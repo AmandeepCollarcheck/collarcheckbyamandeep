@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "832067658424",
+    "project_id": "collarchek-2fa66",
+    "storage_bucket": "collarchek-2fa66.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832067658424:android:0654c9af648ecca5494a4d",
+        "android_client_info": {
+          "package_name": "com.example.collarchek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYy0nH-AJrEd54NI5cvk2TlhmjzF8YVh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
