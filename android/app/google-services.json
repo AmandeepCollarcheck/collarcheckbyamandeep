@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "832067658424",
-    "project_id": "collarchek-2fa66",
-    "storage_bucket": "collarchek-2fa66.firebasestorage.app"
+    "project_number": "677481949886",
+    "project_id": "collarcheck-36e23",
+    "storage_bucket": "collarcheck-36e23.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:832067658424:android:0654c9af648ecca5494a4d",
+        "mobilesdk_app_id": "1:677481949886:android:e2cd3cc0a82f3c37b7ccef",
         "android_client_info": {
           "package_name": "com.example.collarchek"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "677481949886-i053at7rrfrsma2tuvsdp8uai9ijdjcl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.collarchek",
+            "certificate_hash": "4d91d08112efb505a8c0ff155484ddcf4197cd2d"
+          }
+        },
+        {
+          "client_id": "677481949886-j8du81o3lqlqnrsci3ntacddsuh73eon.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAYy0nH-AJrEd54NI5cvk2TlhmjzF8YVh8"
+          "current_key": "AIzaSyAOAn9bDpGPN8xd5E3D5nTAxBS5ng1z0to"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677481949886-j8du81o3lqlqnrsci3ntacddsuh73eon.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

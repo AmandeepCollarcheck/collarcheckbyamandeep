@@ -15,3 +15,4 @@ const Color appBlackShadowColor= Color(0x1A000000);
 const Color appPinkColor= Color(0xffff7875);
 const Color appRedColor= Color(0xffFF0505);
 const Color appGreenColor= Color(0xff59C58B);
+const Color appRateUnSelectedColor= Color(0xffE2E2E2);

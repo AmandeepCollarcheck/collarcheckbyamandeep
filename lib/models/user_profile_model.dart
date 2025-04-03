@@ -893,8 +893,10 @@ class Top {
   String? countryName;
   String? experienceCount;
   String? city;
+  String? individualId;
   String? slug;
   FollowData? followData;
+  Following? followingData;
   String? workStatus;
   String? designationName;
   String? companyName;
@@ -910,9 +912,11 @@ class Top {
     this.city,
     this.slug,
     this.followData,
+    this.individualId,
     this.workStatus,
     this.designationName,
     this.companyName,
+    this.followingData
   });
 
   factory Top.fromJson(Map<String, dynamic> json) => Top(
@@ -926,6 +930,8 @@ class Top {
     city: json["city"],
     slug: json["slug"],
     followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
+    followingData: json["following"] == null ? null : Following.fromJson(json["following"]),
+    individualId: json["individual_id"],
     workStatus: json["work_status"],
     designationName: json["designation_name"],
     companyName: json["company_name"],
@@ -941,7 +947,9 @@ class Top {
     "experienceCount": experienceCount,
     "city": city,
     "slug": slug,
+    "individual_id":individualId,
     "followData": followData?.toJson(),
+    "following": followingData?.toJson(),
     "work_status": workStatus,
     "designation_name": designationName,
     "company_name": companyName,

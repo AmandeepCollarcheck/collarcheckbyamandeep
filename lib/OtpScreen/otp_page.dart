@@ -23,7 +23,7 @@ class OtpPage extends StatelessWidget {
           child: Scaffold(
             backgroundColor: appScreenBackgroundColor,
             appBar: commonAppBar(context,onClick: (){
-              controller.onBack(isLogin: controller.isLoginScreen.value);
+              controller.onBack(isLogin: controller.isLoginScreenData.value);
             }),
             body: SingleChildScrollView(
               child: Container(
@@ -38,16 +38,21 @@ class OtpPage extends StatelessWidget {
                         children: <Widget>[
                           SizedBox(height: 10,),
                          Obx((){
-                           return controller.isEmailVerification.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumber.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumber.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,);
+                           return controller.isEmailVerificationData.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,);
                          }),
                           SizedBox(height: 20,),
                           Form(key: controller.formKey,
                             child: PinCodeTextField(
                               controller: controller.otpController,
                               appContext: context,
-                              obscureText: true,
-                              obscuringCharacter: '*',
+                              obscureText: false,
                               length: 6,
+                              onChanged: (value) {
+                                controller.otpController.text = value; // 🔥 Ensure controller updates
+                              },
+                              onCompleted: (String value){
+                                controller.loginButtonClick(context);
+                              },
                               validator: (value) => value!.isEmpty ? appOtp+appIsRequired : null,
                               pinTheme: PinTheme(
                                 fieldHeight: 40,
@@ -115,8 +120,8 @@ class OtpPage extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          commonButton(context, buttonName: controller.isEmailVerification.value?appVerifyEmail:appLogin, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor,buttonBorderColor: appPrimaryColor ,onClick: (){
-                           if(controller.isEmailVerification.value){
+                          commonButton(context, buttonName: controller.isEmailVerificationData.value?appVerifyEmail:appLogin, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor,buttonBorderColor: appPrimaryColor ,onClick: (){
+                           if(controller.isEmailVerificationData.value){
                              controller.verifyEmailOtpAPiCall(context);
                            }else{
                              controller.loginButtonClick(context);

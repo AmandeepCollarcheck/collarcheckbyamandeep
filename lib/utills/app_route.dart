@@ -8,21 +8,52 @@ import 'package:collarchek/StartSignUp/start_signup_bindings.dart';
 import 'package:collarchek/StartSignUp/start_signup_page.dart';
 import 'package:collarchek/StartUp/startup_bindings.dart';
 import 'package:collarchek/StartUp/startup_screen.dart';
+import 'package:collarchek/about/about_bindings.dart';
+import 'package:collarchek/about/about_page.dart';
+import 'package:collarchek/account_verification/account_verification.dart';
+import 'package:collarchek/account_verification/account_verification_bindings.dart';
 import 'package:collarchek/bottom_nav_bar/Bottom_nav_bar_binding.dart';
 import 'package:collarchek/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:collarchek/certificates/certificated_bindings.dart';
+import 'package:collarchek/certificates/certificated_page.dart';
 import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
 import 'package:collarchek/dashboard/dashboard_page.dart';
+import 'package:collarchek/educations/education_bindings.dart';
+import 'package:collarchek/educations/education_page.dart';
+import 'package:collarchek/employees/employees_bindings.dart';
+import 'package:collarchek/employees/employees_page.dart';
+import 'package:collarchek/employment_history/employment_history_bindings.dart';
+import 'package:collarchek/employment_history/employment_history_page.dart';
 import 'package:collarchek/filter/filter_screen.dart';
 import 'package:collarchek/job_details/job_details_bindinds.dart';
 import 'package:collarchek/job_details/job_details_page.dart';
+import 'package:collarchek/jobs/jobs_bindings.dart';
+import 'package:collarchek/jobs/jobs_page.dart';
+import 'package:collarchek/languages/language_binding.dart';
+import 'package:collarchek/languages/language_page.dart';
+import 'package:collarchek/messages/chat_screen/chat_bindings.dart';
+import 'package:collarchek/messages/chat_screen/chat_page.dart';
+import 'package:collarchek/messages/message_bindings.dart';
+import 'package:collarchek/messages/message_page.dart';
+import 'package:collarchek/notifications/notification_binding.dart';
+import 'package:collarchek/notifications/notification_page.dart';
+import 'package:collarchek/portfolio/portfolio_bindings.dart';
 import 'package:collarchek/profile_details/profile_details.dart';
 import 'package:collarchek/profile_details/profile_details_bindings.dart';
 import 'package:collarchek/profiles/profile_bindings.dart';
 import 'package:collarchek/profiles/profile_dart.dart';
 import 'package:collarchek/recommendJobs/recommend_job.dart';
 import 'package:collarchek/recommendJobs/recommend_job_bindings.dart';
+import 'package:collarchek/request/request_bindings.dart';
+import 'package:collarchek/request/request_page.dart';
+import 'package:collarchek/reviews/review_bindings.dart';
+import 'package:collarchek/reviews/review_page.dart';
+import 'package:collarchek/search/search_bindings.dart';
+import 'package:collarchek/search/search_page.dart';
+import 'package:collarchek/skills/skills_bindings.dart';
+import 'package:collarchek/skills/skills_page.dart';
 import 'package:collarchek/topCompanies/top_companies_bindings.dart';
 import 'package:collarchek/topCompanies/top_companies_page.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -30,6 +61,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../Splash/splash_binding.dart';
 import '../Splash/splash_page.dart';
 import '../filter/filter_bindings.dart';
+import '../portfolio/portfolio_page.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -47,6 +79,22 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String profileDetails = '/profileDetails';
   static const String connection = '/connection';
+  static const String employmentHistory = '/employmentHistory';
+  static const String skills = '/skills';
+  static const String language = '/language';
+  static const String addPortfolio = '/addPortfolio';
+  static const String jobs = '/jobs';
+  static const String educations = '/educations';
+  static const String addCertificates = '/addCertificates';
+  static const String review = '/review';
+  static const String about = '/about';
+  static const String request = '/request';
+  static const String message = '/message';
+  static const String chat = '/chat';
+  static const String search = '/search';
+  static const String notifications = '/notifications';
+  static const String accountVerification = '/accountVerification';
+  static const String companyEmployees = '/companyEmployees';
 
   static final routes = [
     GetPage(
@@ -123,6 +171,86 @@ class AppRoutes {
       name: connection,
       page: () => ConnectionPage(),
       binding: ConnectionBindings(),
+    ),
+    GetPage(
+      name: employmentHistory,
+      page: () => EmploymentHistoryPage(),
+      binding: EmploymentHistoryBindings(),
+    ),
+    GetPage(
+      name: skills,
+      page: () => SkilldPage(),
+      binding: SkillBindings(),
+    ),
+    GetPage(
+      name: language,
+      page: () => LanguagePage(),
+      binding: LanguageBindings(),
+    ),
+    GetPage(
+      name: addPortfolio,
+      page: () => PortfolioPage(),
+      binding: PortfolioBindings(),
+    ),
+    GetPage(
+      name: jobs,
+      page: () => JobsPage(),
+      binding: JobsBindings(),
+    ),
+    GetPage(
+      name: educations,
+      page: () => EducationPage(),
+      binding: EducationBindings(),
+    ),
+    GetPage(
+      name: addCertificates,
+      page: () => CertificatesPage(),
+      binding: CertificatesBindings(),
+    ),
+    GetPage(
+      name: review,
+      page: () => ReviewPage(),
+      binding: ReviewBindings(),
+    ),
+    GetPage(
+      name: about,
+      page: () => AboutPage(),
+      binding: AboutBindings(),
+    ),
+    GetPage(
+      name: accountVerification,
+      page: () => AccountVerificationPage(),
+      binding: AccountVerificationBindings(),
+    ),
+    GetPage(
+      name: request,
+      page: () => RequestPage(),
+      binding: RequestBindings(),
+    ),
+    GetPage(
+      name: message,
+      page: () => MessagePage(),
+      binding: MessageBindings(),
+    ),
+    GetPage(
+      name: chat,
+      page: () => ChatPage(),
+      binding: ChatBindings(),
+    ),
+    GetPage(
+      name: search,
+      page: () => SearchPage(),
+      binding: SearchBindings(),
+    ),
+    GetPage(
+      name: notifications,
+      page: () => NotificationPage(),
+      binding: NotificationBindings(),
+    ),
+    GetPage(
+      name: companyEmployees,
+      page: () => EmployeesPage(),
+      binding: EmployeesBindings(),
     ),
   ];
 }

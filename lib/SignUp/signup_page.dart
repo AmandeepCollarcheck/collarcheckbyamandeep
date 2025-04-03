@@ -6,6 +6,7 @@ import 'package:collarchek/utills/common_widget/common_screen_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 
@@ -17,6 +18,7 @@ import '../utills/image_path.dart';
 
 class SignUpPage extends GetView<SignUpControllers>{
   const SignUpPage({super.key});
+  @override
   Widget build(BuildContext context){
     return SafeArea(
       child: Scaffold(
@@ -241,25 +243,38 @@ class SignUpPage extends GetView<SignUpControllers>{
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        _socialIconWidget(socialIcon: appGoogleIconTwo),
+        _socialIconWidget(socialIcon: appGoogleNewSvg, onClick: () {
+          controller.googleLogin();
+        }),
         SizedBox(width: 20,),
-        _socialIconWidget(socialIcon: appFacebookIcon),
+        _socialIconWidget(socialIcon: appFacebookNewSvg, onClick: () {
+          controller.facebookLogin();
+        }),
         SizedBox(width: 20,),
-        _socialIconWidget(socialIcon: appLinkedinIcon),
+        _socialIconWidget(socialIcon: appLinkdinNewSvg, onClick: () {
+          controller.linkedinLogin();
+        }),
+        SizedBox(width: 20,),
+        _socialIconWidget(socialIcon: appAppleNewSvg, onClick: () {  }),
       ],
     );
   }
 
-  _socialIconWidget({required String socialIcon}) {
-    return Container(
-      alignment: Alignment.center,
-      height: 50,
-      width: 65,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: appGreyBlackColor,width: 1.0)
+  _socialIconWidget({required String socialIcon,required Function onClick}) {
+    return GestureDetector(
+      onTap: (){
+        onClick();
+      },
+      child: Container(
+        alignment: Alignment.center,
+        height: 50,
+        width: 65,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: appGreyBlackColor,width: 1.0)
+        ),
+        child: SvgPicture.asset(socialIcon,height: 40,width: 40,),
       ),
-      child: Image.asset(socialIcon,height: 40,width: 40,),
     );
   }
 

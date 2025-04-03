@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collarchek/profiles/profile_controllers.dart';
 import 'package:collarchek/utills/app_colors.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/common_button.dart';
 import 'package:collarchek/utills/common_widget/common_methods.dart';
 import 'package:collarchek/utills/common_widget/common_screen_header.dart';
@@ -86,6 +87,7 @@ class ProfilePage extends GetView<ProfileControllers>{
                         }
                         return  commonTextFieldTitleWithVerification(headerName: appEmailId,isMendatory: true,isVerify: controller.isEmailVerified.value,onVerifyClick: (){
 
+                          Get.offNamed(AppRoutes.accountVerification);
                           return showVerifyEmailWidget(
                                 context,
                               controller: controller.emailController,
@@ -173,20 +175,28 @@ class ProfilePage extends GetView<ProfileControllers>{
                           )
                       ),
                       SizedBox(width: 10,),
+                      ///Accomodation
                       Flexible(
                           child: Column(
                             children: <Widget>[
                               commonTextFieldTitle(headerName: appAccomodationType,isMendatory: true),
                               SizedBox(height: 5,),
                               Obx((){
-                                return customDropDown(
+                                var accomodationdata=controller.allDropDownData.value.data?.accomodationList??[];
+                                return accomodationdata!=null&&accomodationdata.isNotEmpty?customDropDown(
                                   hintText: appAccomodationType,
-                                  item: controller.allDropDownData.value.data?.accomodationList?.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? [],
-                                  selectedValue: controller.allDropDownData.value.data?.accomodationList != null && controller.allDropDownData.value.data!.accomodationList!.isNotEmpty ? {"id": controller.allDropDownData.value.data?.accomodationList?[0].id, "name": controller.allDropDownData.value.data?.accomodationList?[0].name,} : null,
+                                  item: [{'id':"0","name":appSelectAccomodation},
+                                  ...accomodationdata.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                                  ],
+                                  selectedValue: accomodationdata.any((datum)=>datum.id==controller.selectedAccodationType["id"])?controller.selectedAccodationType:{'id':"0","name":appSelectAccomodation},
                                   onChanged: (Map<String,dynamic>? selectedData) {
+                                    controller.selectedAccodationType.value = {
+                                      "id": selectedData?['id'].toString() ?? "0",
+                                      "name": selectedData?['name'].toString() ?? appSelectAccomodation
+                                    };
                                     controller.accomodationType.value=selectedData?['name'];
                                   },
-                                  icon: appDropDownIcon,);
+                                  icon: appDropDownIcon,):Container();
                               }),
                             ],
                           )
@@ -203,41 +213,74 @@ class ProfilePage extends GetView<ProfileControllers>{
                       ///Current Company
                       commonTextFieldTitle(headerName: appMyCurrentCompany,isMendatory: false),
                       SizedBox(height: 5,),
-                      Obx(()=>customDropDown(
-                        hintText: appMyCurrentCompany,
-                        item: controller.allDropDownData.value.data?.companyList?.map((datum) => {"id": datum.id, "name": datum.company,}).toList() ?? [],
-                        selectedValue: controller.allDropDownData.value.data?.companyList != null && controller.allDropDownData.value.data!.companyList!.isNotEmpty ? {"id": controller.allDropDownData.value.data?.companyList?[0].id, "name": controller.allDropDownData.value.data?.companyList?[0].company,} : null,
-                        onChanged: (Map<String,dynamic>? selectedData) {
-                          controller.myCurrentCompany.value=selectedData?['name'];
-                        },
-                        icon: appDropDownIcon,
-                      )),
+                      Obx((){
+                        var currentCompany=controller.allDropDownData.value.data?.companyList??[];
+                        return currentCompany.isNotEmpty ? customDropDown(
+                          hintText: appMyCurrentCompany,
+                          item: [{"id": "0", "name": appSelectCompany},
+                            ...currentCompany.map((datum) => {
+                              "id": datum.id,
+                              "name": datum.company,
+                            })
+                          ],
+                          selectedValue: currentCompany.any((datum) => datum.id == controller.selectedCompany["id"]) ? controller.selectedCompany : {"id": "0", "name": appSelectCompany}, // Fallback if not found
+                          onChanged: (Map<String, dynamic>? selectedData) {
+                            if (selectedData != null) {
+                              controller.selectedCompany.value = {
+                                "id": selectedData?['id'].toString() ?? "0",
+                                "name": selectedData?['name'].toString() ?? appSelectCompany
+                              };
+
+                              controller.myCurrentCompany.value = selectedData['name'];
+                            }
+                          },
+                          icon: appDropDownIcon,
+                        )
+                            : Container();
+
+                      }),
                       SizedBox(height: 10,),
                       ///Current Position
                       commonTextFieldTitle(headerName: appCurrentPosition,isMendatory: false),
                       SizedBox(height: 5,),
                       Obx((){
-                        return customDropDown(
+                        var currentPosition=controller.allDropDownData.value.data?.designationList??[];
+                        return currentPosition.isNotEmpty?customDropDown(
                           hintText: appCurrentPosition,
-                          item: controller.allDropDownData.value.data?.designationList?.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? [],
-                          selectedValue: controller.allDropDownData.value.data?.designationList != null && controller.allDropDownData.value.data!.designationList!.isNotEmpty ? {"id": controller.allDropDownData.value.data?.designationList?[0].id, "name": controller.allDropDownData.value.data?.designationList?[0].name,} : null,
+                          item: [{"id": "0", "name": appSelectPosition},
+                            ...currentPosition.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                          ],
+                          selectedValue: currentPosition.any((datum)=>datum.id==controller.selectedCurrentPosition["id"])?controller.selectedCurrentPosition: {"id": "0", "name": appSelectPosition},
                           onChanged: (Map<String,dynamic>? selectedData) {
+                            controller.selectedCurrentPosition.value = {
+                              "id": selectedData?['id'].toString() ?? "0",
+                              "name": selectedData?['name'].toString() ?? appSelectPosition
+                            };
                             controller.currentPosition.value=selectedData?['name'];
                           },
-                          icon: appDropDownIcon,);
+                          icon: appDropDownIcon,):Container();
                       }),
                       SizedBox(height: 10,),
                       ///Work Status
                       commonTextFieldTitle(headerName: appWorkStatus,isMendatory: true),
                       SizedBox(height: 5,),
-                      Obx(()=>customDropDown(
-                        hintText: appWorkStatus,
-                        item: controller.allDropDownData.value.data?.employementList?.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? [],
-                        selectedValue: controller.allDropDownData.value.data?.employementList != null && controller.allDropDownData.value.data!.employementList!.isNotEmpty ? {"id": controller.allDropDownData.value.data?.employementList?[0].id, "name": controller.allDropDownData.value.data?.employementList?[0].name,} : null,
-                        onChanged: (Map<String,dynamic>? selectedData) {
-                          controller.workStatus.value=selectedData?['name'];
-                        },
-                        icon: appDropDownIcon,)),
+                      Obx((){
+                        var workStatus=controller.allDropDownData.value.data?.employementList??[];
+                        return workStatus.isNotEmpty?customDropDown(
+                          hintText: appWorkStatus,
+                          item: [{'id':"0","name":appSelectWorkStatus},
+                            ...workStatus.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                          ],
+                          selectedValue:workStatus.any((datum)=>datum.id==controller.selectedWorkStatus["id"])?controller.selectedWorkStatus:{'id':"0","name":appSelectWorkStatus},
+                          onChanged: (Map<String,dynamic>? selectedData) {
+                            controller.selectedWorkStatus.value = {
+                              "id": selectedData?['id'].toString() ?? "0",
+                              "name": selectedData?['name'].toString() ?? appSelectWorkStatus
+                            };
+                            controller.workStatus.value=selectedData?['name'];
+                          },
+                          icon: appDropDownIcon,):Container();
+                      }),
                       SizedBox(height: 10,),
                       ///Work Country Stata
                       Row(
@@ -247,40 +290,54 @@ class ProfilePage extends GetView<ProfileControllers>{
                                 children: <Widget>[
                                   commonTextFieldTitle(headerName: appCountry,isMendatory: false),
                                   SizedBox(height: 5,),
+                                  ///Country
                                   Obx((){
-                                    return customDropDown(
+                                    var countryData=controller.countryListData.value.data??[];
+                                    return countryData.isNotEmpty?customDropDown(
                                       hintText: appCountry,
-                                      item: controller.countryListData.value.data?.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? [],
-                                      selectedValue: controller.countryListData.value.data != null && controller.countryListData.value.data!.isNotEmpty ? {"id": controller.countryListData.value.data?[0].id, "name": controller.countryListData.value.data?[0].name,} : null,
+                                      item: [{'id':"0","name":appSelectCountry},
+                                        ...countryData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                                      ],
+                                      selectedValue: countryData.any((datum)=>datum.id==controller.selectedCountry["id"])?controller.selectedCountry:{'id':"0","name":appSelectCountry},
                                       onChanged: (Map<String,dynamic>? selectedData) {
+                                        controller.selectedCountry.value = {
+                                          "id": selectedData?['id'].toString() ?? "0",
+                                          "name": selectedData?['name'].toString() ?? appSelectCountry
+                                        };
                                         controller.getStateListApiCall(countryName: selectedData?['id']);
                                         controller.country.value=selectedData?['name'];
-                                    }, icon: appDropDownIcon,);
+                                    }, icon: appDropDownIcon,):Container();
                                   })
                                 ],
                               )
                           ),
                           SizedBox(width: 10,),
                           Flexible(
-                              child: Obx((){
-                                return controller.stateListData.value.data!=null&&controller.stateListData.value.data!.isNotEmpty?Column(
-                                  children: <Widget>[
-                                    commonTextFieldTitle(headerName: appState,isMendatory: false),
-                                    SizedBox(height: 5,),
-                                    Obx((){
-                                      return customDropDown(
-                                        hintText: appAccomodationType,
-                                        item: controller.stateListData.value.data?.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? [],
-                                        selectedValue: controller.stateListData.value.data != null && controller.stateListData.value.data!.isNotEmpty ? {"id": controller.stateListData.value.data?[0].id, "name": controller.stateListData.value.data?[0].name,} : null,
-                                        onChanged: (Map<String,dynamic>? selectedData) {
-                                          controller.getCityListApiCall(stateName:  selectedData?['id']);
-                                          controller.state.value=selectedData?['name'];
-                                        },
-                                        icon: appDropDownIcon,);
-                                    })
-                                  ],
-                                ):Column();
-                              })
+                            ///State
+                              child: Column(
+                                children: <Widget>[
+                                  commonTextFieldTitle(headerName: appState,isMendatory: false),
+                                  SizedBox(height: 5,),
+                                  Obx((){
+                                    var StateData=controller.stateListData.value.data??[];
+                                    return StateData!=null&&StateData.isNotEmpty?customDropDown(
+                                      hintText: appAccomodationType,
+                                      item:[{'id':"0","name":appSelectState},
+                                        ...StateData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                                      ],
+                                      selectedValue:StateData.any((datum)=>datum.id==controller.selectedState["id"])?controller.selectedState:{'id':"0","name":appSelectState},
+                                      onChanged: (Map<String,dynamic>? selectedData) {
+                                        controller.selectedState.value = {
+                                          "id": selectedData?['id'].toString() ?? "0",
+                                          "name": selectedData?['name'].toString() ?? appSelectState
+                                        };
+                                        controller.getCityListApiCall(stateName:  selectedData?['id']);
+                                        controller.state.value=selectedData?['name'];
+                                      },
+                                      icon: appDropDownIcon,):Container();
+                                  })
+                                ],
+                              )
                           ),
                         ],
                       ),
@@ -289,14 +346,21 @@ class ProfilePage extends GetView<ProfileControllers>{
                       commonTextFieldTitle(headerName: appResidingCity,isMendatory: false),
                       SizedBox(height: 5,),
                       Obx((){
-                        return customDropDown(
+                        var residingCity=controller.cityListData.value.data??[];
+                        return residingCity.isNotEmpty?customDropDown(
                           hintText: appResidingCity,
-                          item: controller.cityListData.value.data?.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? [],
-                          selectedValue: controller.cityListData.value.data != null && controller.cityListData.value.data!.isNotEmpty ? {"id": controller.cityListData.value.data?[0].id, "name": controller.cityListData.value.data?[0].name,} : null,
+                          item: [{'id':"0","name":appSelectCity},
+                          ...residingCity.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                          ],
+                          selectedValue: residingCity.any((detum)=>detum.id==controller.selectedCity["id"])?controller.selectedCity:{'id':"0","name":appSelectCity},
                           onChanged: (Map<String,dynamic>? selectedData) {
+                            controller.selectedCity.value = {
+                              "id": selectedData?['id'].toString() ?? "0",
+                              "name": selectedData?['name'].toString() ?? appSelectCity
+                            };
                             controller.residingCity.value=selectedData?['name'];
                           },
-                          icon: appDropDownIcon,);
+                          icon: appDropDownIcon,):Container();
                       }),
                       SizedBox(height: 10,),
 
@@ -402,7 +466,9 @@ class ProfilePage extends GetView<ProfileControllers>{
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Obx((){
-                                return Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),);
+                                return SizedBox(
+                                  width: MediaQuery.of(context).size.width*0.7,
+                                    child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                               }),
                               GestureDetector(
                                 onTap:(){
@@ -445,30 +511,30 @@ class ProfilePage extends GetView<ProfileControllers>{
                       commonTextField(controller: controller.facebookController, hintText: appFacebookProfileURL),
                       SizedBox(height: 10,),
                       ///Tumblr
-                      commonTextFieldTitle(headerName: appTumblr,isMendatory: false),
-                      SizedBox(height: 5,),
-                      commonTextField(controller: controller.tumblrController, hintText: appTumblrProfileURL),
-                      SizedBox(height: 10,),
+                      // commonTextFieldTitle(headerName: appTumblr,isMendatory: false),
+                      // SizedBox(height: 5,),
+                      // commonTextField(controller: controller.tumblrController, hintText: appTumblrProfileURL),
+                      // SizedBox(height: 10,),
                       ///Discord
-                      commonTextFieldTitle(headerName: appDiscord,isMendatory: false),
-                      SizedBox(height: 5,),
-                      commonTextField(controller: controller.discordController, hintText: appDiscordProfileURL),
-                      SizedBox(height: 10,),
+                      // commonTextFieldTitle(headerName: appDiscord,isMendatory: false),
+                      // SizedBox(height: 5,),
+                      // commonTextField(controller: controller.discordController, hintText: appDiscordProfileURL),
+                      // SizedBox(height: 10,),
                       ///Twitter
                       commonTextFieldTitle(headerName: appTwitter,isMendatory: false),
                       SizedBox(height: 5,),
                       commonTextField(controller: controller.twitterController, hintText: appTwitterProfileURL),
                       SizedBox(height: 10,),
                       ///Zook
-                      commonTextFieldTitle(headerName: appZoom,isMendatory: false),
-                      SizedBox(height: 5,),
-                      commonTextField(controller: controller.zoomController, hintText: appZoomProfileURL),
-                      SizedBox(height: 10,),
-                      ///Snapshot
-                      commonTextFieldTitle(headerName: appSnapchat,isMendatory: false),
-                      SizedBox(height: 5,),
-                      commonTextField(controller: controller.snapshotController, hintText: appSnapchatProfileURL),
-                      SizedBox(height: 10,),
+                      // commonTextFieldTitle(headerName: appZoom,isMendatory: false),
+                      // SizedBox(height: 5,),
+                      // commonTextField(controller: controller.zoomController, hintText: appZoomProfileURL),
+                      // SizedBox(height: 10,),
+                      // ///Snapshot
+                      // commonTextFieldTitle(headerName: appSnapchat,isMendatory: false),
+                      // SizedBox(height: 5,),
+                      // commonTextField(controller: controller.snapshotController, hintText: appSnapchatProfileURL),
+                      // SizedBox(height: 10,),
                     ],
                   ),
                 ),
@@ -499,6 +565,10 @@ class ProfilePage extends GetView<ProfileControllers>{
   _profileWidget(context) {
     return Obx((){
       var profileImage=controller.userProfileData.value.data?.profile??"";
+      if(controller.selectedImage.value!=null){
+        profileImage=null;
+      }
+
       var userFirstName=controller.userProfileData.value.data?.fname??"";
       var userLastName=controller.userProfileData.value.data?.lname??'';
       var userIndividualId=controller.userProfileData.value.data?.individualId??"";
@@ -513,7 +583,7 @@ class ProfilePage extends GetView<ProfileControllers>{
               children: <Widget>[
                 profileImage!=null&&profileImage.isNotEmpty?ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.network(profileImage??"",height: 100,width: 100,),
+                  child: Image.network(profileImage??"",height: 80,width: 80,fit: BoxFit.cover,),
                 ):controller.selectedImage.value!=null?Container(
                   alignment: Alignment.center,
                   height: 80,
@@ -539,7 +609,7 @@ class ProfilePage extends GetView<ProfileControllers>{
                           colors: [controller.getRandomColor(),controller.getRandomColor()]
                       )
                   ),
-                  child: Text(getInitialsWithSpace(input: "$userFirstName $userLastName"),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
+                  child: userFirstName.isNotEmpty?Text(getInitialsWithSpace(input: "$userFirstName $userLastName"??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)):Container(),
                 ),
                 Positioned(
                     bottom: 0,
@@ -559,7 +629,7 @@ class ProfilePage extends GetView<ProfileControllers>{
                         child: SvgPicture.asset(appCameraSvgIcon,height: 30,width: 30,))
                 ),
               ],
-             
+
             ),
             SizedBox(width: 20,),
             Container(

@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 String tag = 'api_provider';
-final baseUrlForLogin = 'https://api.collarcheck.com/wapi/';
-final baseUrlForOtherAPi = 'https://api.collarcheck.com/mapi/';
+//final baseUrlForLogin = 'https://api.collarcheck.com/wapi/';
+final baseUrlForLogin = 'https://admin.collarcheck.com/mapi/';
+//final baseUrlForOtherAPi = 'https://api.collarcheck.com/mapi/';
+final baseUrlForOtherAPi = 'https://admin.collarcheck.com/mapi/';
 final basePlaceUrl = 'https://maps.googleapis.com/maps/api/';
 
 final String strSendOtp = 'login/sendOtp';
@@ -25,7 +27,51 @@ final String strDashboardDataList = '/dashboard/dataList';
 final String strSaveProfile = '/employee/edit-user';
 final String strVerifyEmail = '/user/sendEmailOtp';
 final String strVerifyEmailOtp = '/user/verifyEmailOtp';
+final String strEmployeeMantHistory = '/employee/allEmployementNew';
+final String strDesignationList = '/dashboard/employmentList';
+final String strAddEmployment = '/employee/add-employement';
+final String strEmployeeAddSkills = '/employee/add-skill';
+final String strAllSkills = '/employee/all-skill';
+final String strDeleteSkills = '/employee/delete-skill';
+final String strAddLanguage = '/employee/add_language';
+final String strAllLanguage = '/employee/allLanguage';
+final String strDeleteLanguage = '/employee/language';
+final String strAddPortfolio = '/employee/add-portfolio';
+final String strEducationDetails = '/general/educationDataList';
+final String strAddEducation = '/employee/add-education';
+final String strEmployeeAddCertificates = '/employee/add-certificate';
+final String strAddReview = '/company/add-review';
+final String strAppliedJobs = '/employee/appliedjob';
+final String strEmployeeHistorylist = '/employee/allEmployementNew';
+final String strPortfolioList = '/employee/all-portfolio';
+final String strEditPortfolioData = '/employee/portfolio-detail';
+final String strUpdatePortfolioData = '/employee/add-portfolio';
+final String strAllEducation = '/employee/all-education';
+final String strEditEducation = '/employee/education-detail';
+final String strALlLanguage = '/employee/allLanguage';
+final String strALlLanguageDataList = '/general/languageList';
+final String strALlCertificatesList = '/employee/all-certificate';
+final String strDeleteCertificates = '/employee/delete-certificate';
+final String strEmployeeApplyJob = '/employee/apply-job';
+final String strFollowCompany = '/general/follow';
+final String strEditEducationData = '/employee/add-education';
+final String strFilterDataList = '/dashboard/jobFilterDataList';
+final String strAllMessageList = '/general/all-message';
+final String strSendMessage = '/general/send-message';
+final String strFollowRequest = '/company/followRequestList';
+final String strFollowAccept = '/general/acceptfollow';
+final String strFollowReject = '/general/rejectfollow';
+final String strConnectionList = '/general/followDataList';
+final String strGlobalSearch = '/general/globalSearch';
+final String strNotificationData = '/general/all-notification';
+final String strSocailLogin = '/login/googlelogin';
+final String strEditCertificate = '/employee/certificate-detail';
+final String strEditEmployment = '/employee/employement-detail';
 
+///Company Side APis
+
+final String strCompanyAddEmployment = '/company/addEmployee';
+final String strCompanyAllEmployee = '/company/all-connection';
 
 
 

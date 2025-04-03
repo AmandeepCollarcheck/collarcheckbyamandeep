@@ -16,8 +16,17 @@ class BottomNavBarController extends GetxController{
   Rx isNavBarVisible = true.obs;
   Rx bottomNavCurrentIndex=0.obs;
   Rx profilePercentage=0.0.obs;
+  var profileImageData="".obs;
+  var nameInitial="".obs;
+  var selectedTabIndexValue=0.obs;
+  var userTypeData="".obs;
   @override
   void onInit() {
+    Map<String, dynamic> data = Get.arguments ?? {};
+    if (data.isNotEmpty) {
+      int? index = int.tryParse(data[bottomNavCurrentIndexData]?.toString() ?? '0');
+      bottomNavCurrentIndex.value = index ?? 0;
+    }
     _getProfilePercentage();
     super.onInit();
   }
@@ -40,8 +49,23 @@ class BottomNavBarController extends GetxController{
     '/profile',
   ];
 
+  final List<String> companyRoutes = [
+    '/home',
+    '/companyEmployees',
+    '/jobs',
+    '/messages',
+    '/profile',
+  ];
+
   void _getProfilePercentage() async{
-    profilePercentage.value =
-        (double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100;
+    profilePercentage.value = (double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100;
+    profileImageData.value=await readStorageData(key: profileImage);
+    var userFirstName=await readStorageData(key: firstName);
+    var userLastName=await readStorageData(key: lastName);
+    userTypeData.value=await readStorageData(key: userType);
+    nameInitial.value= getInitialsWithSpace(input: "$userFirstName $userLastName");
+    update();
   }
+
+
 }

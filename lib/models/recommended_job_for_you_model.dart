@@ -27,7 +27,7 @@ class RecommendedJobForYouModel {
 class Data {
   List<AlljobList>? alljobList;
   int? filterApply;
-  List<dynamic>? filterName;
+  List<FilterName>? filterName;
 
   Data({
     this.alljobList,
@@ -38,14 +38,27 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     alljobList: json["alljobList"] == null ? [] : List<AlljobList>.from(json["alljobList"]!.map((x) => AlljobList.fromJson(x))),
     filterApply: json["filterApply"],
-    filterName: json["filterName"] == null ? [] : List<dynamic>.from(json["filterName"]!.map((x) => x)),
+    filterName: _parseFilterName(json["filterName"]),
   );
 
   Map<String, dynamic> toJson() => {
     "alljobList": alljobList == null ? [] : List<dynamic>.from(alljobList!.map((x) => x.toJson())),
     "filterApply": filterApply,
-    "filterName": filterName == null ? [] : List<dynamic>.from(filterName!.map((x) => x)),
+    "filterName": filterName == null ? [] : List<dynamic>.from(filterName!.map((x) => x.toJson())),
   };
+
+  // Handling dynamic filterName type
+  static List<FilterName> _parseFilterName(dynamic json) {
+    if (json == null) {
+      return [];
+    } else if (json is List) {
+      return List<FilterName>.from(json.map((x) => FilterName.fromJson(x)));
+    } else if (json is Map<String, dynamic>) {
+      return [FilterName.fromJson(json)];
+    } else {
+      return [];
+    }
+  }
 }
 
 class AlljobList {
@@ -227,3 +240,41 @@ class Skill {
     "name": name,
   };
 }
+
+
+class Company {
+  String? id;
+  String? name;
+
+  Company({
+    this.id,
+    this.name,
+  });
+
+  factory Company.fromJson(Map<String, dynamic> json) => Company(
+    id: json["id"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+  };
+}
+
+class FilterName {
+  Company? company;
+
+  FilterName({
+    this.company,
+  });
+
+  factory FilterName.fromJson(Map<String, dynamic> json) => FilterName(
+    company: json["company"] == null ? null : Company.fromJson(json["company"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "company": company?.toJson(),
+  };
+}
+

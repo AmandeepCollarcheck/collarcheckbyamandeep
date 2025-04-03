@@ -21,7 +21,8 @@ Widget commonTextField({
   TextInputType keyboardType = TextInputType.text,
   FormFieldValidator<String>? validator,
   TextInputAction textInputAction = TextInputAction.done,
-  Function()? onSearchClick
+  Function()? onSearchClick,
+  Function(String)? onChanged
 }) {
   return TextFormField(
     controller: controller,
@@ -32,9 +33,13 @@ Widget commonTextField({
     readOnly: isRealOnly,
     maxLines: maxLine,
     onTap: onTap,
+    onChanged: onChanged,
+    style: AppTextStyles.font16.copyWith(color: appBlackColor),
     inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'^\s+')),],
     textCapitalization: keyboardType==TextInputType.emailAddress?TextCapitalization.none: TextCapitalization.sentences,
     decoration: InputDecoration(
+      fillColor: appWhiteColor,
+      filled: true,
       suffixIcon: suffixIcon!=null?GestureDetector(
         onTap: (){
           onSearchClick!();
@@ -152,7 +157,8 @@ Widget commonMobileNumberTextField({
       FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
     ],
     maxLength: 15,
-    validator: validator, // Optional: add validation
+    validator: validator,
+    style: AppTextStyles.font16.copyWith(color: appBlackColor),
     decoration: InputDecoration(
         counterText: "",
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -186,6 +192,7 @@ customDropDown({
 
   return DropdownButtonFormField<Map<String, dynamic>>(
     isExpanded: true,
+    style: AppTextStyles.font16.copyWith(color: appBlackColor),
     decoration: InputDecoration(
       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       hintText: hintText,
@@ -212,9 +219,6 @@ customDropDown({
     ),
     value: item.firstWhere((e) => e["id"] == selectedValue?["id"] ),
     items: item.map((itemData) {
-      print("sdkjsjkdsjkdjkfksj");
-      print(selectedValue);
-      print(itemData);
       return DropdownMenuItem<Map<String, dynamic>>(
         value: itemData, // Assign the whole map
         child: Text(
@@ -222,10 +226,12 @@ customDropDown({
           style: AppTextStyles.font14W500.copyWith(color: appBlackColor),
         ),
       );
-    }).toSet().toList(),
+    }).toList(),
     onChanged: onChanged,
     icon: SizedBox.shrink(),
   );
 
 }
+
+
 

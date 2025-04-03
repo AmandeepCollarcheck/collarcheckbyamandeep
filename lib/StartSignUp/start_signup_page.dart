@@ -15,8 +15,8 @@ import '../utills/font_styles.dart';
 
 class StartSignUpPage extends GetView<StartUpSignupController>{
    const StartSignUpPage({super.key});
+  @override
   Widget build(BuildContext context){
-    keyboardDismiss(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: appScreenBackgroundColor,

@@ -8,6 +8,10 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter/cupertino.dart';
 
 import 'package:get_storage/get_storage.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
+import 'package:otp_autofill/otp_autofill.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../api_provider/api_provider.dart';
 import '../models/save_user_profile_model.dart';
@@ -20,27 +24,34 @@ class OtpController extends GetxController{
   final formKey = GlobalKey<FormState>();
   late ProgressDialog progressDialog=ProgressDialog() ;
   var otpController = TextEditingController();
-  Rx mobileNumber="".obs;
-  Rx isLoginScreen=false.obs;
-  Rx isEmailVerification=false.obs;
+  final scaffoldKey = GlobalKey();
+  late OTPInteractor _otpInteractor;
+
+  Rx mobileNumberData="".obs;
+  Rx isLoginScreenData=false.obs;
+  Rx isEmailVerificationData=false.obs;
   Rx otpCountDownTimer=30.obs;
   Timer? _timer;
+  Rx screenNameData="".obs;
 
 
   @override
   void onInit() {
-    final Map<String, dynamic> data = Get.arguments;
-    print("askldasdahsdhahsdakd");
-    print(data);
-    mobileNumber.value=data['mobile_number'];
-    isLoginScreen.value=data['isLoginScreen']??false;
-    isEmailVerification.value=data['isEmailVerification']??false;
+    final Map<String, dynamic> data = Get.arguments??{};
+    if(data.isNotEmpty){
+      mobileNumberData.value=data[mobileNumber]??"";
+      isLoginScreenData.value=data[isLoginScreen]??false;
+      isEmailVerificationData.value=data[isEmailVerification]??false;
+      screenNameData.value=data[dashboard]??"";
+    }
+    _autoFilledOtpHandle();
     _otpCountDownStart();
     super.onInit();
   }
   @override
   void dispose() {
     otpController.dispose();
+    SmsAutoFill().unregisterListener();
     _timer?.cancel();
     super.onClose();
   }
@@ -53,7 +64,7 @@ class OtpController extends GetxController{
         try {
           progressDialog.show();
           var formData = dio.FormData.fromMap({
-            "phone": mobileNumber.value,
+            "phone": mobileNumberData.value,
             "otp": otpController.text,
             "login": 1,
           });
@@ -66,9 +77,15 @@ class OtpController extends GetxController{
             await writeStorageData(key: lastName, value: sendOtp.data?.lName??"");
             await writeStorageData(key: userId, value: sendOtp.data?.individualId??"");
             await writeStorageData(key: profession, value: sendOtp.data?.profileDescription??"");
+            await writeStorageData(key: id, value: sendOtp.data?.id??"");
+            await writeStorageData(key: slug, value: sendOtp.data?.slug??"");
+            await writeStorageData(key: userType, value: sendOtp.data?.userType??"");
             progressDialog.dismissLoader();
             Get.offNamed(AppRoutes.bottomNavBar);
           } else {
+            progressDialog.dismissLoader();
+            final canVibrate = await Haptics.canVibrate();
+            await Haptics.vibrate(HapticsType.error);
             showToast(sendOtp.message??"");
           }
 
@@ -88,7 +105,7 @@ class OtpController extends GetxController{
         try {
           progressDialog.show();
           var params = {
-            "phone": mobileNumber.value
+            "phone": mobileNumberData.value
           };
           SendOtp sendOtp = await ApiProvider.base().sendOtp(params);
           progressDialog.dismissLoader();
@@ -111,10 +128,14 @@ class OtpController extends GetxController{
     Get.offNamed(AppRoutes.startUpSignup);
   }
   onBack({required bool isLogin}){
-    if(isLogin==false){
+    if(isEmailVerificationData.value==true){
+      Get.offNamed(AppRoutes.accountVerification);
+    }else if(isLogin==false){
       Get.offNamed(AppRoutes.signup);
-    }else if(isEmailVerification.value==true){
+    }else if(isEmailVerificationData.value==true){
       Get.offNamed(AppRoutes.profile);
+    }else if(screenNameData.value==dashboard){
+      Get.offNamed(AppRoutes.bottomNavBar);
     }else{
       Get.offNamed(AppRoutes.login);
     }
@@ -140,7 +161,7 @@ class OtpController extends GetxController{
         try {
           progressDialog.show();
           var formData = dio.FormData.fromMap({
-            "email": mobileNumber.value,
+            "email": mobileNumberData.value,
             "otp": otpController.text,
             "login": 1,
           });
@@ -171,4 +192,43 @@ class OtpController extends GetxController{
       }
     }
   }
+
+  _autoFilledOtpHandle() async {
+    // 🔹 Request SMS Permission Only if Not Granted
+    if (await Permission.sms.isDenied || await Permission.phone.isDenied) {
+      await Permission.sms.request();
+      await Permission.phone.request();
+    }
+
+    // 🔹 Initialize OTP Text Field Controller
+    otpController = OTPTextEditController(
+      codeLength: 6,
+      onCodeReceive: (code) {
+        print('Received OTP: $code');
+        otpController.text = code; // 🔥 Set OTP in controller
+        update(); // 🔥 Force UI Update in GetX
+      },
+    )..startListenUserConsent((code) {
+      final exp = RegExp(r'(\d{6})');
+      return exp.stringMatch(code ?? '') ?? '';
+    });
+
+    print("Listening for OTP...");
+
+    // 🔹 Start listening for OTP using SmsAutoFill
+    await SmsAutoFill().listenForCode();
+
+    // 🔹 Listen for OTP changes
+    SmsAutoFill().code.listen((otp) {
+      if (otp.isNotEmpty) {
+        otpController.text = otp;
+        update(); // 🔥 Force UI Update
+        print("Updated OTP: $otp");
+      }
+    });
+  }
+
+
+
+
 }

@@ -76,27 +76,20 @@ class LoginScreen extends GetView<LoginControllers>{
                 SizedBox(height: 20,),
                 _commonSocialSignIN(context,socialName: appContinueWithGoogle,onClick: (){
                    controller.googleLogin();
-                },socialIcon: appGoogleIcon),
+                },socialIcon: appGoogleNewSvg),
                 SizedBox(height: 10,),
                 _commonSocialSignIN(context,socialName: appContinueWithFacebook,onClick: (){
-                  ///Gooogle click
-                },socialIcon: appFacebookIcon),
+                  controller.facebookLogin();
+                },socialIcon: appFacebookNewSvg),
                 SizedBox(height: 10,),
                 _commonSocialSignIN(context,socialName: appContinueWithLinkedin,onClick: (){
-                  ///Gooogle click
-                },socialIcon: appLinkdinSvg),
+                  controller.linkedinLogin();
+                },socialIcon: appLinkdinNewSvg),
                 SizedBox(height: 10,),
                 _commonSocialSignIN(context,socialName: appContinueWithApple,onClick: (){
                   ///Gooogle click
-                },socialIcon: appGoogleIcon),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset(appLinkdinSvg,height: 20,width: 20,),
-                    SizedBox(width: 10,),
-                   // Text(socialName,  style: AppTextStyles.font16.copyWith(color: appBlackColor,)),
-                  ],
-                ),
+                },socialIcon: appAppleNewSvg),
+
 
                 SizedBox(height: 80,),
                 Container(

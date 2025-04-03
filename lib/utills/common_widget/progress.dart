@@ -4,10 +4,12 @@ import 'package:collarchek/utills/app_colors.dart';
 import 'package:collarchek/utills/common_widget/common_button.dart';
 import 'package:collarchek/utills/common_widget/common_text_field.dart';
 import 'package:collarchek/utills/image_path.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -16,9 +18,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../models/employment_list_model.dart';
 import '../app_key_constent.dart';
 import '../app_strings.dart';
 import '../font_styles.dart';
+import 'common_appbar.dart';
+import 'common_methods.dart';
 
 
 
@@ -159,7 +164,7 @@ readStorageData({required String key})async{
 
 String calculateTimeDifference({required String createDate}) {
   if (createDate == null || createDate.isEmpty) {
-    return noDataAvailable; // Handle null or empty case
+    return ""; // Handle null or empty case
   }
 
   DateTime? createdAt = DateTime.tryParse(createDate); // Convert string to DateTime safely
@@ -212,12 +217,19 @@ String generateLocation({
 
 
 String getInitialsWithSpace({required String input}) {
-  return input.split(' ').map((word) => word.isNotEmpty ? word[0] : '').join(' ').toUpperCase();
+  List<String> words=[];
+  if(input.isNotEmpty){
+     words = input.isNotEmpty?input.trim().split(RegExp(r'\s+')):[];
+    if (words.length < 2) return words.map((w) => w[0]).join(' ').toUpperCase();
+
+  }
+  return '${words[0][0]} ${words[1][0]}'.toUpperCase()??"";
 }
 
 jonInfoCard(context,{required String icon1,required String header1,required String description1,required String icon2,required String header2,required String description2}) {
   return Container(
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
@@ -233,7 +245,7 @@ jonInfoCard(context,{required String icon1,required String header1,required Stri
                 children: <Widget>[
                   Text(header1,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.35,
+                    width: MediaQuery.of(context).size.width*0.30,
                       child: Text(description1,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)),
                 ],
               )
@@ -251,7 +263,7 @@ jonInfoCard(context,{required String icon1,required String header1,required Stri
               children: <Widget>[
                 Text(header2,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
                 SizedBox(
-                    width: MediaQuery.of(context).size.width*0.35,
+                    width: MediaQuery.of(context).size.width*0.30,
                     child: Text(description2,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)),
               ],
             )
@@ -363,7 +375,7 @@ Future<void> getFileFromGallery(context,{required Function(String) onFilePickedD
         return;
       }
 
-      onFilePickedData(file.name);
+      onFilePickedData(file.path.toString());
     } else {
       // User canceled file picker
     }
@@ -373,16 +385,21 @@ Future<void> getFileFromGallery(context,{required Function(String) onFilePickedD
 
 }
 
-Future<void> selectDate( context,{ required Function(String) onSelectedDate}) async {
+Future<void> selectDate(
+    context,{
+      required Function(String) onSelectedDate,
+      bool isEndDate=false,
+      DateTime? firstDateData
+    }) async {
   DateTime? selectedDate;
   final DateTime? picked = await showDatePicker(
     context: context,
     initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
+    firstDate: isEndDate?firstDateData!:DateTime(1910),
     lastDate: DateTime.now(),
   );
   if (picked != null && picked != selectedDate) {
-    final DateFormat dateFormatter = DateFormat('yyyy-MM-dd'); // Change format if needed
+    final DateFormat dateFormatter = DateFormat('dd-MM-yyyy'); // Change format if needed
     onSelectedDate(dateFormatter.format(picked));
   }
 }
@@ -413,3 +430,258 @@ showVerifyEmailWidget(context,{required TextEditingController controller,require
       }
   );
 }
+
+
+
+commonRattingBar(context,{int itemCount=5,required double initialRating,required Function(double) updatedRating,double size=24,double padding=4.0}){
+  return RatingBar.builder(
+    initialRating: initialRating,
+    minRating: 1,
+    direction: Axis.horizontal,
+    allowHalfRating: false,
+    itemCount: itemCount,
+    unratedColor: appRateUnSelectedColor,
+    itemSize: size,
+    itemPadding: EdgeInsets.symmetric(horizontal: padding),
+    itemBuilder: (context, _) => Icon(
+      Icons.star,
+      color: Colors.amber,
+    ),
+    onRatingUpdate: (rating) {
+      updatedRating(rating);
+    },
+  );
+}
+
+
+
+Future<void> getPortfolioTypeFromGallery(context,{required Function(String) onFilePickedData,required String portfolioType})async{
+  int maxFileSize = 25 * 1024 * 1024;
+  try {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: portfolioType=="Upload Image"?FileType.image:portfolioType=="Upload Video"?FileType.video:FileType.custom,
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+
+      // Check file size limit
+      if (file.size > maxFileSize) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("File size should be less than 25MB")),
+        );
+        return;
+      }
+
+      onFilePickedData(file.path.toString());
+    } else {
+      // User canceled file picker
+    }
+  }catch (e){
+    print("Pdf not picked $e");
+  }
+
+}
+
+
+String dateTimeYear({required String? date}) {
+  if (date == null || date.isEmpty) {
+    print("Invalid date input: $date"); // Debugging statement
+    return "N/A"; // Return a default value or handle accordingly
+  }
+
+  try {
+    DateTime dateTime = DateTime.parse(date);
+    return dateTime.year.toString();
+  } catch (e) {
+    print("Error parsing date: $e");
+    return "Invalid Date"; // Return fallback value
+  }
+}
+
+
+String formatDate({required String date}) {
+  DateTime dateTime = DateTime.parse(date);
+  String day = DateFormat('d').format(dateTime); // Get day without leading zero
+  String suffix = getDaySuffix(int.parse(day)); // Get suffix (st, nd, rd, th)
+  String formattedDate = "$day$suffix ${DateFormat('MMM yyyy').format(dateTime)}";
+
+  return formattedDate;
+}
+
+String getDaySuffix(int day) {
+  if (day >= 11 && day <= 13) {
+    return "th"; // Special case for 11th, 12th, 13th
+  }
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+}
+
+
+handleIndecaterPercentage({required String devident,required String devider}){
+
+  double verbal = double.tryParse(devident ?? '') ?? 0.0;
+  double language = double.tryParse(devider ?? '') ?? 1.0; // Avoid division by zero
+
+   return verbal / language;
+}
+
+DateTime convertStringDateTime({required String date}) {
+  try {
+    DateFormat format = DateFormat("dd-MM-yyyy");
+    DateTime dateTime = format.parse(date);
+    return dateTime;
+  } catch (e) {
+    throw FormatException("Invalid date format: $date");
+  }
+}
+convertDateTimeString({required String dateTimeString}){
+  DateTime dateTime = DateTime.parse(dateTimeString);
+
+  String formattedDate = DateFormat("yyyy-MM-dd").format(dateTime);
+  return formattedDate;
+}
+convertDateInMonthYear({required String date}){
+  try {
+    DateTime parsedDate = DateTime.parse(date); // Parses YYYY-MM-DD format
+    return DateFormat('MMM yyyy').format(parsedDate); // Returns "Mar 2025"
+  } catch (e) {
+    return "Invalid Date"; // Handle invalid input
+  }
+}
+
+
+checkEmploymentIsPresentOfNot({required String joiningDate ,required String tillEmploymentDate,required String isStillWorking}){
+
+  try{
+    String joiningDateData=formatDate(date: joiningDate??"");
+    String endDate=formatDate(date: tillEmploymentDate??"");
+    if(isStillWorking=="1"){
+      return "$joiningDateData $appTo $appPresent";
+    }else{
+      return "$joiningDateData $appTo $endDate";
+    }
+
+  }catch(e){
+    return "Invalid date";
+  }
+}
+
+String getRatingText(int rating) {
+  return rating <= 1 ? appStar : appStars;
+}
+
+
+completeSalaryPackage({required String salaryType,required String salaryAmount,required String salaryMode}){
+  return "$salaryType $salaryAmount $salaryMode";
+}
+
+openShortItemFilter(context,{required Function(int) onShort}){
+  shortedDataFilter(
+    context,
+    menuItem: [{'id':1,'name':appMostRelevent},{'id':2,'name':appHighestSalary},{'id':3,'name':appLowestSalary},{'id':4,'name':appNewlyPosted}],
+    onVoidCallBack: (Map<String, dynamic> value ) {
+      onShort(value['id']);
+    },
+  );
+}
+
+
+String formatTimestampInAmPm({required String timestamp}) {
+  DateTime dateTime = DateTime.parse(timestamp);
+  DateTime now = DateTime.now();
+  DateTime yesterday = now.subtract(Duration(days: 1));
+  DateTime lastWeek = now.subtract(Duration(days: 7));
+
+  String timeFormat = DateFormat('hh:mm a').format(dateTime); // Format time (e.g., 08:48 AM)
+  String fullDateFormat = DateFormat('yyyy-MM-dd hh:mm a').format(dateTime); // Full date
+
+  if (DateFormat('yyyy-MM-dd').format(dateTime) == DateFormat('yyyy-MM-dd').format(now)) {
+    return timeFormat; // If today, return only time
+  } else if (DateFormat('yyyy-MM-dd').format(dateTime) == DateFormat('yyyy-MM-dd').format(yesterday)) {
+    return 'Yesterday $timeFormat'; // If yesterday, return "Yesterday + time"
+  } else if (dateTime.isAfter(lastWeek)) {
+    return '${DateFormat('EEEE').format(dateTime)} $timeFormat'; // If within last week, return day name + time
+  } else {
+    return fullDateFormat; // If older than 7 days, return full date
+  }
+}
+
+
+noDataAvailableFoundWidget(context,{required String header,required String details}){
+  return Container(
+    height: MediaQuery.of(context).size.height*0.1,
+    width: MediaQuery.of(context).size.width,
+    margin: EdgeInsets.all(10),
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: appPrimaryColor,width: 1)
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(header,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+        Text(details,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),),
+
+      ],
+    ),
+  );
+}
+
+
+///Back desabe
+DateTime? lastBackPressTime; // Track last back press time
+DateTime? lastSwipeTime;
+Future<bool> onWillPop() async {
+  if (_shouldExitApp()) {
+    _exitApp();
+  } else {
+    _showToast(appPressBackAGainToExit);
+  }
+  return false; // Prevent default back action
+}
+
+// Handle swipe gestures
+void onSwipeBack() {
+  if (_shouldExitApp()) {
+    _exitApp();
+  } else {
+    _showToast(appSwipeAgainToExit);
+  }
+}
+
+// Check if app should exit
+bool _shouldExitApp() {
+  DateTime now = DateTime.now();
+  if (lastBackPressTime == null || now.difference(lastBackPressTime!) > Duration(seconds: 2)) {
+    lastBackPressTime = now;
+    return false;
+  }
+  return true;
+}
+
+// Show toast message
+void _showToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+  );
+}
+
+// Exit app
+void _exitApp() {
+  exit(0); // Force close the app
+}
+
+

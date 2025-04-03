@@ -422,6 +422,8 @@ class UserDetail {
   String? companyName;
   String? contactPerson;
   String? email;
+  String? fName;
+  String? lName;
   dynamic emailAlternate;
   String? phone;
   dynamic profile;
@@ -520,6 +522,8 @@ class UserDetail {
     this.profilePercentage,
     this.uncomplete,
     this.socialLogin,
+    this.lName,
+    this.fName
   });
 
   factory UserDetail.fromJson(Map<String, dynamic> json) => UserDetail(
@@ -529,6 +533,8 @@ class UserDetail {
     companyName: json["company_name"],
     contactPerson: json["contact_person"],
     email: json["email"],
+    fName: json["fname"],
+    lName: json["lname"],
     emailAlternate: json["email_alternate"],
     phone: json["phone"],
     profile: json["profile"],
@@ -583,6 +589,8 @@ class UserDetail {
     "company_name": companyName,
     "contact_person": contactPerson,
     "email": email,
+    "fname": fName,
+    "lname": lName,
     "email_alternate": emailAlternate,
     "phone": phone,
     "profile": profile,

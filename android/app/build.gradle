@@ -12,6 +12,7 @@ dependencies {
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.android.gms:play-services-auth'
     implementation 'com.google.firebase:firebase-analytics'
 }
 android {
@@ -40,16 +41,16 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('release-key.jks')
-            storePassword 'YOUR_PASSWORD'
+            storeFile file('my-release-key.jks')
+            storePassword 'CollarCheck'
             keyAlias 'release'
-            keyPassword 'YOUR_PASSWORD'
+            keyPassword 'CollarCheck'
         }
         debug {
-            storeFile file('release-key.jks')  // Use the same keystore
-            storePassword 'YOUR_PASSWORD'
+            storeFile file('my-release-key.jks')  // Use the same keystore
+            storePassword 'CollarCheck'
             keyAlias 'release'
-            keyPassword 'YOUR_PASSWORD'
+            keyPassword 'CollarCheck'
         }
     }
 
@@ -58,7 +59,7 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             //signingConfig = signingConfigs.debug
         }
     }

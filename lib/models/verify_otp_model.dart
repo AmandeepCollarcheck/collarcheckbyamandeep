@@ -13,7 +13,7 @@ class VerifyOtp {
 
   factory VerifyOtp.fromJson(Map<String, dynamic> json) => VerifyOtp(
     status: json["status"],
-    message: json["message"],
+    message: json["message"] ?? json["messages"],
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
   );
 

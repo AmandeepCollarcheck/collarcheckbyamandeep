@@ -4,11 +4,13 @@ import 'package:collarchek/utills/font_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 
-commonButton(context,{required String buttonName,required Color buttonBackgroundColor,required Color textColor,required Color buttonBorderColor ,required VoidCallback onClick}){
+import '../image_path.dart';
+
+commonButton(context,{required String buttonName,required Color buttonBackgroundColor,required Color textColor,required Color buttonBorderColor ,required VoidCallback onClick,bool isPrefixIconShow=false, String isPrefixIcon=appAppliedIcon, bool isPaddingDisabled=false}){
   return GestureDetector(
     onTap: onClick,
     child: Container(
-      margin: EdgeInsets.only(left: 20,right: 20),
+      margin: isPaddingDisabled?EdgeInsets.only(left:0,right: 0):EdgeInsets.only(left: 20,right: 20),
       alignment: Alignment.center,
       height: 45,
       width: MediaQuery.of(context).size.width,
@@ -17,7 +19,14 @@ commonButton(context,{required String buttonName,required Color buttonBackground
         borderRadius: BorderRadius.all(Radius.circular(14)),
         border: Border.all(color: buttonBorderColor,width: 1.0)
       ),
-      child: Text(buttonName,style: AppTextStyles.semiBold.copyWith(color: textColor),textAlign: TextAlign.center,),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          isPrefixIconShow?SvgPicture.asset(isPrefixIcon,height: 24,width: 24,):Container(),
+          isPrefixIconShow?SizedBox(width: 4,):SizedBox(width: 0,),
+          Text(buttonName,style: AppTextStyles.semiBold.copyWith(color: textColor),textAlign: TextAlign.center,)
+        ],
+      ),
     ),
   );
 }

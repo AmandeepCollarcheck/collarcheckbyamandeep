@@ -6,11 +6,13 @@ import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:collarchek/utills/font_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../api_provider/api_provider.dart';
+import '../../bottom_nav_bar/bottom_nav_bar_controller.dart';
 import '../app_key_constent.dart';
 import '../app_route.dart';
 import '../app_strings.dart';
@@ -24,11 +26,14 @@ class CommonDrawer extends StatefulWidget {
 
 class _CommonDrawerState extends State<CommonDrawer> {
   Rx profileImageData="".obs;
+  Rx profileDesignation="".obs;
   Rx userIdData="".obs;
   Rx professionData="".obs;
   Rx profilePercentageData=0.0.obs;
   Rx userNameData="".obs;
   late ProgressDialog progressDialog ;
+  final BottomNavBarController controller = Get.find<BottomNavBarController>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,11 +44,13 @@ class _CommonDrawerState extends State<CommonDrawer> {
 
   _getAllDataLocally() async {
     profileImageData.value=await readStorageData(key: profileImage) ??"";
+    profileDesignation.value=await readStorageData(key: profileDesignationData) ??"";
     userIdData.value=await readStorageData(key: userId) ??"";
     professionData.value=await readStorageData(key: profession) ??"";
     String firstName = await readStorageData(key: 'firstName') ?? "";
     String lastName = await readStorageData(key: 'lastName') ?? "";
     userNameData.value = "$firstName $lastName".trim();
+
     profilePercentageData.value=(double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100;
   }
   @override
@@ -63,26 +70,65 @@ class _CommonDrawerState extends State<CommonDrawer> {
               color: appPrimaryBackgroundColor,
             ),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appRecommendedJob, title: appRecommendJobs, onOptionClick: () {
+            _drawerOptionCard(icon: appRecommendedIconSvg, title: controller.userTypeData.value==company?appRecommendedCandidates:appRecommendJobs, onOptionClick: () {
+              Get.back();
               Get.offNamed(AppRoutes.recommendJob);
             }),
             SizedBox(height: 10,),
             Container(
               height: 1,
+
               color: appPrimaryBackgroundColor,
             ),
             SizedBox(height: 20,),
             Container(padding: EdgeInsets.only(left: 10),child: Text(appAccount,style: AppTextStyles.font12.copyWith(color: appGreyBlackColor),)),
-            SizedBox(height: 10,),
-            _drawerOptionCard(icon: appPersonalInfo, title: appPersonalInformation, onOptionClick: () {
-              Get.toNamed(AppRoutes.profile);
+            controller.userTypeData.value==company?SizedBox(height: 0,):SizedBox(height: 10,),
+            // _drawerOptionCard(icon: appPersonalInfo, title: appPersonalInformation, onOptionClick: () {
+            //   Get.back();
+            //   Get.toNamed(AppRoutes.profile);
+            // }),
+            // SizedBox(height: 10,),
+            controller.userTypeData.value==company?Container(): _drawerOptionCard(icon: appRecommendedIconSvg, title: appAppliedJobs, onOptionClick: () {
+              Get.back();
+              controller.bottomNavCurrentIndex.value=2;
+              controller.selectedTabIndexValue.value=1;
             }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appRecommendedJob, title: appAppliedJobs, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appMyConnectionIconSvg, title: controller.userTypeData.value==company?appMyEmployees:appMyConnections, onOptionClick: () {
+              Get.back();
+              controller.bottomNavCurrentIndex.value=1;
+              //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+            }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appConnectionsIcons, title: appConnections, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appConnectionRequestIconSvg, title: controller.userTypeData.value==company?appEmployeeRequests:appConnectionsRequest, onOptionClick: () {
+              Get.back();
+              //controller.bottomNavCurrentIndex.value=1;
+              Get.offNamed(AppRoutes.request,arguments: {screenName:dashboard});
+            }),
+            controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
+            controller.userTypeData.value==company?_drawerOptionCard(icon: appMyConnectionIconSvg, title: appMyConnections, onOptionClick: () {
+              Get.back();
+              controller.bottomNavCurrentIndex.value=1;
+              //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+            }):Container(),
+            controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
+            controller.userTypeData.value==company?_drawerOptionCard(icon: appReviewRequestSvg, title: appReviewRequests, onOptionClick: () {
+              Get.back();
+              controller.bottomNavCurrentIndex.value=1;
+              //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+            }):Container(),
+            controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
+            controller.userTypeData.value==company?_drawerOptionCard(icon: appPostJobSvg, title: appPostJob, onOptionClick: () {
+              Get.back();
+              controller.bottomNavCurrentIndex.value=1;
+              //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+            }):Container(),
+
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appSettings, title: appSettingsText, onOptionClick: () {  }),
+            _drawerOptionCard(icon: controller.userTypeData.value==company?appMyConnectionIconSvg:appSalaryRequestIconSvg, title: controller.userTypeData.value==company?appSavedCandidates:appSalaryRequest, onOptionClick: () {
+              Get.back();
+              Get.offNamed(AppRoutes.request,arguments: {screenName:dashboard,tabSelectionIndexValue:1});
+            }),
             SizedBox(height: 10,),
             Container(
               height: 1,
@@ -94,24 +140,29 @@ class _CommonDrawerState extends State<CommonDrawer> {
               child: Text(appGeneral,style: AppTextStyles.font12.copyWith(color: appGreyBlackColor),),
             ),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appAboutUs, title: appAboutUsText, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appAboutUsIconSvg, title: appAboutUsText, onOptionClick: () {  }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appAboutUs, title: appHelpCenter, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appBestPracticsIconSvg, title: appBestPractices, onOptionClick: () {  }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appRecommendedJob, title: appCareer, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appTermUseIconSvg, title: appTermsOfUse, onOptionClick: () {  }),
+
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appFAQ, title: appFAQText, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appNotificationSettingsIconSvg, title: appNotificationSettings, onOptionClick: () {  }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appPrivacyPolicyIcon, title: appPrivacyPolicy, onOptionClick: () {  }),
+            _drawerOptionCard(icon: appSettingsIconIconSvg, title: appGeneralSettings, onOptionClick: () {  }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appTermUse, title: appTermsOfUse, onOptionClick: () {  }),
-            SizedBox(height: 10,),
+            // _drawerOptionCard(icon: appSettings, title: appSettingsText, onOptionClick: () {  }),
+            // SizedBox(height: 10,),
+            // _drawerOptionCard(icon: appPrivacyPolicyIcon, title: appPrivacyPolicy, onOptionClick: () {  }),
+            // SizedBox(height: 10,),
+            // _drawerOptionCard(icon: appTermUse, title: appTermsOfUse, onOptionClick: () {  }),
+            // SizedBox(height: 10,),
             Container(
               height: 1,
               color: appPrimaryBackgroundColor,
             ),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appLogout, title: appLogoutText, onOptionClick: () {
+            _drawerOptionCard(icon: appLogoutIconSvg, title: appLogoutText, onOptionClick: () {
               _callingLogoutApi();
             },isPrimaryColor: true),
             SizedBox(height: 10,),
@@ -135,7 +186,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
         padding: EdgeInsets.only(left: 10),
         child: Row(
           children: <Widget>[
-            Image.asset(icon,height: 24,width: 24,),
+            icon.contains(".svg")?SvgPicture.asset(icon,height: 16,width: 16,):Image.asset(icon,height: 24,width: 24,),
             SizedBox(width: 10,),
             Text(title,style: AppTextStyles.font14.copyWith(color: isPrimaryColor?appPrimaryColor:appBlackColor)),
           ],
@@ -155,7 +206,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
           backgroundColor: appGreyColor,
           center: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: profileImageData.value != null || profileImageData.value.isNotEmpty?Image.asset(appDummyProfile,height: 64,width: 64,fit: BoxFit.cover,):Image.network(profileImageData.value,height: 64,width: 64,fit: BoxFit.cover,),
+            child: controller.profileImageData.value.isNotEmpty?Image.network(controller.profileImageData.value,height: 64,width: 64,fit: BoxFit.cover,):Image.asset(appDummyProfile,height: 64,width: 64,fit: BoxFit.cover,),
           ),
           progressColor: appPrimaryColor,
         ),
@@ -165,10 +216,13 @@ class _CommonDrawerState extends State<CommonDrawer> {
           children: <Widget>[
             userNameData.value!=null&&userNameData.value.isNotEmpty?  Text(userNameData.value,style: AppTextStyles.font16W700.copyWith(color: appBlackColor)):Container(),
             userIdData.value!=null&&userIdData.value.isNotEmpty? Text("$appId: ${userIdData.value}",style: AppTextStyles.font12.copyWith(color: appPrimaryColor)):Container(),
-            professionData.value!=null&&professionData.value.isNotEmpty? Text(professionData.value,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)):Container(),
+            profileDesignation.value!=null&&profileDesignation.value.isNotEmpty? Text(profileDesignation.value,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)):Container(),
             SizedBox(height: 5,),
             GestureDetector(
-              onTap: (){},
+              onTap: (){
+                Get.back();
+                controller.bottomNavCurrentIndex.value=4;
+              },
               child: Text(appViewAndUpdateProfile,style: AppTextStyles.font14.copyWith(color: appPrimaryColor)),
             )
           ],

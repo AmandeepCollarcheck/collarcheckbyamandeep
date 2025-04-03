@@ -1,13 +1,18 @@
 import 'dart:io';
-
+import 'package:dio/dio.dart' as dio;
 import 'package:collarchek/models/company_signUp_model.dart';
 import 'package:collarchek/models/individual_signup_model.dart';
 import 'package:collarchek/utills/app_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linkedin_login/linkedin_login.dart';
 
 import '../api_provider/api_provider.dart';
+import '../models/social_login_model.dart';
+import '../utills/app_key_constent.dart';
 import '../utills/app_strings.dart';
+import '../utills/auth_services.dart';
 import '../utills/common_widget/progress.dart';
 
 class SignUpControllers extends GetxController{
@@ -18,6 +23,7 @@ class SignUpControllers extends GetxController{
   var phoneController = TextEditingController();
   var companyEmailController = TextEditingController();
   var referralCodeController = TextEditingController();
+  var socialLoginData=SocailLoginModel().obs;
   late ProgressDialog progressDialog=ProgressDialog() ;
   var isCompanyProfile = false.obs;
   Rx isTermCheck =false.obs;
@@ -38,8 +44,8 @@ class SignUpControllers extends GetxController{
 
   @override
   void onInit() {
-    final Map<String, dynamic> data = Get.arguments;
-    isCompanyProfile.value=data['isCompanyProfile'];
+    final Map<String, dynamic> data = Get.arguments??{};
+    isCompanyProfile.value=data['isCompanyProfile']??false;
     super.onInit();
   }
 
@@ -132,5 +138,85 @@ class SignUpControllers extends GetxController{
   }
   backButtonClick(){
     Get.offNamed(AppRoutes.startUpSignup);
+  }
+
+  googleLogin() async {
+    final AuthService authService = AuthService();
+    UserCredential? user = await authService.signInWithGoogle();
+    if (user != null) {
+      print("Login successful: ${user.user?.email}");
+      Future.delayed(Duration(milliseconds: 500), ()async {
+        socialLoginApiCall(email: user.user?.email??"");
+      });
+    }
+  }
+
+  facebookLogin()async{
+    final AuthService authService = AuthService();
+    UserCredential? user = await authService.signInWithFacebook();
+  }
+
+  linkedinLogin()async{
+    progressDialog.show();
+    final String redirectUrl = 'https://www.linkedin.com/developers/tools/oauth/redirect';
+    final String clientId = '77k0w5amiegwcb';
+    final String clientSecret = 'WPL_AP1.C1OpJn3ExMpoZgYd.6nBt1Q==';
+    Get.off((){
+      return LinkedInUserWidget(
+        redirectUrl: redirectUrl,
+        clientId: clientId,
+        destroySession: true,
+        clientSecret: clientSecret,
+        onGetUserProfile: (UserSucceededAction linkedInUser)  async {
+          print("User Detail${linkedInUser.user.email??""}");
+          Future.delayed(Duration(milliseconds: 500), ()async {
+            socialLoginApiCall(email: linkedInUser.user.email??"");
+          });
+
+
+
+        },
+        onError: (UserFailedAction e) {
+          Get.offNamed(AppRoutes.login);
+        },
+      );
+    });
+
+  }
+
+  void socialLoginApiCall({required String email}) async{
+    try {
+      progressDialog.show();
+      var formData = dio.FormData.fromMap({
+        "email": email??"",
+      });
+      SocailLoginModel connectionDataListModel = await ApiProvider.base().socialLoginApi(formData);
+      if(connectionDataListModel.status==true){
+        socialLoginData.value=connectionDataListModel;
+        if(socialLoginData.value.data!=null){
+          var socialData=socialLoginData.value.data;
+          await writeStorageData(key: deviceAccessToken, value: socialData?.loginauth??"");
+          await writeStorageData(key: profileImage, value: socialData?.profile??"");
+          await writeStorageData(key: firstName, value: socialData?.fname??"");
+          await writeStorageData(key: lastName, value: socialData?.lname??"");
+          await writeStorageData(key: userId, value: socialData?.individualId??"");
+          await writeStorageData(key: profession, value: socialData?.profileDescription??"");
+          await writeStorageData(key: id, value: socialData?.id.toString()??"");
+          await writeStorageData(key: slug, value: socialData?.slug??"");
+          progressDialog.dismissLoader();
+          Get.offNamed(AppRoutes.bottomNavBar);
+        }
+
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
   }
 }

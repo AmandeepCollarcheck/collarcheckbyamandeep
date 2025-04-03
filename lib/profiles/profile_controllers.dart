@@ -9,17 +9,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart' as dio;
 import 'package:get_storage/get_storage.dart';
-
+import 'package:dio/dio.dart' as dio;
 import '../api_provider/api_provider.dart';
 import '../models/all_drop_down_list_model.dart';
 import '../models/city_list_model.dart';
 import '../models/country_list_model.dart';
 import '../models/employee_user_details_model.dart';
+import '../models/employment_history_list_model.dart';
 import '../models/save_user_profile_model.dart';
 import '../models/state_list_model.dart';
 import '../models/user_home_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_strings.dart';
+import '../utills/common_widget/image_multipart.dart';
 import '../utills/common_widget/progress.dart';
 
 class ProfileControllers extends GetxController{
@@ -33,6 +35,7 @@ class ProfileControllers extends GetxController{
   var countryListData=CountryListModel().obs;
   var stateListData=StateListModel().obs;
   var cityListData=CityListModel().obs;
+
   var allDropDownData=AllDropDownListModel().obs;
   final formKey = GlobalKey<FormState>();
   var firstNameController = TextEditingController();
@@ -64,15 +67,31 @@ class ProfileControllers extends GetxController{
   Rx residingCity=appSelect.obs;
   Rx presentAddress=appSelect.obs;
   Rx paremanentAddress=appSelect.obs;
-
-
-
-
   Rx selectedResumeName="".obs;
+
+
+  ///Dropdown handled
+  var selectedCompany={'id':"0","name":appSelectCompany}.obs;
+  var selectedAccodationType={'id':"0","name":appSelectAccomodation}.obs;
+  var selectedCurrentPosition={'id':"0","name":appSelectPosition}.obs;
+  var selectedWorkStatus={'id':"0","name":appSelectWorkStatus}.obs;
+  var selectedCountry={'id':"0","name":appSelectCountry}.obs;
+  var selectedState={'id':"0","name":appSelectState}.obs;
+  var selectedCity={'id':"0","name":appSelectCity}.obs;
+
+  ///Redirection
+  var screenNameData="".obs;
 
   @override
   void onInit() {
+    Map<String,dynamic> data=Get.arguments??{};
+    if(data.isNotEmpty){
+      screenNameData.value=data[screenName]??"";
+    }
+
+
     // TODO: implement onInit
+
     Future.delayed(Duration(milliseconds: 500), ()async {
       getAllDropDownListApiCall();
 
@@ -86,13 +105,20 @@ class ProfileControllers extends GetxController{
 
     });
 
+
+
     super.onInit();
   }
 
 
 
   backButtonClick(){
-    Get.offNamed(AppRoutes.bottomNavBar);
+    if(screenNameData.value==profileDetails){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar);
+    }
+
   }
 
 
@@ -127,10 +153,10 @@ class ProfileControllers extends GetxController{
         workStatus.value=userProfileData.value.data?.workStatusName??appSelect;
         country.value=userProfileData.value.data?.countryName??appSelect;
         state.value=userProfileData.value.data?.stateName??appSelect;
-        residingCity.value=userProfileData.value.data?.city??appSelect;
+        residingCity.value=userProfileData.value.data?.cityName??appSelect;
         isSameAsCheck.value=userProfileData.value.data?.sameAddress??false;
-        presentAddress.value=userProfileData.value.data?.presentAddress??appSelect;
-        paremanentAddress.value=userProfileData.value.data?.permanentAddress??appSelect;
+        presentController.text=userProfileData.value.data?.presentAddress??appSelect;
+        permanentController.text=userProfileData.value.data?.permanentAddress??appSelect;
         linkedInController.text=userProfileData.value.data?.linkdin??"";
         youtubeController.text=userProfileData.value.data?.youtube??"";
         instagramController.text=userProfileData.value.data?.instagram??"";
@@ -142,29 +168,34 @@ class ProfileControllers extends GetxController{
         snapshotController.text=userProfileData.value.data?.snapchat??"";
         selectedResumeName.value=userProfileData.value.data?.resumeName??"";
         ///Set Data in DropDown
-        if(userProfileData.value.data?.currentCompany!=null){
-          allDropDownData.value.data?.companyList?[0]=CompanyList(id:userProfileData.value.data?.currentCompany??"",company: userProfileData.value.data?.stillWorkingCompanyName??"" );
-        }
-        if(userProfileData.value.data?.accomodationName!=null){
-          allDropDownData.value.data?.accomodationList?[0]=AccomodationListElement(id:userProfileData.value.data?.accomodation??"",name: userProfileData.value.data?.accomodationName??"" );
-        }
-        if(userProfileData.value.data?.currentPosition!=null){
-          allDropDownData.value.data?.accomodationList?[0]=AccomodationListElement(id:userProfileData.value.data?.stillWorkingPosition??"",name: userProfileData.value.data?.stillWorkingPositionName??"" );
-        }
-        if(userProfileData.value.data?.workStatus!=null){
-          allDropDownData.value.data?.accomodationList?[0]=AccomodationListElement(id:userProfileData.value.data?.workStatus??"",name: userProfileData.value.data?.workStatusName??"" );
-        }
-        if(userProfileData.value.data?.country!=null){
-          countryListData.value.data?[0]=CountryDatum(id:userProfileData.value.data?.country??"",name: userProfileData.value.data?.countryName??"" );
-        }
-        if(userProfileData.value.data?.state!=null){
-          stateListData.value.data?[0]=StateDatum(id:userProfileData.value.data?.state??"",name: userProfileData.value.data?.stateName??"" );
-        }
-        if(userProfileData.value.data?.city!=null){
-          cityListData.value.data?[0]=CityDatum(id:userProfileData.value.data?.city??"",name: userProfileData.value.data?.cityName??"" );
-        }
-      //  allDropDownData.value.data?.companyList?[0].id=userProfileData.value.data?.currentCompany??"";
-        //allDropDownData.value.data?.companyList?[0].company=userProfileData.value.data?.stillWorkingCompanyName??"";
+        selectedCompany.value={
+          "id": userProfileData.value.data?.stillWorkingCompany.toString() ?? "0",
+          "name": userProfileData.value.data?.stillWorkingCompanyName.toString() ?? appSelectCompany
+        };
+        selectedAccodationType.value={
+          'id':userProfileData.value.data?.accomodation.toString()??"0",
+          "name":userProfileData.value.data?.accomodationName.toString()??appSelectAccomodation
+        };
+         selectedCurrentPosition.value={
+           'id':userProfileData.value.data?.stillWorkingPosition.toString()??"0",
+           "name":userProfileData.value.data?.stillWorkingPositionName.toString()??appSelectPosition
+         };
+         selectedWorkStatus.value={
+           'id':userProfileData.value.data?.workStatus.toString()??"0",
+           "name":userProfileData.value.data?.workStatusName.toString()??appSelectWorkStatus
+         };
+         selectedCountry.value={
+           'id':userProfileData.value.data?.country.toString()??"0",
+           "name":userProfileData.value.data?.countryName.toString()??appSelectCountry
+         };
+         selectedState.value={
+           'id':userProfileData.value.data?.state.toString()??"0",
+           "name":userProfileData.value.data?.stateName.toString()??appSelectState
+         };
+         selectedCity.value={
+           'id':userProfileData.value.data?.city.toString()??"0",
+           "name":userProfileData.value.data?.cityName.toString()??appSelectCity
+         };
       }else{
         showToast(somethingWentWrong);
       }
@@ -273,7 +304,11 @@ class ProfileControllers extends GetxController{
     try {
       keyboardDismiss(context);
       progressDialog.show();
-      var params={
+      var documentFile = await convertFileToMultipart(selectedImage.value?.path??"");
+      var resumeFile = await convertFileToMultipart(selectedResumeName.value??"");
+      var formData = dio.FormData.fromMap({
+        "profile":documentFile??"",
+        "resume":resumeFile??"",
         "fname":firstNameController.text??'',
         "lname":lastNameController.text??'',
         "work_status":workStatus.value??"",
@@ -302,15 +337,14 @@ class ProfileControllers extends GetxController{
         "country":country.value??'',
         "dob":dateOfBirthController.text??'',
         "state":state.value??'',
-        "profile":selectedImage.value?.path??"",
-        "resume":selectedResumeName.value??""
-      };
-      SaveUserProfileModel saveUserProfileModel = await ApiProvider.baseWithToken().saveUserProfile(params);
+        });
+      SaveUserProfileModel saveUserProfileModel = await ApiProvider.baseWithToken().saveUserProfile(formData);
       if(saveUserProfileModel.status==true){
-        getProfileApiCall();
-        showToast("Data Saved Successfully");
+        progressDialog.dismissLoader();
+        Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+
       }else{
-        showToast(somethingWentWrong);
+        showToast(saveUserProfileModel.messages??"");
       }
       progressDialog.dismissLoader();
     } on HttpException catch (exception) {
@@ -345,7 +379,7 @@ class ProfileControllers extends GetxController{
         if (Get.isDialogOpen ?? false) {
           Get.back(); // Close dialog
         }
-        Get.offNamed(AppRoutes.otp,arguments: {'mobile_number':emailController.text??"",'isEmailVerification':true,});
+        Get.offNamed(AppRoutes.otp,arguments: {mobileNumber:emailController.text??"",isEmailVerification:true,});
       }else{
         showToast(somethingWentWrong);
       }
@@ -358,6 +392,8 @@ class ProfileControllers extends GetxController{
       showToast(exception.toString());
     }
   }
+
+
 
 
 

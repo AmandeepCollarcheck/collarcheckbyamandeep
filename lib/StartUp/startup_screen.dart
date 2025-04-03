@@ -20,12 +20,14 @@ class StartUpScreen extends GetView<StartUpControllers>{
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
           backgroundColor: appScreenBackgroundColor,
         body: Container(
           margin: EdgeInsets.only(left: 10,right: 10,top: 20),
           child: Column(
             children: <Widget>[
-              SvgPicture.asset(appStartupImage,height: 308,),
+              Image.asset(appStartNewIconSvg,height: 308,),
+              //SvgPicture.asset(appStartupImage,height: 308,),
               SizedBox(height: 10,),
               Column(
                 children: <Widget>[
