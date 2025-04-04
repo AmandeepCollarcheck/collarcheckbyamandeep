@@ -52,7 +52,7 @@ class BottomNavBarController extends GetxController{
   final List<String> companyRoutes = [
     '/home',
     '/companyEmployees',
-    '/jobs',
+    '/companyJobs',
     '/messages',
     '/profile',
   ];

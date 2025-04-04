@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +11,7 @@ import '../utills/app_route.dart';
 import '../utills/app_strings.dart';
 import '../utills/common_widget/progress.dart';
 
-class EmployeeControllers extends GetxController with GetTickerProviderStateMixin{
+class CompanyJobControllers extends GetxController with GetTickerProviderStateMixin{
   late final TabController tabController;
   late ProgressDialog progressDialog=ProgressDialog() ;
   var searchController = TextEditingController();
@@ -26,14 +25,14 @@ class EmployeeControllers extends GetxController with GetTickerProviderStateMixi
   var currentCount="".obs;
   var pastCount="".obs;
   var listTabLabel = [
-    appCurrent,appPast
+    appOpen,appDraft,appCompleted
   ].obs;
-  var listTabCounter=["0","0"].obs;
+  var listTabCounter=["0","0","0"].obs;
 
   @override
   void onInit() {
     // TODO: implement onInit
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       selectedTabIndex.value = tabController.index; // Update reactive variable
     });
@@ -95,28 +94,28 @@ class EmployeeControllers extends GetxController with GetTickerProviderStateMixi
   }
 
   ///Employee List api
-   getEmployeeDataListApiCall() async{
-     try {
-       progressDialog.show();
-       EmployeeListModel connectionDataListModel = await ApiProvider.baseWithToken().employeeListData();
-       if(connectionDataListModel.status==true){
-         employeeData.value=connectionDataListModel;
-         currentCount.value=employeeData.value.data!.currentCount.toString();
-         pastCount.value=employeeData.value.data!.pastCount.toString();
-         listTabCounter.clear();
-         listTabCounter.add(currentCount.value);
-         listTabCounter.add(pastCount.value);
-       }else{
-         showToast(somethingWentWrong);
-       }
-       progressDialog.dismissLoader();
-     } on HttpException catch (exception) {
-       progressDialog.dismissLoader();
-       showToast(exception.message);
-     } catch (exception) {
-       progressDialog.dismissLoader();
-       showToast(exception.toString());
-     }
-   }
-
+  getEmployeeDataListApiCall() async{
+    try {
+      progressDialog.show();
+      EmployeeListModel connectionDataListModel = await ApiProvider.baseWithToken().employeeListData();
+      if(connectionDataListModel.status==true){
+        employeeData.value=connectionDataListModel;
+        currentCount.value=employeeData.value.data!.currentCount.toString();
+        pastCount.value=employeeData.value.data!.pastCount.toString();
+        listTabCounter.clear();
+        listTabCounter.add(currentCount.value);
+        listTabCounter.add(pastCount.value);
+        listTabCounter.add(pastCount.value);
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
 }

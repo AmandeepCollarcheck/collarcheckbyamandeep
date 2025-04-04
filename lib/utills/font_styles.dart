@@ -111,6 +111,7 @@ class AppTextStyles {
     decorationThickness: 0.5,
     fontWeight: FontWeight.w600, // SemiBold
   );
+
   static const TextStyle font12w500 = TextStyle(
     fontFamily: fontFamily,
     fontSize: 12,

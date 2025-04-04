@@ -1,4 +1,6 @@
-import 'package:collarchek/employees/employees_controllers.dart';
+import 'package:collarchek/company_job/company_job_controllers.dart';
+import 'package:collarchek/utills/app_key_constent.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -14,9 +16,7 @@ import '../utills/common_widget/progress.dart';
 import '../utills/font_styles.dart';
 import '../utills/image_path.dart';
 
-class EmployeesPage extends GetView<EmployeeControllers>{
-  const EmployeesPage({super.key});
-
+class CompanyJobPage extends GetView<CompanyJobControllers>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -102,8 +102,9 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                   // physics: NeverScrollableScrollPhysics(),
                   controller: controller.tabController,
                   children: <Widget>[
-                    _currentPage(context),
-                    _pastPage(context)
+                    _openPage(context),
+                    _draftPage(context),
+                    _completedPage(context)
                   ],
                 ),
               ),
@@ -114,27 +115,33 @@ class EmployeesPage extends GetView<EmployeeControllers>{
     );
   }
 
-  _currentPage(context) {
+  _openPage(context) {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var currentData=controller.employeeData.value.data?.current??[];
-            return currentData.isNotEmpty?Container(
+            var pastData=controller.employeeData.value.data?.past??[];
+            return pastData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(currentData.length??0, (index){
-                    return commonCompanyWidget(context,
-                      profileImage: currentData[index].profile??"",
-                      initialName: currentData[index].contactPerson??'',
-                      userName:  currentData[index].contactPerson??'',
-                      ccId: currentData[index].individualId??'',
-                      ratingStar: '0',
-                      buttonName: '',
-                      designation: currentData[index].designation??'',
-                      location: generateLocation(cityName: currentData[index].presentAddress??'', stateName: "", countryName: ""),
-                      dataPosted: dateCombination(joiningDate: '', endDate: '',isPresent: false),
-                      onClick: () {  },
+                  children: List.generate(pastData.length??0, (index){
+                    return commonCompanyJobWidget(context,
+                      profileImage: pastData[index].profile??"",
+                      initialName:"Satyam Shukla",
+                      userName: "Satyam Shukla",
+                      ccId: pastData[index].individualId??'',
+                      ratingStar: '10',
+                      buttonName: appAddReview,
+                      salary: "600 - 100 Lacs PA",
+                      experienceYear: "3 years",
+                      vaccancy: "12",
+                      onClick: () {
+                        print("On click wor,");
+                      },
+                      jobStatus: 'Published',
+                      noOfVaccency: '10',
+                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
+                      locations: 'Delhi, noida, lucknow',
                     );
                   }),
                 )
@@ -155,7 +162,7 @@ class EmployeesPage extends GetView<EmployeeControllers>{
     );
   }
 
-  _pastPage(context) {
+  _draftPage(context) {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -165,20 +172,70 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                 padding: EdgeInsets.all(10),
                 child:Wrap(
                   children: List.generate(pastData.length??0, (index){
-                    return commonCompanyWidget(context,
+                    return commonCompanyJobWidget(context,
                       profileImage: pastData[index].profile??"",
-                      initialName:pastData[index].contactPerson??'',
-                      userName:
-                      pastData[index].contactPerson??'',
+                      initialName:"Satyam Shukla",
+                      userName: "Satyam Shukla",
                       ccId: pastData[index].individualId??'',
                       ratingStar: '10',
                       buttonName: appAddReview,
-                      designation: pastData[index].designation??'',
-                      location: generateLocation(cityName: pastData[index].presentAddress??'', stateName: "", countryName: ""),
-                      dataPosted: dateCombination(joiningDate: pastData[index].joiningDate??'', endDate: pastData[index].workedTillDate??'',isPresent: false),
+                      salary: "600 - 100 Lacs PA",
+                      experienceYear: "3 years",
+                      vaccancy: "12",
+                      onClick: () {
+                        Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyJobsScreen,jobProfileName:"Web designer"});
+
+                      },
+                      jobStatus: 'Published',
+                      noOfVaccency: '10',
+                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
+                      locations: 'Delhi, noida, lucknow',
+                    );
+                  }),
+                )
+            ):SizedBox(
+                height: MediaQuery.of(context).size.height*0.65,
+                child: Center(
+                  child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
+                )
+            );
+          }),
+          Container(
+            //color: appPrimaryColor,
+            alignment: Alignment.bottomCenter,
+            child: allRightReservedWidget(),
+          )
+        ],
+      ),
+    );
+  }
+  _completedPage(context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Obx(()  {
+            var pastData=controller.employeeData.value.data?.past??[];
+            return pastData.isNotEmpty?Container(
+                padding: EdgeInsets.all(10),
+                child:Wrap(
+                  children: List.generate(pastData.length??0, (index){
+                    return commonCompanyJobWidget(context,
+                      profileImage: pastData[index].profile??"",
+                      initialName:"Satyam Shukla",
+                      userName: "Satyam Shukla",
+                      ccId: pastData[index].individualId??'',
+                      ratingStar: '10',
+                      buttonName: appAddReview,
+                      salary: "600 - 100 Lacs PA",
+                      experienceYear: "3 years",
+                      vaccancy: "12",
                       onClick: () {
                         print("On click wor,");
                       },
+                      jobStatus: 'Published',
+                      noOfVaccency: '10',
+                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
+                      locations: 'Delhi, noida, lucknow',
                     );
                   }),
                 )

@@ -216,15 +216,20 @@ String generateLocation({
 }
 
 
-String getInitialsWithSpace({required String input}) {
-  List<String> words=[];
-  if(input.isNotEmpty){
-     words = input.isNotEmpty?input.trim().split(RegExp(r'\s+')):[];
-    if (words.length < 2) return words.map((w) => w[0]).join(' ').toUpperCase();
-
+String getInitialsWithSpace({required String? input}) {
+  if (input == null || input.trim().isEmpty) {
+    return "";
   }
-  return '${words[0][0]} ${words[1][0]}'.toUpperCase()??"";
+
+  List<String> words = input.trim().split(RegExp(r'\s+'));
+
+  if (words.length == 1) {
+    return words[0][0].toUpperCase(); // Return single initial if only one word
+  }
+
+  return '${words[0][0]} ${words[1][0]}'.toUpperCase();
 }
+
 
 jonInfoCard(context,{required String icon1,required String header1,required String description1,required String icon2,required String header2,required String description2}) {
   return Container(

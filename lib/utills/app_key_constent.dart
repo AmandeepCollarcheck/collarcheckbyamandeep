@@ -44,6 +44,7 @@ const progressBarMaxValue="5";
 //Key
  const searchJype="searchTypeData";
  const screenName="screen_name";
+ const jobProfileName="jobProfileName";
  const isEdit="is_edit";
  const isEditItemId="is_edit_item_id";
  const mobileNumber="mobile_number";
@@ -70,3 +71,4 @@ const connections="connections";
 const searchScreen="searchScreen";
 const topCompaniesScreen="topCompaniesScreen";
 const companyEmployeesScreen="companyEmployees";
+const companyJobsScreen="companyJobs";

@@ -12,10 +12,14 @@ import 'package:collarchek/about/about_bindings.dart';
 import 'package:collarchek/about/about_page.dart';
 import 'package:collarchek/account_verification/account_verification.dart';
 import 'package:collarchek/account_verification/account_verification_bindings.dart';
+import 'package:collarchek/applicants/applicants_bindings.dart';
+import 'package:collarchek/applicants/applicants_page.dart';
 import 'package:collarchek/bottom_nav_bar/Bottom_nav_bar_binding.dart';
 import 'package:collarchek/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:collarchek/certificates/certificated_bindings.dart';
 import 'package:collarchek/certificates/certificated_page.dart';
+import 'package:collarchek/company_job/company_job_bindings.dart';
+import 'package:collarchek/company_job/company_job_page.dart';
 import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
@@ -95,6 +99,8 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String accountVerification = '/accountVerification';
   static const String companyEmployees = '/companyEmployees';
+  static const String companyJobs = '/companyJobs';
+  static const String applicants = '/applicants';
 
   static final routes = [
     GetPage(
@@ -251,6 +257,16 @@ class AppRoutes {
       name: companyEmployees,
       page: () => EmployeesPage(),
       binding: EmployeesBindings(),
+    ),
+    GetPage(
+      name: companyJobs,
+      page: () => CompanyJobPage(),
+      binding: CompanyJobBindings(),
+    ),
+    GetPage(
+      name: applicants,
+      page: () => ApplicantsPage(),
+      binding: ApplicantsBindings(),
     ),
   ];
 }

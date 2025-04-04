@@ -1,4 +1,6 @@
 import 'package:collarchek/bottom_nav_bar/bottom_nav_bar_controller.dart';
+import 'package:collarchek/company_job/company_job_bindings.dart';
+import 'package:collarchek/company_job/company_job_page.dart';
 import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
@@ -85,6 +87,13 @@ class BottomNavBarPage extends GetView<BottomNavBarController>{
                           page: ()=>EmployeesPage(),
                           binding: EmployeesBindings()
                         );
+
+                      case '/companyJobs':
+                        return GetPageRoute(
+                            page: ()=>CompanyJobPage(),
+                            binding: CompanyJobBindings()
+                        );
+
 
                       default:
                         return GetPageRoute(page: () => DashboardPage());

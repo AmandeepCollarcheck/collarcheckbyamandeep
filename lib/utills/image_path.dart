@@ -147,3 +147,5 @@ const String appReviewRequestSvg = "${svgIconBasePath}review_request.svg";
 const String appPostJobSvg = "${svgIconBasePath}post_job.svg";
 const String appAddEmploymentIconSvg = "${svgIconBasePath}add_employment_icon.svg";
 const String appBackIconSvg = "${svgIconBasePath}back_icon_new.svg";
+const String appRatingBarSvg = "${svgIconBasePath}rating_bar_icon.svg";
+const String appVaccencySvg = "${svgIconBasePath}vaccency.svg";

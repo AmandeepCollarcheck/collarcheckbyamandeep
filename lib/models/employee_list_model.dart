@@ -54,11 +54,12 @@ class Data {
 
 class Past {
   String? user;
-  dynamic profile;
+  String? profile;
   String? username;
   String? designation;
   String? employeeStatus;
   String? connectiondate;
+  String? individualId;
   String? approved;
   String? experienceId;
   dynamic linkdin;
@@ -89,6 +90,7 @@ class Past {
     this.youtube,
     this.instagram,
     this.facebook,
+    this.individualId,
     this.slug,
     this.contactPerson,
     this.profileDescription,
@@ -115,6 +117,7 @@ class Past {
     instagram: json["instagram"],
     facebook: json["facebook"],
     slug: json["slug"],
+    individualId: json["individual_id"],
     contactPerson: json["contact_person"],
     profileDescription: json["profile_description"],
     dob: json["dob"],
@@ -134,6 +137,7 @@ class Past {
     "employee_status": employeeStatus,
     "connectiondate": connectiondate,
     "approved": approved,
+    "individual_id": individualId,
     "experience_id": experienceId,
     "linkdin": linkdin,
     "youtube": youtube,

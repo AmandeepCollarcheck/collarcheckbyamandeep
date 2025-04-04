@@ -324,6 +324,13 @@ const String appAddNewEmployment="Add New Employment";
 const String appAddEmployee="Select Employee";
 const String appCurrent="Current";
 const String appPast="Past";
+const String appOpen="Open";
+const String appDraft="Draft";
+const String appVacancies="Vacancies";
+const String appCompleted="Completed";
+const String appApplicants="+ Applicants";
+const String appMarkAsComplete="Mark as complete";
+const String appApplicationFor="Applications for";
 
 
 
