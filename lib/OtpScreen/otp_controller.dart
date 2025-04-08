@@ -214,33 +214,10 @@ class OtpController extends GetxController{
       codeLength: 6,
       onCodeReceive: (code) {
          otpController.text = code; // 🔥 Set OTP in controller
-
-
-
       },
     )..startListenUserConsent((code) {
       final exp = RegExp(r'(\d{6})');
       return exp.stringMatch(code ?? '') ?? '';
     });
-
-    print("Listening for OTP...");
-
-    // 🔹 Start listening for OTP using SmsAutoFill
-    await SmsAutoFill().listenForCode();
-
-    // 🔹 Listen for OTP changes
-    SmsAutoFill().code.listen((otp) {
-      print("Updated OTP: $otp");
-      if (otp.isNotEmpty) {
-
-        otpController.text = otp;
-        update(); // 🔥 Force UI Update
-
-      }
-    });
   }
-
-
-
-
 }

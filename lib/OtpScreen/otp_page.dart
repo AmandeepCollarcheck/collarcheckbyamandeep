@@ -38,8 +38,6 @@ class OtpPage extends StatelessWidget {
                         children: <Widget>[
                           SizedBox(height: 10,),
                          Obx((){
-                           print("jlslsjdfksjdflsjkfljsdfjlksjkldflksdfjklskdfs");
-                           print(controller.otpController.text);
                            return Column(
                              children: <Widget>[
                                 controller.isEmailVerificationData.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,),
