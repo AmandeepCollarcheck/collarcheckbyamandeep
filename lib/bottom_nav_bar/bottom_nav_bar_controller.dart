@@ -73,7 +73,16 @@ class BottomNavBarController extends GetxController{
     }else{
       selectedUserType.value=false;
     }
-    profilePercentage.value = (double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100;
+
+
+    final data = await readStorageData(key: progressPercentage) ?? '0';
+    profilePercentage.value = (double.tryParse(data) ?? 0.0) / 100;
+
+    //profilePercentage.value = readStorageData(key: progressPercentage)!=null?(double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100:0.0;
+
+
+
+
     profileImageData.value=await readStorageData(key: profileImage);
     var userFirstName=await readStorageData(key: firstName);
     var userLastName=await readStorageData(key: lastName);

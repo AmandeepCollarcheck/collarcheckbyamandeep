@@ -1,3 +1,7 @@
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+
+BuildContext? buildContext = Get.context;
 const deviceAccessToken = 'accessToken';
 const progressPercentage = 'progressPercentage';
 const profileImage = 'profileImage';

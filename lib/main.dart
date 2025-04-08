@@ -1,10 +1,12 @@
 import 'package:collarchek/utills/app_colors.dart';
 import 'package:collarchek/utills/app_route.dart';
+import 'package:collarchek/utills/common_widget/common_custom_scrool_tab_view.dart';
 import 'package:collarchek/utills/font_styles.dart';
 import 'package:collarchek/utills/internet_connection.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,6 +17,7 @@ Future<void> main() async {
   await FlutterDisplayMode.setHighRefreshRate();
   await Firebase.initializeApp();
   await InternetChecker().onInit();
+  Get.put(CommonScrollControllers(), permanent: true);
   await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: appPrimaryColor,

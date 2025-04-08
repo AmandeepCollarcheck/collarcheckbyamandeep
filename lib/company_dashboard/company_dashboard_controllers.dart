@@ -11,10 +11,12 @@ import '../models/dashboard_statics_model.dart';
 import '../models/user_home_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
+import '../utills/common_widget/common_custom_scrool_tab_view.dart';
 import '../utills/common_widget/progress.dart';
 
 class CompanyDashboardControllers extends GetxController{
   var searchController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
   late ProgressDialog progressDialog=ProgressDialog() ;
   var companyUserDetails=CompanyUserDetailsModel().obs;
   var designationListData=CompanyAllDetailsData().obs;

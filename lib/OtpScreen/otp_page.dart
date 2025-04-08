@@ -38,41 +38,50 @@ class OtpPage extends StatelessWidget {
                         children: <Widget>[
                           SizedBox(height: 10,),
                          Obx((){
-                           return controller.isEmailVerificationData.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,);
-                         }),
-                          SizedBox(height: 20,),
-                          Form(key: controller.formKey,
-                            child: PinCodeTextField(
-                              controller: controller.otpController,
-                              appContext: context,
-                              obscureText: false,
-                              length: 6,
-                              onChanged: (value) {
-                                controller.otpController.text = value; // 🔥 Ensure controller updates
-                              },
-                              onCompleted: (String value){
-                                controller.loginButtonClick(context);
-                              },
-                              validator: (value) => value!.isEmpty ? appOtp+appIsRequired : null,
-                              pinTheme: PinTheme(
-                                fieldHeight: 40,
-                                fieldWidth: 40,
-                                activeColor: appPrimaryColor,
-                                activeFillColor: appPrimaryColor,
-                                inactiveColor: appGreyBlackColor,
-                                disabledColor: appGreyBlackColor,
-                                selectedFillColor: appPrimaryColor,
-                                inactiveBorderWidth: 1,
-                                selectedBorderWidth: 1,
-                                disabledBorderWidth: 1,
-                              ),
-                              cursorColor: appPrimaryColor,
-                              errorTextSpace: 30,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                           print("jlslsjdfksjdflsjkfljsdfjlksjkldflksdfjklskdfs");
+                           print(controller.otpController.text);
+                           return Column(
+                             children: <Widget>[
+                                controller.isEmailVerificationData.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,),
+                               SizedBox(height: 20,),
+                               Form(
+                                 key: controller.formKey,
+                                 child: PinCodeTextField(
 
-                            ),
-                          ),
+                                   controller: controller.otpController,
+                                   appContext: context,
+                                   obscureText: false,
+                                   length: 6,
+                                   onChanged: (value) {
+                                     controller.otpController.text = value; // 🔥 Ensure controller updates
+                                   },
+                                   onCompleted: (String value){
+                                     controller.loginButtonClick(context);
+                                   },
+                                   validator: (value) => value!.isEmpty ? appOtp+appIsRequired : null,
+                                   pinTheme: PinTheme(
+                                     fieldHeight: 40,
+                                     fieldWidth: 40,
+                                     activeColor: appPrimaryColor,
+                                     activeFillColor: appPrimaryColor,
+                                     inactiveColor: appGreyBlackColor,
+                                     disabledColor: appGreyBlackColor,
+                                     selectedFillColor: appPrimaryColor,
+                                     inactiveBorderWidth: 1,
+                                     selectedBorderWidth: 1,
+                                     disabledBorderWidth: 1,
+                                   ),
+                                   cursorColor: appPrimaryColor,
+                                   errorTextSpace: 30,
+                                   keyboardType: TextInputType.number,
+                                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+
+                                 ),
+                               ),
+                             ],
+                           );
+                         }),
+
                           Container(
                             margin: EdgeInsets.only(bottom: 20),
                             alignment: Alignment.bottomCenter,

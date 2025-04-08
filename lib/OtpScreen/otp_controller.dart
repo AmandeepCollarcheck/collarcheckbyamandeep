@@ -24,8 +24,9 @@ class OtpController extends GetxController{
   final formKey = GlobalKey<FormState>();
   late ProgressDialog progressDialog=ProgressDialog() ;
   var otpController = TextEditingController();
+  late OTPTextEditController otpTextController;
   final scaffoldKey = GlobalKey();
-  late OTPInteractor _otpInteractor;
+
 
   Rx mobileNumberData="".obs;
   Rx isLoginScreenData=false.obs;
@@ -48,6 +49,8 @@ class OtpController extends GetxController{
     _otpCountDownStart();
     super.onInit();
   }
+
+
   @override
   void dispose() {
     otpController.dispose();
@@ -196,17 +199,24 @@ class OtpController extends GetxController{
   _autoFilledOtpHandle() async {
     // 🔹 Request SMS Permission Only if Not Granted
     if (await Permission.sms.isDenied || await Permission.phone.isDenied) {
-      await Permission.sms.request();
-      await Permission.phone.request();
-    }
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.sms,
+        Permission.phone,
+      ].request();
 
-    // 🔹 Initialize OTP Text Field Controller
-    otpController = OTPTextEditController(
+      if (statuses[Permission.sms]!.isPermanentlyDenied ||
+          statuses[Permission.phone]!.isPermanentlyDenied) {
+        openAppSettings(); // Prompt user to enable from settings
+      }
+    }
+   // 🔹 Initialize OTP Text Field Controller
+    otpTextController = OTPTextEditController(
       codeLength: 6,
       onCodeReceive: (code) {
-        print('Received OTP: $code');
-        otpController.text = code; // 🔥 Set OTP in controller
-        update(); // 🔥 Force UI Update in GetX
+         otpController.text = code; // 🔥 Set OTP in controller
+
+
+
       },
     )..startListenUserConsent((code) {
       final exp = RegExp(r'(\d{6})');
@@ -220,10 +230,12 @@ class OtpController extends GetxController{
 
     // 🔹 Listen for OTP changes
     SmsAutoFill().code.listen((otp) {
+      print("Updated OTP: $otp");
       if (otp.isNotEmpty) {
+
         otpController.text = otp;
         update(); // 🔥 Force UI Update
-        print("Updated OTP: $otp");
+
       }
     });
   }
