@@ -11,7 +11,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:otp_autofill/otp_autofill.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+
 
 import '../api_provider/api_provider.dart';
 import '../models/save_user_profile_model.dart';
@@ -52,9 +52,8 @@ class OtpController extends GetxController{
 
 
   @override
-  void dispose() {
+  void onClose() {
     otpController.dispose();
-    SmsAutoFill().unregisterListener();
     _timer?.cancel();
     super.onClose();
   }

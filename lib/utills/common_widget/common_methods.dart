@@ -80,7 +80,7 @@ commonCardWidget(context,{required String image,
             isApplied: isApplied,
             isApplyClick: isApplyClick,
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
           programmingKnowledge(context,programmingList: programmingList,isExpanded:isExpanded, itemCount: programmingList.length,onExpandChanged: onExpandChanged ),
           SizedBox(height: 10,),
           Container(
@@ -203,32 +203,77 @@ appliedCommonCardWidget(context,{required String image,
 
 
 programmingKnowledge(context,{required List programmingList,required bool isExpanded,required VoidCallback onExpandChanged ,required int itemCount }) {
-  return SizedBox(
-   // height: 50,
-    width: MediaQuery.of(context).size.width*0.8,
-    child: GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-       // maxCrossAxisExtent: 140, // Adjust this value based on max text size
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        mainAxisExtent: 26, crossAxisCount: 4, // Fixed height
-      ),
-      itemCount: isExpanded ||itemCount<3? itemCount : 4, // Add "More" button if collapsed
-      itemBuilder: (context, index) {
-        if (!isExpanded && index == 3 && programmingList.length >= 3) {
-          return _buildMoreButton(onExpandChanged: onExpandChanged);
-        }
-        String name = programmingList[index].name.toString();
-        RegExp regExp = RegExp(r'name:\s*([\w\s]+)');
-        Match? match = regExp.firstMatch(name);
 
+  // return SizedBox(
+  //  // height: 50,
+  //   width: MediaQuery.of(context).size.width*0.8,
+  //   child: GridView.builder(
+  //     shrinkWrap: true,
+  //     physics: NeverScrollableScrollPhysics(),
+  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //      // maxCrossAxisExtent: 140, // Adjust this value based on max text size
+  //       crossAxisSpacing: 8,
+  //       mainAxisSpacing: 8,
+  //       mainAxisExtent: 26, crossAxisCount: 4, // Fixed height
+  //     ),
+  //     itemCount: isExpanded ||itemCount<3? itemCount : 4, // Add "More" button if collapsed
+  //     itemBuilder: (context, index) {
+  //       if (!isExpanded && index == 3 && programmingList.length >= 3) {
+  //         return _buildMoreButton(onExpandChanged: onExpandChanged);
+  //       }
+  //       String name = programmingList[index].name.toString();
+  //       RegExp regExp = RegExp(r'name:\s*([\w\s]+)');
+  //       Match? match = regExp.firstMatch(name);
+  //
+  //
+  //       return programmingList.isNotEmpty?_buildGridItem(match?.group(1)??programmingList[index].name.toString()):Container();
+  //     },
+  //   ),
+  // );
+  return Wrap(
+    spacing: 8,
+    runSpacing: 8,
+    children: [
+      // Render first 3 items (or all if expanded)
+      for (int i = 0; i < (isExpanded || programmingList.length <= 3 ? programmingList.length : 3); i++)
+        IntrinsicWidth(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: appWhiteColor,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: appPrimaryColor, width: 1),
+            ),
+            child: Text(
+              (() {
+                final nameRaw = programmingList[i].name.toString();
+                final RegExp regExp = RegExp(r'name:\s*([\w\s]+)');
+                final match = regExp.firstMatch(nameRaw);
+                return match?.group(1) ?? nameRaw;
+              })(),
+              style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
+            ),
+          ),
+        ),
 
-        return programmingList.isNotEmpty?_buildGridItem(match?.group(1)??programmingList[index].name.toString()):Container();
-      },
-    ),
+      // Add "+More" button as a separate chip after 3rd item (only if needed)
+      if (!isExpanded && programmingList.length > 3)
+        IntrinsicWidth(
+          child: GestureDetector(
+            onTap: onExpandChanged,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 5, ),
+              alignment: Alignment.center,
+              child: Text("+$appMore",style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
+            ),
+          ),
+        ),
+    ],
   );
+
+
+
 
 }
 Widget _buildMoreButton({required VoidCallback onExpandChanged}) {
@@ -270,79 +315,102 @@ _companyDetails(context,{
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
-      image.isNotEmpty?ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: image.endsWith(".svg")?SvgPicture.network(image,height: 50,width: 50,fit: BoxFit.cover,):image.contains("https")?Image.network(image,height: 50,width: 50,fit: BoxFit.cover,):Image.asset(image,height: 50,width: 50,fit: BoxFit.cover,),
+      image.isNotEmpty?Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: appPrimaryColor)
+        ),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: image.endsWith(".svg")?SvgPicture.network(image,height: 50,width: 50,fit: BoxFit.cover,):image.contains("https")?Image.network(image,height: 50,width: 50,fit: BoxFit.cover,):Image.asset(image,height: 50,width: 50,fit: BoxFit.cover,),
+        ),
       ): Container(
         alignment: Alignment.center,
         height: 50,
         width: 50,
         decoration: BoxDecoration(
            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: appPrimaryColor),
             gradient: LinearGradient(
                 colors: [getRandomColor(),getRandomColor()]
             )
         ),
         child: Text(getInitialsWithSpace(input: jobProfileName??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
       ),
-      SizedBox(width: 16,),
+      SizedBox(width: 12,),
       Container(
+        width: MediaQuery.of(context).size.width*0.66,
         alignment: Alignment.topLeft,
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(
-              width:MediaQuery.of(context).size.width*0.50,
-              child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 1,),
-            ),
-            companyName!=null&&companyName.isNotEmpty?SizedBox(
-                width:MediaQuery.of(context).size.width*0.5,
-                child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
-            SizedBox(height: 1,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                salaryDetails!=null&&salaryDetails.isNotEmpty?Row(
+                SizedBox(
+                  width:MediaQuery.of(context).size.width*0.52,
+                  child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 2,),
+                ),
+                companyName!=null&&companyName.isNotEmpty?SizedBox(
+                    width:MediaQuery.of(context).size.width*0.5,
+                    child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
+                SizedBox(height: 1,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SvgPicture.asset(appSalarySvgIcon,height: 15,width: 15,),
-                    SizedBox(width: 2,),
-                    Text(salaryDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                    salaryDetails!=null&&salaryDetails.isNotEmpty?Row(
+                      children: <Widget>[
+                        SvgPicture.asset(appSalarySvgIcon,height: 15,width: 15,),
+                        SizedBox(width: 2,),
+                        Text(salaryDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                      ],
+                    ):Container(),
+                    salaryDetails!=null&&salaryDetails.isNotEmpty?SizedBox(width: 5,):SizedBox(width: 0,),
+                    (salaryDetails!=null&&salaryDetails.isNotEmpty)&&(appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty)? Container(
+                      height: 18,
+                      width: 1,
+                      color: appGreyBlackColor,
+                    ):Container(),
+                    SizedBox(width: 5,),
+                    appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty?Row(
+                      children: <Widget>[
+                        SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,),
+                        SizedBox(width: 2,),
+                        Text(expDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                      ],
+                    ):Container(),
                   ],
-                ):Container(),
-                salaryDetails!=null&&salaryDetails.isNotEmpty?SizedBox(width: 5,):SizedBox(width: 0,),
-                (salaryDetails!=null&&salaryDetails.isNotEmpty)&&(appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty)? Container(
-                  height: 18,
-                  width: 1,
-                  color: appGreyBlackColor,
-                ):Container(),
-                SizedBox(width: 5,),
-                appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty?Row(
-                  children: <Widget>[
-                    SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,),
-                    SizedBox(width: 2,),
-                    Text(expDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-                  ],
-                ):Container(),
+                )
               ],
-            )
+            ),
+            if(isCompanyProfile==false)
+              isApplied?Text(appApplied,style: AppTextStyles.font14W500.copyWith(color: appGreenColor),):GestureDetector(
+                onTap: (){
+                  isApplyClick();
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: appPrimaryColor,width: 1),
+                    color: appWhiteColor),
+                  child: Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
+                )
+                ///If need Icon enable cheild
+                //child: SvgPicture.asset(appApplyIconNew,height: 24,width: 24,),
+                // child: Row(
+                //   children: <Widget>[
+                //     SvgPicture.asset(appApplySvgIcon,height: 16,width: 16,),
+                //     Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
+                //   ],
+                // ),
+              )
           ],
-        ),
+        )
       ),
-      if(isCompanyProfile==false)
-      isApplied?Text(appApplied,style: AppTextStyles.font14W500.copyWith(color: appGreenColor),):GestureDetector(
-        onTap: (){
-          isApplyClick();
-        },
-        child: SvgPicture.asset(appApplyIconNew,height: 24,width: 24,),
-        // child: Row(
-        //   children: <Widget>[
-        //     SvgPicture.asset(appApplySvgIcon,height: 16,width: 16,),
-        //     Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
-        //   ],
-        // ),
-      )
     ],
   );
 }

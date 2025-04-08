@@ -13,15 +13,20 @@ import '../utills/common_widget/progress.dart';
 
 class JobDetailsControllers extends GetxController with GetTickerProviderStateMixin{
   late final TabController tabController;
+  final ScrollController scrollController = ScrollController();
   late ProgressDialog progressDialog=ProgressDialog() ;
   var jobDetailsData=JobDetailsModel().obs;
   RxDouble tabViewHeight = RxDouble(350.0);
   //var tabHeight=500.0.obs;
   Rx jobTitle="".obs;
   final RxBool isExpanded = false.obs;
+  var isTabClicked = false.obs;
 
-  List<GlobalKey> keys = List.generate(3, (index) => GlobalKey());
 
+  final List<GlobalKey> keys = List.generate(3, (index) => GlobalKey(debugLabel: 'section_$index'));
+
+  final List<double> sectionOffsets = [];
+  
 
 
   var listTabLabel = [
@@ -42,6 +47,7 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
     jobTitle.value=data['jobTitle']??"";
     screenNameData.value=data[screenName]??"";
     tabController = TabController(length: 3, vsync: this);
+    scrollController.addListener(_handleScroll);
 
     Future.delayed(Duration(milliseconds: 500), ()async {
       String jobName=jobTitle.value;
@@ -129,4 +135,63 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
 
 
 
+
+  void _handleScroll() {
+    if (isTabClicked.value) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateSectionOffsets();
+      final scrollOffset = scrollController.offset;
+
+      for (int i = 0; i < sectionOffsets.length; i++) {
+        final start = sectionOffsets[i];
+        final end = (i + 1 < sectionOffsets.length) ? sectionOffsets[i + 1] : double.infinity;
+
+        if (scrollOffset >= start && scrollOffset < end) {
+          if (tabController.index != i) {
+            tabController.animateTo(i);
+          }
+          break;
+        }
+      }
+    });
+  }
+
+  void _updateSectionOffsets() {
+    sectionOffsets.clear();
+    for (var key in keys) {
+      final ctx = key.currentContext;
+      if (ctx != null) {
+        final box = ctx.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero, ancestor: Get.context!.findRenderObject());
+        sectionOffsets.add(position.dy + scrollController.offset);
+      }
+    }
+  }
+
+  void scrollToSection(int index) {
+    isTabClicked.value = true;
+    final ctx = keys[index].currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      ).then((_) {
+        Future.delayed(Duration(milliseconds: 200), () {
+          isTabClicked.value = false;
+        });
+      });
+    } else {
+      isTabClicked.value = false;
+    }
+  }
+
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    tabController.dispose();
+    super.dispose();
+  }
 }

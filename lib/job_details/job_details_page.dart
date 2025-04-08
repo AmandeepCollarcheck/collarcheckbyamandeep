@@ -28,35 +28,22 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
               bottomNavigationBar: _bottomButton(context),
               body: Column(
                 children: [
+                  commonActiveSearchBar(
+                      backGroundColor: appWhiteColor,
+                      onClick: (){
+                        controller.backButtonClick(context);
+                      },
+                      onShareClick: (){},
+                      onFilterClick: (){},
+                      leadingIcon: appBackSvgIcon,
+                      isShowShare: true,
+                      screenName: "",
+                      actionButton: ""
+                  ),
                   Expanded(
                       child: NestedScrollView(
                           headerSliverBuilder: (context, innerBoxIsScrolled) {
                             return[
-                              SliverAppBar(
-                                pinned: true,
-                                floating: false,
-                                backgroundColor: appScreenBackgroundColor,
-                                elevation: 0,
-                                automaticallyImplyLeading: false,
-                                flexibleSpace: FlexibleSpaceBar(
-                                  background: Container(
-                                    color: appScreenBackgroundColor,
-                                    child: commonActiveSearchBar(
-                                        backGroundColor: appWhiteColor,
-                                        onClick: (){
-                                          controller.backButtonClick(context);
-                                        },
-                                        onShareClick: (){},
-                                        onFilterClick: (){},
-                                        leadingIcon: appBackSvgIcon,
-                                        isShowShare: true,
-                                        screenName: "",
-                                        actionButton: ""
-                                    ),
-                                  ),
-                                ),
-                              ),
-
                               SliverToBoxAdapter(
                                 child: Container(
                                   color: appScreenBackgroundColor,
@@ -64,50 +51,54 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       _jobProfileDetails(context),
-                                      SizedBox(height: 10,),
+                                      SizedBox(height: 20,),
                                     ],
                                   ),
                                 ),
                               ),
                             ];
                           },
-                          body: Container(
-                            margin: EdgeInsets.only(left: 20,right: 20,top: 40),
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(height: 20),
-                                Divider(color: appPrimaryBackgroundColor,thickness: 1,),
-                                Container(
-                                  color: appWhiteColor,
-                                  padding:EdgeInsets.zero,
-                                  child: TabBar(
-                                    indicatorPadding: EdgeInsets.zero,
-                                    isScrollable: false,
-                                    dividerColor: appWhiteColor,
-                                    indicatorColor: appPrimaryColor,
-                                    indicatorWeight: 2,
-                                    labelPadding: EdgeInsets.only(bottom: 10),
-                                    // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
-                                    indicatorSize: TabBarIndicatorSize.tab,
-                                    controller: controller.tabController,
-                                    tabs: List.generate(controller.listTabLabel.length, (index){
-                                      return Text(controller.listTabLabel[index],style: AppTextStyles.font12.copyWith(color: appBlackColor),);
-                                    }),
-                                  ),
+                          body: Column(
+                            children: <Widget>[
+                              Divider(color: appPrimaryBackgroundColor,thickness: 1,height: 1,),
+                              SizedBox(height: 10,),
+                              Container(
+                                margin: EdgeInsets.only(left: 20,right: 20,),
+                                color: appWhiteColor,
+                                padding:EdgeInsets.zero,
+                                child: TabBar(
+                                  indicatorPadding: EdgeInsets.zero,
+                                  isScrollable: false,
+                                  dividerColor: appWhiteColor,
+                                  indicatorColor: appPrimaryColor,
+                                  indicatorWeight: 2,
+                                  labelPadding: EdgeInsets.only(bottom: 10),
+                                  // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  controller: controller.tabController,
+                                  onTap: (index){
+                                    controller.scrollToSection(index);
+                                  },
+
+                                  tabs: List.generate(controller.listTabLabel.length, (index){
+                                    return Text(controller.listTabLabel[index],style: AppTextStyles.font12.copyWith(color: appBlackColor),);
+                                  }),
                                 ),
-                                SizedBox(height: 10,),
-                                Obx((){
-                                  var jobDescription=controller.jobDetailsData.value.data?.detail?.jobDescription??"";
-                                  var roleResponsibility=controller.jobDetailsData.value.data?.detail?.rolesResponsibility??"";
-                                  return Expanded(
-                                    child: TabBarView(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      controller: controller.tabController,
+                              ),
+                              SizedBox(height: 10,),
+
+                              SingleChildScrollView(
+                                  controller: controller.scrollController,
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 20,right: 20),
+                                    child: Column(
                                       children: <Widget>[
                                         ///Job Description
-                                        jobDescription.isNotEmpty||roleResponsibility.isNotEmpty?MeasureHeight(
-                                          onHeightChanged: (height) => controller.updateHeight(height),
-                                          child: SingleChildScrollView(
+                                        Obx((){
+                                          var jobDescription=controller.jobDetailsData.value.data?.detail?.jobDescription??"";
+                                          var roleResponsibility=controller.jobDetailsData.value.data?.detail?.rolesResponsibility??"";
+                                          return jobDescription.isNotEmpty||roleResponsibility.isNotEmpty?Container(
+                                            key: controller.keys[0],
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: <Widget>[
@@ -128,17 +119,18 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
 
                                               ],
                                             ),
-                                          ),
-                                        ):Center(
-                                          child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
-                                        ),
+                                          ):Center(
+                                            child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
+                                          );
+                                        }),
 
 
 
                                         ///Required Skills
                                         Obx((){
                                           var skills=controller.jobDetailsData.value.data?.detail?.skill??[];
-                                          return skills.isNotEmpty?MeasureHeight(
+                                          return skills.isNotEmpty?Container(
+                                            key: controller.keys[1],
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: <Widget>[
@@ -175,14 +167,14 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
                                                 SizedBox(height: 10,),
                                               ],
                                             ),
-                                            onHeightChanged: (height) => controller.updateHeight(height),
                                           ):Center(
                                             child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
                                           );
                                         }),
 
                                         ///Job Info
-                                        MeasureHeight(
+                                        Container(
+                                          key: controller.keys[2],
                                           child:  Obx((){
                                             var createdDate=controller.jobDetailsData.value.data?.detail?.createDate??"";
                                             var applicationCount=controller.jobDetailsData.value.data?.detail?.vacancy??"";
@@ -220,15 +212,13 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
                                               ),
                                             );
                                           }),
-                                          onHeightChanged: (height) => controller.updateHeight(height),
                                         ),
 
                                       ],
                                     ),
-                                  );
-                                }),
-                              ],
-                            ),
+                                  )
+                              ),
+                            ],
                           )
                       )
                   )
@@ -491,39 +481,41 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child:image.isNotEmpty?Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
+        Container(
+          padding: EdgeInsets.all(0),
+          decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: appGreyBlackColor.withOpacity(0.5),width: 1)
-            ),
-            child: Image.network(image,height: 56,width: 56,errorBuilder: (context, error, stackTrace) {
+              border: Border.all(color: appPrimaryColor,width: 1)
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child:image.isNotEmpty?Image.network(image,height: 56,width: 56,errorBuilder: (context, error, stackTrace) {
               return Container(
                 alignment: Alignment.center,
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: appPrimaryColor,width: 1),
                     gradient: LinearGradient(
                         colors: [getRandomColor(),getRandomColor()]
                     )
                 ),
                 child: Text(getInitialsWithSpace(input: jobProfile??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
               );
-            },),
-          ):Container(
-            alignment: Alignment.center,
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                    colors: [getRandomColor(),getRandomColor()]
-                )
+            },):Container(
+              alignment: Alignment.center,
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: appPrimaryColor,width: 1),
+                  gradient: LinearGradient(
+                      colors: [getRandomColor(),getRandomColor()]
+                  )
+              ),
+              child: Text(getInitialsWithSpace(input: jobProfile??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
             ),
-            child: Text(getInitialsWithSpace(input: jobProfile??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
           ),
         ),
         SizedBox(width: 5,),
