@@ -1,6 +1,10 @@
 import 'package:collarchek/bottom_nav_bar/bottom_nav_bar_controller.dart';
+import 'package:collarchek/company_dashboard/company_dashboard_bindings.dart';
+import 'package:collarchek/company_dashboard/company_dashboard_page.dart';
 import 'package:collarchek/company_job/company_job_bindings.dart';
 import 'package:collarchek/company_job/company_job_page.dart';
+import 'package:collarchek/company_profile/company_profile_bindings.dart';
+import 'package:collarchek/company_profile/company_profile_page.dart';
 import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
@@ -46,14 +50,17 @@ class BottomNavBarPage extends GetView<BottomNavBarController>{
             }
           },
           child: GestureDetector(
-            onHorizontalDragEnd: (details) => onSwipeBack(),
+          //  onHorizontalDragEnd: (details) => onSwipeBack(),
             child: Scaffold(
               key: controller.scaffoldKey,
               drawer: CommonDrawer(),
               body: Obx((){
+                if (!controller.isProfileDataLoaded.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
                 return Navigator(
                   key: ValueKey(controller.bottomNavCurrentIndex.value),
-                  initialRoute: controller.userTypeData.value==company?controller.companyRoutes[controller.bottomNavCurrentIndex.value]:controller.routes[controller.bottomNavCurrentIndex.value],
+                  initialRoute: controller.selectedUserType.value?controller.companyRoutes[controller.bottomNavCurrentIndex.value]:controller.routes[controller.bottomNavCurrentIndex.value],
                   onGenerateRoute: (settings) {
                     switch (settings.name) {
                       case '/home':
@@ -92,6 +99,16 @@ class BottomNavBarPage extends GetView<BottomNavBarController>{
                         return GetPageRoute(
                             page: ()=>CompanyJobPage(),
                             binding: CompanyJobBindings()
+                        );
+                      case '/companyProfile':
+                        return GetPageRoute(
+                            page: ()=>CompanyProfilePage(),
+                            binding: CompanyProfileBindings()
+                        );
+                      case '/companyDashboard':
+                        return GetPageRoute(
+                            page: ()=>CompanyDashboardPage(),
+                            binding: CompanyDashboardBindings()
                         );
 
 

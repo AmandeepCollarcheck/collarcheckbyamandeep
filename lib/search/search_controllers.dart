@@ -42,6 +42,8 @@ class SearchControllers extends GetxController{
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"3"});
     }else if(screenNameData.value==profileDetails){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else if(screenNameData.value==companyEmployeesScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar);
     }

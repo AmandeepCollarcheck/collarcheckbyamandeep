@@ -102,8 +102,12 @@ class _CommonDrawerState extends State<CommonDrawer> {
             SizedBox(height: 10,),
             _drawerOptionCard(icon: appConnectionRequestIconSvg, title: controller.userTypeData.value==company?appEmployeeRequests:appConnectionsRequest, onOptionClick: () {
               Get.back();
-              //controller.bottomNavCurrentIndex.value=1;
-              Get.offNamed(AppRoutes.request,arguments: {screenName:dashboard});
+              if(controller.userTypeData.value==company){
+                Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:dashboard});
+              }else{
+                Get.offNamed(AppRoutes.request,arguments: {screenName:dashboard});
+              }
+
             }),
             controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
             controller.userTypeData.value==company?_drawerOptionCard(icon: appMyConnectionIconSvg, title: appMyConnections, onOptionClick: () {

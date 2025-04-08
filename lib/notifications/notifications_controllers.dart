@@ -15,6 +15,7 @@ class NotificationControllers extends GetxController{
   @override
   void onInit() {
     // TODO: implement onInit
+
     Future.delayed(Duration(milliseconds: 500), ()async {
       getNotificationApiData();
     });

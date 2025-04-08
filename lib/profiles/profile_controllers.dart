@@ -51,9 +51,9 @@ class ProfileControllers extends GetxController{
   var youtubeController = TextEditingController();
   var instagramController = TextEditingController();
   var facebookController = TextEditingController();
+  var twitterController = TextEditingController();
   var tumblrController = TextEditingController();
   var discordController = TextEditingController();
-  var twitterController = TextEditingController();
   var zoomController = TextEditingController();
   var snapshotController = TextEditingController();
 

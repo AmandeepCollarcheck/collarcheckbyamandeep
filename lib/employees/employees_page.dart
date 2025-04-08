@@ -1,4 +1,5 @@
 import 'package:collarchek/employees/employees_controllers.dart';
+import 'package:collarchek/utills/app_key_constent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -38,7 +39,7 @@ class EmployeesPage extends GetView<EmployeeControllers>{
 
                   },
                   onAddEmployment: (){
-                    openAddEmploymentForm(context, designationListData: controller.designationListData.value);
+                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData: companyEmployeesScreen);
                   },
                   onTap: (){
                     controller.openSearchScreen(context);
@@ -130,7 +131,7 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                       userName:  currentData[index].contactPerson??'',
                       ccId: currentData[index].individualId??'',
                       ratingStar: '0',
-                      buttonName: '',
+                      buttonName: appAddReview,
                       designation: currentData[index].designation??'',
                       location: generateLocation(cityName: currentData[index].presentAddress??'', stateName: "", countryName: ""),
                       dataPosted: dateCombination(joiningDate: '', endDate: '',isPresent: false),
@@ -168,10 +169,9 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                     return commonCompanyWidget(context,
                       profileImage: pastData[index].profile??"",
                       initialName:pastData[index].contactPerson??'',
-                      userName:
-                      pastData[index].contactPerson??'',
+                      userName:" Person"??'',
                       ccId: pastData[index].individualId??'',
-                      ratingStar: '10',
+                      ratingStar: '10.0',
                       buttonName: appAddReview,
                       designation: pastData[index].designation??'',
                       location: generateLocation(cityName: pastData[index].presentAddress??'', stateName: "", countryName: ""),

@@ -67,6 +67,12 @@ class AppTextStyles {
     decorationThickness: 0.5,
     fontWeight: FontWeight.w600, // SemiBold
   );
+  static const TextStyle font22w700 = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 22,
+    decorationThickness: 0.5,
+    fontWeight: FontWeight.w700, // SemiBold
+  );
   static const TextStyle font28 = TextStyle(
     fontFamily: fontFamily,
     fontSize: 28,
@@ -111,6 +117,12 @@ class AppTextStyles {
     decorationThickness: 0.5,
     fontWeight: FontWeight.w600, // SemiBold
   );
+  static const TextStyle font18w700 = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 18,
+    decorationThickness: 0.5,
+    fontWeight: FontWeight.w700, // SemiBold
+  );
 
   static const TextStyle font12w500 = TextStyle(
     fontFamily: fontFamily,
@@ -154,6 +166,12 @@ class AppTextStyles {
     decorationThickness: 0.5,
     fontWeight: FontWeight.w600, // SemiBold
   );
+  static const TextStyle font20w500 = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 20,
+    decorationThickness: 0.5,
+    fontWeight: FontWeight.w500, // SemiBold
+  );
 }
 
 
@@ -163,6 +181,7 @@ class AppTextStyles {
 
 class AppTheme {
   static ThemeData get lightTheme => ThemeData(
+    useMaterial3: true,
     fontFamily: AppTextStyles.fontFamily,
     textTheme: TextTheme(
       bodyLarge: AppTextStyles.regular,
@@ -175,6 +194,7 @@ class AppTheme {
   );
 
   static ThemeData get darkTheme => ThemeData(
+    useMaterial3: true,
     fontFamily: AppTextStyles.fontFamily,
     textTheme: TextTheme(
       bodyLarge: AppTextStyles.regular,

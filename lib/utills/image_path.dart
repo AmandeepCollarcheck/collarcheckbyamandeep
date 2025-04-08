@@ -24,7 +24,7 @@ const String appCertificatesImageData = "${imageBasePath}certificates_image.png"
 
 ///Icons
 const String iconBasePath="assets/icon/";
-//const String appConnectionSelected = "${iconBasePath}connection_selected.png";
+const String appCurrentEmploueeIcon = "${iconBasePath}current_employee_icon.png";
 //const String appConnectionUnSelected = "${iconBasePath}connection_unselected.png";
 //const String appHomeSelected = "${iconBasePath}home_selected.png";
 //const String appHomeUnSelected = "${iconBasePath}home_unselected.png";
@@ -149,3 +149,6 @@ const String appAddEmploymentIconSvg = "${svgIconBasePath}add_employment_icon.sv
 const String appBackIconSvg = "${svgIconBasePath}back_icon_new.svg";
 const String appRatingBarSvg = "${svgIconBasePath}rating_bar_icon.svg";
 const String appVaccencySvg = "${svgIconBasePath}vaccency.svg";
+const String appAISvg = "${svgIconBasePath}ai_icon.svg";
+const String appCameraIconSvg = "${svgIconBasePath}camera_icon.svg";
+const String appCCIDSvg = "${svgIconBasePath}ccid_icon.svg";

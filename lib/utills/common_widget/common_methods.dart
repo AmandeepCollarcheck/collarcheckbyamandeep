@@ -41,6 +41,7 @@ commonCardWidget(context,{required String image,
   required String timeAgo,
   required Function() onClick,
   required Function() isApplyClick,
+  bool isCompanyProfile=false,
   bool isApplied=false,
 
 }){
@@ -52,16 +53,17 @@ commonCardWidget(context,{required String image,
       width: cardWidth,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: appGreyBlackColor.withOpacity(0.2), // Light shadow color
-              offset: Offset(5, 5), // Moves shadow to the right and bottom
-              blurRadius: 10, // Softens the shadow
-              spreadRadius: 2, // Increases shadow size
-            ),
-          ],
+        color: appWhiteColor,
         borderRadius: BorderRadius.circular(10),
-        color: appCardWhiteColor,
+        border: Border.all(color: appPrimaryBackgroundColor,width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x1A000000), // #0000001A
+            offset: Offset(0, 2),
+            blurRadius: 2,
+            spreadRadius: 0,
+          ),
+        ],
         //border: Border.all(color: appGreyBlackColor,width: 1)
       ),
       child: Column(
@@ -70,6 +72,7 @@ commonCardWidget(context,{required String image,
           _companyDetails(
             context,
               image: image,
+              isCompanyProfile: isCompanyProfile,
               jobProfileName: jobProfileName,
               companyName: companyName,
               salaryDetails: salaryDetails,
@@ -259,12 +262,13 @@ _companyDetails(context,{
   required String companyName,
   required String salaryDetails,
   required String expDetails,
+  bool isCompanyProfile=false,
   bool isApplied=false,
   required Function() isApplyClick,
 }) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
       image.isNotEmpty?ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -281,7 +285,7 @@ _companyDetails(context,{
         ),
         child: Text(getInitialsWithSpace(input: jobProfileName??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
       ),
-      SizedBox(width: 10,),
+      SizedBox(width: 16,),
       Container(
         alignment: Alignment.topLeft,
         child: Column(
@@ -326,6 +330,7 @@ _companyDetails(context,{
           ],
         ),
       ),
+      if(isCompanyProfile==false)
       isApplied?Text(appApplied,style: AppTextStyles.font14W500.copyWith(color: appGreenColor),):GestureDetector(
         onTap: (){
           isApplyClick();

@@ -18,8 +18,12 @@ import '../models/all_skills_list_model.dart';
 import '../models/applied_job_data_model.dart';
 import '../models/certificates_data_list_model.dart';
 import '../models/city_list_model.dart';
+import '../models/company_all_details_data.dart';
+import '../models/company_job_data_list_model.dart';
+import '../models/company_user_details_model.dart';
 import '../models/connection_data_list_model.dart';
 import '../models/country_list_model.dart';
+import '../models/dashboard_statics_model.dart';
 import '../models/edit_certificates_model.dart';
 import '../models/edit_education_data_model.dart';
 import '../models/edit_employment_history_model.dart';
@@ -1186,6 +1190,20 @@ class ApiProvider{
       handleException(error, stacktrace, _dioError!);
     }
   }
+  Future addJob(params) async {
+    try {
+      Response response = await _dio.post(strCompanyAddJob,data: params);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
 
   Future employeeListData() async {
     try {
@@ -1201,6 +1219,93 @@ class ApiProvider{
       handleException(error, stacktrace, _dioError!);
     }
   }
+  Future companyJobListData() async {
+    try {
+      Response response = await _dio.get(strCompanyJobData);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyJobListModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+
+
+  Future companyAllData() async {
+    try {
+      Response response = await _dio.get(strCompanyAllData);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyAllDetailsData.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future companyUserDetails() async {
+    try {
+      Response response = await _dio.get(strCompanyUserDetails);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+
+      return CompanyUserDetailsModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future companyDashboardStatics() async {
+    try {
+      Response response = await _dio.get(strCompanyStaticsDetails);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+
+      return DashboardStaticsDetailsModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future companyUpdateProfile(FormData params) async {
+    try {
+      print(">>>>>>>>>>>>>>>>>>>>>>");
+      print(params.fields);
+      Response response = await _dio.post(strCompanyProfileUpdate,data: params);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+
+
+
+
+
+
 
 
 

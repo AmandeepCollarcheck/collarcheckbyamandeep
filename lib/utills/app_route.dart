@@ -18,8 +18,14 @@ import 'package:collarchek/bottom_nav_bar/Bottom_nav_bar_binding.dart';
 import 'package:collarchek/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:collarchek/certificates/certificated_bindings.dart';
 import 'package:collarchek/certificates/certificated_page.dart';
+import 'package:collarchek/company_dashboard/company_dashboard_bindings.dart';
+import 'package:collarchek/company_dashboard/company_dashboard_page.dart';
+import 'package:collarchek/company_employment_request/company_employment_request_bindings.dart';
+import 'package:collarchek/company_employment_request/company_employment_request_page.dart';
 import 'package:collarchek/company_job/company_job_bindings.dart';
 import 'package:collarchek/company_job/company_job_page.dart';
+import 'package:collarchek/company_profile/company_profile_bindings.dart';
+import 'package:collarchek/company_profile/company_profile_page.dart';
 import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
@@ -101,6 +107,9 @@ class AppRoutes {
   static const String companyEmployees = '/companyEmployees';
   static const String companyJobs = '/companyJobs';
   static const String applicants = '/applicants';
+  static const String companyProfile = '/companyProfile';
+  static const String companyEmploymentRequest = '/companyEmploymentRequest';
+  static const String companyDashboard = '/companyDashboard';
 
   static final routes = [
     GetPage(
@@ -267,6 +276,21 @@ class AppRoutes {
       name: applicants,
       page: () => ApplicantsPage(),
       binding: ApplicantsBindings(),
+    ),
+    GetPage(
+      name: companyEmploymentRequest,
+      page: () => CompanyEmploymentRequestPage(),
+      binding: CompanyEmploymentRequestBindings(),
+    ),
+    GetPage(
+      name: companyProfile,
+      page: () => CompanyProfilePage(),
+      binding: CompanyProfileBindings(),
+    ),
+    GetPage(
+      name: companyDashboard,
+      page: () => CompanyDashboardPage(),
+      binding: CompanyDashboardBindings(),
     ),
   ];
 }

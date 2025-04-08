@@ -72,3 +72,4 @@ const searchScreen="searchScreen";
 const topCompaniesScreen="topCompaniesScreen";
 const companyEmployeesScreen="companyEmployees";
 const companyJobsScreen="companyJobs";
+const companyDashboardScreen="companyDashboard";

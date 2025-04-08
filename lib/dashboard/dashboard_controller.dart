@@ -13,11 +13,12 @@ import '../utills/common_widget/progress.dart';
 class DashboardController extends GetxController{
   var searchController =TextEditingController();
   late ProgressDialog progressDialog=ProgressDialog() ;
+  var userHomeModel=UserHomeModel().obs;
   final Debouncer debouncer = Debouncer();
   final RxBool isExpanded = false.obs;
   Rx isSearchActive=false.obs;
   Rx location="".obs;
-  var userHomeModel=UserHomeModel().obs;
+
   var userProfileComplatationPercentage=[].obs;
 
 

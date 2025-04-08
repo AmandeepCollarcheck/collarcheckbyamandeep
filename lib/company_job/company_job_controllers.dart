@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
+import '../models/company_all_details_data.dart';
+import '../models/company_job_data_list_model.dart';
 import '../models/employee_list_model.dart';
 import '../models/employment_list_model.dart';
 import '../utills/app_key_constent.dart';
@@ -15,15 +17,16 @@ class CompanyJobControllers extends GetxController with GetTickerProviderStateMi
   late final TabController tabController;
   late ProgressDialog progressDialog=ProgressDialog() ;
   var searchController = TextEditingController();
-  var designationListData=DesignationListModel().obs;
-  var employeeData=EmployeeListModel().obs;
+  var designationListData=CompanyAllDetailsData().obs;
+  var jobData=CompanyJobListModel().obs;
   Rx isSearchActive=false.obs;
   var isEditData=false.obs;
   var isEditIdData="".obs;
   Rx screenNameData="".obs;
   var selectedTabIndex=0.obs;
-  var currentCount="".obs;
-  var pastCount="".obs;
+  var openCount="".obs;
+  var draftCount="".obs;
+  var completedCount="".obs;
   var listTabLabel = [
     appOpen,appDraft,appCompleted
   ].obs;
@@ -57,7 +60,7 @@ class CompanyJobControllers extends GetxController with GetTickerProviderStateMi
         getDesignationApiCall();
       });
       Future.delayed(Duration(milliseconds: 500), ()async {
-        getEmployeeDataListApiCall();
+        getJobListApiCall();
       });
     }
 
@@ -76,7 +79,7 @@ class CompanyJobControllers extends GetxController with GetTickerProviderStateMi
   void getDesignationApiCall() async{
     try {
       progressDialog.show();
-      DesignationListModel designationListModel = await ApiProvider.baseWithToken().designationList();
+      CompanyAllDetailsData designationListModel = await ApiProvider.baseWithToken().companyAllData();
       if(designationListModel.status==true){
         designationListData.value=designationListModel;
 
@@ -93,19 +96,20 @@ class CompanyJobControllers extends GetxController with GetTickerProviderStateMi
     }
   }
 
-  ///Employee List api
-  getEmployeeDataListApiCall() async{
+  ///Job List api
+  getJobListApiCall() async{
     try {
       progressDialog.show();
-      EmployeeListModel connectionDataListModel = await ApiProvider.baseWithToken().employeeListData();
-      if(connectionDataListModel.status==true){
-        employeeData.value=connectionDataListModel;
-        currentCount.value=employeeData.value.data!.currentCount.toString();
-        pastCount.value=employeeData.value.data!.pastCount.toString();
+      CompanyJobListModel companyJobListModel = await ApiProvider.baseWithToken().companyJobListData();
+      if(companyJobListModel.status==true){
+        jobData.value=companyJobListModel;
+        openCount.value=jobData.value.data!.publishJobs?.length.toString()??"0";
+        draftCount.value=jobData.value.data!.draftJobs?.length.toString()??"0";
+        completedCount.value=jobData.value.data!.cancelJobs?.length.toString()??"0";
         listTabCounter.clear();
-        listTabCounter.add(currentCount.value);
-        listTabCounter.add(pastCount.value);
-        listTabCounter.add(pastCount.value);
+        listTabCounter.add(openCount.value);
+        listTabCounter.add(draftCount.value);
+        listTabCounter.add(completedCount.value);
       }else{
         showToast(somethingWentWrong);
       }

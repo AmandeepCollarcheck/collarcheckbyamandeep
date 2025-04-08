@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ var salaryBracts=[{'id':"1","name":appAnnually},{'id':"2","name":appPerMonth},].
 Rx selectedDesignation="".obs;
 Rx selectedDepartment="".obs;
 Rx selectedCompany="".obs;
+Rx selecteedEmployee="".obs;
 Rx selectedJoiningDateData="".obs;
 Rx selectedEmployedTill="".obs;
 Rx selectedCTC="".obs;
@@ -40,15 +42,17 @@ var isEditData=false.obs;
 Rx selectedSkills="".obs;
 /// Dropdown
 var selectedDesignationDropDown={"id":"0","name": appSelectDesignation}.obs;
-var selectedCompanyDropDown={"id":"0","name": appSelectCompany}.obs;
+var selectedCompanyDropDown={"id":"0","name": appSelectEmployee}.obs;
 var selectedDepartmentDropDown={"id":"0","name": appSelectDepartment}.obs;
 var selectedSkillsDropDown={"id":"0","name": appSelectSkill}.obs;
 var selectedCTCDropDown={"id":"0","name": appSelectCTC}.obs;
+var selectedEmployeeDropDown={"id":"0","name": appSelectDesignation}.obs;
 var selectedCTCTypeDropDown={"id":"0","name": appSelectCTCType}.obs;
 
-openAddEmploymentForm(context,{required DesignationListModel designationListData}){
+openAddEmploymentForm(context,{required DesignationListModel designationListData,required String screenNameData}){
   return showModalBottomSheet(
       isScrollControlled: true,
+      backgroundColor: appWhiteColor,
       enableDrag: true,
       context: context,
       builder: (BuildContext context){
@@ -64,7 +68,8 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                     children: <Widget>[
                       GestureDetector(
                         onTap:(){
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: SvgPicture.asset(appBackIconSvg,height: 12,width: 12,color: appBlackColor,),
                       ),
@@ -86,18 +91,18 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                         var designation=designationListData.data?.companyList??[];
 
                         return designation!=null&&designation.isNotEmpty?customDropDown(
-                            hintText: appSelectCompany,
-                            item: [{"id":"0","name": appSelectCompany},
+                            hintText: appSelectDesignation,
+                            item: [{"id":"0","name": appSelectEmployee},
                               ...designation.map((data)=>{'id':data.id,'name':data.company}).toList()??[]
                             ],
-                            selectedValue: designation.any((detum)=>detum.id==selectedCompanyDropDown["id"])?selectedCompanyDropDown:{"id":"0","name": appSelectCompany},
+                            selectedValue: designation.any((detum)=>detum.id==selectedDesignationDropDown["id"])?selectedDesignationDropDown:{"id":"0","name": appSelectDesignation},
                             onChanged: (Map<String,dynamic>? selectedData){
                               if(selectedData!=null){
-                                selectedCompanyDropDown.value={
+                                selectedDesignationDropDown.value={
                                   "id": selectedData?['id'].toString() ?? "0",
-                                  "name": selectedData?['name'].toString() ?? appSelectCompany
+                                  "name": selectedData?['name'].toString() ?? appSelectEmployee
                                 };
-                                selectedCompany.value=selectedData['name'];
+                                selectedDesignation.value=selectedData['name'];
                               }
                             },
                             icon: appDropDownIcon
@@ -140,26 +145,27 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                             item: [{"id":"0","name": appSelectDesignation},
                               ...designation.map((data)=>{'id':data.id,'name':data.name}).toList()??[]
                             ],
-                            selectedValue: designation.any((datum)=>datum.id==selectedDesignationDropDown["id"])?selectedDesignationDropDown:{"id":"0","name": appSelectDesignation},
+                            selectedValue: designation.any((datum)=>datum.id==selectedEmployeeDropDown["id"])?selectedEmployeeDropDown:{"id":"0","name": appSelectDesignation},
                             onChanged: (Map<String,dynamic>? selectedData){
                               if(selectedData!=null){
-                                selectedDesignationDropDown.value={
+                                selectedEmployeeDropDown.value={
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectDesignation
                                 };
-                                selectedDesignation.value=selectedData['name'];
+                                selecteedEmployee.value=selectedData['name'];
                               }
                             },
                             icon: appDropDownIcon
                         ):Container();
                       }),
+                      SizedBox(height: 10,),
                       ///Joining date and Employee Till
                       Row(
                         children: <Widget>[
                           Flexible(
                               child: Column(
                                 children: <Widget>[
-                                  commonTextFieldTitle(headerName: appJoiningDate,isMendatory: false),
+                                  commonTextFieldTitle(headerName: appJoiningDate,isMendatory: true),
                                   SizedBox(height: 5,),
                                   commonTextField(
                                       isRealOnly: true,
@@ -181,7 +187,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                           Flexible(
                             child: Column(
                               children: <Widget>[
-                                commonTextFieldTitle(headerName: appEmployedTill,isMendatory: false),
+                                commonTextFieldTitle(headerName: appEmployedTill,isMendatory: true),
                                 SizedBox(height: 5,),
                                 commonTextField(
                                     isRealOnly: true,
@@ -251,7 +257,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                                   ),
                                 )),
                                 SizedBox(width: 10,),
-                                Text(appIAmStillWorkingHere,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)
+                                Text(appEmployeeStillWorkingHere,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)
                               ],
                             )
                           ],
@@ -288,7 +294,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                         );
                       }),
                       SizedBox(height: 10,),
-                      commonTextFieldTitle(headerName: appSkills,isMendatory: true),
+                      commonTextFieldTitle(headerName: appSkills,isMendatory: false),
                       SizedBox(height: 5,),
                       Obx((){
                         var skills = List<DepartmentListElement>.from(designationListData.data?.skillList ?? []);
@@ -348,7 +354,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                       }),
                       ///Role and Responsibility
                       SizedBox(height: 10,),
-                      commonTextFieldTitle(headerName: appRoleAndResponsibility,isMendatory: true),
+                      commonTextFieldTitle(headerName: appRoleAndResponsibility,isMendatory: false),
                       SizedBox(height: 5,),
                       commonTextField(controller: rolesAndResponsibilityControllers, hintText: appRoleAndResponsibility,maxLine: 5),
                       ///CTC Detial
@@ -369,7 +375,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectCTC
                                 };
-                                selectedType.value=selectedData['name'];// Add new selected skill
+                                selectedCTC.value=selectedData['name'];// Add new selected skill
                               }
                             },
                             icon: appDropDownIcon
@@ -489,7 +495,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                     textColor: appWhiteColor,
                     buttonBorderColor: appPrimaryColor,
                     onClick: (){
-                      addEmploymentValidation(context);
+                      addEmploymentValidation(context, screenNameData: screenNameData);
                     }
                 ),
                 SizedBox(height: 20,)
@@ -502,38 +508,36 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
   );
 }
 
-addEmploymentValidation(context){
+addEmploymentValidation(context,{required String screenNameData}){
   if(selectedDesignation.value==null||selectedDesignation.value==""){
-    showToast(appPleaseSelectDesignation);
-  }else if(selectedCompany.value==null||selectedCompany.value==""){
-    showToast(appPleaseSelectCompany);
+    showToast(appPleaseSelectEmployee);
   }else if(selectedDepartment.value==null||selectedDepartment.value==""){
     showToast(appPleaseSelectDepartment);
+  }else if(selecteedEmployee.value==null||selecteedEmployee.value==""){
+    showToast(appPleaseSelectDesignation);
   }else if(selectedJoiningDateData.value==null||selectedJoiningDateData.value==""){
     showToast(appPleaseSelectJoiningDate);
-  }else if(selectedEmployedTill==null&&isStillWorkingHere.value==false){
+  }else if (!isStillWorkingHere.value && (selectedEmployedTill == null || selectedEmployedTill.value == "")) {
     showToast(appPleaseSelectEmpluedDate);
-  }else if(selectedSkills.value==null||selectedSkills.value==""){
-    showToast(appPleaseSelectSkill);
-  }else if(selectedType.value==null||selectedType.value==""){
+  }else if(selectedCTC.value==null||selectedCTC.value==""){
     showToast(appPleaseSelectCTC);
   }else if(ctcAmount.text==null||ctcAmount.text.isEmpty){
     showToast(appPleaseSelectCTCAmount);
   }else if(selectedType.value==null||selectedType.value==""){
     showToast(appPleaseSelectCTCType);
-  }else if(selectedResumeName.value==null||selectedResumeName.value==""){
-    showToast(appPleaseSelectResume);
+  }else if(selectedType.value==null||selectedType.value==""){
+    showToast(appPleaseSelectCTCType);
   }else{
     if(isEditData.value){
       //updateEmploymentApiCall(context);
     }else{
-      addEmploymentApiCall(context);
+      addEmploymentApiCall(context, screenNameData: screenNameData);
     }
 
   }
 }
 
-addEmploymentApiCall(context)async{
+addEmploymentApiCall(context,{required String screenNameData})async{
   try {
     keyboardDismiss(context);
     progressDialog.show();
@@ -561,7 +565,13 @@ addEmploymentApiCall(context)async{
       if (progressDialog.isShowing()) {
         Get.back();
       }
-      Get.back();
+      print(">>>>>>>>>>>>>>>>>>");
+      print(screenNameData);
+      print(companyEmployeesScreen);
+      if(screenNameData==companyEmployeesScreen){
+        Navigator.pop(context);
+        Get.offNamed(AppRoutes.companyEmployees,arguments: {bottomNavCurrentIndexData:"1"});
+      }
       // if(screenNameData.value==dashboard){
       //   Get.offNamed(AppRoutes.bottomNavBar);
       // }else if(screenNameData.value==profileDetails){

@@ -37,16 +37,18 @@ class NotificationPage extends GetView<NotificationControllers>{
             Obx((){
               var notificationData=controller.notificationData.value.data?.notification??[];
               return notificationData.isNotEmpty?Container(
-                padding: EdgeInsets.only(left: 20,right: 20),
+                height: MediaQuery.of(context).size.height*0.87,
+                //padding: EdgeInsets.only(left: 20,right: 20),
                 child: ListView.separated(
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context,int index){
-                      return Divider(color: appPrimaryBackgroundColor,thickness: 1,);
+                      return Container(color: notificationData[index].isViewed=="0"?appWhiteColor:appPrimaryBackgroundColor,height: 1,);
                     },
                     itemCount: notificationData.length??0,
                     separatorBuilder:  (BuildContext context,int index){
                       return Container(
-                        padding: EdgeInsets.only(top: 5,bottom: 5),
+                        color: notificationData[index].isViewed=="0"?appPrimaryBackgroundColor:appWhiteColor,
+                        padding: EdgeInsets.only(left: 20,right: 10,top: 5,bottom: 5,),
                         child: Row(
                           children: <Widget>[
                             notificationData[index].profile!=null?ClipRRect(

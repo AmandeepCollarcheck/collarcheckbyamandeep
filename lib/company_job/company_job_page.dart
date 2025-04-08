@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../utills/app_colors.dart';
 import '../utills/app_strings.dart';
 import '../utills/common_widget/add_employment_bottom_sheet.dart';
+import '../utills/common_widget/add_new_job_model_sheet.dart';
 import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_methods.dart';
 import '../utills/common_widget/company_common_widget.dart';
@@ -17,6 +18,8 @@ import '../utills/font_styles.dart';
 import '../utills/image_path.dart';
 
 class CompanyJobPage extends GetView<CompanyJobControllers>{
+  const CompanyJobPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -38,7 +41,7 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
 
                   },
                   onAddEmployment: (){
-                    openAddEmploymentForm(context, designationListData: controller.designationListData.value);
+                    addNewJobForm(context, companyAllDetails: controller.designationListData.value,screenNameData:companyJobsScreen);
                   },
                   onTap: (){
                     controller.openSearchScreen(context);
@@ -120,7 +123,7 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
+            var pastData=controller.jobData.value.data?.publishJobs??[];
             return pastData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
@@ -167,29 +170,29 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
-            return pastData.isNotEmpty?Container(
+            var draftData=controller.jobData.value.data?.draftJobs??[];
+            return draftData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(draftData.length??0, (index){
                     return commonCompanyJobWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla",
-                      userName: "Satyam Shukla",
-                      ccId: pastData[index].individualId??'',
+                      profileImage: draftData[index].profile??"",
+                      initialName: draftData[index].departmentName??"",
+                      userName: draftData[index].departmentName??"",
+                      ccId: draftData[index].individualId??'',
                       ratingStar: '10',
                       buttonName: appAddReview,
-                      salary: "600 - 100 Lacs PA",
-                      experienceYear: "3 years",
-                      vaccancy: "12",
+                      salary:  draftData[index].salaryName??"",
+                      experienceYear:  draftData[index].experienceName??"",
+                      vaccancy: draftData[index].vacancy??"",
                       onClick: () {
                         Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyJobsScreen,jobProfileName:"Web designer"});
 
                       },
-                      jobStatus: 'Published',
-                      noOfVaccency: '10',
-                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-                      locations: 'Delhi, noida, lucknow',
+                      jobStatus: controller.tabController.index==1?appInDraft:controller.tabController.index==2?appCompleted:appPublished,
+                      noOfVaccency: draftData[index].applicationCount??"",
+                      timeAgo: calculateTimeDifference(createDate:  draftData[index].createDate??"",),
+                      locations: generateLocation(cityName: draftData[index].cityName??"", stateName: draftData[index].stateName??"", countryName: draftData[index].countryName??"",),
                     );
                   }),
                 )
@@ -214,7 +217,7 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
+            var pastData=controller.jobData.value.data?.cancelJobs??[];
             return pastData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(

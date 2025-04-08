@@ -12,6 +12,7 @@ import '../utills/app_key_constent.dart';
 
 class BottomNavBarController extends GetxController{
   final ScrollController scrollController = ScrollController();
+  late ProgressDialog progressDialog=ProgressDialog() ;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   Rx isNavBarVisible = true.obs;
   Rx bottomNavCurrentIndex=0.obs;
@@ -20,16 +21,24 @@ class BottomNavBarController extends GetxController{
   var nameInitial="".obs;
   var selectedTabIndexValue=0.obs;
   var userTypeData="".obs;
+  var selectedUserType=false.obs;
+  var isProfileDataLoaded = false.obs;
   @override
   void onInit() {
+
     Map<String, dynamic> data = Get.arguments ?? {};
     if (data.isNotEmpty) {
       int? index = int.tryParse(data[bottomNavCurrentIndexData]?.toString() ?? '0');
       bottomNavCurrentIndex.value = index ?? 0;
     }
-    _getProfilePercentage();
     super.onInit();
   }
+  @override
+  void onReady() {
+    super.onReady();
+    _getProfilePercentage();
+  }
+
 
   @override
   void dispose() {
@@ -50,21 +59,28 @@ class BottomNavBarController extends GetxController{
   ];
 
   final List<String> companyRoutes = [
-    '/home',
+    '/companyDashboard',
     '/companyEmployees',
     '/companyJobs',
     '/messages',
-    '/profile',
+    '/companyProfile',
   ];
 
   void _getProfilePercentage() async{
+    userTypeData.value=await readStorageData(key: userType);
+    if(userTypeData.value==company){
+      selectedUserType.value=true;
+    }else{
+      selectedUserType.value=false;
+    }
     profilePercentage.value = (double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100;
     profileImageData.value=await readStorageData(key: profileImage);
     var userFirstName=await readStorageData(key: firstName);
     var userLastName=await readStorageData(key: lastName);
-    userTypeData.value=await readStorageData(key: userType);
+
     nameInitial.value= getInitialsWithSpace(input: "$userFirstName $userLastName");
     update();
+    isProfileDataLoaded.value = true;
   }
 
 

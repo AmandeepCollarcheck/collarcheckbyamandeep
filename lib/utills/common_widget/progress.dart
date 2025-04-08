@@ -17,6 +17,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:readmore/readmore.dart';
 
 import '../../models/employment_list_model.dart';
 import '../app_key_constent.dart';
@@ -690,3 +691,16 @@ void _exitApp() {
 }
 
 
+commonReadMoreWidget(context,{required  String message,required TextStyle textStyle,int trimLine=2}){
+  return ReadMoreText(
+    message,
+    trimMode: TrimMode.Line,
+    trimLines: trimLine,
+    colorClickableText:appPrimaryColor,
+    trimCollapsedText: '$appReadMode',
+    style: textStyle,
+    trimExpandedText: '...$appReadLess',
+    moreStyle: AppTextStyles.font12.copyWith(color: appPrimaryColor),
+    lessStyle: AppTextStyles.font12.copyWith(color: appPrimaryColor),
+  );
+}

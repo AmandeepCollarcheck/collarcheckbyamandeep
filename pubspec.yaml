@@ -70,6 +70,10 @@ dependencies:
   sms_autofill: ^2.4.1
   cloud_firestore: ^5.6.5
   otp_autofill: ^4.1.0
+  nested_scroll_view_plus: ^3.0.0
+  readmore: ^3.0.0
+  scroll_to_animate_tab: ^0.0.3
+
 
 
 
