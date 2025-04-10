@@ -1299,6 +1299,20 @@ class ApiProvider{
       handleException(error, stacktrace, _dioError!);
     }
   }
+  Future companyProfile({required String userName}) async {
+    try {
+      Response response = await _dio.get("$strCompanyProfile/$userName");
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return UserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
 
 
 

@@ -59,7 +59,7 @@ Widget commonSearchAppBar(
                 ),
                 if (!isSearchActive) // Show logo only when search is not active
                   Padding(
-                    padding: EdgeInsets.only(left: 10),
+                    padding: EdgeInsets.only(left: 10,bottom: 5),
                     child: Image.asset(appLogoNewSvg, height: 32, width: 151),
                   ),
               ],

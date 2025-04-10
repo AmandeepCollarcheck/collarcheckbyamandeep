@@ -25,6 +25,7 @@ const String appCertificatesImageData = "${imageBasePath}certificates_image.png"
 ///Icons
 const String iconBasePath="assets/icon/";
 const String appCurrentEmploueeIcon = "${iconBasePath}current_employee_icon.png";
+const String appColarCheckDummyIcon = "${iconBasePath}Colarcheck_LOGO.png";
 //const String appConnectionUnSelected = "${iconBasePath}connection_unselected.png";
 //const String appHomeSelected = "${iconBasePath}home_selected.png";
 //const String appHomeUnSelected = "${iconBasePath}home_unselected.png";

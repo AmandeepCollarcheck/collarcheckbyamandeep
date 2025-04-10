@@ -100,4 +100,12 @@ class SearchControllers extends GetxController{
       },
     );
   }
+
+  openEmployeeProfileScreen(context,{required String employeeSlug}){
+    Get.offNamed(AppRoutes.profileDetails,arguments: {slugId:employeeSlug,screenName:searchScreen,isEmployeeProfile:true});
+  }
+
+  openCompanyProfileScreen(context,{required String employeeSlug}){
+    Get.offNamed(AppRoutes.companyProfile,arguments: {slugId:employeeSlug,screenName:searchScreen,isEmployeeProfile:true});
+  }
 }

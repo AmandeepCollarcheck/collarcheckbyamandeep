@@ -47,6 +47,7 @@ const progressBarMaxValue="5";
 
 //Key
  const searchJype="searchTypeData";
+ const slugId="slugId";
  const screenName="screen_name";
  const jobProfileName="jobProfileName";
  const isEdit="is_edit";
@@ -63,6 +64,7 @@ const progressBarMaxValue="5";
  const tabSelectionIndexValue="tabSelectionIndex";
  const topCompanyScreenType="topCompanyScreenType";
  const bottomNavCurrentIndexData="bottomNavCurrentIndex";
+ const isEmployeeProfile="EmployeeProfile";
  const filledProfileDescriptionData="filledProfileDescription";
 
 //value

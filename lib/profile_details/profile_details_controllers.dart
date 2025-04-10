@@ -19,6 +19,7 @@ import '../models/portifolio_list_model.dart';
 import '../models/save_user_profile_model.dart';
 import '../models/user_profile_model.dart';
 import '../utills/app_key_constent.dart';
+import '../utills/app_route.dart';
 import '../utills/app_strings.dart';
 import '../utills/common_widget/progress.dart';
 
@@ -37,6 +38,10 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
   var languageDate=LanguageListModel().obs;
   var experienceHeights = <double>[].obs;
   var isExpendedSkills=false.obs;
+  var screenNameData="".obs;
+  var slugDataId="".obs;
+  var isEmployeeProfileDate=false.obs;
+  var userIdData="".obs;
 
 
   var listTabLabel = [
@@ -45,9 +50,16 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
 
   @override
   void onInit() {
+    Map<String,dynamic> data=Get.arguments??{};
+     if(data.isNotEmpty){
+       screenNameData.value=data[screenName]??"";
+       slugDataId.value=data[slugId]??"";
+       isEmployeeProfileDate.value=data[isEmployeeProfile];
+     }
     tabController = TabController(length: 4, vsync: this);
     // TODO: implement onInit
     Future.delayed(Duration(milliseconds: 500), ()async {
+      userIdData.value=await readStorageData(key: id);
       getProfileApiCall();
     });
     Future.delayed(Duration(milliseconds: 500), ()async {
@@ -77,6 +89,19 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
     super.onInit();
   }
 
+
+
+  backButtonClick(){
+    if(screenNameData.value==searchScreen){
+      Get.offNamed(AppRoutes.search);
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar);
+    }
+
+  }
+
+
+
   Color getRandomColor() {
     Random random = Random();
     return Color.fromARGB(
@@ -91,7 +116,11 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
     try {
       progressDialog.show();
       String slugData =await GetStorage().read(slug);
-      UserProfileModel userProfileModel = await ApiProvider.baseWithToken().userProfile(userName: slugData);
+      print("asnskldfsldfslkdfskldfklsdf");
+      print(slugData);
+      print(slugDataId.value);
+
+      UserProfileModel userProfileModel = await ApiProvider.baseWithToken().userProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
       if(userProfileModel.status==true){
         userProfileData.value=userProfileModel;
         var profileData=userProfileData.value.data?.employementHistoryNew??[];

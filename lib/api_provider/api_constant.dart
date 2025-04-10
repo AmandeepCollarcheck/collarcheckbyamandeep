@@ -78,6 +78,7 @@ final String strCompanyJobData = '/company/all-job';
 final String strCompanyUserDetails = '/company/user-detail';
 final String strCompanyStaticsDetails = '/company/dashboard';
 final String strCompanyProfileUpdate = '/company/edit-user';
+final String strCompanyProfile = '/auth/company-profile';
 
 
 

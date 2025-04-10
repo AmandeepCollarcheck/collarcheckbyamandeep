@@ -67,7 +67,7 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
     if(screenNameData.value==jobs){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"2"});
     }else if(screenNameData.value==searchScreen){
-      Get.offNamed(AppRoutes.bottomNavBar);
+      Get.offNamed(AppRoutes.search);
     }else{
       Get.offNamed(AppRoutes.bottomNavBar);
     }

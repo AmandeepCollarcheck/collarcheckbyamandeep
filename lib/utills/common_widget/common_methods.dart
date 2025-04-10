@@ -321,7 +321,7 @@ _companyDetails(context,{
             border: Border.all(color: appPrimaryColor)
         ),
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(9),
             child: image.endsWith(".svg")?SvgPicture.network(image,height: 50,width: 50,fit: BoxFit.cover,):image.contains("https")?Image.network(image,height: 50,width: 50,fit: BoxFit.cover,):Image.asset(image,height: 50,width: 50,fit: BoxFit.cover,),
         ),
       ): Container(
@@ -339,7 +339,7 @@ _companyDetails(context,{
       ),
       SizedBox(width: 12,),
       Container(
-        width: MediaQuery.of(context).size.width*0.66,
+        width: MediaQuery.of(context).size.width*0.65,
         alignment: Alignment.topLeft,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,11 +350,11 @@ _companyDetails(context,{
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width:MediaQuery.of(context).size.width*0.52,
+                  width:MediaQuery.of(context).size.width*0.5,
                   child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 2,),
                 ),
                 companyName!=null&&companyName.isNotEmpty?SizedBox(
-                    width:MediaQuery.of(context).size.width*0.5,
+                    width:MediaQuery.of(context).size.width*0.45,
                     child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
                 SizedBox(height: 1,),
                 Row(
@@ -485,7 +485,7 @@ topCompaniesWidget({required String jobTypeName,required String numberOfCompany,
       children: <Widget>[
         Text(jobTypeName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
         Text("$numberOfCompany$appCompaniesAreHiring",style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
-        SizedBox(height: 15,),
+        SizedBox(height: 10,),
         _companyList(companyImage: allCompanyIcon),
         SizedBox(height: 10,),
         GestureDetector(
@@ -501,10 +501,29 @@ _companyList({required List companyImage}) {
     child: Wrap(
       spacing: 5,
       children: List.generate(companyImage.length, (index){
-        return companyImage[index].toString().contains("https")?ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: companyImage[index].toString().contains("https")?Image.network(companyImage[index],height: 30,width: 30,fit: BoxFit.cover,):Image.asset(companyImage[index],height: 30,width: 30,fit: BoxFit.cover,),
-        ):Container();
+        return companyImage[index].toString().contains("https")?Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: appPrimaryColor,width: 1)
+          ),
+          child: companyImage.isNotEmpty?ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: companyImage[index].toString().contains("https")?Image.network(companyImage[index],height: 30,width: 30,fit: BoxFit.cover,):Image.asset(companyImage[index],height: 30,width: 30,fit: BoxFit.cover,),
+          ):Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: appPrimaryColor,width: 1)
+            ),
+            child: Image.asset(appColarCheckDummyIcon,height: 30,width: 30,fit: BoxFit.cover,),
+          ),
+        ):Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: appPrimaryColor,width: 1)
+          ),
+          child: Image.asset(appColarCheckDummyIcon,height: 30,width: 30,fit: BoxFit.cover,),
+
+        );
       }),
     ),
   );

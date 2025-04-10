@@ -34,6 +34,7 @@ class OtpController extends GetxController{
   Rx otpCountDownTimer=30.obs;
   Timer? _timer;
   Rx screenNameData="".obs;
+  var isOtpWrong=false.obs;
 
 
   @override
@@ -181,6 +182,7 @@ class OtpController extends GetxController{
             // progressDialog.dismissLoader();
             // Get.offNamed(AppRoutes.bottomNavBar);
           } else {
+            isOtpWrong.value=true;
             showToast(sendOtp.messages??"");
           }
 

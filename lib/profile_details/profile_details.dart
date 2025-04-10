@@ -44,8 +44,22 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                       flexibleSpace: FlexibleSpaceBar(
                         background: Container(
                           color: appScreenBackgroundColor,
-                          padding: EdgeInsets.only(left: 20, right: 20),
-                          child: commonAppBarWithSettingAndShareOption(context,
+                          padding: controller.isEmployeeProfileDate.value?EdgeInsets.only(top: 20):EdgeInsets.only(left: 20, right: 20),
+                          child: controller.isEmployeeProfileDate.value?commonActiveSearchBar(
+                              leadingIcon: appBackSvgIcon,
+                              screenName: appEmployeeProfiles,
+                              isFilterShow: false,
+                              actionButton: appFilterMore,
+                              onClick: (){
+                                controller.backButtonClick();
+                              },
+                              onShareClick: (){},
+                              onFilterClick:(){
+                               // controller.clickFilterButton();
+                              },
+                              isScreenNameShow: true,
+                              isShowShare: false
+                          ):commonAppBarWithSettingAndShareOption(context,
                             leadingIcon: appBackSvgIcon,
                             onClick: () {},
                             onSettingsClick: () {},
@@ -59,7 +73,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
+                            controller.isEmployeeProfileDate.value?SizedBox(height: 0): SizedBox(height: 20),
                             Container(
                               padding: EdgeInsets.only(left: 20, right: 20),
                               child: _profileWidget(context),
@@ -146,6 +160,44 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                                 ),
                               );
                             }),
+                            SizedBox(height: 10),
+                            Obx((){
+                              return controller.userProfileData.value.data?.id.toString()!=controller.userIdData.value?Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.4,
+                                    child: commonButton(
+                                        isPaddingDisabled: true,
+                                        context,
+                                        buttonName: appFollowFound,
+                                        buttonBackgroundColor: appWhiteColor,
+                                        textColor: appPrimaryColor,
+                                        buttonBorderColor: appPrimaryColor,
+                                        onClick: (){
+
+                                        }
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.4,
+                                    child: commonButton(
+                                        context,
+                                        isPaddingDisabled: true,
+                                        buttonName: appMessageFound,
+                                        buttonBackgroundColor: appPrimaryColor,
+                                        textColor: appWhiteColor,
+                                        buttonBorderColor: appPrimaryColor,
+                                        onClick: (){
+
+                                        }
+                                    ),
+                                  ),
+                                ],
+                              ):Container();
+
+                            })
                           ],
                         ),
                       ),

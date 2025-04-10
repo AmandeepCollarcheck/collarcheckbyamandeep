@@ -400,6 +400,7 @@ const String appOfficeLocation="Office Location / Address";
 const String appPleaseNameOfCompany="Please enter name of company";
 const String appPleaseEnterValidName="Please enter valid email";
 const String appPleaseEnterValidPhone="Please enter valid phone";
+const String appWrongOtpEntered="Wrong OTP Entered";
 const String appPleaseEnterContactPersonName="Please enter contact person name";
 
 

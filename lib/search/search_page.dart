@@ -118,7 +118,6 @@ class SearchPage extends GetView<SearchControllers>{
                                      Obx(() {
                                        final jobList = controller.searchDataList.value.data?.jobList ?? [];
                                        return Container(
-
                                          child: jobList.isNotEmpty?Wrap(
                                            runSpacing: 10,
                                            children: List.generate(jobList.length>4?4:jobList.length, (index) {
@@ -126,7 +125,7 @@ class SearchPage extends GetView<SearchControllers>{
                                                context,
                                                cardWidth: MediaQuery.of(context).size.width,
                                                onClick: () {
-                                                 controller.openJobDetails(jobTitle: jobList[index].slug ??"");
+                                                 controller.openJobDetails(jobTitle: jobList[index].slug ??"",);
                                                },
                                                image: jobList[index].profile ??"",
                                                jobProfileName: jobList[index].jobTitle ?? "",
@@ -203,22 +202,26 @@ class SearchPage extends GetView<SearchControllers>{
                                          child: companyList.isNotEmpty?Wrap(
                                            runSpacing: 10,
                                            children: List.generate(companyListData.length>4?4:companyList.length, (index) {
-                                             return commonTopCompaniesWidget(context,
-                                                 image: companyList[index].profile??"",
-                                                 location: generateLocation(cityName: companyList[index].cityName??"", stateName: companyList[index].stateName??"", countryName: companyList[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
-                                                 name: capitalizeFirstLetter(companyList[index].fname??""),
-                                                 id:companyList[index].individualId??"",
-                                                 jobTitle:"",
-                                                 onClick: (){
-                                                   // var userId=controller.userProfileData.value.data?.id??"";
-                                                   // controller.companyFollowApiCall(context,companyId:companyProfile[index].id??"", userId: userId??"" );
+                                             return GestureDetector(
+                                               onTap: (){
+                                                 controller.openCompanyProfileScreen(context,employeeSlug: companyList[index].slug??"");
 
-                                                 },
-                                                 isFollowData: true, onMessageClick: (){
+                                               },
+                                               child: commonTopCompaniesWidget(context,
+                                                   image: companyList[index].profile??"",
+                                                   location: generateLocation(cityName: companyList[index].cityName??"", stateName: companyList[index].stateName??"", countryName: companyList[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
+                                                   name: capitalizeFirstLetter(companyList[index].fname??""),
+                                                   id:companyList[index].individualId??"",
+                                                   jobTitle:"",
+                                                   onClick: (){
 
-                                                 }
+                                                   },
+                                                   isFollowData: true, onMessageClick: (){
+
+                                                   }
 
 
+                                               ),
                                              );
                                            }),
                                          ):SizedBox(
@@ -282,23 +285,28 @@ class SearchPage extends GetView<SearchControllers>{
                                          child: userList.isNotEmpty?Wrap(
                                            runSpacing: 10,
                                            children: List.generate(userListData.length>4?4:userList.length, (index) {
-                                             return commonTopCompaniesWidget(context,
-                                                 image: userList[index].profile??"",
-                                                 location: generateLocation(cityName: userList[index].cityName??"", stateName: userList[index].stateName??"", countryName: userList[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
-                                                 name: capitalizeFirstLetter(userList[index].fname??""),
-                                                 id:userList[index].individualId??"",
-                                                 jobTitle:capitalizeFirstLetter(userList[index].designationName??""),
-                                                 onClick: (){
-                                                   // var userId=controller.userProfileData.value.data?.id??"";
-                                                   // controller.companyFollowApiCall(context,companyId:companyProfile[index].id??"", userId: userId??"" );
+                                             return GestureDetector(
+                                               onTap: (){
+                                                 controller.openEmployeeProfileScreen(context,employeeSlug: userList[index].slug??"");
+                                               },
+                                               child: commonTopCompaniesWidget(context,
+                                                   image: userList[index].profile??"",
+                                                   location: generateLocation(cityName: userList[index].cityName??"", stateName: userList[index].stateName??"", countryName: userList[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
+                                                   name: capitalizeFirstLetter(userList[index].fname??""),
+                                                   id:userList[index].individualId??"",
+                                                   jobTitle:capitalizeFirstLetter(userList[index].designationName??""),
+                                                   onClick: (){
+                                                     // var userId=controller.userProfileData.value.data?.id??"";
+                                                     // controller.companyFollowApiCall(context,companyId:companyProfile[index].id??"", userId: userId??"" );
 
-                                                 },
-                                                 isSimilerProfile: true,
-                                                 isFollowData: false, onMessageClick: (){
+                                                   },
+                                                   isSimilerProfile: true,
+                                                   isFollowData: false, onMessageClick: (){
 
-                                                 }
+                                                   }
 
 
+                                               ),
                                              );
                                            }),
                                          ):SizedBox(
