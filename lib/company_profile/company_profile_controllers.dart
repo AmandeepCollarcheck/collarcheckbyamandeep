@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../api_provider/api_provider.dart';
+import '../models/company_profile_details_model.dart';
 import '../models/user_profile_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_strings.dart';
@@ -14,7 +15,7 @@ import '../utills/common_widget/progress.dart';
 class CompanyProfileControllers extends GetxController with GetTickerProviderStateMixin{
   late ProgressDialog progressDialog=ProgressDialog() ;
   final scrollController = ScrollController();
-  var userProfileData=UserProfileModel().obs;
+  var companyProfileData=CompanyProfileDetailsModel().obs;
   var selectedIndex=0.obs;
   var isExpanded=false.obs;
   final GlobalKey homeKey = GlobalKey();
@@ -22,12 +23,13 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
   final GlobalKey galleryKey = GlobalKey();
   final GlobalKey companyKey = GlobalKey();
   final GlobalKey similerProfile = GlobalKey();
+  final GlobalKey benifits = GlobalKey();
   var slugDataId="".obs;
   var screenNameData="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
   var listTabLabel = [
-    appAbout, appJobOpening, appGallery
+    appAbout, appJobOpening, appGallery,appPerksAndBenefits
   ].obs;
 
 
@@ -92,12 +94,12 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
       String slugData =await GetStorage().read(slug);
 
 
-      UserProfileModel userProfileModel = await ApiProvider.baseWithToken().companyProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
-      if(userProfileModel.status==true){
-        userProfileData.value=userProfileModel;
-        var profileData=userProfileData.value.data?.employementHistoryNew??[];
-        await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
-    await writeStorageData(key: profileImage, value: userProfileData.value.data?.profile??"");
+      CompanyProfileDetailsModel companyProfileDetailsModel = await ApiProvider.baseWithToken().companyProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
+      if(companyProfileDetailsModel.status==true){
+        companyProfileData.value=companyProfileDetailsModel;
+        // var profileData=companyProfileData.value.data?.employementHistoryNew??[];
+        // await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
+        // await writeStorageData(key: profileImage, value: companyProfileData.value.data?.profile??"");
 
     }else{
     showToast(somethingWentWrong);

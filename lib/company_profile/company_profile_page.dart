@@ -1,4 +1,6 @@
 import 'package:collarchek/company_profile/company_profile_controllers.dart';
+import 'package:collarchek/utills/app_key_constent.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/app_strings.dart';
 import 'package:collarchek/utills/common_widget/common_image_widget.dart';
 import 'package:collarchek/utills/common_widget/progress.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:scroll_to_animate_tab/scroll_to_animate_tab.dart';
+import '../models/company_profile_details_model.dart';
 import '../utills/app_colors.dart';
 import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_methods.dart';
@@ -150,16 +153,23 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                       Expanded(
                         child: SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              _childWithKey(controller.homeKey, _homeWidgetTabView(context)),
-                              _childWithKey(controller.jobOpeningKey, _jobOpeningTabView(context)),
-                              _childWithKey(controller.galleryKey, _galleryWidget(context)),
-                              _childWithKey(controller.companyKey, _similarCompanyWidget(context)),
-                              _childWithKey(controller.similerProfile, _simillerProfileWidget(context)),
-                            ],
-                          ),),
+                          child: Obx((){
+                            var allData=controller.companyProfileData.value.data;
+                            var benefitsData=allData?.allBenefits??[];
+                            var galleryData=allData?.allGallery??[];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                _childWithKey(controller.homeKey, _homeWidgetTabView(context)),
+                                _childWithKey(controller.jobOpeningKey, _jobOpeningTabView(context)),
+                                _childWithKey(controller.galleryKey, _galleryWidget(context, galleryData: galleryData??[])),
+                                _childWithKey(controller.benifits, _perksAndBebefitsWidget(context, allBenefits: benefitsData??[])),
+                                _childWithKey(controller.companyKey, _similarCompanyWidget(context)),
+                                _childWithKey(controller.similerProfile, _simillerProfileWidget(context)),
+
+                              ],
+                            );
+                          }),),
                       ),
 
 
@@ -176,6 +186,81 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
         )
     );
   }
+  _perksAndBebefitsWidget(context,{required List allBenefits}){
+    List<List> chunks = [];
+
+    for (int i = 0; i < allBenefits.length; i += 2) {
+      int end = (i + 2 < allBenefits.length) ? i + 2 : allBenefits.length;
+      chunks.add(allBenefits.sublist(i, end));
+    }
+    return Container(
+      margin: EdgeInsets.only(left: 15,right: 15),
+      decoration: BoxDecoration(
+          border: Border.all(color: appPrimaryBackgroundColor,width: 1),
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(appPerksAndBenefits,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+                GestureDetector(
+                  onTap: (){
+                    Get.offNamed(AppRoutes.companyBenefit,arguments: {screenName:companyProfileScreen});
+                  },
+                  child: SvgPicture.asset(appEditIcon,height: 20,width: 20,),
+                )
+              ],
+            ),
+          ),
+          Container(height: 1,color: appPrimaryBackgroundColor,),
+          Column(
+            children: List.generate(chunks.length, (rowIndex) {
+              List rowItems = chunks[rowIndex];
+              return Row(
+                children: List.generate(rowItems.length, (index) {
+                  var item = rowItems[index];
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0,horizontal: 10),
+                      child: Row(
+                        children: [
+                          commonImageWidget(
+                              image: item.image,
+                              initialName: item.name,
+                              height: 30,
+                              width: 30,
+                              borderRadius: 0,
+                              isBorderDisable: true
+                          ),
+                          SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              item.name ?? "",
+                              style: AppTextStyles.font14.copyWith(color: appBlackColor),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              );
+            }),
+          )
+        ],
+      ),
+    );
+  }
+
+
+
+
+
 
   _profileWidget(BuildContext context) {
     return  Container(
@@ -454,7 +539,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
     );
   }
 
-  _galleryWidget(context) {
+  _galleryWidget(context,{required List galleryData}) {
     return Container(
       margin: EdgeInsets.only(left: 16,right: 16,top: 20),
       decoration: BoxDecoration(
@@ -472,11 +557,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                 Text(appGallery,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
                 GestureDetector(
                   onTap: (){
-                    // if(profileDescription.isNotEmpty){
-                    //   Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails,isEdit:true,filledProfileDescriptionData:profileDescription??""});
-                    // }else{
-                    //   Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails});
-                    // }
+                    Get.offNamed(AppRoutes.addGallery,arguments: {screenName:companyProfileScreen});
 
                   },
                   child: SvgPicture.asset(appEditIcon,height: 22,width: 22,),
@@ -488,6 +569,32 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
             height: 1,
             color: appPrimaryBackgroundColor,
           ),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                Wrap(
+                  spacing:15,
+                  children: List.generate(galleryData.length>2?2:galleryData.length, (index){
+                    return commonImageWidget(image: galleryData[index].image??"", initialName:  galleryData[index].name??"", height: MediaQuery.of(context).size.height*0.1, width: MediaQuery.of(context).size.width*0.4, borderRadius: 5,borderColor: appPrimaryBackgroundColor);
+                  }),
+                ),
+                SizedBox(height: 8,),
+                Wrap(
+                  spacing:5,
+                  children: List.generate(galleryData.length, (index){
+                    return Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: index==0?appPrimaryColor:appGreyWhiteColor
+                      ),
+                      height: 5,width: 5,
+                    );
+                  }),
+                ),
+              ],
+            ),
+          )
 
         ],
       ),

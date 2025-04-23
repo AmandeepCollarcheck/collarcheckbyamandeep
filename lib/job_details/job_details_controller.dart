@@ -105,6 +105,8 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
     try {
       progressDialog.show();
       var jobId=jobDetailsData.value.data?.detail?.id??"";
+      print("sslkjkdfskjfshfdhsjdfk");
+      print(jobId);
       var formData = dio.FormData.fromMap({
         "job":jobId,
 

@@ -129,7 +129,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                               children: <Widget>[
                                                 _commonCardWidget(context,cardHeader: appApplication, itemNumber:  staticsData?.applications.toString()??"0", itemNumberColor: appBlueColor, cardIcon: appCurrentEmploueeIcon),
                                                 SizedBox(width: 12,),
-                                                _commonCardWidget(context,cardHeader: appEmployeeRequests, itemNumber:  staticsData?.followRequests.toString()??"0", itemNumberColor: appLightYellowColor, cardIcon: appCurrentEmploueeIcon)
+                                                _commonCardWidget(context,cardHeader: appEmployeeRequests, itemNumber:  staticsData?.followRequests?.length.toString()??"0", itemNumberColor: appLightYellowColor, cardIcon: appCurrentEmploueeIcon)
                                               ],
                                             ),
                                           ],
@@ -143,7 +143,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                 ///Complete Your Profile Widget
                                 _completeProfileForBetterSearch(context),
                                 ///Employment Request
-                               // _employmentRequest(context),
+                                _employmentRequest(context),
                                 Container(
                                   
                                   padding: EdgeInsets.all(20),
@@ -174,13 +174,13 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                   ),
                                 ),
                                 ///All Application
-                               // _allApplicationList(context),
+                                _allApplicationList(context),
                                 ///Most Viewed Jod
-                                //_mostViewedJobs(context),
+                                _mostViewedJobs(context),
                                 /// Pending Employee Review
-                                //_pendingEmployeeReview(context),
+                                _pendingEmployeeReview(context),
                                 ///recommended employees
-                                //_recommendedEmployees(context),
+                                _recommendedEmployees(context),
                                 ///Spotlight your work culture
                                 Container(
                                   padding: EdgeInsets.all(20),
@@ -217,11 +217,11 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                   ),
                                 ),
                                 ///People who reciently joined
-                                //_peopleWhoRecentlyJoined(context),
+                                _peopleWhoRecentlyJoined(context),
                                 ///Save Condidate
                                 //_savedCandidate(context),
                                 ///_all Right resirved
-                                //_allRightReserved(context)
+                                _allRightReserved(context)
 
 
 
@@ -332,290 +332,297 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
   }
 
   _employmentRequest(context) {
-    // return Obx((){
-    //   if(controller.userHomeModel.value==null){
-    //     ///Add simmer
-    //     return Center();
-    //   }
-    //   var jobForYou=controller.userHomeModel.value.data?.jobForYou??[];
-    //   return jobForYou!=null&&jobForYou.isNotEmpty?Obx((){
-    //     var jobList=controller.userHomeModel.value.data?.jobForYou??[];
-    //     return Container(
-    //       color: appWhiteColor,
-    //       padding: EdgeInsets.only(left: 10,bottom: 5),
-    //       child: Column(
-    //         children: <Widget>[
-    //           Padding(
-    //             padding: EdgeInsets.only(left: 10),
-    //             child: commonHeaderAndSeeAll(headerName: appEmployeeRequests, seeAllClick: (){
-    //               //controller.openRecommendJobPage(isJobForYou: true,);
-    //             }),
-    //           ),
-    //           SizedBox(height: 15,),
-    //           SingleChildScrollView(
-    //             scrollDirection: Axis.horizontal,
-    //             child:  Row(
-    //               children: List.generate(4/*jobList.length>4?4:jobList.length*/, (index){
-    //                 //controller.location.value="${jobList[index].cityName??""}, ${jobList[index].stateName??""}, ${jobList[index].companyName??""}";
-    //                 return Padding(
-    //                   padding: EdgeInsets.only(
-    //                     right: index == jobList.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
-    //                   ),
-    //                   child: companyEmploymentRequestWidget(context,
-    //                     profileImage: ''??"",
-    //                     initialName:"Satyam Shukla ",
-    //                     userName: "Satyam Shukla ",
-    //                     ccId: "CCyeuue788"??'',
-    //                     dataPosted: "asknfsjdjf",
-    //                     designation: "Software Enginner",
-    //                     onClick: () {
-    //                       print("On click wor,");
-    //                     },
-    //                     jobStatus: 'Employment',
-    //                   ),
-    //                 );
-    //               }),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   }):Container();
-    // });
+    return Obx((){
+      var employmentListData=controller.companyStaticsDetails.value.data?.employementRequestList??[];
+      if(employmentListData==null){
+        ///Add simmer
+        return Center();
+      }
+
+      return employmentListData!=null&&employmentListData.isNotEmpty?Obx((){
+        return Container(
+          color: appWhiteColor,
+          padding: EdgeInsets.only(left: 10,bottom: 5),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: commonHeaderAndSeeAll(headerName: appEmployeeRequests, seeAllClick: (){
+                  //controller.openRecommendJobPage(isJobForYou: true,);
+                }),
+              ),
+              SizedBox(height: 15,),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child:  Row(
+                  children: List.generate(4/*jobList.length>4?4:jobList.length*/, (index){
+                    //controller.location.value="${jobList[index].cityName??""}, ${jobList[index].stateName??""}, ${jobList[index].companyName??""}";
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        right: index == employmentListData.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
+                      ),
+                      child: companyEmploymentRequestWidget(context,
+                        profileImage: ''??"",
+                        initialName:"Satyam Shukla ",
+                        userName: "Satyam Shukla ",
+                        ccId: "CCyeuue788"??'',
+                        dataPosted: "asknfsjdjf",
+                        designation: "Software Enginner",
+                        onClick: () {
+                          print("On click wor,");
+                        },
+                        jobStatus: 'Employment',
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
+        );
+      }):Container();
+    });
   }
 
   _allApplicationList(context) {
-    // return Obx((){
-    //   if(controller.userHomeModel.value==null){
-    //     ///Add simmer
-    //     return Center();
-    //   }
-    //   var jobForYou=controller.userHomeModel.value.data?.jobForYou??[];
-    //   return jobForYou!=null&&jobForYou.isNotEmpty?Obx((){
-    //     var jobList=controller.userHomeModel.value.data?.jobForYou??[];
-    //     return Container(
-    //       color: appPrimaryBackgroundColor,
-    //       padding: EdgeInsets.all(10),
-    //       child: Column(
-    //         children: <Widget>[
-    //           Padding(
-    //             padding: EdgeInsets.only(left: 10),
-    //             child: commonHeaderAndSeeAll(headerName: appAllApplications, seeAllClick: (){
-    //               //controller.openRecommendJobPage(isJobForYou: true,);
-    //             }),
-    //           ),
-    //           SizedBox(height: 15,),
-    //           SingleChildScrollView(
-    //             scrollDirection: Axis.horizontal,
-    //             child:  Wrap(
-    //               children: List.generate(10??0, (index){
-    //                 return commonCompanyApplicantWidget(context,
-    //                   profileImage: ""??"",
-    //                   initialName:"Satyam Shukla",
-    //                   userName: "Satyam Shukla",
-    //                   ccId: "CCajksdjasd",
-    //                   ratingStar: '10',
-    //                   buttonName: "",
-    //                   salary: "600 - 100 Lacs PA",
-    //                   experienceYear: "3 years",
-    //                   vaccancy: "12",
-    //                   onClick: () {
-    //                     print("On click wor,");
-    //                   },
-    //                   jobStatus: 'Published',
-    //                   noOfVaccency: '10',
-    //                   timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-    //                   locations: 'Delhi, noida, lucknow',
-    //                   email: 'satyam.shuklaasdsgdghsghd@mail.com',
-    //                   phone: '+917705089308',
-    //                   profileDesignation: 'Software Engenners',
-    //                 );
-    //               }),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   }):Container();
-    // });
+    return Obx((){
+      if(controller.companyStaticsDetails.value==null){
+        ///Add simmer
+        return Center();
+      }
+      var allApplicationData=controller.companyStaticsDetails.value.data?.allApplicationList??[];
+      return allApplicationData!=null&&allApplicationData.isNotEmpty?Obx((){
+        return Container(
+          color: appPrimaryBackgroundColor,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: commonHeaderAndSeeAll(headerName: appAllApplications, seeAllClick: (){
+                  //controller.openRecommendJobPage(isJobForYou: true,);
+                }),
+              ),
+              SizedBox(height: 15,),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child:  Wrap(
+                  children: List.generate(10??0, (index){
+                    return commonCompanyApplicantWidget(context,
+                      profileImage: ""??"",
+                      initialName:"Satyam Shukla",
+                      userName: "Satyam Shukla",
+                      ccId: "CCajksdjasd",
+                      ratingStar: '10',
+                      buttonName: "",
+                      salary: "600 - 100 Lacs PA",
+                      experienceYear: "3 years",
+                      vaccancy: "12",
+                      onClick: () {
+                        print("On click wor,");
+                      },
+                      jobStatus: 'Published',
+                      noOfVaccency: '10',
+                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
+                      locations: 'Delhi, noida, lucknow',
+                      email: 'satyam.shuklaasdsgdghsghd@mail.com',
+                      phone: '+917705089308',
+                      profileDesignation: 'Software Engenners',
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
+        );
+      }):Container();
+    });
   }
 
   _mostViewedJobs(context) {
-    return Container(
-      color: appWhiteColor,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 20,top: 15),
-            child: commonHeaderAndSeeAll(headerName: appMostViewedJobs, seeAllClick: (){
-              //controller.openRecommendJobPage(isJobForYou: true,);
-            }),
-          ),
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-            child: ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-                itemBuilder: (BuildContext context,int index){
-                  return  mostViewedJos(context,designation: 'Software Enginner', timeAgo: '8 hrs ago', locations: 'Delhi, Noida', noOfVaccency: '10');
-                },
-                separatorBuilder:(BuildContext context,int index){
-                  return Container(
-                    height: 1,color: appPrimaryBackgroundColor,
-                  );
-                },
-                itemCount: 2
+    return Obx((){
+      if(controller.companyStaticsDetails.value==null){
+        ///Add simmer
+        return Center();
+      }
+      var mostViewedData=controller.companyStaticsDetails.value.data?.mostAppliedJob??[];
+      return mostViewedData!=null&&mostViewedData.isNotEmpty?Container(
+        color: appWhiteColor,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 20,top: 15),
+              child: commonHeaderAndSeeAll(headerName: appMostViewedJobs, seeAllClick: (){
+                //controller.openRecommendJobPage(isJobForYou: true,);
+              }),
+            ),
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                child: ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context,int index){
+                      return  mostViewedJos(
+                          context,
+                          designation: 'Software Enginner',
+                          timeAgo: '8 hrs ago',
+                          locations: 'Delhi, Noida',
+                          noOfVaccency: '10'
+                      );
+                    },
+                    separatorBuilder:(BuildContext context,int index){
+                      return Container(
+                        height: 1,color: appPrimaryBackgroundColor,
+                      );
+                    },
+                    itemCount: 2
+                )
             )
-          )
-        ],
-      ),
-    );
+          ],
+        ),
+      ):Container();
+    });
   }
 
   _pendingEmployeeReview(context) {
-    // return Obx((){
-    //   if(controller.userHomeModel.value==null){
-    //     ///Add simmer
-    //     return Center();
-    //   }
-    //   var jobForYou=controller.userHomeModel.value.data?.jobForYou??[];
-    //   return jobForYou!=null&&jobForYou.isNotEmpty?Obx((){
-    //     var jobList=controller.userHomeModel.value.data?.jobForYou??[];
-    //     return Container(
-    //       color: appPrimaryBackgroundColor,
-    //       padding: EdgeInsets.all(10),
-    //       child: Column(
-    //         children: <Widget>[
-    //           Padding(
-    //             padding: EdgeInsets.only(left: 10),
-    //             child: commonHeaderAndSeeAll(headerName: appPendingEmployeeReviews, seeAllClick: (){
-    //               //controller.openRecommendJobPage(isJobForYou: true,);
-    //             }),
-    //           ),
-    //           SizedBox(height: 15,),
-    //           SingleChildScrollView(
-    //             scrollDirection: Axis.horizontal,
-    //             child:  Wrap(
-    //               spacing: 10,
-    //               children: List.generate(10??0, (index){
-    //                 return commonEmployeeReviewWidget(context,
-    //                   profileImage: ""??"",
-    //                   initialName:"Satyam Shukla",
-    //                   userName: "Satyam Shukla",
-    //                   ccId: "CCajksdjasd",
-    //                   ratingStar: '10',
-    //                   buttonName: "",
-    //                   salary: "600 - 100 Lacs PA",
-    //                   experienceYear: "3 years",
-    //                   vaccancy: "12",
-    //                   onClick: () {
-    //                     print("On click wor,");
-    //                   },
-    //                   jobStatus: 'Published',
-    //                   noOfVaccency: '10',
-    //                   timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-    //                   locations: 'Delhi, noida, lucknow',
-    //                   email: 'satyam.shuklaasdsgdghsghd@mail.com',
-    //                   phone: '+917705089308',
-    //                   profileDesignation: 'Software Engenners', date: '14 Mar 2025',
-    //                 );
-    //               }),
-    //             ),
-    //           ),
-    //           SizedBox(height: 5,),
-    //         ],
-    //       ),
-    //     );
-    //   }):Container();
-    // });
+    return Obx((){
+      if(controller.companyStaticsDetails.value==null){
+        ///Add simmer
+        return Center();
+      }
+      var pendingEmployeeReview=controller.companyStaticsDetails.value.data?.pendingReviewsList??[];
+      return pendingEmployeeReview!=null&&pendingEmployeeReview.isNotEmpty?Obx((){
+        return Container(
+          color: appPrimaryBackgroundColor,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: commonHeaderAndSeeAll(headerName: appPendingEmployeeReviews, seeAllClick: (){
+                  //controller.openRecommendJobPage(isJobForYou: true,);
+                }),
+              ),
+              SizedBox(height: 15,),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child:  Wrap(
+                  spacing: 10,
+                  children: List.generate(10??0, (index){
+                    return commonEmployeeReviewWidget(context,
+                      profileImage: ""??"",
+                      initialName:"Satyam Shukla",
+                      userName: "Satyam Shukla",
+                      ccId: "CCajksdjasd",
+                      ratingStar: '10',
+                      buttonName: "",
+                      salary: "600 - 100 Lacs PA",
+                      experienceYear: "3 years",
+                      vaccancy: "12",
+                      onClick: () {
+                        print("On click wor,");
+                      },
+                      jobStatus: 'Published',
+                      noOfVaccency: '10',
+                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
+                      locations: 'Delhi, noida, lucknow',
+                      email: 'satyam.shuklaasdsgdghsghd@mail.com',
+                      phone: '+917705089308',
+                      profileDesignation: 'Software Engenners', date: '14 Mar 2025',
+                    );
+                  }),
+                ),
+              ),
+              SizedBox(height: 5,),
+            ],
+          ),
+        );
+      }):Container();
+    });
   }
 
   _recommendedEmployees(context) {
-    // return Obx((){
-    //   if(controller.companyUserDetails.value==null){
-    //     ///Add simmer
-    //     return Center();
-    //   }
-    //   var jobForYou=controller.companyUserDetails.value.data?.jobForYou??[];
-    //   return jobForYou!=null&&jobForYou.isNotEmpty?Obx((){
-    //     var jobList=controller.userHomeModel.value.data?.jobForYou??[];
-    //     return Container(
-    //       color: appWhiteColor,
-    //       padding: EdgeInsets.all(10),
-    //       child: Column(
-    //         children: <Widget>[
-    //           Padding(
-    //             padding: EdgeInsets.only(left: 10),
-    //             child: commonHeaderAndSeeAll(headerName: appRecommendedEmployees, seeAllClick: (){
-    //               //controller.openRecommendJobPage(isJobForYou: true,);
-    //             }),
-    //           ),
-    //           SizedBox(height: 15,),
-    //           SingleChildScrollView(
-    //             scrollDirection: Axis.horizontal,
-    //             child:  Wrap(
-    //               spacing: 10,
-    //               children: List.generate(10??0, (index){
-    //                 return companyRecommendedWidget(context,
-    //                   profileImage: ""??"",
-    //                   initialName:"Satyam Shukla",
-    //                   userName: "Satyam Shukla",
-    //                   ccId: "CCajksdjasd",
-    //                   location: 'Delhi, noida, lucknow',
-    //                   designation: 'Software Engenners',  ratingBar: '10',
-    //                 );
-    //               }),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   }):Container();
-    // });
+    return Obx((){
+      if(controller.companyStaticsDetails.value==null){
+        ///Add simmer
+        return Center();
+      }
+      var recommendedEmployee=controller.companyStaticsDetails.value.data?.recommendedEmployees??[];
+      return recommendedEmployee!=null&&recommendedEmployee.isNotEmpty?Container(
+        color: appWhiteColor,
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: commonHeaderAndSeeAll(headerName: appRecommendedEmployees, seeAllClick: (){
+                //controller.openRecommendJobPage(isJobForYou: true,);
+              }),
+            ),
+            SizedBox(height: 15,),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child:  Wrap(
+                spacing: 10,
+                children: List.generate(recommendedEmployee.length??0, (index){
+                  return companyRecommendedWidget(context,
+                    profileImage: recommendedEmployee[index].profile??"",
+                    initialName:recommendedEmployee[index].name??"",
+                    userName: recommendedEmployee[index].name??"",
+                    ccId: recommendedEmployee[index].individualId??"",
+                    location: generateLocation(cityName: recommendedEmployee[index].cityName??"", stateName: recommendedEmployee[index].stateName??"", countryName: recommendedEmployee[index].countryName??"",),
+                    designation: recommendedEmployee[index].designationName??"",
+                    ratingBar: recommendedEmployee[index].totalRating??"0",
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
+      ):Container();
+    });
   }
 
   _peopleWhoRecentlyJoined(context) {
-    // return Obx((){
-    //   if(controller.userHomeModel.value==null){
-    //     ///Add simmer
-    //     return Center();
-    //   }
-    //   var jobForYou=controller.userHomeModel.value.data?.jobForYou??[];
-    //   return jobForYou!=null&&jobForYou.isNotEmpty?Obx((){
-    //     var jobList=controller.userHomeModel.value.data?.jobForYou??[];
-    //     return Container(
-    //       color: appWhiteColor,
-    //       padding: EdgeInsets.all(10),
-    //       child: Column(
-    //         children: <Widget>[
-    //           Padding(
-    //             padding: EdgeInsets.only(left: 10),
-    //             child: commonHeaderAndSeeAll(headerName: appPeopleWhoRecentlyJoined, seeAllClick: (){
-    //               //controller.openRecommendJobPage(isJobForYou: true,);
-    //             }),
-    //           ),
-    //           SizedBox(height: 15,),
-    //           SingleChildScrollView(
-    //             scrollDirection: Axis.horizontal,
-    //             child:  Wrap(
-    //               spacing: 10,
-    //               children: List.generate(10??0, (index){
-    //                 return recentlyJoinedWidget(context,
-    //                   profileImage: ""??"",
-    //                   initialName:"Satyam Shukla",
-    //                   userName: "Satyam Shukla",
-    //                   ccId: "CCajksdjasd",
-    //                   location: 'Delhi, noida, lucknow',
-    //                   designation: 'Software Engenners',  ratingBar: '10',
-    //                 );
-    //               }),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   }):Container();
-    // });
+    return Obx((){
+      if(controller.companyStaticsDetails.value==null){
+        ///Add simmer
+        return Center();
+      }
+      var recentlyJoinedData=controller.companyStaticsDetails.value.data?.recentJoinList??[];
+      return recentlyJoinedData!=null&&recentlyJoinedData.isNotEmpty?Container(
+        color: appWhiteColor,
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: commonHeaderAndSeeAll(headerName: appPeopleWhoRecentlyJoined, seeAllClick: (){
+                //controller.openRecommendJobPage(isJobForYou: true,);
+              }),
+            ),
+            SizedBox(height: 15,),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child:  Wrap(
+                spacing: 10,
+                children: List.generate(recentlyJoinedData.length??0, (index){
+                  return recentlyJoinedWidget(context,
+                    profileImage: recentlyJoinedData[index].profile??"",
+                    initialName:recentlyJoinedData[index].name??"",
+                    userName: recentlyJoinedData[index].name??"",
+                    ccId: recentlyJoinedData[index].individualId??"",
+                    location: 'Delhi, noida, lucknow',
+                    designation: recentlyJoinedData[index].designationName??"",
+                    ratingBar: '10',
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
+      ):Container();
+    });
   }
 
   _savedCandidate( context) {

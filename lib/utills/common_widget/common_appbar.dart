@@ -399,12 +399,12 @@ Widget commonCompanySearchAppBar(
                 SizedBox(width: 10),
                 GestureDetector(
                   onTap: (){
-                    Get.offNamed(AppRoutes.notifications);
+                    Get.offNamed(AppRoutes.companyEmploymentRequest);
                   },
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      SvgPicture.asset(actionButtonOne, height: 25, width: 25),
+                      SvgPicture.asset(appEmployeeRequestSvgIcon, height: 24, width: 24,color: appBlackColor,),
                       isBadge?Positioned(
                         top: -7,
                         right: -3,

@@ -21,50 +21,57 @@ class CommonScrollControllers extends GetxController with GetTickerProviderState
     super.onInit();
     scrollController.addListener(handleScroll);
   }
-  void handleScroll() {
-    if (isTabClicked) return;
+  @override
+  void onReady() {
+    super.onReady();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateSectionOffsets();
-      final scrollOffset = scrollController.offset;
-      for (int i = 0; i < sectionOffsets.length; i++) {
-        //sectionOffsets=[370.43999999999994, 1374.44, 1618.44]
-        final start = sectionOffsets[i];
-        final end = (i + 1 < sectionOffsets.length) ? sectionOffsets[i + 1] : double.infinity;
-        print("OOOooooooooooOOOOOO");
-        print(start);//1274.6666666666665
-        print(end);//1518.6666666666665
-        print("OOOooooooooooOOOOOO111111");
-        if (scrollOffset >= start && scrollOffset < end) {
-          print("asdlaksdalsdkalksdajklsdajklds1111$i");
-          if (selectedIndex.value != i) {
-            print("asdlaksdalsdkalksdajklsdajklds3222222$i");
-            print("asdlaksdalsdkalksdajklsdajklds333333${selectedIndex.value}");
-            selectedIndex.value = i;
-          }
-          break;
-        }
-      }
+      // Use your scrollable ListView's context here
+      _updateSectionOffsets(scrollViewContext!);
     });
-
   }
 
 
-  void _updateSectionOffsets() {
-    sectionOffsets.clear();
-    for (var key in sectionKeys) {
-      final ctx = key.currentContext;
-      print('>>>>>>>>>>>>>>>>');
-      if (ctx != null) {
-        print('>>>>>>>>>>>>>>>>111111');
-        final box = ctx.findRenderObject() as RenderBox;
-        final position = box.localToGlobal(Offset.zero, ancestor: buildContext?.findRenderObject());
-        print('>>>>>>>>>>>>>>>>2222222');
-        sectionOffsets.add(position.dy + scrollController.offset);
-        print('>>>>>>>>>>>>>>>>333333');
-        print(sectionOffsets);
+  double lastOffset = 0.0;
+
+  void handleScroll() {
+    if (isTabClicked) return;
+
+    final scrollOffset = scrollController.offset;
+    final isScrollingDown = scrollOffset > lastOffset;
+    lastOffset = scrollOffset;
+
+    for (int i = 0; i < sectionOffsets.length; i++) {
+      final start = sectionOffsets[i];
+      final end = (i + 1 < sectionOffsets.length) ? sectionOffsets[i + 1] : double.infinity;
+
+      if (scrollOffset >= start && scrollOffset < end) {
+        if (selectedIndex.value != i) {
+          selectedIndex.value = i;
+          print('User scrolled ${isScrollingDown ? 'down' : 'up'} to section $i');
+        }
+        break;
       }
     }
   }
+
+
+
+
+  void _updateSectionOffsets(BuildContext context) {
+    sectionOffsets.clear();
+
+    for (var key in sectionKeys) {
+      final ctx = key.currentContext;
+      if (ctx != null) {
+        final box = ctx.findRenderObject() as RenderBox;
+        final scrollContainerBox = context.findRenderObject() as RenderBox;
+
+        final position = box.localToGlobal(Offset.zero, ancestor: scrollContainerBox);
+        sectionOffsets.add(position.dy); // relative to scroll container
+      }
+    }
+  }
+
 
   void scrollToSection(int index) {
     isTabClicked = true;

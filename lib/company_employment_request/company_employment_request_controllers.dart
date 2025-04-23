@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
+import '../models/company_all_employment_model.dart';
 import '../models/employee_list_model.dart';
 import '../models/employment_list_model.dart';
 import '../utills/app_key_constent.dart';
@@ -16,6 +17,7 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
   late ProgressDialog progressDialog=ProgressDialog() ;
   var searchController = TextEditingController();
   var designationListData=DesignationListModel().obs;
+  var companyEmploymentData=CompanyAllEmploymentModel().obs;
   var employeeData=EmployeeListModel().obs;
   Rx isSearchActive=false.obs;
   var isEditData=false.obs;
@@ -55,6 +57,9 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
     }else{
       Future.delayed(Duration(milliseconds: 500), ()async {
         getDesignationApiCall();
+      });
+      Future.delayed(Duration(milliseconds: 500), ()async {
+        getAllEmploymentApiCall();
       });
       Future.delayed(Duration(milliseconds: 500), ()async {
         getEmployeeDataListApiCall();
@@ -107,6 +112,25 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
         listTabCounter.add(pastCount.value);
         listTabCounter.add(pastCount.value);
         listTabCounter.add(pastCount.value);
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  void getAllEmploymentApiCall()async {
+    try {
+      progressDialog.show();
+      CompanyAllEmploymentModel companyAllEmploymentModel = await ApiProvider.baseWithToken().companyAllEmployment();
+      if(companyAllEmploymentModel.status==true){
+        companyEmploymentData.value=companyAllEmploymentModel;
       }else{
         showToast(somethingWentWrong);
       }

@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import '../../api_provider/api_provider.dart';
+import '../../models/company_all_employment_model.dart';
 import '../../models/employment_list_model.dart';
 import '../../models/save_user_profile_model.dart';
 import '../app_colors.dart';
@@ -21,6 +22,7 @@ import 'common_text_field.dart';
 import 'image_multipart.dart';
 late ProgressDialog progressDialog=ProgressDialog() ;
 var joiningDateControllers=TextEditingController();
+var employeesControllers=TextEditingController();
 var employedTillControllers=TextEditingController();
 var rolesAndResponsibilityControllers=TextEditingController();
 var ctcAmount=TextEditingController();
@@ -38,6 +40,7 @@ Rx selectedResumeName="".obs;
 Rx isStillWorkingHere =false.obs;
 var selectedEmployeeType = Rxn<int>();
 var selectedSkillsData = [].obs;
+var selectedSkillsSelectedData = [].obs;
 var isEditData=false.obs;
 Rx selectedSkills="".obs;
 /// Dropdown
@@ -49,7 +52,7 @@ var selectedCTCDropDown={"id":"0","name": appSelectCTC}.obs;
 var selectedEmployeeDropDown={"id":"0","name": appSelectDesignation}.obs;
 var selectedCTCTypeDropDown={"id":"0","name": appSelectCTCType}.obs;
 
-openAddEmploymentForm(context,{required DesignationListModel designationListData,required String screenNameData}){
+openAddEmploymentForm(context,{required DesignationListModel designationListData,required String screenNameData,required CompanyAllEmploymentModel companyAllEmployment}){
   return showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: appWhiteColor,
@@ -85,23 +88,25 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                       /// Form
                       ///Select Company
                       ///Select Company
-                      commonTextFieldTitle(headerName: appAddEmployee,isMendatory: true),
+                      commonTextFieldTitle(headerName: appSelectEmployee,isMendatory: true),
                       SizedBox(height: 5,),
+                     // commonTextField(controller: employeesControllers, hintText: appEnterEmployee),
                       Obx((){
-                        var designation=designationListData.data?.companyList??[];
+                        var employeeData=companyAllEmployment.data??[];
 
-                        return designation!=null&&designation.isNotEmpty?customDropDown(
+                        return employeeData!=null&&employeeData.isNotEmpty?customDropDown(
                             hintText: appSelectDesignation,
                             item: [{"id":"0","name": appSelectEmployee},
-                              ...designation.map((data)=>{'id':data.id,'name':data.company}).toList()??[]
+                              ...employeeData.map((data)=>{'id':data.id,'name':data.userName}).toList()??[]
                             ],
-                            selectedValue: designation.any((detum)=>detum.id==selectedDesignationDropDown["id"])?selectedDesignationDropDown:{"id":"0","name": appSelectDesignation},
+                            selectedValue: employeeData.any((detum)=>detum.id==selectedDesignationDropDown["id"])?selectedDesignationDropDown:{"id":"0","name": appSelectDesignation},
                             onChanged: (Map<String,dynamic>? selectedData){
                               if(selectedData!=null){
                                 selectedDesignationDropDown.value={
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectEmployee
                                 };
+                                employeesControllers.text=selectedData?['id'].toString() ?? "0";
                                 selectedDesignation.value=selectedData['name'];
                               }
                             },
@@ -128,7 +133,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectDepartment
                                 };
-                                selectedDepartment.value=selectedData['name'];
+                                selectedDepartment.value=selectedData['id'];
                               }
                             },
                             icon: appDropDownIcon
@@ -152,7 +157,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectDesignation
                                 };
-                                selecteedEmployee.value=selectedData['name'];
+                                selecteedEmployee.value=selectedData['id'];
                               }
                             },
                             icon: appDropDownIcon
@@ -310,7 +315,10 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectSkill
                                 };
+                                print("/////");
+                                print(selectedData);
                                 selectedSkillsData.add(selectedData);
+                                selectedSkillsSelectedData.add(selectedData['name']);
                                 selectedSkills.value=selectedData['name'];// Add new selected skill
                               }
                             },
@@ -509,7 +517,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
 }
 
 addEmploymentValidation(context,{required String screenNameData}){
-  if(selectedDesignation.value==null||selectedDesignation.value==""){
+  if(employeesControllers.text==null||employeesControllers.text.isEmpty){
     showToast(appPleaseSelectEmployee);
   }else if(selectedDepartment.value==null||selectedDepartment.value==""){
     showToast(appPleaseSelectDepartment);
@@ -543,34 +551,34 @@ addEmploymentApiCall(context,{required String screenNameData})async{
     progressDialog.show();
     var documentFile = await convertFileToMultipart(selectedResumeName.value??'');
     var formData = dio.FormData.fromMap({
-      "user":await readStorageData(key: id),
-      "designation":selectedDesignation.value??'',
-      "company":selectedCompany.value??'',
-      "department":selectedDepartment.value??"",
-      "joining_date":selectedJoiningDateData.value??'',
-      "worked_till_date":selectedEmployedTill.value??'',
-      "employment_type":selectedEmployeeType.value,
+      "user":employeesControllers.text.toString(),
+      "employment_type":selectedEmployeeType.value.toString(),
+      "designation":selecteedEmployee.value.toString()??'',
+      "salary":ctcAmount.value.text.toString()??"",
+      "salary_inhand":selectedCTC.value.replaceAll(" ", "").toLowerCase()??"",
+      "salary_mode":selectedType.value.toString(),
+      "joining_date":convertDateFormat(selectedJoiningDateData.value.toString()??''),
+      "worked_till_date":convertDateFormat(selectedEmployedTill.value.toString()??''),
+      "department":selectedDepartment.value.toString()??"",
+      "still_working":isStillWorkingHere.value?"1":"0",
       "description":rolesAndResponsibilityControllers.text??"",
       "document[0]":documentFile??'',
-      "salary_mode":selectedCTC.value??"",
-      "salary_inhand":ctcAmount.value.text??"",
-      "still_working":isStillWorkingHere.value?1:0
+
     });
 
+
+
     for (int i = 0; i < selectedSkillsData.length; i++) {
-      formData.fields.add(MapEntry("skill[$i]", selectedSkillsData[i].toString()));
+      formData.fields.add(MapEntry("skill[$i]", selectedSkillsData[i]['name'].toString()));
     }
     SaveUserProfileModel addEmployment = await ApiProvider.baseWithToken().addCompanyEmployment(formData);
     if(addEmployment.status==true){
       if (progressDialog.isShowing()) {
         Get.back();
       }
-      print(">>>>>>>>>>>>>>>>>>");
-      print(screenNameData);
-      print(companyEmployeesScreen);
       if(screenNameData==companyEmployeesScreen){
         Navigator.pop(context);
-        Get.offNamed(AppRoutes.companyEmployees,arguments: {bottomNavCurrentIndexData:"1"});
+        Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
       }
       // if(screenNameData.value==dashboard){
       //   Get.offNamed(AppRoutes.bottomNavBar);

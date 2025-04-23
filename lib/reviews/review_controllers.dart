@@ -23,12 +23,14 @@ class ReviewControllers extends GetxController{
   var portfolioTitle="Select Portfolio".obs;
   var selectedImageFromTHeGallery="".obs;
   Rx screenNameData="".obs;
+  Rx experienceIdData="".obs;
 
   @override
   void onInit() {
     Map<String,dynamic> data=Get.arguments??{};
     if(data.isNotEmpty){
       screenNameData.value=data[screenName]??"";
+      experienceIdData.value=data[experienceId]??"0";
     }
     // TODO: implement onInit
     super.onInit();
@@ -40,6 +42,8 @@ class ReviewControllers extends GetxController{
       Get.offNamed(AppRoutes.bottomNavBar);
     }else if(screenNameData.value==profileDetails){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else if(screenNameData.value==companyEmployeesScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
     }
 
   }
@@ -65,7 +69,7 @@ class ReviewControllers extends GetxController{
       progressDialog.show();
       var uploadedData=await convertFileToMultipart(selectedImageFromTHeGallery.value??"");
       var formData = dio.FormData.fromMap({
-        "experience":"1",
+        "experience":experienceIdData??0,
         "rating":ratingValue??"0",
         "review":descriptionController.text??"",
         "link":linkController.text??"",
@@ -75,7 +79,12 @@ class ReviewControllers extends GetxController{
       if(addSkillsData.status==true){
         //addSkillsModelData.value=addSkillsData;
         progressDialog.dismissLoader();
-        Get.offNamed(AppRoutes.bottomNavBar);
+        if(screenNameData.value==companyEmployeesScreen){
+          Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+        }else{
+          Get.offNamed(AppRoutes.bottomNavBar);
+        }
+
 
       }else{
         showToast(somethingWentWrong);

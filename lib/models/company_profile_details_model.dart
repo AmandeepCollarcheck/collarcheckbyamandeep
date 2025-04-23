@@ -1,17 +1,16 @@
 
-
-class CompanyUserDetailsModel {
+class CompanyProfileDetailsModel {
   bool? status;
   String? message;
   Data? data;
 
-  CompanyUserDetailsModel({
+  CompanyProfileDetailsModel({
     this.status,
     this.message,
     this.data,
   });
 
-  factory CompanyUserDetailsModel.fromJson(Map<String, dynamic> json) => CompanyUserDetailsModel(
+  factory CompanyProfileDetailsModel.fromJson(Map<String, dynamic> json) => CompanyProfileDetailsModel(
     status: json["status"],
     message: json["message"],
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -26,7 +25,7 @@ class CompanyUserDetailsModel {
 
 class Data {
   String? id;
-  String? loginauth;
+  bool? isVerified;
   String? individualId;
   String? companyName;
   String? contactPerson;
@@ -34,21 +33,17 @@ class Data {
   dynamic emailAlternate;
   String? phone;
   dynamic profile;
-  String? socialImage;
   String? website;
   String? description;
   dynamic secondPhone;
   dynamic location;
   String? phoneVerified;
   String? emailVerified;
-  bool? isVerified;
   String? userType;
   dynamic secondPhoneVerify;
   dynamic emailAlternateVerify;
   String? profileDescription;
   dynamic presentAddress;
-  dynamic permanentAddress;
-  bool? sameAddress;
   dynamic country;
   dynamic city;
   dynamic state;
@@ -67,20 +62,24 @@ class Data {
   dynamic snapchat;
   String? incorporateDate;
   String? turnover;
+  String? claimStatus;
   dynamic turnoverName;
-  String? companySize;
-  dynamic companySizeName;
   String? industry;
   String? industryName;
-  int? totalConnection;
-  int? profilePercentage;
-  List<String>? uncomplete;
-  Complete? complete;
-  bool? socialLogin;
+  String? companySize;
+  dynamic companySizeName;
+  int? totalEmployee;
+  int? allEmploymentCount;
+  List<dynamic>? alljob;
+  List<TopCompany>? topCompany;
+  List<dynamic>? topUser;
+  List<AllBenefit>? allGallery;
+  List<AllBenefit>? allBenefits;
+  FollowData? followData;
 
   Data({
     this.id,
-    this.loginauth,
+    this.isVerified,
     this.individualId,
     this.companyName,
     this.contactPerson,
@@ -88,21 +87,17 @@ class Data {
     this.emailAlternate,
     this.phone,
     this.profile,
-    this.socialImage,
     this.website,
     this.description,
     this.secondPhone,
     this.location,
     this.phoneVerified,
     this.emailVerified,
-    this.isVerified,
     this.userType,
     this.secondPhoneVerify,
     this.emailAlternateVerify,
     this.profileDescription,
     this.presentAddress,
-    this.permanentAddress,
-    this.sameAddress,
     this.country,
     this.city,
     this.state,
@@ -121,21 +116,25 @@ class Data {
     this.snapchat,
     this.incorporateDate,
     this.turnover,
+    this.claimStatus,
     this.turnoverName,
-    this.companySize,
-    this.companySizeName,
     this.industry,
     this.industryName,
-    this.totalConnection,
-    this.profilePercentage,
-    this.uncomplete,
-    this.complete,
-    this.socialLogin,
+    this.companySize,
+    this.companySizeName,
+    this.totalEmployee,
+    this.allEmploymentCount,
+    this.alljob,
+    this.topCompany,
+    this.topUser,
+    this.allGallery,
+    this.allBenefits,
+    this.followData,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
-    loginauth: json["loginauth"],
+    isVerified: json["is_verified"],
     individualId: json["individual_id"],
     companyName: json["company_name"],
     contactPerson: json["contact_person"],
@@ -143,21 +142,17 @@ class Data {
     emailAlternate: json["email_alternate"],
     phone: json["phone"],
     profile: json["profile"],
-    socialImage: json["social_image"],
     website: json["website"],
     description: json["description"],
     secondPhone: json["second_phone"],
     location: json["location"],
     phoneVerified: json["phone_verified"],
     emailVerified: json["email_verified"],
-    isVerified: json["is_verified"],
     userType: json["user_type"],
     secondPhoneVerify: json["second_phone_verify"],
     emailAlternateVerify: json["email_alternate_verify"],
     profileDescription: json["profile_description"],
     presentAddress: json["present_address"],
-    permanentAddress: json["permanent_address"],
-    sameAddress: json["same_address"],
     country: json["country"],
     city: json["city"],
     state: json["state"],
@@ -176,21 +171,25 @@ class Data {
     snapchat: json["snapchat"],
     incorporateDate: json["incorporate_date"],
     turnover: json["turnover"],
+    claimStatus: json["claim_status"],
     turnoverName: json["turnover_name"],
-    companySize: json["company_size"],
-    companySizeName: json["company_size_name"],
     industry: json["industry"],
     industryName: json["industry_name"],
-    totalConnection: json["totalConnection"],
-    profilePercentage: json["profile_percentage"],
-    uncomplete: json["uncomplete"] == null ? [] : List<String>.from(json["uncomplete"]!.map((x) => x)),
-    complete: json["complete"] == null ? null : Complete.fromJson(json["complete"]),
-    socialLogin: json["socialLogin"],
+    companySize: json["company_size"],
+    companySizeName: json["company_size_name"],
+    totalEmployee: json["total_employee"],
+    allEmploymentCount: json["allEmploymentCount"],
+    alljob: json["alljob"] == null ? [] : List<dynamic>.from(json["alljob"]!.map((x) => x)),
+    topCompany: json["topCompany"] == null ? [] : List<TopCompany>.from(json["topCompany"]!.map((x) => TopCompany.fromJson(x))),
+    topUser: json["topUser"] == null ? [] : List<dynamic>.from(json["topUser"]!.map((x) => x)),
+    allGallery: json["allGallery"] == null ? [] : List<AllBenefit>.from(json["allGallery"]!.map((x) => AllBenefit.fromJson(x))),
+    allBenefits: json["allBenefits"] == null ? [] : List<AllBenefit>.from(json["allBenefits"]!.map((x) => AllBenefit.fromJson(x))),
+    followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "loginauth": loginauth,
+    "is_verified": isVerified,
     "individual_id": individualId,
     "company_name": companyName,
     "contact_person": contactPerson,
@@ -198,21 +197,17 @@ class Data {
     "email_alternate": emailAlternate,
     "phone": phone,
     "profile": profile,
-    "social_image": socialImage,
     "website": website,
     "description": description,
     "second_phone": secondPhone,
     "location": location,
     "phone_verified": phoneVerified,
     "email_verified": emailVerified,
-    "is_verified": isVerified,
     "user_type": userType,
     "second_phone_verify": secondPhoneVerify,
     "email_alternate_verify": emailAlternateVerify,
     "profile_description": profileDescription,
     "present_address": presentAddress,
-    "permanent_address": permanentAddress,
-    "same_address": sameAddress,
     "country": country,
     "city": city,
     "state": state,
@@ -231,75 +226,107 @@ class Data {
     "snapchat": snapchat,
     "incorporate_date": incorporateDate,
     "turnover": turnover,
+    "claim_status": claimStatus,
     "turnover_name": turnoverName,
-    "company_size": companySize,
-    "company_size_name": companySizeName,
     "industry": industry,
     "industry_name": industryName,
-    "totalConnection": totalConnection,
-    "profile_percentage": profilePercentage,
-    "uncomplete": uncomplete == null ? [] : List<dynamic>.from(uncomplete!.map((x) => x)),
-    "complete": complete?.toJson(),
-    "socialLogin": socialLogin,
+    "company_size": companySize,
+    "company_size_name": companySizeName,
+    "total_employee": totalEmployee,
+    "allEmploymentCount": allEmploymentCount,
+    "alljob": alljob == null ? [] : List<dynamic>.from(alljob!.map((x) => x)),
+    "topCompany": topCompany == null ? [] : List<dynamic>.from(topCompany!.map((x) => x.toJson())),
+    "topUser": topUser == null ? [] : List<dynamic>.from(topUser!.map((x) => x)),
+    "allGallery": allGallery == null ? [] : List<dynamic>.from(allGallery!.map((x) => x.toJson())),
+    "allBenefits": allBenefits == null ? [] : List<dynamic>.from(allBenefits!.map((x) => x.toJson())),
+    "followData": followData?.toJson(),
   };
 }
 
-class Complete {
-  String? companyName;
-  String? email;
-  String? phone;
-  String? phoneVerified;
-  String? contactPerson;
-  String? incorporateDate;
-  String? industry;
-  String? addEmployee;
-  String? review;
-  String? gallery;
-  String? perk;
-  String? employeeCount;
+class AllBenefit {
+  String? name;
+  String? image;
 
-  Complete({
-    this.companyName,
-    this.email,
-    this.phone,
-    this.phoneVerified,
-    this.contactPerson,
-    this.incorporateDate,
-    this.industry,
-    this.addEmployee,
-    this.review,
-    this.gallery,
-    this.perk,
-    this.employeeCount,
+  AllBenefit({
+    this.name,
+    this.image,
   });
 
-  factory Complete.fromJson(Map<String, dynamic> json) => Complete(
-    companyName: json["company_name"],
-    email: json["email"],
-    phone: json["phone"],
-    phoneVerified: json["phone_verified"],
-    contactPerson: json["contact_person"],
-    incorporateDate: json["incorporate_date"],
-    industry: json["industry"],
-    addEmployee: json["add_employee"],
-    review: json["review"],
-    gallery: json["gallery"],
-    perk: json["perk"],
-    employeeCount: json["employee_count"],
+  factory AllBenefit.fromJson(Map<String, dynamic> json) => AllBenefit(
+    name: json["name"],
+    image: json["image"],
   );
 
   Map<String, dynamic> toJson() => {
-    "company_name": companyName,
-    "email": email,
-    "phone": phone,
-    "phone_verified": phoneVerified,
-    "contact_person": contactPerson,
-    "incorporate_date": incorporateDate,
-    "industry": industry,
-    "add_employee": addEmployee,
-    "review": review,
-    "gallery": gallery,
-    "perk": perk,
-    "employee_count": employeeCount,
+    "name": name,
+    "image": image,
+  };
+}
+
+class FollowData {
+  int? following;
+  int? follower;
+
+  FollowData({
+    this.following,
+    this.follower,
+  });
+
+  factory FollowData.fromJson(Map<String, dynamic> json) => FollowData(
+    following: json["following"],
+    follower: json["follower"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "following": following,
+    "follower": follower,
+  };
+}
+
+class TopCompany {
+  String? id;
+  String? profile;
+  String? name;
+  String? individualId;
+  String? slug;
+  String? cityName;
+  String? stateName;
+  String? countryName;
+  FollowData? followData;
+
+  TopCompany({
+    this.id,
+    this.profile,
+    this.name,
+    this.individualId,
+    this.slug,
+    this.cityName,
+    this.stateName,
+    this.countryName,
+    this.followData,
+  });
+
+  factory TopCompany.fromJson(Map<String, dynamic> json) => TopCompany(
+    id: json["id"],
+    profile: json["profile"],
+    name: json["name"],
+    individualId: json["individual_id"],
+    slug: json["slug"],
+    cityName: json["city_name"],
+    stateName: json["state_name"],
+    countryName: json["country_name"],
+    followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "profile": profile,
+    "name": name,
+    "individual_id": individualId,
+    "slug": slug,
+    "city_name": cityName,
+    "state_name": stateName,
+    "country_name": countryName,
+    "followData": followData?.toJson(),
   };
 }

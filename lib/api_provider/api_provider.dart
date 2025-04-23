@@ -16,11 +16,17 @@ import '../models/all_language_list_model.dart';
 import '../models/all_message_data_list_model.dart';
 import '../models/all_skills_list_model.dart';
 import '../models/applied_job_data_model.dart';
+import '../models/benefit_data_list_model.dart';
 import '../models/certificates_data_list_model.dart';
 import '../models/city_list_model.dart';
 import '../models/company_all_details_data.dart';
+import '../models/company_all_employment_model.dart';
+import '../models/company_all_review_model.dart';
+import '../models/company_benefit_model.dart';
 import '../models/company_job_data_list_model.dart';
+import '../models/company_profile_details_model.dart';
 import '../models/company_user_details_model.dart';
+import '../models/company_user_specific_review_model.dart';
 import '../models/connection_data_list_model.dart';
 import '../models/country_list_model.dart';
 import '../models/dashboard_statics_model.dart';
@@ -1178,6 +1184,9 @@ class ApiProvider{
   Future addCompanyEmployment(FormData params) async {
     try {
 
+      print("njhhhj>>");
+      print(params.fields);
+
       Response response = await _dio.post(strCompanyAddEmployment,data: params);
       Map<String, dynamic> jsonData;
       if (response.data is String) {
@@ -1192,6 +1201,7 @@ class ApiProvider{
   }
   Future addJob(params) async {
     try {
+      print(params);
       Response response = await _dio.post(strCompanyAddJob,data: params);
       Map<String, dynamic> jsonData;
       if (response.data is String) {
@@ -1308,12 +1318,161 @@ class ApiProvider{
       } else {
         jsonData = response.data;
       }
-      return UserProfileModel.fromJson(jsonData);
+      return CompanyProfileDetailsModel.fromJson(jsonData);
     }catch (error, stacktrace) {
       handleException(error, stacktrace, _dioError!);
     }
   }
 
+
+  Future addBenefits(params) async {
+    try {
+      Response response = await _dio.post(strAddBenefits, data: params );
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future allBenefitData() async {
+    try {
+      Response response = await _dio.get(strGetBenefits);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return BenefitDataListModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future benefitData() async {
+    try {
+      Response response = await _dio.get(strCompanyBenefits);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyBenefitListModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+
+  Future deleteBenefits(params) async {
+    try {
+      Response response = await _dio.delete("$strCompanyDeleteBenefits/$params", );
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future companyGalleryData() async {
+    try {
+      Response response = await _dio.get(strCompanyGallery);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyBenefitListModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future addGalleryImage(FormData params) async {
+    try {
+      print(">>>>>>>>>>>>>>>>>>>>>>>>>>");
+      print(params.fields);
+      Response response = await _dio.post(strAddGallery, data: params );
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+  Future deleteGalleryImage(params) async {
+    try {
+      Response response = await _dio.delete("$strDeleteGalleryImage/$params", );
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyAllReview() async {
+    try {
+      Response response = await _dio.get(strCompanyAllReview);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyAllReviewModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyUserSpecificAllReview(userId) async {
+    try {
+      Response response = await _dio.get("$strCompanyUserAllReview?user_id=$userId");
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyUserSpecificReviewModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyAllEmployment() async {
+    try {
+      Response response = await _dio.get(strCompanyAllEmployment);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyAllEmploymentModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
 
 
 

@@ -75,6 +75,7 @@ class Current {
   String? lastModifyDate;
   String? accountCreateDate;
   bool? inWishlist;
+  TotalRating? totalRating;
 
   Current({
     this.user,
@@ -100,6 +101,7 @@ class Current {
     this.lastModifyDate,
     this.accountCreateDate,
     this.inWishlist,
+    this.totalRating,
   });
 
   factory Current.fromJson(Map<String, dynamic> json) => Current(
@@ -126,6 +128,8 @@ class Current {
     lastModifyDate: json["last_modify_date"] ,
     accountCreateDate: json["account_create_date"] ,
     inWishlist: json["in_wishlist"],
+    totalRating: json["totalRating"] == null ? null : TotalRating.fromJson(json["totalRating"]),
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -152,6 +156,26 @@ class Current {
     "last_modify_date": lastModifyDate,
     "account_create_date": accountCreateDate,
     "in_wishlist": inWishlist,
+    "totalRating": totalRating?.toJson(),
+  };
+}
+class TotalRating {
+  int? rating;
+  int? noofrecord;
+
+  TotalRating({
+    this.rating,
+    this.noofrecord,
+  });
+
+  factory TotalRating.fromJson(Map<String, dynamic> json) => TotalRating(
+    rating: json["rating"],
+    noofrecord: json["noofrecord"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "rating": rating,
+    "noofrecord": noofrecord,
   };
 }
 class Past {
@@ -164,6 +188,7 @@ class Past {
   String? individualId;
   String? approved;
   String? experienceId;
+  bool? isVerified;
   dynamic linkdin;
   dynamic youtube;
   dynamic instagram;
@@ -178,7 +203,7 @@ class Past {
   String? lastModifyDate;
   String? accountCreateDate;
   bool? inWishlist;
-
+  TotalRating? totalRating;
   Past({
     this.user,
     this.profile,
@@ -198,11 +223,13 @@ class Past {
     this.profileDescription,
     this.dob,
     this.presentAddress,
+    this.isVerified,
     this.joiningDate,
     this.workedTillDate,
     this.lastModifyDate,
     this.accountCreateDate,
     this.inWishlist,
+    this.totalRating
   });
 
   factory Past.fromJson(Map<String, dynamic> json) => Past(
@@ -224,11 +251,14 @@ class Past {
     profileDescription: json["profile_description"],
     dob: json["dob"],
     presentAddress: json["present_address"],
+    isVerified: json["is_verified"],
     joiningDate: json["joining_date"] ,
     workedTillDate: json["worked_till_date"] ,
     lastModifyDate: json["last_modify_date"],
     accountCreateDate: json["account_create_date"] ,
     inWishlist: json["in_wishlist"],
+    totalRating: json["totalRating"] == null ? null : TotalRating.fromJson(json["totalRating"]),
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -245,6 +275,7 @@ class Past {
     "youtube": youtube,
     "instagram": instagram,
     "facebook": facebook,
+    "is_verified": isVerified,
     "slug": slug,
     "contact_person": contactPerson,
     "profile_description": profileDescription,
@@ -255,5 +286,6 @@ class Past {
     "last_modify_date": lastModifyDate,
     "account_create_date": accountCreateDate,
     "in_wishlist": inWishlist,
+    "totalRating": totalRating?.toJson(),
   };
 }

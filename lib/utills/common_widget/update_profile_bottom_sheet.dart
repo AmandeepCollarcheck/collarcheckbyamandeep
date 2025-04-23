@@ -13,6 +13,7 @@ import '../../api_provider/api_provider.dart';
 import '../../models/city_list_model.dart';
 import '../../models/company_all_details_data.dart';
 import '../../models/company_user_details_model.dart';
+import '../../models/employee_user_details_model.dart';
 import '../../models/save_user_profile_model.dart';
 import '../../models/state_list_model.dart';
 import '../app_colors.dart';

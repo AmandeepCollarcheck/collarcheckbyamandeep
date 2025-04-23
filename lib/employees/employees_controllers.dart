@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
+import '../models/company_all_employment_model.dart';
 import '../models/employee_list_model.dart';
 import '../models/employment_list_model.dart';
 import '../utills/app_key_constent.dart';
@@ -18,6 +19,7 @@ class EmployeeControllers extends GetxController with GetTickerProviderStateMixi
   var searchController = TextEditingController();
   var designationListData=DesignationListModel().obs;
   var employeeData=EmployeeListModel().obs;
+  var companyEmploymentData=CompanyAllEmploymentModel().obs;
   Rx isSearchActive=false.obs;
   var isEditData=false.obs;
   var isEditIdData="".obs;
@@ -56,6 +58,9 @@ class EmployeeControllers extends GetxController with GetTickerProviderStateMixi
     }else{
       Future.delayed(Duration(milliseconds: 500), ()async {
         getDesignationApiCall();
+      });
+      Future.delayed(Duration(milliseconds: 500), ()async {
+        getAllEmploymentApiCall();
       });
       Future.delayed(Duration(milliseconds: 500), ()async {
         getEmployeeDataListApiCall();
@@ -118,5 +123,24 @@ class EmployeeControllers extends GetxController with GetTickerProviderStateMixi
        showToast(exception.toString());
      }
    }
+
+  void getAllEmploymentApiCall()async {
+    try {
+      progressDialog.show();
+      CompanyAllEmploymentModel companyAllEmploymentModel = await ApiProvider.baseWithToken().companyAllEmployment();
+      if(companyAllEmploymentModel.status==true){
+        companyEmploymentData.value=companyAllEmploymentModel;
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
 
 }

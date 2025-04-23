@@ -8,6 +8,7 @@ import '../api_provider/api_provider.dart';
 import '../models/company_all_details_data.dart';
 import '../models/company_user_details_model.dart';
 import '../models/dashboard_statics_model.dart';
+import '../models/employee_user_details_model.dart';
 import '../models/user_home_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
@@ -21,6 +22,7 @@ class CompanyDashboardControllers extends GetxController{
   var companyUserDetails=CompanyUserDetailsModel().obs;
   var designationListData=CompanyAllDetailsData().obs;
   var companyStaticsDetails=DashboardStaticsDetailsModel().obs;
+  var userDetails=EmployeeUserDetails().obs;
   Rx isSearchActive=false.obs;
   var userProfileComplatationPercentage=[].obs;
 
@@ -34,6 +36,7 @@ class CompanyDashboardControllers extends GetxController{
     Future.delayed(Duration(milliseconds: 500), ()async {
       getDashboardStaticeApiData();
     });
+
     Future.delayed(Duration(milliseconds: 500), ()async {
       getDesignationApiCall();
     });
@@ -187,5 +190,7 @@ class CompanyDashboardControllers extends GetxController{
       showToast(exception.toString());
     }
   }
+
+
 
 }

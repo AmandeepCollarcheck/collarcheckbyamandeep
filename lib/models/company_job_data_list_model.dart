@@ -26,8 +26,8 @@ class CompanyJobListModel {
 
 class Data {
   List<DraftJob>? draftJobs;
-  List<dynamic>? publishJobs;
-  List<dynamic>? cancelJobs;
+  List<DraftJob>? publishJobs;
+  List<DraftJob>? cancelJobs;
 
   Data({
     this.draftJobs,
@@ -37,14 +37,14 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     draftJobs: json["draftJobs"] == null ? [] : List<DraftJob>.from(json["draftJobs"]!.map((x) => DraftJob.fromJson(x))),
-    publishJobs: json["publishJobs"] == null ? [] : List<dynamic>.from(json["publishJobs"]!.map((x) => x)),
-    cancelJobs: json["cancelJobs"] == null ? [] : List<dynamic>.from(json["cancelJobs"]!.map((x) => x)),
+    publishJobs: json["publishJobs"] == null ? [] : List<DraftJob>.from(json["publishJobs"]!.map((x) => DraftJob.fromJson(x))),
+    cancelJobs: json["cancelJobs"] == null ? [] : List<DraftJob>.from(json["cancelJobs"]!.map((x) => DraftJob.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "draftJobs": draftJobs == null ? [] : List<dynamic>.from(draftJobs!.map((x) => x.toJson())),
-    "publishJobs": publishJobs == null ? [] : List<dynamic>.from(publishJobs!.map((x) => x)),
-    "cancelJobs": cancelJobs == null ? [] : List<dynamic>.from(cancelJobs!.map((x) => x)),
+    "publishJobs": publishJobs == null ? [] : List<dynamic>.from(publishJobs!.map((x) => x.toJson())),
+    "cancelJobs": cancelJobs == null ? [] : List<dynamic>.from(cancelJobs!.map((x) => x.toJson())),
   };
 }
 

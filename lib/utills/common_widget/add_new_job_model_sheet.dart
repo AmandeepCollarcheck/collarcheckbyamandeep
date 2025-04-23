@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:dio/dio.dart' as dio;
 import '../../api_provider/api_provider.dart';
+import '../../bottom_nav_bar/bottom_nav_bar_controller.dart';
 import '../../models/city_list_model.dart';
 import '../../models/company_all_details_data.dart';
 import '../../models/save_user_profile_model.dart';
@@ -518,7 +519,7 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
                             isPrefixIconShow: false,
                             isPrefixIcon: appViewJd,
                             onClick: (){
-
+                              addJobValidation(context, screenNameData: screenNameData, isDraft: 0);
                             }
                         ),
                       ),
@@ -534,7 +535,7 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
                             textColor: appWhiteColor,
                             buttonBorderColor: appPrimaryColor,
                             onClick: (){
-                              addJobValidation(context, screenNameData: screenNameData);
+                              addJobValidation(context, screenNameData: screenNameData, isDraft: 1);
                             }
                         ),
                       )
@@ -554,7 +555,7 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
   );
 }
 
-void addJobValidation(context, {required String screenNameData}) {
+void addJobValidation(context, {required String screenNameData,required int isDraft}) {
 
   if (isInvalidSelection(selectedJobTitle.value, appSelectedJobTitles)) {
     showToast(appSelectJobTitle);
@@ -569,14 +570,15 @@ void addJobValidation(context, {required String screenNameData}) {
   }else if(isInvalidSelection(selectedWorkMode.value, appSelectWorkMode)) {
     showToast(appSelectWorkMode);
   }else{
-    _addNewJob(context,screenNameData: screenNameData);
+    _addNewJob(context,screenNameData: screenNameData, isDraft: isDraft);
   }
 
 
 }
 
-void _addNewJob(context,{required String screenNameData})async {
+void _addNewJob(context,{required String screenNameData,required int isDraft})async {
   try {
+    print("isDraft$isDraft");
     keyboardDismiss(context);
     progressDialog.show();
      var documentFile = await convertFileToMultipart(selectedImageFromTHeGallery.value??'');
@@ -625,6 +627,7 @@ void _addNewJob(context,{required String screenNameData})async {
       "department": selectedDepartment.value["id"] ?? "",
       "city": selectedCity.value["id"] ?? "",
       "industry": appIndustryControllers.text ?? "",
+      "status":isDraft,
       "skill": selectedSkillsData.map((e) => e['id']).where((id) => id != null).toList()
     };
 
@@ -637,8 +640,10 @@ void _addNewJob(context,{required String screenNameData})async {
         Get.back();
       }
       if(screenNameData==companyJobsScreen){
-        Navigator.pop(context);
-        Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+        final BottomNavBarController controller = Get.put(BottomNavBarController());
+        controller.bottomNavCurrentIndex.value=2;
+       // Navigator.pop(context);
+        //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
       }
 
     }else{

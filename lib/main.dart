@@ -17,6 +17,7 @@ Future<void> main() async {
   await FlutterDisplayMode.setHighRefreshRate();
   await Firebase.initializeApp();
   await InternetChecker().onInit();
+
   Get.put(CommonScrollControllers(), permanent: true);
   await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

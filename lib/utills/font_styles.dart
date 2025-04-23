@@ -130,6 +130,13 @@ class AppTextStyles {
     decorationThickness: 0.5,
     fontWeight: FontWeight.w500, // SemiBold
   );
+  static const TextStyle font12W500Underline = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 12,
+    decorationThickness: 0.5,
+    decoration: TextDecoration.underline,
+    fontWeight: FontWeight.w500, // SemiBold
+  );
   static const TextStyle font10 = TextStyle(
     fontFamily: fontFamily,
     fontSize: 10,

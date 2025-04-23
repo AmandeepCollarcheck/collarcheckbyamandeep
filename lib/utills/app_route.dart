@@ -12,6 +12,12 @@ import 'package:collarchek/about/about_bindings.dart';
 import 'package:collarchek/about/about_page.dart';
 import 'package:collarchek/account_verification/account_verification.dart';
 import 'package:collarchek/account_verification/account_verification_bindings.dart';
+import 'package:collarchek/add_gallery/add_gallery_bindings.dart';
+import 'package:collarchek/add_gallery/add_gallery_page.dart';
+import 'package:collarchek/all_review/all_review_bindings.dart';
+import 'package:collarchek/all_review/all_review_page.dart';
+import 'package:collarchek/all_review/user_specific_review/user_specific_review_bindings.dart';
+import 'package:collarchek/all_review/user_specific_review/user_specific_review_page.dart';
 import 'package:collarchek/applicants/applicants_bindings.dart';
 import 'package:collarchek/applicants/applicants_page.dart';
 import 'package:collarchek/bottom_nav_bar/Bottom_nav_bar_binding.dart';
@@ -30,6 +36,9 @@ import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
 import 'package:collarchek/dashboard/dashboard_page.dart';
+import 'package:collarchek/edit_benefit/edit_benefir_bindings.dart';
+import 'package:collarchek/edit_benefit/edit_benefir_page.dart';
+import 'package:collarchek/edit_benefit/edit_benefit_controllers.dart';
 import 'package:collarchek/educations/education_bindings.dart';
 import 'package:collarchek/educations/education_page.dart';
 import 'package:collarchek/employees/employees_bindings.dart';
@@ -110,7 +119,10 @@ class AppRoutes {
   static const String companyProfile = '/companyProfile';
   static const String companyEmploymentRequest = '/companyEmploymentRequest';
   static const String companyDashboard = '/companyDashboard';
-
+  static const String companyBenefit = '/companyBenefit';
+  static const String addGallery = '/addGallery';
+  static const String companyAllReview = '/companyAllReview';
+  static const String userSpecificReview = '/userSpecificReview';
   static final routes = [
     GetPage(
       name: splash,
@@ -291,6 +303,26 @@ class AppRoutes {
       name: companyDashboard,
       page: () => CompanyDashboardPage(),
       binding: CompanyDashboardBindings(),
+    ),
+    GetPage(
+      name: companyBenefit,
+      page: () => EditBenefitPage(),
+      binding: EditBenefitBindings(),
+    ),
+    GetPage(
+      name: addGallery,
+      page: () => AddGalleryPage(),
+      binding: AddGalleryBindings(),
+    ),
+    GetPage(
+      name: companyAllReview,
+      page: () => AllReviewPage(),
+      binding: AllReviewBindings(),
+    ),
+    GetPage(
+      name: userSpecificReview,
+      page: () => UserSpecificReviewPage(),
+      binding: UserSpecificReviewBindings(),
     ),
   ];
 }

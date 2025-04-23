@@ -1,5 +1,6 @@
 import 'package:collarchek/employees/employees_controllers.dart';
 import 'package:collarchek/utills/app_key_constent.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -39,7 +40,7 @@ class EmployeesPage extends GetView<EmployeeControllers>{
 
                   },
                   onAddEmployment: (){
-                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData: companyEmployeesScreen);
+                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData: companyEmployeesScreen, companyAllEmployment: controller.companyEmploymentData.value);
                   },
                   onTap: (){
                     controller.openSearchScreen(context);
@@ -127,15 +128,18 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                   children: List.generate(currentData.length??0, (index){
                     return commonCompanyWidget(context,
                       profileImage: currentData[index].profile??"",
-                      initialName: currentData[index].contactPerson??'',
-                      userName:  currentData[index].contactPerson??'',
+                      initialName: currentData[index].username??'',
+                      userName:  currentData[index].username??'',
                       ccId: currentData[index].individualId??'',
-                      ratingStar: '0',
+                      ratingStar:currentData[index].totalRating?.rating.toString()??'0',
                       buttonName: appAddReview,
                       designation: currentData[index].designation??'',
                       location: generateLocation(cityName: currentData[index].presentAddress??'', stateName: "", countryName: ""),
-                      dataPosted: dateCombination(joiningDate: '', endDate: '',isPresent: false),
-                      onClick: () {  },
+                      dataPosted: dateCombination(joiningDate: currentData[index].connectiondate??'', endDate: '',isPresent: true),
+                      onClick: () {
+                        Get.offNamed(AppRoutes.review,arguments: {experienceId:currentData[index].experienceId??'',screenName:companyEmployeesScreen});
+                      },
+                        isProfileVerified: currentData[index].isVerified??false,
                     );
                   }),
                 )
@@ -168,17 +172,18 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                   children: List.generate(pastData.length??0, (index){
                     return commonCompanyWidget(context,
                       profileImage: pastData[index].profile??"",
-                      initialName:pastData[index].contactPerson??'',
-                      userName:" Person"??'',
+                      initialName:pastData[index].username??'',
+                      userName:pastData[index].username??'',
                       ccId: pastData[index].individualId??'',
-                      ratingStar: '10.0',
+                      ratingStar: pastData[index].totalRating?.rating.toString()??'0',
                       buttonName: appAddReview,
                       designation: pastData[index].designation??'',
                       location: generateLocation(cityName: pastData[index].presentAddress??'', stateName: "", countryName: ""),
-                      dataPosted: dateCombination(joiningDate: pastData[index].joiningDate??'', endDate: pastData[index].workedTillDate??'',isPresent: false),
+                      dataPosted:  '$appLastWorkingDate${formatDate(date: pastData[index].connectiondate??"")}',
+                      isPastData: true,
                       onClick: () {
-                        print("On click wor,");
-                      },
+                        Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyEmployeesScreen});
+                      }, isProfileVerified: pastData[index].isVerified??false,
                     );
                   }),
                 )

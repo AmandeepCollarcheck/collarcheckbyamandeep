@@ -439,13 +439,14 @@ showVerifyEmailWidget(context,{required TextEditingController controller,require
 
 
 
-commonRattingBar(context,{int itemCount=5,required double initialRating,required Function(double) updatedRating,double size=24,double padding=4.0}){
+commonRattingBar(context,{int itemCount=5,required double initialRating,required Function(double) updatedRating,double size=24,double padding=4.0,bool ignoreGesture=false}){
   return RatingBar.builder(
     initialRating: initialRating,
     minRating: 1,
     direction: Axis.horizontal,
     allowHalfRating: false,
     itemCount: itemCount,
+    ignoreGestures: ignoreGesture,
     unratedColor: appRateUnSelectedColor,
     itemSize: size,
     itemPadding: EdgeInsets.symmetric(horizontal: padding),
@@ -503,6 +504,20 @@ String dateTimeYear({required String? date}) {
     print("Error parsing date: $e");
     return "Invalid Date"; // Return fallback value
   }
+}
+
+
+String convertDateFormat(String inputDate) {
+  final inputFormat = DateFormat('dd-MM-yyyy');
+  final outputFormat = DateFormat('yyyy-MM-dd');
+  final dateTime = inputFormat.parse(inputDate);
+  return outputFormat.format(dateTime);
+}
+
+void main() {
+  String originalDate = "09-04-2025";
+  String formattedDate = convertDateFormat(originalDate);
+  print(formattedDate); // Output: 2025-04-09
 }
 
 

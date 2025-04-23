@@ -79,6 +79,16 @@ final String strCompanyUserDetails = '/company/user-detail';
 final String strCompanyStaticsDetails = '/company/dashboard';
 final String strCompanyProfileUpdate = '/company/edit-user';
 final String strCompanyProfile = '/auth/company-profile';
+final String strAddBenefits = '/company/addBenafit';
+final String strGetBenefits = '/general/benefitList';
+final String strCompanyBenefits = '/company/benefit';
+final String strCompanyGallery= '/company/gallery';
+final String strCompanyDeleteBenefits = '/company/deleteBenafit';
+final String strAddGallery = '/company/addGallery';
+final String strDeleteGalleryImage = '/company/deleteGallery';
+final String strCompanyAllReview = '/company/reviewUniqueUsers';
+final String strCompanyUserAllReview = '/company/all-review';
+final String strCompanyAllEmployment = '/company/all-employement';
 
 
 

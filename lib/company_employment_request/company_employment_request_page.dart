@@ -38,7 +38,7 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
 
                   },
                   onAddEmployment: (){
-                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData:controller.screenNameData.value);
+                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData:controller.screenNameData.value, companyAllEmployment: controller.companyEmploymentData.value);
                   },
                   onTap: (){
                     controller.openSearchScreen(context);

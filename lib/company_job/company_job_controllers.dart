@@ -8,6 +8,7 @@ import '../models/company_all_details_data.dart';
 import '../models/company_job_data_list_model.dart';
 import '../models/employee_list_model.dart';
 import '../models/employment_list_model.dart';
+import '../models/save_user_profile_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
 import '../utills/app_strings.dart';
@@ -110,6 +111,43 @@ class CompanyJobControllers extends GetxController with GetTickerProviderStateMi
         listTabCounter.add(openCount.value);
         listTabCounter.add(draftCount.value);
         listTabCounter.add(completedCount.value);
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+  /// Mark as completed
+  void markAsCompleteApiCall(context)async {
+    try {
+
+      keyboardDismiss(context);
+      progressDialog.show();
+
+      final data = {
+        "status":"2",
+        "job_title":"a",
+        "job_description":"b"
+      };
+
+
+
+
+      SaveUserProfileModel addEmployment = await ApiProvider.baseWithToken().addJob(data);
+      if(addEmployment.status==true){
+        if (progressDialog.isShowing()) {
+          Get.back();
+        }
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          getJobListApiCall();
+        });
+
       }else{
         showToast(somethingWentWrong);
       }

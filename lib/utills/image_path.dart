@@ -153,3 +153,4 @@ const String appVaccencySvg = "${svgIconBasePath}vaccency.svg";
 const String appAISvg = "${svgIconBasePath}ai_icon.svg";
 const String appCameraIconSvg = "${svgIconBasePath}camera_icon.svg";
 const String appCCIDSvg = "${svgIconBasePath}ccid_icon.svg";
+const String appEmployeeRequestSvgIcon = "${svgIconBasePath}employeement_request_svg.svg";

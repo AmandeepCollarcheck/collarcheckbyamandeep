@@ -123,28 +123,32 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.jobData.value.data?.publishJobs??[];
-            return pastData.isNotEmpty?Container(
+            var publishData=controller.jobData.value.data?.publishJobs??[];
+            return publishData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(publishData.length??0, (index){
                     return commonCompanyJobWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla",
-                      userName: "Satyam Shukla",
-                      ccId: pastData[index].individualId??'',
+                      profileImage: publishData[index].profile??"",
+                      initialName:publishData[index].jobTitle??"",
+                      userName:publishData[index].jobTitle??"",
+                      ccId: publishData[index].individualId??'',
                       ratingStar: '10',
                       buttonName: appAddReview,
-                      salary: "600 - 100 Lacs PA",
-                      experienceYear: "3 years",
-                      vaccancy: "12",
+                      salary: publishData[index].salaryName??"",
+                      experienceYear: publishData[index].experienceName??"",
+                      vaccancy: publishData[index].vacancy??"",
                       onClick: () {
                         print("On click wor,");
                       },
                       jobStatus: 'Published',
-                      noOfVaccency: '10',
-                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-                      locations: 'Delhi, noida, lucknow',
+                      noOfVaccency: publishData[index].applicationCount??"",
+                      timeAgo: calculateTimeDifference(createDate:  publishData[index].createDate??""),
+                      locations: generateLocation(cityName: publishData[index].cityName??"", stateName: publishData[index].stateName??"", countryName: publishData[index].countryName??"",),
+                      markAsCompleted: () {
+                       controller.markAsCompleteApiCall(context);
+                      },
+                      isEdit: () {  },
                     );
                   }),
                 )
@@ -177,8 +181,8 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                   children: List.generate(draftData.length??0, (index){
                     return commonCompanyJobWidget(context,
                       profileImage: draftData[index].profile??"",
-                      initialName: draftData[index].departmentName??"",
-                      userName: draftData[index].departmentName??"",
+                      initialName: draftData[index].jobTitle??"",
+                      userName: draftData[index].jobTitle??"",
                       ccId: draftData[index].individualId??'',
                       ratingStar: '10',
                       buttonName: appAddReview,
@@ -193,6 +197,8 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                       noOfVaccency: draftData[index].applicationCount??"",
                       timeAgo: calculateTimeDifference(createDate:  draftData[index].createDate??"",),
                       locations: generateLocation(cityName: draftData[index].cityName??"", stateName: draftData[index].stateName??"", countryName: draftData[index].countryName??"",),
+                      markAsCompleted: () {  },
+                      isEdit: () {  },
                     );
                   }),
                 )
@@ -217,28 +223,30 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.jobData.value.data?.cancelJobs??[];
-            return pastData.isNotEmpty?Container(
+            var completeData=controller.jobData.value.data?.cancelJobs??[];
+            return completeData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(completeData.length??0, (index){
                     return commonCompanyJobWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla",
-                      userName: "Satyam Shukla",
-                      ccId: pastData[index].individualId??'',
-                      ratingStar: '10',
+                      profileImage: completeData[index].profile??"",
+                      initialName:completeData[index].jobTitle??"",
+                      userName: completeData[index].jobTitle??"",
+                      ccId: completeData[index].individualId??"",
+                      ratingStar: "10",
                       buttonName: appAddReview,
-                      salary: "600 - 100 Lacs PA",
-                      experienceYear: "3 years",
-                      vaccancy: "12",
+                      salary: completeData[index].salaryName??"",
+                      experienceYear: completeData[index].experienceName??"",
+                      vaccancy: completeData[index].vacancy??"",
                       onClick: () {
                         print("On click wor,");
                       },
                       jobStatus: 'Published',
-                      noOfVaccency: '10',
-                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-                      locations: 'Delhi, noida, lucknow',
+                      noOfVaccency: completeData[index].applicationCount??"",
+                      timeAgo: calculateTimeDifference(createDate:  completeData[index].createDate??"",),
+                      locations: generateLocation(cityName: completeData[index].cityName??"", stateName: completeData[index].stateName??"", countryName: completeData[index].countryName??"",),
+                      markAsCompleted: () {  },
+                      isEdit: () {  },
                     );
                   }),
                 )
