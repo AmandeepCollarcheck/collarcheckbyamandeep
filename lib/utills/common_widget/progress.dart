@@ -705,6 +705,41 @@ void _exitApp() {
   exit(0); // Force close the app
 }
 
+String formatRating(dynamic rating) {
+  final double value = double.tryParse(rating.toString()) ?? 0.0;
+  return value.toStringAsFixed(1); // Always 1 digit after decimal
+}
+
+commonUserNameWidget(context,{required String userName,required bool isProfileVerified,required double width}){
+  return SizedBox(
+    width: width,
+    child: RichText(
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: userName,
+            style: AppTextStyles.font16W700.copyWith(color: appBlackColor),
+          ),
+          if (isProfileVerified)
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: SvgPicture.asset(
+                  appVerifiedIcon,
+                  height: 16,
+                  width: 16,
+                ),
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
 
 commonReadMoreWidget(context,{required  String message,required TextStyle textStyle,int trimLine=2}){
   return ReadMoreText(
@@ -718,4 +753,42 @@ commonReadMoreWidget(context,{required  String message,required TextStyle textSt
     moreStyle: AppTextStyles.font12.copyWith(color: appPrimaryColor),
     lessStyle: AppTextStyles.font12.copyWith(color: appPrimaryColor),
   );
+}
+
+String commonEmployementDataPosted({context, required String joiningData, required String employementTillDate, required String stillWorking,}) {
+  String getMonthName(int month) {
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    return months[month - 1];
+  }
+
+  String getDaySuffix(int day) {
+    if (day >= 11 && day <= 13) return 'th';
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  String formatDate(String dateStr) {
+    final date = DateTime.tryParse(dateStr);
+    if (date == null) return '';
+    final day = date.day;
+    final month = getMonthName(date.month); // now safe to call
+    final year = date.year;
+    return "$day${getDaySuffix(day)}, $month $year";
+  }
+
+  final joining = formatDate(joiningData);
+  final till = stillWorking == "1" ? appToPresent : formatDate(employementTillDate);
+
+  return "$joining-$till";
 }

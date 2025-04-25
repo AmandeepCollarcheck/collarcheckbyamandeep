@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_storage/get_storage.dart' show GetStorage;
 
+import '../models/all_application_list_model.dart';
 import '../models/all_drop_down_list_model.dart';
 import '../models/all_language_list_data_model.dart';
 import '../models/all_language_list_model.dart';
@@ -1469,6 +1470,48 @@ class ApiProvider{
         jsonData = response.data;
       }
       return CompanyAllEmploymentModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future acceptCompanyEmployment({required String id}) async {
+    try {
+      Response response = await _dio.put('$strCompanyAcceptEmployment/$id');
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future rejectCompanyEmployment({required String id}) async {
+    try {
+      Response response = await _dio.put('$strCompanyRejectEmployment/$id');
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyAllApplications() async {
+    try {
+      Response response = await _dio.get(strCompanyAllApplications);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return AllApplicationListModel.fromJson(jsonData);
     }catch (error, stacktrace) {
       handleException(error, stacktrace, _dioError!);
     }

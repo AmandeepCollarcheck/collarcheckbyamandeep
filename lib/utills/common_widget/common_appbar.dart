@@ -214,6 +214,91 @@ commonActiveSearchBar({required  Function onClick,required  Function onShareClic
   );
 }
 
+
+
+
+commonCompanyActiveSearchBar({required  Function onClick,required  Function onShareClick,required  Function onAddEmployment,required String leadingIcon,required String screenName,bool isFilterShow=false,bool isScreenNameShow=true,bool isShowShare=false,required String actionButton,bool isProfileImageShow=false,String profileImageData="",String initialName="", Color backGroundColor=appWhiteColor}){
+  return Container(
+    padding: EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 20),
+    color: backGroundColor,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            GestureDetector(
+              onTap: (){
+                onClick();
+              },
+              child:  leadingIcon.contains(".svg")?SvgPicture.asset(leadingIcon, height: 15, width: 15,):Image.asset(leadingIcon, height: 24, width: 24),
+            ),
+            SizedBox(width: 5,),
+            isProfileImageShow?ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: profileImageData.isNotEmpty?Image.network(
+                profileImageData,height: 40,width: 40,fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                            colors: [getRandomColor(),getRandomColor()]
+                        )
+                    ),
+                    height: 40,width: 40,
+                    child: Text(initialName,style: AppTextStyles.font14W500.copyWith(color: appBlackColor),),
+                  );
+                },
+              ):Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                        colors: [getRandomColor(),getRandomColor()]
+                    )
+                ),
+                height: 40,width: 40,
+                child: Text(initialName,style: AppTextStyles.font14W500.copyWith(color: appBlackColor),),
+              ),
+            ):Container(),
+            SizedBox(width: 5,),
+            isScreenNameShow?Text(
+              screenName, // Notification count
+              style: AppTextStyles.font16W600.copyWith(
+                color: appBlackColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ):Container(),
+          ],
+        ),
+
+        isFilterShow?GestureDetector(
+          onTap: (){
+            onAddEmployment();
+          },
+          child: Row(
+            children: <Widget>[
+              SvgPicture.asset(appAddEmploymentIconSvg, height: 24, width: 24)
+            ],
+          ),
+        ):isShowShare?GestureDetector(
+          onTap: (){
+            onShareClick();
+          },
+          child: SvgPicture.asset(appShareAndroid,height: 24,width: 24,),
+        ):Container(
+          width: 0,
+        )
+
+      ],
+    ),
+  );
+}
+
+
+
+
 Color getRandomColor() {
   Random random = Random();
   return Color.fromARGB(

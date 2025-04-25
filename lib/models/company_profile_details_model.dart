@@ -70,9 +70,9 @@ class Data {
   dynamic companySizeName;
   int? totalEmployee;
   int? allEmploymentCount;
-  List<dynamic>? alljob;
+  List<Alljob>? alljob;
   List<TopCompany>? topCompany;
-  List<dynamic>? topUser;
+  List<TopUser>? topUser;
   List<AllBenefit>? allGallery;
   List<AllBenefit>? allBenefits;
   FollowData? followData;
@@ -179,9 +179,9 @@ class Data {
     companySizeName: json["company_size_name"],
     totalEmployee: json["total_employee"],
     allEmploymentCount: json["allEmploymentCount"],
-    alljob: json["alljob"] == null ? [] : List<dynamic>.from(json["alljob"]!.map((x) => x)),
+    alljob: json["alljob"] == null ? [] : List<Alljob>.from(json["alljob"]!.map((x) => Alljob.fromJson(x))),
     topCompany: json["topCompany"] == null ? [] : List<TopCompany>.from(json["topCompany"]!.map((x) => TopCompany.fromJson(x))),
-    topUser: json["topUser"] == null ? [] : List<dynamic>.from(json["topUser"]!.map((x) => x)),
+    topUser: json["topUser"] == null ? [] : List<TopUser>.from(json["topUser"]!.map((x) => TopUser.fromJson(x))),
     allGallery: json["allGallery"] == null ? [] : List<AllBenefit>.from(json["allGallery"]!.map((x) => AllBenefit.fromJson(x))),
     allBenefits: json["allBenefits"] == null ? [] : List<AllBenefit>.from(json["allBenefits"]!.map((x) => AllBenefit.fromJson(x))),
     followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
@@ -234,15 +234,156 @@ class Data {
     "company_size_name": companySizeName,
     "total_employee": totalEmployee,
     "allEmploymentCount": allEmploymentCount,
-    "alljob": alljob == null ? [] : List<dynamic>.from(alljob!.map((x) => x)),
+    "alljob": alljob == null ? [] : List<dynamic>.from(alljob!.map((x) => x.toJson())),
     "topCompany": topCompany == null ? [] : List<dynamic>.from(topCompany!.map((x) => x.toJson())),
-    "topUser": topUser == null ? [] : List<dynamic>.from(topUser!.map((x) => x)),
+    "topUser": topUser == null ? [] : List<dynamic>.from(topUser!.map((x) => x.toJson())),
     "allGallery": allGallery == null ? [] : List<dynamic>.from(allGallery!.map((x) => x.toJson())),
     "allBenefits": allBenefits == null ? [] : List<dynamic>.from(allBenefits!.map((x) => x.toJson())),
     "followData": followData?.toJson(),
   };
 }
+class Alljob {
+  String? id;
+  String? title;
+  String? profile;
+  String? experienceName;
+  String? departmentName;
+  dynamic roleTypeName;
+  String? vacancy;
+  String? slug;
+  String? countryName;
+  String? stateName;
+  String? cityName;
+  String? designationName;
+  String? salary;
+  String? salaryName;
+  String? noOfApplication;
+  String? createDate;
+  bool? urgent;
 
+  Alljob({
+    this.id,
+    this.title,
+    this.experienceName,
+    this.departmentName,
+    this.roleTypeName,
+    this.vacancy,
+    this.slug,
+    this.countryName,
+    this.stateName,
+    this.cityName,
+    this.designationName,
+    this.salary,
+    this.profile,
+    this.noOfApplication,
+    this.createDate,
+    this.urgent,
+    this.salaryName
+  });
+
+  factory Alljob.fromJson(Map<String, dynamic> json) => Alljob(
+    id: json["id"],
+    title: json["title"],
+    experienceName: json["experience_name"],
+    departmentName: json["department_name"],
+    roleTypeName: json["role_type_name"],
+    vacancy: json["vacancy"],
+    slug: json["slug"],
+    profile: json["profile"],
+    countryName: json["country_name"],
+    stateName: json["state_name"],
+    cityName: json["city_name"],
+    designationName: json["designation_name"],
+    salary: json["salary"],
+    salaryName: json["salary_name"],
+    noOfApplication: json["no_of_application"],
+    createDate: json["create_date"],
+    urgent: json["urgent"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "experience_name": experienceName,
+    "department_name": departmentName,
+    "role_type_name": roleTypeName,
+    "vacancy": vacancy,
+    "slug": slug,
+    "profile": profile,
+    "country_name": countryName,
+    "state_name": stateName,
+    "city_name": cityName,
+    "designation_name": designationName,
+    "salary": salary,
+    "salary_name": salaryName,
+    "no_of_application": noOfApplication,
+    "create_date": createDate,
+    "urgent": urgent,
+  };
+}
+class TopUser {
+  String? id;
+  String? individualId;
+  String? profile;
+  String? name;
+  String? slug;
+  String? cityName;
+  dynamic rating;
+  String? stateName;
+  String? countryName;
+  String? workStatus;
+  String? designationName;
+  String? companyName;
+  FollowData? followData;
+
+  TopUser({
+    this.id,
+    this.individualId,
+    this.profile,
+    this.name,
+    this.slug,
+    this.cityName,
+    this.rating,
+    this.stateName,
+    this.countryName,
+    this.workStatus,
+    this.designationName,
+    this.companyName,
+    this.followData,
+  });
+
+  factory TopUser.fromJson(Map<String, dynamic> json) => TopUser(
+    id: json["id"],
+    individualId: json["individual_id"],
+    profile: json["profile"],
+    name: json["name"],
+    slug: json["slug"],
+    cityName: json["city_name"],
+    rating: json["rating"],
+    stateName: json["state_name"],
+    countryName: json["country_name"],
+    workStatus: json["work_status"],
+    designationName: json["designation_name"],
+    companyName: json["company_name"],
+    followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "individual_id": individualId,
+    "profile": profile,
+    "name": name,
+    "slug": slug,
+    "city_name": cityName,
+    "rating": rating,
+    "state_name": stateName,
+    "country_name": countryName,
+    "work_status": workStatus,
+    "designation_name": designationName,
+    "company_name": companyName,
+    "followData": followData?.toJson(),
+  };
+}
 class AllBenefit {
   String? name;
   String? image;

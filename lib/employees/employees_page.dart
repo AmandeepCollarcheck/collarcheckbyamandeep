@@ -137,7 +137,8 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                       location: generateLocation(cityName: currentData[index].presentAddress??'', stateName: "", countryName: ""),
                       dataPosted: dateCombination(joiningDate: currentData[index].connectiondate??'', endDate: '',isPresent: true),
                       onClick: () {
-                        Get.offNamed(AppRoutes.review,arguments: {experienceId:currentData[index].experienceId??'',screenName:companyEmployeesScreen});
+                        Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyEmployeesScreen});
+                        // Get.offNamed(AppRoutes.review,arguments: {experienceId:currentData[index].experienceId??'',screenName:companyEmployeesScreen});
                       },
                         isProfileVerified: currentData[index].isVerified??false,
                     );

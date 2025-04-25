@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
+import '../bottom_nav_bar/bottom_nav_bar_controller.dart';
 import '../models/company_all_details_data.dart';
 import '../models/company_user_details_model.dart';
 import '../models/dashboard_statics_model.dart';
 import '../models/employee_user_details_model.dart';
+import '../models/save_user_profile_model.dart';
 import '../models/user_home_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
@@ -25,6 +27,7 @@ class CompanyDashboardControllers extends GetxController{
   var userDetails=EmployeeUserDetails().obs;
   Rx isSearchActive=false.obs;
   var userProfileComplatationPercentage=[].obs;
+  final BottomNavBarController bottomController = Get.find<BottomNavBarController>();
 
 
   @override
@@ -191,6 +194,52 @@ class CompanyDashboardControllers extends GetxController{
     }
   }
 
+
+  acceptEmploymentApiCall(context,{required String id})async{
+    try {
+      progressDialog.show();
+      SaveUserProfileModel acceptEmployment = await ApiProvider.baseWithToken().acceptCompanyEmployment(id: id);
+      if(acceptEmployment.status==true){
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          getDashboardStaticeApiData();
+        });
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  rejectEmploymentApiCall(context,{required String id})async{
+    try {
+      progressDialog.show();
+      SaveUserProfileModel acceptEmployment = await ApiProvider.baseWithToken().rejectCompanyEmployment(id: id);
+      if(acceptEmployment.status==true){
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          getDashboardStaticeApiData();
+        });
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  openEmploymentRequestPage(context){
+    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyEmploymentRequest});
+  }
 
 
 }

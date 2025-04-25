@@ -116,9 +116,7 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
     try {
       progressDialog.show();
       String slugData =await GetStorage().read(slug);
-      print("asnskldfsldfslkdfskldfklsdf");
-      print(slugData);
-      print(slugDataId.value);
+
 
       UserProfileModel userProfileModel = await ApiProvider.baseWithToken().userProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
       if(userProfileModel.status==true){

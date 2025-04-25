@@ -89,6 +89,9 @@ final String strDeleteGalleryImage = '/company/deleteGallery';
 final String strCompanyAllReview = '/company/reviewUniqueUsers';
 final String strCompanyUserAllReview = '/company/all-review';
 final String strCompanyAllEmployment = '/company/all-employement';
+final String strCompanyAcceptEmployment = '/company/update-employement';
+final String strCompanyRejectEmployment = '/company/rejectEmployement';
+final String strCompanyAllApplications = '/company/allapplication';
 
 
 

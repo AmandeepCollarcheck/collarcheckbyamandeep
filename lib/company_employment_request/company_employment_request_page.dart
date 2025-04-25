@@ -27,35 +27,30 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
           children: <Widget>[
             ///Search Widget
             Container(
-              margin: EdgeInsets.only(left: 20,right: 20,top: 20),
-              child: Obx(()=>commonCompanySearchAppBar(
-                  context,controller: controller.searchController,
-                  actionButtonOne: appNotificationSVGIcon,
-                  actionButtonTwo: appSearchIcon,
-                  isSearchActive: controller.isSearchActive.value,
-                  onChanged: (value){
-                    // controller.openSearchScreen(context);
-
+              child: commonCompanyActiveSearchBar(
+                  leadingIcon: appBackSvgIcon,
+                  screenName: appEmployeeRequests,
+                  isFilterShow: true,
+                  actionButton: appFilterMore,
+                  onClick: (){
+                    //controller.backButtonClick();
                   },
-                  onAddEmployment: (){
-                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData:controller.screenNameData.value, companyAllEmployment: controller.companyEmploymentData.value);
+                  onShareClick: (){},
+                  onAddEmployment:(){
+                   // controller.clickFilterButton();
                   },
-                  onTap: (){
-                    controller.openSearchScreen(context);
-                  },
-                  onSearchIconClick: (bool isSearchClick) {
-                    controller.isSearchActive.value=isSearchClick;
-
-                  })),
+                  isScreenNameShow: true,
+                  isShowShare: false
+              ),
             ),
             SizedBox(height: 20,),
             Container(
               color: appWhiteColor,
-              padding:EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               child: Obx(() {
                 return TabBar(
-                  labelPadding: EdgeInsets.only(bottom: 10),
-                  isScrollable: false,
+                  labelPadding: EdgeInsets.zero, // Remove default horizontal padding
+                  isScrollable: true,
                   dividerColor: appWhiteColor,
                   indicatorColor: appPrimaryColor,
                   indicatorWeight: 2,
@@ -65,34 +60,38 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                     return Obx(() {
                       bool isSelected = controller.selectedTabIndex.value == index;
 
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            controller.listTabLabel[index],
-                            style: AppTextStyles.font14.copyWith(
-                              color: isSelected ? appPrimaryColor : appBlackColor,
-                            ),
+                      return Tab(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10), // Custom spacing
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                controller.listTabLabel[index],
+                                style: AppTextStyles.font14.copyWith(
+                                  color: isSelected ? appPrimaryColor : appBlackColor,
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: isSelected ? appPrimaryColor : appGreyBlackColor,
+                                ),
+                                child: Text(
+                                  controller.listTabCounter[index].toString(),
+                                  style: AppTextStyles.font10.copyWith(color: appWhiteColor),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 2),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isSelected ? appPrimaryColor : appGreyBlackColor,
-                            ),
-                            child: Text(
-                              controller.listTabCounter[index].toString(),
-                              style: AppTextStyles.font10.copyWith(color: appWhiteColor),
-                            ),
-                          ),
-                        ],
+                        ),
                       );
                     });
                   }),
                 );
               }),
-
             ),
             Expanded(
               child: Container(
@@ -136,7 +135,9 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment',
+                      jobStatus: 'Employment', approved: '',
+                      isAcceptClick: () {  },
+                      isRejectClick: () {  },
                     );
                   }),
                 )
@@ -178,7 +179,9 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment',
+                      jobStatus: 'Employment', approved: '',
+                      isAcceptClick: () {  },
+                      isRejectClick: () {  },
                     );
                   }),
                 )
@@ -220,7 +223,9 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment',
+                      jobStatus: 'Employment', approved: '',
+                      isAcceptClick: () {  },
+                      isRejectClick: () {  },
                     );
                   }),
                 )
@@ -262,7 +267,9 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment',
+                      jobStatus: 'Employment', approved: '',
+                      isAcceptClick: () {  },
+                      isRejectClick: () {  },
                     );
                   }),
                 )

@@ -1,74 +1,67 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../app_key_constent.dart';
-
-
-
-class CommonScrollControllers extends GetxController with GetTickerProviderStateMixin{
+class CommonScrollControllers extends GetxController with GetTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
-
 
   final List<GlobalKey> sectionKeys = List.generate(3, (_) => GlobalKey());
   final List<double> sectionOffsets = [];
   final selectedIndex = 0.obs;
 
   bool isTabClicked = false;
+  BuildContext? scrollViewContext;
+
+  double lastOffset = 0.0;
+  Timer? debounceTimer;
 
   @override
   void onInit() {
     super.onInit();
     scrollController.addListener(handleScroll);
   }
+
   @override
   void onReady() {
     super.onReady();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Use your scrollable ListView's context here
-      _updateSectionOffsets(scrollViewContext!);
-    });
-  }
-
-
-  double lastOffset = 0.0;
-
-  void handleScroll() {
-    if (isTabClicked) return;
-
-    final scrollOffset = scrollController.offset;
-    final isScrollingDown = scrollOffset > lastOffset;
-    lastOffset = scrollOffset;
-
-    for (int i = 0; i < sectionOffsets.length; i++) {
-      final start = sectionOffsets[i];
-      final end = (i + 1 < sectionOffsets.length) ? sectionOffsets[i + 1] : double.infinity;
-
-      if (scrollOffset >= start && scrollOffset < end) {
-        if (selectedIndex.value != i) {
-          selectedIndex.value = i;
-          print('User scrolled ${isScrollingDown ? 'down' : 'up'} to section $i');
-        }
-        break;
-      }
+    if (scrollViewContext != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        updateSectionOffsets(scrollViewContext!);
+      });
     }
   }
 
+  void handleScroll() {
+    if (isTabClicked || sectionOffsets.isEmpty) return;
 
+    debounceTimer?.cancel();
+    debounceTimer = Timer(const Duration(milliseconds: 100), () {
+      final scrollOffset = scrollController.offset;
+      lastOffset = scrollOffset;
+      for (int i = sectionOffsets.length - 1; i >= 0; i--) {
+        if (scrollOffset + 50 >= sectionOffsets[i]) {
+          if (selectedIndex.value != i) {
+            selectedIndex.value = i;
+          }
+          break;
+        }
+      }
+    });
+  }
 
-
-  void _updateSectionOffsets(BuildContext context) {
+  void updateSectionOffsets(BuildContext context) {
     sectionOffsets.clear();
-
     for (var key in sectionKeys) {
       final ctx = key.currentContext;
       if (ctx != null) {
         final box = ctx.findRenderObject() as RenderBox;
         final scrollContainerBox = context.findRenderObject() as RenderBox;
-
         final position = box.localToGlobal(Offset.zero, ancestor: scrollContainerBox);
-        sectionOffsets.add(position.dy); // relative to scroll container
+        sectionOffsets.add(position.dy);
       }
+      print("?????????????????");
+      print(sectionOffsets);
     }
   }
 
@@ -79,10 +72,10 @@ class CommonScrollControllers extends GetxController with GetTickerProviderState
     if (ctx != null) {
       Scrollable.ensureVisible(
         ctx,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       ).then((_) {
-        Future.delayed(Duration(milliseconds: 200), () {
+        Future.delayed(const Duration(milliseconds: 200), () {
           isTabClicked = false;
         });
       });
@@ -94,7 +87,7 @@ class CommonScrollControllers extends GetxController with GetTickerProviderState
   @override
   void dispose() {
     scrollController.dispose();
+    debounceTimer?.cancel();
     super.dispose();
   }
 }
-

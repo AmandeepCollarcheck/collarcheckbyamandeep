@@ -27,7 +27,7 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
               children: <Widget>[
                 Obx(()=>commonActiveSearchBar(
                     leadingIcon: appBackSvgIcon,
-                    screenName: "$appApplicationFor ${controller.jobProfileNameData.value}",
+                    screenName: controller.headerTitleName.value,
                     isFilterShow: true,
                     actionButton: appFilterMore,
                     onClick: (){
@@ -43,53 +43,57 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
                 Container(
                   padding: EdgeInsets.only(top: 10,left: 15,right: 15),
                   color: appPrimaryBackgroundColor,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
-                          children: [
-                            TextSpan(
-                              text:  "10"??"0",
-                              style: AppTextStyles.font14.copyWith(color: appPrimaryColor), // Normal text style
-                            ),
-                            TextSpan(
-                              text: appJobFound,
-                              style:  AppTextStyles.font14.copyWith(color: appBlackColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
+                  child: Obx((){
+                    var data=controller.allApplicationData.value.data?.length.toString()??"0";
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
+                            children: [
+                              TextSpan(
+                                text:  data.toString()??"0",
+                                style: AppTextStyles.font14.copyWith(color: appPrimaryColor), // Normal text style
+                              ),
+                              TextSpan(
+                                text: data=="1"||data=="0"?appJobFound:appJobsFound,
+                                style:  AppTextStyles.font14.copyWith(color: appBlackColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
 
-                                  // Navigate to Terms of Use page or any action
-                                },
-                            ),
-                          ],
+                                    // Navigate to Terms of Use page or any action
+                                  },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          openShortItemFilter(context, onShort: (int value) {
-                            //controller.shortDataList(value: value);
-                          });
-                        },
-                        child: SvgPicture.asset(appShortIconSvg,height: 20,width: 20,),
-                      )
-                    ],
-                  ),
+                        GestureDetector(
+                          onTap: (){
+                            openShortItemFilter(context, onShort: (int value) {
+                              //controller.shortDataList(value: value);
+                            });
+                          },
+                          child: SvgPicture.asset(appShortIconSvg,height: 20,width: 20,),
+                        )
+                      ],
+                    );
+                  }),
                 ),
                 Obx(()  {
-                  var pastData=controller.employeeData.value.data?.past??[];
-                  return pastData.isNotEmpty?Container(
+                  var allApplications=controller.allApplicationData.value.data??[];
+                  return allApplications.isNotEmpty?Container(
                     color: appPrimaryBackgroundColor,
                       padding: EdgeInsets.all(10),
                       child:Wrap(
-                        children: List.generate(10??0, (index){
+                        children: List.generate(allApplications.length??0, (index){
+                          var locations=generateLocation(cityName: allApplications[index].cityName??"", stateName: allApplications[index].stateName??"", countryName: allApplications[index].countryName??"");
                           return commonCompanyApplicantWidget(context,
-                            profileImage: ""??"",
-                            initialName:"Satyam Shukla",
-                            userName: "Satyam Shukla",
-                            ccId: "CCajksdjasd",
+                            profileImage: allApplications[index].profile??"",
+                            initialName:allApplications[index].fname??"",
+                            userName: allApplications[index].fname??"",
+                            ccId: allApplications[index].individualId??"",
                             ratingStar: '10',
                             buttonName: "",
                             salary: "600 - 100 Lacs PA",
@@ -100,11 +104,13 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
                             },
                             jobStatus: 'Published',
                             noOfVaccency: '10',
-                            timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-                            locations: 'Delhi, noida, lucknow',
-                            email: 'satyam.shuklaasdsgdghsghd@mail.com',
-                            phone: '+917705089308',
-                            profileDesignation: 'Software Engenners',
+                            timeAgo: calculateTimeDifference(createDate:  allApplications[index].date??"",),
+                            locations: locations,
+                            email: allApplications[index].email??"",
+                            phone: allApplications[index].phone??"",
+                            profileDesignation:allApplications[index].designationName??"",
+                            isProfileVerified: true,
+                              width: MediaQuery.of(context).size.width
                           );
                         }),
                       )

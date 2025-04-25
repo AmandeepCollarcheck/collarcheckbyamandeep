@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:collarchek/utills/app_colors.dart';
 import 'package:collarchek/utills/app_strings.dart';
 import 'package:collarchek/utills/common_widget/common_button.dart';
@@ -374,7 +376,7 @@ _companyJonProfileWidget(context,{required String profileImage,required String n
 }
 
 
-commonCompanyApplicantWidget(context,{required String profileImage,required String timeAgo,required String noOfVaccency,required String profileDesignation,required String email,required String phone,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick}){
+commonCompanyApplicantWidget(context,{required String profileImage,required String timeAgo,required String noOfVaccency,required String profileDesignation,required String email,required String phone,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required bool isProfileVerified,required double width}){
   return Card(
     elevation: 0,
     child: Container(
@@ -395,14 +397,14 @@ commonCompanyApplicantWidget(context,{required String profileImage,required Stri
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          _companyApplicantProfileWidget(context,profileImage: profileImage,noOfVaccency:noOfVaccency, initialName: initialName, userName: userName, ccId: ccId, ratingStar: ratingStar, buttonName: buttonName,onClick: onClick, jobStatus: jobStatus, salary: salary,experienceYear: experienceYear,vaccancy: vaccancy,locations: locations, timeAgo: timeAgo, email: email, phone: phone,profileDesignation:profileDesignation),
+          _companyApplicantProfileWidget(context,profileImage: profileImage,noOfVaccency:noOfVaccency, initialName: initialName, userName: userName, ccId: ccId, ratingStar: ratingStar, buttonName: buttonName,onClick: onClick, jobStatus: jobStatus, salary: salary,experienceYear: experienceYear,vaccancy: vaccancy,locations: locations, timeAgo: timeAgo, email: email, phone: phone,profileDesignation:profileDesignation, isProfileVerified: isProfileVerified,width: width),
         ],
       ),
     ),
   );
 }
 
-_companyApplicantProfileWidget(context,{required String profileImage,required String noOfVaccency,required String email,required String profileDesignation,required String phone,required String timeAgo,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick}) {
+_companyApplicantProfileWidget(context,{required String profileImage,required String noOfVaccency,required String email,required String profileDesignation,required String phone,required String timeAgo,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required bool isProfileVerified,required double width}) {
   return Column(
     children: <Widget>[
       Row(
@@ -425,7 +427,9 @@ _companyApplicantProfileWidget(context,{required String profileImage,required St
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         SizedBox(
-                            child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,)),
+                          child: commonUserNameWidget(context,userName: userName, isProfileVerified: isProfileVerified, width: MediaQuery.of(context).size.width*0.7),
+                           // child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,)
+                        ),
                       ],
                     ),
                   ),
@@ -441,7 +445,7 @@ _companyApplicantProfileWidget(context,{required String profileImage,required St
                       ):Container()
                     ],
                   ),
-                  Row(
+                  locations.isNotEmpty?Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
@@ -453,7 +457,7 @@ _companyApplicantProfileWidget(context,{required String profileImage,required St
                           width: MediaQuery.of(context).size.width*0.66,
                           child: Text(locations,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
                     ],
-                  ),
+                  ):Container(),
                   SizedBox(height: 2,),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,35 +497,40 @@ _companyApplicantProfileWidget(context,{required String profileImage,required St
       ),
       SizedBox(height: 10,),
       Container(
+        width: MediaQuery.of(context).size.width*0.85,
         height: 1,
         color: appPrimaryBackgroundColor,
       ),
       SizedBox(height: 10,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 2),
-                child: SvgPicture.asset(appExperenceIconSvg,height: 15,width: 15,),
-              ),
-              SizedBox(width: 4,),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width*0.39,
-                  child: Text(profileDesignation,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),maxLines: 2,)),
-            ],
-          ),
-          timeAgo.isNotEmpty?Text(timeAgo,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),):Container(),
-        ],
+      SizedBox(
+        width: width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 2),
+                  child: SvgPicture.asset(appExperenceIconSvg,height: 15,width: 15,),
+                ),
+                SizedBox(width: 4,),
+                SizedBox(
+                    child: Text(profileDesignation,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),maxLines: 2,)),
+              ],
+            ),
+            timeAgo.isNotEmpty?Text(timeAgo,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),):Container(),
+          ],
+        ),
       )
     ],
   );
 }
 
 
-companyEmploymentRequestWidget(context,{required String profileImage,required String initialName,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String dataPosted,bool isApproved=false,bool isUpdates=false,bool isRejected=false}){
+companyEmploymentRequestWidget(context,{required String profileImage,required String initialName,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String dataPosted,bool isApproved=false,bool isUpdates=false,bool isRejected=false,required String approved, required Function() isAcceptClick,required Function() isRejectClick}){
+  var joiningDate=dataPosted.split("-")[0];
+  var workedTillDate=dataPosted.split("-")[1];
   return Card(
      // higher value = more shadow
     elevation: 0,
@@ -544,7 +553,7 @@ companyEmploymentRequestWidget(context,{required String profileImage,required St
       child: Column(
         children: <Widget>[
           if(isRejected==false)
-            _companyEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,dataPosted: dataPosted,designation: designation,isApproved: isApproved,isUpdate: isUpdates,isRejected: isRejected),
+            _companyEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,designation: designation,isApproved: isApproved,isUpdate: isUpdates,isRejected: isRejected, joiningDate: joiningDate,workedTillDate: workedTillDate,approved:approved, isAcceptClick: isAcceptClick, isRejectClick: isRejectClick),
           if(isRejected)
             _rejectedEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,dataPosted: dataPosted,designation: designation,)
 
@@ -655,7 +664,7 @@ _rejectedEmploymentWidget(context, {required String profileImage, required Strin
   );
 }
 
-_companyEmploymentWidget(context,{required String profileImage,required String initialName ,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String dataPosted,required bool isApproved,required bool isUpdate,required bool isRejected}) {
+_companyEmploymentWidget(context,{required String profileImage,required String initialName ,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String joiningDate,required String workedTillDate,required bool isApproved,required bool isUpdate,required bool isRejected, required String approved, required Function() isAcceptClick,required Function() isRejectClick}) {
   return Column(
     children: <Widget>[
       Row(
@@ -699,7 +708,7 @@ _companyEmploymentWidget(context,{required String profileImage,required String i
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(top: 2),
-                          child: SvgPicture.asset(isUpdate?appSalarySvgIcon:appDesignationSvgIcon,height: 15,width: 15,),
+                          child: SvgPicture.asset(isUpdate?appSalarySvgIcon:appDesignationSvgIcon,height: 15,width: 15,color: appGreyBlackColor,),
                         ),
                         SizedBox(width: 2,),
                         SizedBox(
@@ -715,62 +724,94 @@ _companyEmploymentWidget(context,{required String profileImage,required String i
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(top: 2),
-                          child: SvgPicture.asset(appDataPostedIconSvg,height: 15,width: 15,),
+                          child: SvgPicture.asset(appDataPostedIconSvg,height: 15,width: 15,color: appGreyBlackColor,),
                         ),
                         SizedBox(width: 2,),
+                        
                         SizedBox(
-                            child: Text(dataPosted,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
+                            child: Row(
+                              children: <Widget>[
+                                Text(joiningDate,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 1,),
+                                SizedBox(width: 5,),
+                                Transform.rotate(
+                                  angle:  math.pi,
+                                  child: SvgPicture.asset(
+                                    appBackSvgIcon,
+                                    height: 10,
+                                    width: 10,
+                                    color: appGreyBlackColor,
+                                  ),
+                                ),
+                                SizedBox(width: 5,),
+                                Text(workedTillDate,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 1,),
+                              ],
+                            ))
                       ],
                     ),
                   ),
                   SizedBox(height: 2,),
                   SizedBox(height: 8,),
-                  if(isApproved==false)
-                    Row(
+                  if(approved=="0")
+                  Column(
                     children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: appPrimaryColor,width: 1)
-                          ),
-                          child: Text(appAccept,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),maxLines: 2,)
-                      ),
-                      SizedBox(width: 6,),
-                      Container(
-                          padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: appPrimaryColor,width: 1)
-                          ),
-                          child: Text(appReject,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),maxLines: 2,)
-                      ),
-                    ],
-                  ),
-                  if(isApproved)
-                    Row(
-                      children: <Widget>[
-                        Container(
-                            padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: appPrimaryColor,
-                                border: Border.all(color: appPrimaryColor,width: 1)
+                      if(isApproved==false)
+                        Row(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: (){
+                                isAcceptClick();
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: appPrimaryColor,width: 1)
+                                  ),
+                                  child: Text(appAccept,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),maxLines: 2,)
+                              ),
+                            ),
+                            SizedBox(width: 6,),
+                            GestureDetector(
+                              onTap: (){
+                                isRejectClick();
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: appPrimaryColor,width: 1)
+                                  ),
+                                  child: Text(appReject,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),maxLines: 2,)
+                              ),
+                            ),
+                          ],
+                        ),
+                      if(isApproved)
+                        Row(
+                          children: <Widget>[
+                            Container(
+                                padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: appPrimaryColor,
+                                    border: Border.all(color: appPrimaryColor,width: 1)
 
+                                ),
+                                child: Text(appAddReview,style: AppTextStyles.font12.copyWith(color: appWhiteColor),maxLines: 2,)
                             ),
-                            child: Text(appAddReview,style: AppTextStyles.font12.copyWith(color: appWhiteColor),maxLines: 2,)
-                        ),
-                        SizedBox(width: 6,),
-                        Container(
-                            padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: appRedTwoColor,width: 1)
+                            SizedBox(width: 6,),
+                            Container(
+                                padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(color: appRedTwoColor,width: 1)
+                                ),
+                                child: Text(appLeftCompany,style: AppTextStyles.font12.copyWith(color: appRedTwoColor),maxLines: 2,)
                             ),
-                            child: Text(appLeftCompany,style: AppTextStyles.font12.copyWith(color: appRedTwoColor),maxLines: 2,)
-                        ),
-                      ],
-                    )
+                          ],
+                        )
+                    ],
+                  )
 
                 ],
               )
@@ -1003,18 +1044,21 @@ companyRecommendedWidget(context,{required String profileImage,required String i
             ),
           ),
           SizedBox(height: 5,),
-          ratingBar=="0"?Container():SizedBox(
+          SizedBox(
             width: MediaQuery.of(context).size.width*0.6,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
-                Row(
+                //commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: width)
+                SizedBox(
+                    width: ratingBar=="0.0"?MediaQuery.of(context).size.width*0.6:MediaQuery.of(context).size.width*0.41,
+                    child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),)),
+                ratingBar=="0.0"?Container():Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     SvgPicture.asset(appRatingBarSvg,height: 16,width: 16,),
                     SizedBox(width: 5,),
-                    Text("$ratingBar${ratingBar=="1"?appStar:appStars}",style: AppTextStyles.font12.copyWith(color: appGreyBlackColor),),
+                    Text("$ratingBar${ratingBar=="1.0"?appStar:appStars}",style: AppTextStyles.font12.copyWith(color: appGreyBlackColor),),
                   ],
                 )
               ],
@@ -1022,16 +1066,16 @@ companyRecommendedWidget(context,{required String profileImage,required String i
           ),
           SizedBox(height: 2,),
           Text("$appId $ccId",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
-          SizedBox(height: 5,),
-          Row(
+          designation.isNotEmpty?SizedBox(height: 5,):SizedBox(height: 0,),
+          designation.isNotEmpty?Row(
             children: <Widget>[
               SvgPicture.asset(appDesignationSvgIcon,height: 16,width: 16,),
               SizedBox(width: 5,),
               Text(designation,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
             ],
-          ),
-          SizedBox(height: 5,),
-          Row(
+          ):Container(),
+          location.isNotEmpty?SizedBox(height: 5,):Container(),
+          location.isNotEmpty? Row(
             children: <Widget>[
               SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,),
               SizedBox(width: 5,),
@@ -1039,7 +1083,7 @@ companyRecommendedWidget(context,{required String profileImage,required String i
                 width: MediaQuery.of(context).size.width*0.56,
                   child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
             ],
-          ),
+          ):Container(),
         ],
       ),
     ),

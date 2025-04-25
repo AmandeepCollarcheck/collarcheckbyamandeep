@@ -1,11 +1,14 @@
 import 'package:collarchek/company_dashboard/company_dashboard_controllers.dart';
 import 'package:collarchek/utills/app_colors.dart';
+import 'package:collarchek/utills/app_key_constent.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../bottom_nav_bar/bottom_nav_bar_controller.dart';
 import '../utills/common_widget/add_new_job_model_sheet.dart';
 import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_image_widget.dart';
@@ -118,18 +121,54 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: <Widget>[
-                                                _commonCardWidget(context,cardHeader: appPostedJobs, itemNumber: staticsData?.postedJobs.toString()??"0", itemNumberColor: appPrimaryColor, cardIcon: appCurrentEmploueeIcon),
+                                                _commonCardWidget(
+                                                    context,
+                                                    cardHeader: appPostedJobs,
+                                                    itemNumber: staticsData?.postedJobs.toString()??"0",
+                                                    itemNumberColor: appPrimaryColor,
+                                                    cardIcon: appCurrentEmploueeIcon,
+                                                    onClick: () {
+                                                      controller.bottomController.bottomNavCurrentIndex.value=2;
+                                                    }
+                                                ),
                                                 SizedBox(width: 12,),
-                                                _commonCardWidget(context,cardHeader: appCurrentEmployees, itemNumber:  staticsData?.currentEmployies.toString()??"0", itemNumberColor: appSkyBlueColor, cardIcon: appCurrentEmploueeIcon)
+                                                _commonCardWidget(
+                                                    context,
+                                                    cardHeader: appCurrentEmployees,
+                                                    itemNumber:  staticsData?.currentEmployies.toString()??"0",
+                                                    itemNumberColor: appSkyBlueColor,
+                                                    cardIcon: appCurrentEmploueeIcon,
+                                                  onClick: (){
+                                                    controller.bottomController.bottomNavCurrentIndex.value=1;
+                                                  }
+                                                )
                                               ],
                                             ),
                                             SizedBox(height: 12,),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: <Widget>[
-                                                _commonCardWidget(context,cardHeader: appApplication, itemNumber:  staticsData?.applications.toString()??"0", itemNumberColor: appBlueColor, cardIcon: appCurrentEmploueeIcon),
+                                                _commonCardWidget(
+                                                    context,
+                                                    cardHeader: appApplication,
+                                                    itemNumber:  staticsData?.applications.toString()??"0",
+                                                    itemNumberColor: appBlueColor,
+                                                    cardIcon: appCurrentEmploueeIcon,
+                                                  onClick: (){
+                                                      Get.offNamed(AppRoutes.applicants,arguments: {screenName:allApplications,isAppApplication:true});
+                                                  }
+                                                ),
                                                 SizedBox(width: 12,),
-                                                _commonCardWidget(context,cardHeader: appEmployeeRequests, itemNumber:  staticsData?.followRequests?.length.toString()??"0", itemNumberColor: appLightYellowColor, cardIcon: appCurrentEmploueeIcon)
+                                                _commonCardWidget(
+                                                    context,
+                                                    cardHeader: appEmployeeRequests,
+                                                    itemNumber:  staticsData?.employementRequestList?.length.toString()??"0",
+                                                    itemNumberColor: appLightYellowColor,
+                                                    cardIcon: appCurrentEmploueeIcon,
+                                                  onClick: (){
+                                                    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
+                                                  }
+                                                )
                                               ],
                                             ),
                                           ],
@@ -245,47 +284,53 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
         required itemNumber,
         required Color itemNumberColor,
         required String cardIcon,
+        required Function() onClick,
       }) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.42,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: appWhiteColor,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: appPrimaryBackgroundColor,width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x1A000000), // #0000001A
-            offset: Offset(0, 5),
-            blurRadius: 5,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            cardHeader,
-            style: AppTextStyles.font12.copyWith(color: appBlackColor),
-            maxLines: 3,
-          ),
-          SizedBox(height: 5),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                itemNumber,
-                style: AppTextStyles.font22w700.copyWith(color: itemNumberColor),
-                maxLines: 3,
-              ),
-              cardIcon.contains(".svg")
-                  ? SvgPicture.asset(cardIcon, height: 30, width: 30)
-                  : Image.asset(cardIcon, height: 30, width: 30),
-            ],
-          ),
-        ],
+    return GestureDetector(
+      onTap: (){
+        onClick();
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.42,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: appWhiteColor,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: appPrimaryBackgroundColor,width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x1A000000), // #0000001A
+              offset: Offset(0, 5),
+              blurRadius: 5,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              cardHeader,
+              style: AppTextStyles.font12.copyWith(color: appBlackColor),
+              maxLines: 3,
+            ),
+            SizedBox(height: 5),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  itemNumber,
+                  style: AppTextStyles.font22w700.copyWith(color: itemNumberColor),
+                  maxLines: 3,
+                ),
+                cardIcon.contains(".svg")
+                    ? SvgPicture.asset(cardIcon, height: 30, width: 30)
+                    : Image.asset(cardIcon, height: 30, width: 30),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -339,48 +384,54 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
         return Center();
       }
 
-      return employmentListData!=null&&employmentListData.isNotEmpty?Obx((){
-        return Container(
-          color: appWhiteColor,
-          padding: EdgeInsets.only(left: 10,bottom: 5),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: commonHeaderAndSeeAll(headerName: appEmployeeRequests, seeAllClick: (){
-                  //controller.openRecommendJobPage(isJobForYou: true,);
+      return employmentListData!=null&&employmentListData.isNotEmpty?Container(
+        color: appWhiteColor,
+        padding: EdgeInsets.only(left: 10,bottom: 5),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: commonHeaderAndSeeAll(headerName: appEmployeeRequests, seeAllClick: (){
+                controller.openEmploymentRequestPage(context);
+              }),
+            ),
+            SizedBox(height: 10,),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child:  Row(
+                children: List.generate(employmentListData.length/*jobList.length>4?4:jobList.length*/, (index){
+                  //controller.location.value="${jobList[index].cityName??""}, ${jobList[index].stateName??""}, ${jobList[index].companyName??""}";
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: index == employmentListData.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
+                    ),
+                    child: companyEmploymentRequestWidget(context,
+                      profileImage:employmentListData[index].profile??"",
+                      initialName:employmentListData[index].userName??"",
+                      userName: employmentListData[index].userName??"",
+                      ccId: employmentListData[index].individualId??"",
+                      dataPosted: commonEmployementDataPosted(joiningData: employmentListData[index].joiningDate??"", employementTillDate: employmentListData[index].workedTillDate??"", stillWorking: employmentListData[index].stillWorking??""),
+                      designation: employmentListData[index].designation??"",
+                      onClick: () {
+                        print("On click wor,");
+                      },
+                      jobStatus: appEmployment,
+
+                      approved: employmentListData[index].approved??"0",
+                      isAcceptClick: () {
+                      controller.acceptEmploymentApiCall(context, id:  employmentListData[index].id??"",);
+                      },
+                      isRejectClick: () {
+                        controller.rejectEmploymentApiCall(context, id:  employmentListData[index].id??"",);
+                      },
+                    ),
+                  );
                 }),
               ),
-              SizedBox(height: 15,),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child:  Row(
-                  children: List.generate(4/*jobList.length>4?4:jobList.length*/, (index){
-                    //controller.location.value="${jobList[index].cityName??""}, ${jobList[index].stateName??""}, ${jobList[index].companyName??""}";
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        right: index == employmentListData.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
-                      ),
-                      child: companyEmploymentRequestWidget(context,
-                        profileImage: ''??"",
-                        initialName:"Satyam Shukla ",
-                        userName: "Satyam Shukla ",
-                        ccId: "CCyeuue788"??'',
-                        dataPosted: "asknfsjdjf",
-                        designation: "Software Enginner",
-                        onClick: () {
-                          print("On click wor,");
-                        },
-                        jobStatus: 'Employment',
-                      ),
-                    );
-                  }),
-                ),
-              ),
-            ],
-          ),
-        );
-      }):Container();
+            ),
+          ],
+        ),
+      ):Container();
     });
   }
 
@@ -391,51 +442,52 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
         return Center();
       }
       var allApplicationData=controller.companyStaticsDetails.value.data?.allApplicationList??[];
-      return allApplicationData!=null&&allApplicationData.isNotEmpty?Obx((){
-        return Container(
-          color: appPrimaryBackgroundColor,
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: commonHeaderAndSeeAll(headerName: appAllApplications, seeAllClick: (){
-                  //controller.openRecommendJobPage(isJobForYou: true,);
+      return allApplicationData!=null&&allApplicationData.isNotEmpty?Container(
+        color: appPrimaryBackgroundColor,
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: commonHeaderAndSeeAll(headerName: appAllApplications, seeAllClick: (){
+                //controller.openRecommendJobPage(isJobForYou: true,);
+              }),
+            ),
+            SizedBox(height: 15,),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child:  Wrap(
+                children: List.generate(allApplicationData.length??0, (index){
+                  var location=generateLocation(cityName: allApplicationData[index].cityName??"", stateName: allApplicationData[index].stateName??"", countryName: allApplicationData[index].countryName??"");
+                  return commonCompanyApplicantWidget(context,
+                    profileImage: allApplicationData[index].profile??"",
+                    initialName: allApplicationData[index].name??"",
+                    userName: allApplicationData[index].name??"",
+                    ccId: allApplicationData[index].individualId??"",
+                    ratingStar: allApplicationData[index].rating?.rating.toString()??"",
+                    buttonName: "",
+                    salary: "600 - 100 Lacs PA",
+                    experienceYear: "3 years",
+                    vaccancy: "12",
+                    onClick: () {
+                      print("On click wor,");
+                    },
+                    jobStatus: 'Published',
+                    noOfVaccency: '10',
+                    timeAgo: calculateTimeDifference(createDate:  allApplicationData[index].date??"",),
+                    locations: location,
+                    email: allApplicationData[index].email??"",
+                    phone: allApplicationData[index].phone??"",
+                    profileDesignation: allApplicationData[index].designationName??"",
+                      isProfileVerified: true,
+                      width: MediaQuery.of(context).size.width*0.86
+                  );
                 }),
               ),
-              SizedBox(height: 15,),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child:  Wrap(
-                  children: List.generate(10??0, (index){
-                    return commonCompanyApplicantWidget(context,
-                      profileImage: ""??"",
-                      initialName:"Satyam Shukla",
-                      userName: "Satyam Shukla",
-                      ccId: "CCajksdjasd",
-                      ratingStar: '10',
-                      buttonName: "",
-                      salary: "600 - 100 Lacs PA",
-                      experienceYear: "3 years",
-                      vaccancy: "12",
-                      onClick: () {
-                        print("On click wor,");
-                      },
-                      jobStatus: 'Published',
-                      noOfVaccency: '10',
-                      timeAgo: calculateTimeDifference(createDate:  "21-02-25"??""),
-                      locations: 'Delhi, noida, lucknow',
-                      email: 'satyam.shuklaasdsgdghsghd@mail.com',
-                      phone: '+917705089308',
-                      profileDesignation: 'Software Engenners',
-                    );
-                  }),
-                ),
-              ),
-            ],
-          ),
-        );
-      }):Container();
+            ),
+          ],
+        ),
+      ):Container();
     });
   }
 
@@ -464,10 +516,10 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                     itemBuilder: (BuildContext context,int index){
                       return  mostViewedJos(
                           context,
-                          designation: 'Software Enginner',
-                          timeAgo: '8 hrs ago',
+                          designation: mostViewedData[index].jobTitle??"",
+                          timeAgo: calculateTimeDifference(createDate:  mostViewedData[index].modifyDate??"",),
                           locations: 'Delhi, Noida',
-                          noOfVaccency: '10'
+                          noOfVaccency: mostViewedData[index].applicants??"",
                       );
                     },
                     separatorBuilder:(BuildContext context,int index){
@@ -475,7 +527,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                         height: 1,color: appPrimaryBackgroundColor,
                       );
                     },
-                    itemCount: 2
+                    itemCount: mostViewedData.length??0
                 )
             )
           ],
@@ -572,7 +624,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                     ccId: recommendedEmployee[index].individualId??"",
                     location: generateLocation(cityName: recommendedEmployee[index].cityName??"", stateName: recommendedEmployee[index].stateName??"", countryName: recommendedEmployee[index].countryName??"",),
                     designation: recommendedEmployee[index].designationName??"",
-                    ratingBar: recommendedEmployee[index].totalRating??"0",
+                    ratingBar: formatRating(recommendedEmployee[index].totalRating.toString()??"0"),
                   );
                 }),
               ),

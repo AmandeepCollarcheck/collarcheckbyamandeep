@@ -62,7 +62,8 @@ const String appCompaniesAreHiring ="+ companies are hiring ";
 const String appTopCompanies ="Top companies";
 const String appExploreMore ="Explore more";
 const String appFilterMore ="Filter";
-const String appJobFound =" Jobs Found";
+const String appJobsFound =" Jobs Found";
+const String appJobFound =" Job Found";
 const String appFollowFound ="Follow";
 const String appMessageFound ="Message";
 const String appCompaniesFound =" Companies Found ";
@@ -420,7 +421,11 @@ const String appPendingReviews="Pending Reviews";
 const String appApprovedReviews="Approved Reviews";
 const String appEditReview="Edit Review";
 const String appLastWorkingDate="Last Working Date: ";
+const String appCompanyFounded="Company Founded";
 const String appPleaseEnterContactPersonName="Please enter contact person name";
+const String appToPresent="to Present";
+const String appEmployment="Employment";
+const String appNoGalleryData="No data found in app gallery";
 
 
 
