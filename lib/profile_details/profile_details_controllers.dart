@@ -26,6 +26,7 @@ import '../utills/common_widget/progress.dart';
 class  ProfileDetailsControllers extends GetxController with GetTickerProviderStateMixin{
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final scrollController = ScrollController();
+  final scrollControllerForTabSelection = ScrollController();
   late ProgressDialog progressDialog=ProgressDialog() ;
   var userProfileData=UserProfileModel().obs;
   var searchController =TextEditingController();
@@ -44,12 +45,16 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
   var slugDataId="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
-  final GlobalKey homeKey = GlobalKey();
-  final GlobalKey employmentHistory = GlobalKey();
-  final GlobalKey portfolio = GlobalKey();
-  final GlobalKey education = GlobalKey();
-  final GlobalKey similerProfile = GlobalKey();
-  final GlobalKey benifits = GlobalKey();
+
+
+  final sectionKeys = [
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey(),
+
+  ];
+
 
 
   var listTabLabel = [
@@ -65,6 +70,7 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
        isEmployeeProfileDate.value=data[isEmployeeProfile]??false;
      }
     tabController = TabController(length: 4, vsync: this);
+    scrollControllerForTabSelection.addListener(_onScroll);
     // TODO: implement onInit
     //IndividualUserProfileModel
     Future.delayed(Duration(milliseconds: 500), ()async {
@@ -332,37 +338,35 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
 
 
   void _onScroll() {
-    final contextMap = {
-      0: homeKey.currentContext,
-      1: employmentHistory.currentContext,
-      2: portfolio.currentContext,
-      3: education.currentContext,
-    };
+    for (int i = 0; i < sectionKeys.length; i++) {
+      final keyContext = sectionKeys[i].currentContext;
+      if (keyContext != null) {
+        final box = keyContext.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero, ancestor: null).dy;
 
-    for (int index = 0; index < contextMap.length; index++) {
-      final context = contextMap[index];
-      if (context != null) {
-        final box = context.findRenderObject() as RenderBox;
-        final offset = box.localToGlobal(Offset.zero);
-
-        if (offset.dy <= 100 && offset.dy >= -box.size.height / 2) {
-          // Change tab when the section is near the top
-          if (selectedIndex.value != index) {
-            selectedIndex.value = index;
+        if (position > 0 && position < 200) { // 200 means "near top"
+          if (selectedIndex.value != i) {
+            selectedIndex.value = i;
           }
+
+
+          print("shhjshdfhshkdf");
+          print(position);
           break;
         }
       }
     }
   }
 
+
   @override
   void onClose() {
     scrollController.dispose();
+    scrollControllerForTabSelection.dispose();
     super.onClose();
   }
   void scrollToSection(int index) {
-    final context = [homeKey, employmentHistory, portfolio,education][index].currentContext;
+    final context = sectionKeys[index].currentContext;
     if (context != null) {
       Scrollable.ensureVisible(
         context,

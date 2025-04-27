@@ -239,6 +239,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                       /// **TabBarView below the TabBar**
                       Expanded(
                         child: SingleChildScrollView(
+                          //controller: controller.scrollControllerForTabSelection,
                           physics: BouncingScrollPhysics(),
                           child: Obx((){
                             var allData=controller.userProfileData.value.data;
@@ -246,20 +247,20 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                _childWithKey(controller.homeKey, _homeTabDetails(context)),
+                                _childWithKey(controller.sectionKeys[0], _homeTabDetails(context)),
                                 SizedBox(height: 20,),
-                                _childWithKey(controller.employmentHistory, _employmentHistory(context)),
+                                _childWithKey(controller.sectionKeys[1], _employmentHistory(context)),
                                 SizedBox(height: 20,),
-                                _childWithKey(controller.portfolio, _portFolioTabDetails(context)),
+                                _childWithKey(controller.sectionKeys[2], _portFolioTabDetails(context)),
                                 SizedBox(height: 20,),
-                                _childWithKey(controller.education, _educationTabDetails(context)),
+                                _childWithKey(controller.sectionKeys[3], _educationTabDetails(context)),
                                 _commonWidgetData(context)
 
 
                               ],
                             );
-                          }),),
-                      ),
+                          }),
+                      )),
 
                     ],
                   ),

@@ -41,6 +41,7 @@ import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
 import 'package:collarchek/dashboard/dashboard_page.dart';
+
 import 'package:collarchek/edit_benefit/edit_benefir_bindings.dart';
 import 'package:collarchek/edit_benefit/edit_benefir_page.dart';
 import 'package:collarchek/edit_benefit/edit_benefit_controllers.dart';
@@ -89,6 +90,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../Splash/splash_binding.dart';
 import '../Splash/splash_page.dart';
 import '../company_update_profile/company_update_profile_page.dart';
+
 import '../filter/filter_bindings.dart';
 import '../portfolio/portfolio_page.dart';
 
@@ -364,5 +366,6 @@ class AppRoutes {
       page: () => OtherIndividualProfilePage(),
       binding: OtherIndividualProfileBindings(),
     ),
+
   ];
 }

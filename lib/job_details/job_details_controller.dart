@@ -47,7 +47,7 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
     jobTitle.value=data['jobTitle']??"";
     screenNameData.value=data[screenName]??"";
     tabController = TabController(length: 3, vsync: this);
-    scrollController.addListener(_handleScroll);
+    scrollController.addListener(_onScroll);
 
     Future.delayed(Duration(milliseconds: 500), ()async {
       String jobName=jobTitle.value;
@@ -138,25 +138,24 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
 
 
 
-  void _handleScroll() {
-    if (isTabClicked.value) return;
+  void _onScroll() {
+    double offset = scrollController.offset;
+    double screenHeight = Get.context!.size!.height;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateSectionOffsets();
-      final scrollOffset = scrollController.offset;
+    for (int i = 0; i < keys.length; i++) {
+      final keyContext = keys[i].currentContext;
+      if (keyContext != null) {
+        final box = keyContext.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero, ancestor: null).dy;
 
-      for (int i = 0; i < sectionOffsets.length; i++) {
-        final start = sectionOffsets[i];
-        final end = (i + 1 < sectionOffsets.length) ? sectionOffsets[i + 1] : double.infinity;
-
-        if (scrollOffset >= start && scrollOffset < end) {
+        if (position <= screenHeight / 3) {
           if (tabController.index != i) {
+
             tabController.animateTo(i);
           }
-          break;
         }
       }
-    });
+    }
   }
 
   void _updateSectionOffsets() {
