@@ -24,6 +24,11 @@ Future<void> main() async {
     statusBarColor: appPrimaryColor,
     statusBarIconBrightness: Brightness.light,
   ));
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   runApp(const MyApp());
 }
 

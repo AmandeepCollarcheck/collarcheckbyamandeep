@@ -5,6 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 import '../utills/app_colors.dart';
+import '../utills/app_key_constent.dart';
+import '../utills/app_route.dart';
 import '../utills/app_strings.dart';
 import '../utills/common_widget/add_employment_bottom_sheet.dart';
 import '../utills/common_widget/common_appbar.dart';
@@ -33,17 +35,21 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                   isFilterShow: true,
                   actionButton: appFilterMore,
                   onClick: (){
-                    //controller.backButtonClick();
+                    controller.backButtonClick();
                   },
                   onShareClick: (){},
-                  onAddEmployment:(){
-                   // controller.clickFilterButton();
+                  onAddEmployment:()async{
+                    final result=await openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData: companyEmploymentRequest, companyAllEmployment: controller.companyEmploymentData.value);
+                    if(result['result']==true){
+                      Future.delayed(Duration(milliseconds: 500), ()async {
+                        controller.getEmploymentRequestApiCall();
+                      });
+                    }
                   },
                   isScreenNameShow: true,
                   isShowShare: false
               ),
             ),
-            SizedBox(height: 20,),
             Container(
               color: appWhiteColor,
               padding: EdgeInsets.zero,
@@ -120,24 +126,31 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
-            return pastData.isNotEmpty?Container(
+            var pendingData=controller.companyEmploymentRequestData.value.data?.pendingList??[];
+            return pendingData.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(pendingData.length??0, (index){
                     return companyEmploymentRequestWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla ",
-                      userName: "Satyam Shukla ",
-                      ccId: "CCyeuue788"??'',
-                      dataPosted: "asknfsjdjf",
-                      designation: "Software Enginner",
+                      profileImage: pendingData[index].profile??"",
+                      initialName:pendingData[index].userName??"",
+                      userName: pendingData[index].userName??"",
+                      ccId: pendingData[index].individualId??"",
+                      dataPosted:commonEmployementDataPosted(joiningData: pendingData[index].joiningDate??"", employementTillDate: pendingData[index].workedTillDate??"", stillWorking: pendingData[index].stillWorking??""),
+                      designation: pendingData[index].designation??"",
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment', approved: '',
-                      isAcceptClick: () {  },
-                      isRejectClick: () {  },
+                      jobStatus: appEmployment,
+                      approved:pendingData[index].approved??"0",
+                      isAcceptClick: () {
+                        controller.acceptEmploymentApiCall(context, id: pendingData[index].id??"",);
+                      },
+                      isRejectClick: () {
+                        controller.rejectEmploymentApiCall(context, id: pendingData[index].id??"",);
+                      },
+                      isProfileVerified: pendingData[index].isVerified??false,
+                        cardWidth: MediaQuery.of(context).size.width*0.82
                     );
                   }),
                 )
@@ -163,25 +176,32 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
-            return pastData.isNotEmpty?Container(
+            var approved=controller.companyEmploymentRequestData.value.data?.approvedList??[];
+            return approved.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(approved.length??0, (index){
                     return companyEmploymentRequestWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla ",
-                      userName: "Satyam Shukla ",
-                      ccId: "CCyeuue788"??'',
-                      dataPosted: "asknfsjdjf",
-                      designation: "Software Enginner",
+                      profileImage: approved[index].profile??"",
+                      initialName:approved[index].userName??"",
+                      userName: approved[index].userName??"",
+                      ccId: approved[index].individualId??"",
+                      dataPosted:commonEmployementDataPosted(joiningData: approved[index].joiningDate??"", employementTillDate: approved[index].workedTillDate??"", stillWorking: approved[index].stillWorking??""),
+                      designation: approved[index].designation??"",
                       isApproved: true,
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment', approved: '',
-                      isAcceptClick: () {  },
-                      isRejectClick: () {  },
+                      jobStatus: appEmployment,
+                        approved: "0",
+                      isAcceptClick: () {
+                        Get.offNamed(AppRoutes.review,arguments: {experienceId:approved[index].id??'',screenName:companyEmploymentRequest});
+                      },
+                      isRejectClick: () {
+                        print("Left Company");
+                      },
+                        isProfileVerified: approved[index].isVerified??false,
+                        cardWidth: MediaQuery.of(context).size.width*0.82
                     );
                   }),
                 )
@@ -207,25 +227,32 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
-            return pastData.isNotEmpty?Container(
+            var update=controller.companyEmploymentRequestData.value.data?.newUpdateList??[];
+            return update.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(update.length??0, (index){
                     return companyEmploymentRequestWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla ",
-                      userName: "Satyam Shukla ",
-                      ccId: "CCyeuue788"??'',
-                      dataPosted: "asknfsjdjf",
-                      designation: "Software Enginner",
+                      profileImage: update[index].profile??"",
+                      initialName:update[index].userName??"",
+                      userName:update[index].userName??"",
+                      ccId: update[index].individualId??"",
+                      dataPosted:commonEmployementDataPosted(joiningData: update[index].joiningDate??"", employementTillDate: update[index].workedTillDate??"", stillWorking: update[index].stillWorking??""),
+                      designation: update[index].designation??"",
                       isUpdates: true,
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment', approved: '',
-                      isAcceptClick: () {  },
-                      isRejectClick: () {  },
+                      jobStatus: appEmployment,
+                        approved:update[index].approved??"0",
+                      isAcceptClick: () {
+                        controller.acceptEmploymentApiCall(context, id: update[index].id??"",);
+                      },
+                      isRejectClick: () {
+                        controller.rejectEmploymentApiCall(context, id: update[index].id??"",);
+                      },
+                        isProfileVerified: update[index].isVerified??false,
+                        cardWidth: MediaQuery.of(context).size.width*0.82
                     );
                   }),
                 )
@@ -251,25 +278,27 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
       child: Column(
         children: <Widget>[
           Obx(()  {
-            var pastData=controller.employeeData.value.data?.past??[];
-            return pastData.isNotEmpty?Container(
+            var reject=controller.companyEmploymentRequestData.value.data?.rejectList??[];
+            return reject.isNotEmpty?Container(
                 padding: EdgeInsets.all(10),
                 child:Wrap(
-                  children: List.generate(pastData.length??0, (index){
+                  children: List.generate(reject.length??0, (index){
                     return companyEmploymentRequestWidget(context,
-                      profileImage: pastData[index].profile??"",
-                      initialName:"Satyam Shukla ",
-                      userName: "Satyam Shukla ",
-                      ccId: "CCyeuue788"??'',
-                      dataPosted: "asknfsjdjf",
-                      designation: "Software Enginner",
+                      profileImage: reject[index].profile??"",
+                      initialName:reject[index].userName??"",
+                      userName:reject[index].userName??"",
+                      ccId:reject[index].individualId??"",
+                      dataPosted: commonEmployementDataPosted(joiningData: reject[index].joiningDate??"", employementTillDate: reject[index].workedTillDate??"", stillWorking: reject[index].stillWorking??""),
+                      designation: reject[index].designation??"",
                       isRejected: true,
                       onClick: () {
                         print("On click wor,");
                       },
-                      jobStatus: 'Employment', approved: '',
+                      jobStatus: appEmployment, approved: '',
                       isAcceptClick: () {  },
                       isRejectClick: () {  },
+                        isProfileVerified: reject[index].isVerified??false,
+                        cardWidth: MediaQuery.of(context).size.width*0.82
                     );
                   }),
                 )

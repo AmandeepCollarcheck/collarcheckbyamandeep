@@ -711,8 +711,9 @@ String formatRating(dynamic rating) {
 }
 
 commonUserNameWidget(context,{required String userName,required bool isProfileVerified,required double width}){
-  return SizedBox(
+  return Container(
     width: width,
+    //color: appRedColor,
     child: RichText(
       maxLines: 2,
       overflow: TextOverflow.ellipsis,

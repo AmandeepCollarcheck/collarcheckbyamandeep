@@ -117,8 +117,14 @@ class _CommonDrawerState extends State<CommonDrawer> {
             }):Container(),
             controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
             controller.userTypeData.value==company?_drawerOptionCard(icon: appReviewRequestSvg, title: appReviewRequests, onOptionClick: () {
-              Get.back();
-              controller.bottomNavCurrentIndex.value=1;
+              if(controller.userTypeData.value==company){
+                Get.back();
+                Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyDashboardScreen});
+              }else{
+                Get.back();
+                controller.bottomNavCurrentIndex.value=1;
+              }
+
               //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
             }):Container(),
             controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),

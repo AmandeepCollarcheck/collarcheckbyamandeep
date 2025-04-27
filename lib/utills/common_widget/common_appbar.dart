@@ -434,11 +434,16 @@ Widget commonCompanySearchAppBar(
       required String actionButtonOne,
       required String actionButtonTwo,
       bool isSearchActive = false,
+      bool isNotification=false,
+      bool isAddEmploymentShow=true,
+      bool isEmployeeRequestShow=true,
       required Function(bool) onSearchIconClick,
       bool isBadge=true,
       Function(String)? onChanged,
       Function()? onTap,
-      Function()? onAddEmployment
+      Function()? onAddEmployment,
+      Function()? onEmploymentRequestClick,
+      Function()? onNotificationClick,
     }) {
 
   return Container(
@@ -474,17 +479,18 @@ Widget commonCompanySearchAppBar(
                   },
                   child: SvgPicture.asset(actionButtonTwo, height: 20, width: 20),
                 ),
-                SizedBox(width: 10),
-                GestureDetector(
+                isAddEmploymentShow?SizedBox(width: 10):SizedBox(width: 0,),
+                isAddEmploymentShow?GestureDetector(
                   onTap: (){
                     onAddEmployment!();
                   },
                   child: SvgPicture.asset(appAddEmploymentIconSvg, height: 22, width: 22),
-                ),
+                ):Container(),
                 SizedBox(width: 10),
-                GestureDetector(
+                isEmployeeRequestShow?GestureDetector(
                   onTap: (){
-                    Get.offNamed(AppRoutes.companyEmploymentRequest);
+                    onEmploymentRequestClick!();
+
                   },
                   child: Stack(
                     clipBehavior: Clip.none,
@@ -514,7 +520,40 @@ Widget commonCompanySearchAppBar(
                       ):Container(),
                     ],
                   ),
-                ),
+                ):Container(),
+                isNotification? GestureDetector(
+                  onTap: (){
+                    Get.offNamed(AppRoutes.notifications);
+                  },
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      SvgPicture.asset(actionButtonOne, height: 25, width: 25),
+                      isBadge?Positioned(
+                        top: -7,
+                        right: -3,
+                        child: Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 1.5),
+                            color: appPrimaryColor,
+                          ),
+                          constraints: BoxConstraints(minWidth: 18, minHeight: 18),
+                          child: Center(
+                            child: Text(
+                              "10",
+                              style: AppTextStyles.font10.copyWith(
+                                color: appWhiteColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ):Container(),
+                    ],
+                  ),
+                ):Container()
               ],
             ),
           ],

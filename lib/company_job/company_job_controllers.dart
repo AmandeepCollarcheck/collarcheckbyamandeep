@@ -124,22 +124,12 @@ class CompanyJobControllers extends GetxController with GetTickerProviderStateMi
     }
   }
   /// Mark as completed
-  void markAsCompleteApiCall(context)async {
+  void markAsCompleteApiCall(context,{required String statusId})async {
     try {
 
       keyboardDismiss(context);
       progressDialog.show();
-
-      final data = {
-        "status":"2",
-        "job_title":"a",
-        "job_description":"b"
-      };
-
-
-
-
-      SaveUserProfileModel addEmployment = await ApiProvider.baseWithToken().addJob(data);
+      SaveUserProfileModel addEmployment = await ApiProvider.baseWithToken().markAsCompleteApi(statusId: statusId);
       if(addEmployment.status==true){
         if (progressDialog.isShowing()) {
           Get.back();

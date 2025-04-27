@@ -54,7 +54,7 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
      if(data.isNotEmpty){
        screenNameData.value=data[screenName]??"";
        slugDataId.value=data[slugId]??"";
-       isEmployeeProfileDate.value=data[isEmployeeProfile];
+       isEmployeeProfileDate.value=data[isEmployeeProfile]??false;
      }
     tabController = TabController(length: 4, vsync: this);
     // TODO: implement onInit

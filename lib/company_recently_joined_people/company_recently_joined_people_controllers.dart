@@ -1,52 +1,47 @@
 import 'dart:io';
 
+import 'package:collarchek/utills/app_key_constent.dart';
 import 'package:collarchek/utills/app_route.dart';
 import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
-import '../models/company_all_review_model.dart';
-import '../utills/app_key_constent.dart';
+import '../models/company_recently_joined_people.dart';
 import '../utills/common_widget/progress.dart';
 
-class AllReviewControllers extends GetxController{
+class CompanyRecentlyJoinedPeopleControllers extends GetxController{
   late ProgressDialog progressDialog=ProgressDialog() ;
-  var companyAllReviewData=CompanyAllReviewModel().obs;
+  var recentlyJoinedData=CompanyPeopleRecentlyJoinedModel().obs;
   var screenNameData="".obs;
 
+
+  @override
   void onInit() {
     Map<String,dynamic> data=Get.arguments??{};
     if(data.isNotEmpty){
-
       screenNameData.value=data[screenName]??"";
     }
     // TODO: implement onInit
     super.onInit();
     Future.delayed(Duration(milliseconds: 500), ()async {
-      getAllReviewApiCall();
+      getRecentlyJoinedPeopleApiCall();
     });
   }
 
-
-
   backButtonClick(context){
-    if(screenNameData.value==companyEmployeesScreen){
-      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
-    }else if(screenNameData.value==companyDashboardScreen){
+    if(screenNameData.value==companyDashboardScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
     }else{
-      Get.offNamed(AppRoutes.bottomNavBar);
+      Get.offNamed(AppRoutes.bottomNavBar,);
     }
   }
 
-
-
-
-  void getAllReviewApiCall() async{
+  void getRecentlyJoinedPeopleApiCall()async {
     try {
       progressDialog.show();
-      CompanyAllReviewModel companyAllReviewModel = await ApiProvider.baseWithToken().companyAllReview();
-      if(companyAllReviewModel.status==true){
-        companyAllReviewData.value=companyAllReviewModel;
+
+      CompanyPeopleRecentlyJoinedModel companyPeopleRecentlyJoinedModel = await ApiProvider.baseWithToken().companyRecentlyJoinedPeople();
+      if(companyPeopleRecentlyJoinedModel.status==true){
+        recentlyJoinedData.value=companyPeopleRecentlyJoinedModel;
 
       }else{
         showToast(somethingWentWrong);
@@ -60,4 +55,7 @@ class AllReviewControllers extends GetxController{
       showToast(exception.toString());
     }
   }
+
+
+
 }

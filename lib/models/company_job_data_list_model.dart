@@ -57,6 +57,7 @@ class DraftJob {
   String? departmentName;
   String? experienceName;
   String? department;
+  bool? isVerified;
   String? experience;
   List<dynamic>? skill;
   dynamic roleTypeName;
@@ -127,6 +128,7 @@ class DraftJob {
     this.gallery,
     this.companySlug,
     this.apply,
+    this.isVerified
   });
 
   factory DraftJob.fromJson(Map<String, dynamic> json) => DraftJob(
@@ -146,6 +148,7 @@ class DraftJob {
     roleType: json["role_type"],
     industry: json["industry"],
     vacancy: json["vacancy"],
+    isVerified: json["isVerified"],
     urgent: json["urgent"],
     designationName: json["designation_name"],
     countryName: json["country_name"],
@@ -187,6 +190,7 @@ class DraftJob {
     "role_type": roleType,
     "industry": industry,
     "vacancy": vacancy,
+    "isVerified":isVerified,
     "urgent": urgent,
     "designation_name": designationName,
     "country_name": countryName,

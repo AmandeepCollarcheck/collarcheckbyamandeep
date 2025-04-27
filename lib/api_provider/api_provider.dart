@@ -24,8 +24,11 @@ import '../models/company_all_details_data.dart';
 import '../models/company_all_employment_model.dart';
 import '../models/company_all_review_model.dart';
 import '../models/company_benefit_model.dart';
+import '../models/company_employment_request_model.dart';
 import '../models/company_job_data_list_model.dart';
 import '../models/company_profile_details_model.dart';
+import '../models/company_recently_joined_people.dart';
+import '../models/company_recommended_employee_model.dart';
 import '../models/company_user_details_model.dart';
 import '../models/company_user_specific_review_model.dart';
 import '../models/connection_data_list_model.dart';
@@ -1516,7 +1519,76 @@ class ApiProvider{
       handleException(error, stacktrace, _dioError!);
     }
   }
-
+  Future companyAllApplicationsBasedOnId({required String jobId}) async {
+    try {
+      Response response = await _dio.get('$strCompanyAllApplications?job=$jobId');
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return AllApplicationListModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future markAsCompleteApi({required String statusId}) async {
+    try {
+      Response response = await _dio.delete('$strCompanyJobStatus/$statusId');
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyEmploymentRequest() async {
+    try {
+      Response response = await _dio.get(strCompanyEmploymentRequest);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyEmploymentRequestModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyRecommendedEmployment() async {
+    try {
+      Response response = await _dio.get(strCompanyEmployee);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyRecommendedEmployeeModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future companyRecentlyJoinedPeople() async {
+    try {
+      Response response = await _dio.get(strCompanyRecentlyJoinedPeople);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return CompanyPeopleRecentlyJoinedModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
 
 
 

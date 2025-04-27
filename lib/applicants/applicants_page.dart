@@ -31,7 +31,7 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
                     isFilterShow: true,
                     actionButton: appFilterMore,
                     onClick: (){
-                      //controller.backButtonClick();
+                      controller.backButtonClick();
                     },
                     onShareClick: (){},
                     onFilterClick:(){
@@ -58,7 +58,7 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
                                 style: AppTextStyles.font14.copyWith(color: appPrimaryColor), // Normal text style
                               ),
                               TextSpan(
-                                text: data=="1"||data=="0"?appJobFound:appJobsFound,
+                                text: data=="1"||data=="0"?appAppliedFound:appAppliedFound,
                                 style:  AppTextStyles.font14.copyWith(color: appBlackColor),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -94,7 +94,7 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
                             initialName:allApplications[index].fname??"",
                             userName: allApplications[index].fname??"",
                             ccId: allApplications[index].individualId??"",
-                            ratingStar: '10',
+                            ratingStar: allApplications[index].rating?.rating.toString()??"0",
                             buttonName: "",
                             salary: "600 - 100 Lacs PA",
                             experienceYear: "3 years",
@@ -109,8 +109,8 @@ class ApplicantsPage extends GetView<ApplicantsControllers>{
                             email: allApplications[index].email??"",
                             phone: allApplications[index].phone??"",
                             profileDesignation:allApplications[index].designationName??"",
-                            isProfileVerified: true,
-                              width: MediaQuery.of(context).size.width
+                            isProfileVerified: allApplications[index].isVerified??false,
+                              cardWidth: MediaQuery.of(context).size.width*0.92
                           );
                         }),
                       )

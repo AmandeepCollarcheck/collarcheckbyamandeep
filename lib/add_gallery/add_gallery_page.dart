@@ -30,7 +30,7 @@ class AddGalleryPage extends GetView<AddGalleryControllers>{
               children: <Widget>[
                 commonActiveSearchBar(
                   onClick: (){
-                    //controller.backButtonClick(context);
+                    controller.backButtonClick(context);
                   },
                   leadingIcon: appBackSvgIcon,
                   screenName: appAddGallery,  onShareClick: (){}, onFilterClick: (){}, actionButton: '',

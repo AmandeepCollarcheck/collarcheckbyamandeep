@@ -32,6 +32,11 @@ import 'package:collarchek/company_job/company_job_bindings.dart';
 import 'package:collarchek/company_job/company_job_page.dart';
 import 'package:collarchek/company_profile/company_profile_bindings.dart';
 import 'package:collarchek/company_profile/company_profile_page.dart';
+import 'package:collarchek/company_recently_joined_people/company_recently_joined_people_bindings.dart';
+import 'package:collarchek/company_recently_joined_people/company_recently_joined_people_page.dart';
+import 'package:collarchek/company_recommended_employee/company_recommended_employee_bindings.dart';
+import 'package:collarchek/company_recommended_employee/company_recommended_employee_page.dart';
+import 'package:collarchek/company_update_profile/company_update_profile_bindings.dart';
 import 'package:collarchek/connections/connection_bindings.dart';
 import 'package:collarchek/connections/connection_page.dart';
 import 'package:collarchek/dashboard/dashboard_bindings.dart';
@@ -79,6 +84,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../Splash/splash_binding.dart';
 import '../Splash/splash_page.dart';
+import '../company_update_profile/company_update_profile_page.dart';
 import '../filter/filter_bindings.dart';
 import '../portfolio/portfolio_page.dart';
 
@@ -123,6 +129,9 @@ class AppRoutes {
   static const String addGallery = '/addGallery';
   static const String companyAllReview = '/companyAllReview';
   static const String userSpecificReview = '/userSpecificReview';
+  static const String companyUpdateProfile = '/companyUpdateProfile';
+  static const String companyRecommendedEmployee = '/companyRecommendedEmployee';
+  static const String recentlyJoinedPeople = '/recentlyJoinedPeople';
   static final routes = [
     GetPage(
       name: splash,
@@ -323,6 +332,21 @@ class AppRoutes {
       name: userSpecificReview,
       page: () => UserSpecificReviewPage(),
       binding: UserSpecificReviewBindings(),
+    ),
+    GetPage(
+      name: companyUpdateProfile,
+      page: () => CompanyUpdateProfilePage(),
+      binding: CompanyUpdateProfileBindings(),
+    ),
+    GetPage(
+      name: companyRecommendedEmployee,
+      page: () => CompanyRecommendedEmployeePage(),
+      binding: CompanyRecommendedEmployeeBindings(),
+    ),
+    GetPage(
+      name: recentlyJoinedPeople,
+      page: () => CompanyRecentlyJoinedPeoplePage(),
+      binding: CompanyRecentlyJoinedPeopleBindings(),
     ),
   ];
 }

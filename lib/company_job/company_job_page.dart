@@ -38,10 +38,17 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                   isSearchActive: controller.isSearchActive.value,
                   onChanged: (value){
                     // controller.openSearchScreen(context);
-
                   },
-                  onAddEmployment: (){
-                    addNewJobForm(context, companyAllDetails: controller.designationListData.value,screenNameData:companyJobsScreen);
+                  onEmploymentRequestClick: (){
+                    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyJobsScreen});
+                  },
+                  onAddEmployment: ()async{
+                    final result=await addNewJobForm(context, companyAllDetails: controller.designationListData.value,screenNameData:companyJobsScreen);
+                    if(result['result']==true){
+                      Future.delayed(Duration(milliseconds: 500), ()async {
+                        controller.getJobListApiCall();
+                      });
+                    }
                   },
                   onTap: (){
                     controller.openSearchScreen(context);
@@ -139,16 +146,18 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                       experienceYear: publishData[index].experienceName??"",
                       vaccancy: publishData[index].vacancy??"",
                       onClick: () {
-                        print("On click wor,");
+                        Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyJobsScreen,jobProfileName:publishData[index].jobTitle??"",jobId:publishData[index].id??"",});
                       },
                       jobStatus: 'Published',
                       noOfVaccency: publishData[index].applicationCount??"",
                       timeAgo: calculateTimeDifference(createDate:  publishData[index].createDate??""),
                       locations: generateLocation(cityName: publishData[index].cityName??"", stateName: publishData[index].stateName??"", countryName: publishData[index].countryName??"",),
                       markAsCompleted: () {
-                       controller.markAsCompleteApiCall(context);
+                       controller.markAsCompleteApiCall(context, statusId: publishData[index].id??"",);
                       },
                       isEdit: () {  },
+                        isProfileVerified:  publishData[index].isVerified??false,
+                        cardWidth: MediaQuery.of(context).size.width*0.92
                     );
                   }),
                 )
@@ -190,8 +199,7 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                       experienceYear:  draftData[index].experienceName??"",
                       vaccancy: draftData[index].vacancy??"",
                       onClick: () {
-                        Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyJobsScreen,jobProfileName:"Web designer"});
-
+                        Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyJobsScreen,jobProfileName:draftData[index].jobTitle??"",jobId:draftData[index].id??"",});
                       },
                       jobStatus: controller.tabController.index==1?appInDraft:controller.tabController.index==2?appCompleted:appPublished,
                       noOfVaccency: draftData[index].applicationCount??"",
@@ -199,6 +207,8 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                       locations: generateLocation(cityName: draftData[index].cityName??"", stateName: draftData[index].stateName??"", countryName: draftData[index].countryName??"",),
                       markAsCompleted: () {  },
                       isEdit: () {  },
+                        isProfileVerified:  draftData[index].isVerified??false,
+                        cardWidth: MediaQuery.of(context).size.width*0.92
                     );
                   }),
                 )
@@ -239,14 +249,16 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
                       experienceYear: completeData[index].experienceName??"",
                       vaccancy: completeData[index].vacancy??"",
                       onClick: () {
-                        print("On click wor,");
+                        Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyJobsScreen,jobProfileName:completeData[index].jobTitle??"",jobId:completeData[index].id??"",});
                       },
-                      jobStatus: 'Published',
+                      jobStatus: appCompleted,
                       noOfVaccency: completeData[index].applicationCount??"",
                       timeAgo: calculateTimeDifference(createDate:  completeData[index].createDate??"",),
                       locations: generateLocation(cityName: completeData[index].cityName??"", stateName: completeData[index].stateName??"", countryName: completeData[index].countryName??"",),
                       markAsCompleted: () {  },
                       isEdit: () {  },
+                      isProfileVerified:  completeData[index].isVerified??false,
+                      cardWidth: MediaQuery.of(context).size.width*0.92
                     );
                   }),
                 )

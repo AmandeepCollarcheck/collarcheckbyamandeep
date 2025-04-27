@@ -68,6 +68,8 @@ const progressBarMaxValue="5";
  const isEmployeeProfile="EmployeeProfile";
  const filledProfileDescriptionData="filledProfileDescription";
  const isAppApplication="isAppApplication";
+ const isCompanyApp="isCompanyApp";
+ const jobId="jobId";
 
 //value
 const profileDetails="profile_details";
@@ -85,3 +87,4 @@ const companyProfileScreen="companyProfile";
 const companyAllReviewScreen="companyAllReviewScreen";
 const companyEmploymentRequest="companyEmploymentRequest";
 const allApplications="allApplications";
+const recommendedEmployeeScreen="recommendedEmployeeScreen";

@@ -157,7 +157,6 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                           child: Obx((){
                             var allData=controller.companyProfileData.value.data;
                             var benefitsData=allData?.allBenefits??[];
-                            var galleryData=allData?.allGallery??[];
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -266,8 +265,11 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
   _profileWidget(BuildContext context) {
     return  Obx((){
       var profileData=controller.companyProfileData.value.data;
-      var isProfileVerified=profileData?.isVerified??false;
-      var location=generateLocation(cityName: profileData?.cityName??"", stateName: profileData?.stateName??"", countryName: profileData?.countryName??"");
+      if (profileData == null) {
+        return Container();
+      }
+      var isProfileVerified=profileData.isVerified??false;
+      var location=generateLocation(cityName: profileData.cityName??"", stateName: profileData.stateName??"", countryName: profileData.countryName??"");
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -285,8 +287,8 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                   child: Container(
                     padding: EdgeInsets.only(left: 20,right: 20),
                     child: commonImageWidget(
-                        image: profileData?.profile??"",
-                        initialName: profileData?.companyName??"",
+                        image: profileData.profile??"",
+                        initialName: profileData.companyName??"",
                         height: 100, width: 100, borderRadius: 14
                     ),
                   )
@@ -304,7 +306,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                     style: AppTextStyles.font20W700.copyWith(color: appBlackColor),
                     children: [
                       TextSpan(
-                        text: profileData?.companyName??"",
+                        text: profileData.companyName??"",
                       ),
                       if (isProfileVerified)
                         WidgetSpan(
@@ -323,37 +325,37 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text("$appId: ${profileData?.individualId??""}",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),maxLines: 1,),
+                Text("$appId: ${profileData.individualId??""}",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),maxLines: 1,),
                 SizedBox(height: 4,),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    profileData?.totalEmployee!=0?Row(
+                    profileData.totalEmployee!=0?Row(
                       children: <Widget>[
                         SvgPicture.asset(appMyConnectionIconSvg,height: 16,width: 16,color: appBlackColor,),
                         SizedBox(width: 4,),
-                        Text("${profileData?.totalEmployee??""} ${profileData?.totalEmployee.toString()=="1"?appEmployee:appEmployees}",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
+                        Text("${profileData.totalEmployee??""} ${profileData.totalEmployee.toString()=="1"?appEmployee:appEmployees}",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
                       ],
                     ):Container(),
                     SizedBox(width: 8,),
-                    profileData?.totalEmployee!=0&&profileData?.followData?.follower!=0?Container(
+                    profileData.totalEmployee!=0&&profileData.followData?.follower!=0?Container(
                       margin: EdgeInsets.only(top: 2),
                       height: 18,width: 1,color: appGreyBlackColor,):Container(),
                     SizedBox(width: 5,),
-                    profileData?.followData?.follower!=0?Row(
+                    profileData.followData?.follower!=0?Row(
                       children: <Widget>[
-                        Text("${profileData?.followData?.follower} $appFollowerText",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
+                        Text("${profileData.followData?.follower} $appFollowerText",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
                       ],
                     ):Container(),
                   ],
                 ),
-                SizedBox(height: 4,),
-                profileData!.industryName!.isNotEmpty?Row(
+                profileData.industryName!=null&&profileData.industryName!.isNotEmpty?SizedBox(height: 4,):SizedBox(height: 0,),
+                profileData.industryName!=null&&profileData.industryName!.isNotEmpty?Row(
                   children: <Widget>[
                     SvgPicture.asset(appDesignationSvgIcon,height: 20,width: 20,),
                     SizedBox(width: 4,),
-                    Text(profileData?.industryName??"",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
+                    Text(profileData.industryName??"",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
                   ],
                 ):Container(),
                 SizedBox(height: 4,),
@@ -361,7 +363,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                   children: <Widget>[
                     SvgPicture.asset(appEmail,height: 20,width: 20,),
                     SizedBox(width: 4,),
-                    Text(profileData?.email??"",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
+                    Text(profileData.email??"",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
                   ],
                 ),
                 SizedBox(height: 4,),
@@ -369,7 +371,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                   children: <Widget>[
                     SvgPicture.asset(appPhoneIcon,height: 20,width: 20,),
                     SizedBox(width: 4,),
-                    Text(profileData?.phone??"",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
+                    Text(profileData.phone??"",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),maxLines: 1,),
                   ],
                 ),
                 SizedBox(height: 4,),
@@ -610,7 +612,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
               child: SingleChildScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
-                child: Obx(()=>Wrap(
+                child:Wrap(
                   runSpacing: 10,
                   children: List.generate(jobOpeningData.length??0, (index){
                     return Padding(
@@ -642,7 +644,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                       ),
                     );
                   }),
-                )),
+                ),
               ),
             )
           ],

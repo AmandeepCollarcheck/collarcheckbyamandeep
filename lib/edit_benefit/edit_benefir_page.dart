@@ -16,6 +16,8 @@ import '../utills/font_styles.dart';
 import '../utills/image_path.dart';
 
 class EditBenefitPage extends GetView<EditBeneFitControllers>{
+  const EditBenefitPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

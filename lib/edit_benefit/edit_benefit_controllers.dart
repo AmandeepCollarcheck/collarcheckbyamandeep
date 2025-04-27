@@ -38,14 +38,12 @@ class EditBeneFitControllers extends GetxController{
     super.onInit();
   }
   backButtonClick(context){
-    print("sdfkdsfdskdfkhsdfjs");
-    print(screenNameData.value);
-    print(companyProfileScreen);
-    print(screenNameData.value==companyProfileScreen);
     if(screenNameData.value==dashboard){
       Get.offNamed(AppRoutes.bottomNavBar);
     }else if(screenNameData.value==companyProfileScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else if(screenNameData.value==companyDashboardScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
     }
 
   }

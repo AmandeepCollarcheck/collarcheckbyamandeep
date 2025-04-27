@@ -1685,7 +1685,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
 
                               });
                         },
-                        isFollowing:companyProfile[index].followingData?.requestSend??false,
+                        isFollowing:companyProfile[index].following?.requestSend??false,
 
 
 

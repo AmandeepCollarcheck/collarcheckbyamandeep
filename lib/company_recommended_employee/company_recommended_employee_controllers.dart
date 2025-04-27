@@ -4,49 +4,43 @@ import 'package:collarchek/utills/app_route.dart';
 import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
-import '../models/company_all_review_model.dart';
+import '../models/company_recommended_employee_model.dart';
+import '../models/dashboard_statics_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/common_widget/progress.dart';
 
-class AllReviewControllers extends GetxController{
+class CompanyRecommendedEmployeeControllers extends GetxController{
   late ProgressDialog progressDialog=ProgressDialog() ;
-  var companyAllReviewData=CompanyAllReviewModel().obs;
+  var recommendedEmployeeData= CompanyRecommendedEmployeeModel().obs;
   var screenNameData="".obs;
-
+  @override
   void onInit() {
+    // TODO: implement onInit
     Map<String,dynamic> data=Get.arguments??{};
     if(data.isNotEmpty){
-
       screenNameData.value=data[screenName]??"";
     }
-    // TODO: implement onInit
     super.onInit();
     Future.delayed(Duration(milliseconds: 500), ()async {
-      getAllReviewApiCall();
+      getRecommendedEmployeeApiCall();
     });
   }
-
-
-
-  backButtonClick(context){
-    if(screenNameData.value==companyEmployeesScreen){
-      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
-    }else if(screenNameData.value==companyDashboardScreen){
+  backButtonClick(){
+    if(screenNameData.value==companyDashboardScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar);
     }
+
   }
 
-
-
-
-  void getAllReviewApiCall() async{
+  void getRecommendedEmployeeApiCall() async{
     try {
       progressDialog.show();
-      CompanyAllReviewModel companyAllReviewModel = await ApiProvider.baseWithToken().companyAllReview();
-      if(companyAllReviewModel.status==true){
-        companyAllReviewData.value=companyAllReviewModel;
+
+      CompanyRecommendedEmployeeModel companyRecommendedEmployeeModel = await ApiProvider.baseWithToken().companyRecommendedEmployment();
+      if(companyRecommendedEmployeeModel.status==true){
+        recommendedEmployeeData.value=companyRecommendedEmployeeModel;
 
       }else{
         showToast(somethingWentWrong);

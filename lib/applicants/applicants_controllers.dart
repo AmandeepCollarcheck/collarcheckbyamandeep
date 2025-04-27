@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,12 +25,15 @@ class ApplicantsControllers extends GetxController{
   var jobProfileNameData="".obs;
   var isApplicationData=false.obs;
   var headerTitleName="".obs;
+  var jobIdData="".obs;
   @override
   void onInit() {
     Map<String,dynamic> data=Get.arguments??{};
     if(data.isNotEmpty){
       jobProfileNameData.value=data[jobProfileName]??"";
+      jobIdData.value=data[jobId]??"";
       isApplicationData.value=data[isAppApplication]??false;
+      screenNameData.value=data[screenName]??"";
     }
     if(isApplicationData.value){
       headerTitleName.value=appAllApplications;
@@ -44,31 +48,25 @@ class ApplicantsControllers extends GetxController{
       });
     }else{
       Future.delayed(Duration(milliseconds: 500), ()async {
-        getEmployeeDataListApiCall();
+        getAllApplicationBasedOnIdListApiCall();
       });
     }
 
   }
 
-  ///Employee List api
-  getEmployeeDataListApiCall() async{
-    try {
-      progressDialog.show();
-      EmployeeListModel connectionDataListModel = await ApiProvider.baseWithToken().employeeListData();
-      if(connectionDataListModel.status==true){
-        employeeData.value=connectionDataListModel;
-      }else{
-        showToast(somethingWentWrong);
-      }
-      progressDialog.dismissLoader();
-    } on HttpException catch (exception) {
-      progressDialog.dismissLoader();
-      showToast(exception.message);
-    } catch (exception) {
-      progressDialog.dismissLoader();
-      showToast(exception.toString());
+
+  backButtonClick(){
+
+    if(screenNameData.value==companyDashboardScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
+    }else if(screenNameData.value==companyJobsScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"2"});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar);
     }
   }
+
+
 
    getAllApplicationListApiCall() async{
      try {
@@ -88,4 +86,23 @@ class ApplicantsControllers extends GetxController{
        showToast(exception.toString());
      }
    }
+
+  void getAllApplicationBasedOnIdListApiCall() async{
+    try {
+      progressDialog.show();
+      AllApplicationListModel allApplicationListModel = await ApiProvider.baseWithToken().companyAllApplicationsBasedOnId(jobId: jobIdData.value);
+      if(allApplicationListModel.status==true){
+        allApplicationData.value=allApplicationListModel;
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
 }

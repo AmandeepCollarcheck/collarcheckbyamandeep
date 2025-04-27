@@ -7,13 +7,16 @@ import 'package:get/get.dart';
 import '../api_provider/api_provider.dart';
 import '../bottom_nav_bar/bottom_nav_bar_controller.dart';
 import '../models/company_all_details_data.dart';
+import '../models/company_all_employment_model.dart';
 import '../models/company_user_details_model.dart';
 import '../models/dashboard_statics_model.dart';
 import '../models/employee_user_details_model.dart';
+import '../models/employment_list_model.dart';
 import '../models/save_user_profile_model.dart';
 import '../models/user_home_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
+import '../utills/common_widget/add_employment_bottom_sheet.dart';
 import '../utills/common_widget/common_custom_scrool_tab_view.dart';
 import '../utills/common_widget/progress.dart';
 
@@ -23,7 +26,9 @@ class CompanyDashboardControllers extends GetxController{
   late ProgressDialog progressDialog=ProgressDialog() ;
   var companyUserDetails=CompanyUserDetailsModel().obs;
   var designationListData=CompanyAllDetailsData().obs;
+  var employeeListData=DesignationListModel().obs;
   var companyStaticsDetails=DashboardStaticsDetailsModel().obs;
+  var companyEmploymentData=CompanyAllEmploymentModel().obs;
   var userDetails=EmployeeUserDetails().obs;
   Rx isSearchActive=false.obs;
   var userProfileComplatationPercentage=[].obs;
@@ -42,6 +47,12 @@ class CompanyDashboardControllers extends GetxController{
 
     Future.delayed(Duration(milliseconds: 500), ()async {
       getDesignationApiCall();
+    });
+    Future.delayed(Duration(milliseconds: 500), ()async {
+      getEmployeeApiCall();
+    });
+    Future.delayed(Duration(milliseconds: 500), ()async {
+      getAllEmploymentApiCall();
     });
     super.onInit();
   }
@@ -138,12 +149,40 @@ class CompanyDashboardControllers extends GetxController{
     }else if(data=="Review"){
       Get.offNamed(AppRoutes.review,arguments: {screenName:dashboard});
     }else if(data=="Email Verification"){
-      Get.offNamed(AppRoutes.accountVerification);
+      Get.offNamed(AppRoutes.accountVerification,arguments: {screenName:companyDashboardScreen,isCompanyApp:true});
     }else if(data=="Experience Approved"){
       Get.offNamed(AppRoutes.bottomNavBar);
     }
     else if(data=="Profile Descripton"){
       Get.offNamed(AppRoutes.about);
+    }else if(data=="Website"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 0);
+    } else if(data=="About Company"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 0);
+    }else if(data=="Contact person"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 0);
+    }else if(data=="Incorporation Date"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 0);
+    }else if(data=="Turnover"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 0);
+    }else if(data=="Industry Type"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 0);
+    }else if(data=="Country"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 1);
+    } else if(data=="State"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 1);
+    } else if(data=="City"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 1);
+    } else if(data=="Office Address"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 1);
+    } else if(data=="Social Media"){
+      updateProfileBottomSheet(context, companyAllDetails: designationListData.value, screenName: companyDashboardScreen, companyUserDetails: companyUserDetails.value,index: 2);
+    }else if(data=="Add 1 Employee"){
+      openAddEmploymentForm(context, designationListData: employeeListData.value, screenNameData: companyDashboardScreen, companyAllEmployment: companyEmploymentData.value, );
+    }else if(data=="Add gallery"){
+      Get.offNamed(AppRoutes.addGallery,arguments: {screenName:companyDashboardScreen});
+    }else if(data=="Add 3 Perks and benefits"||data=="Add 3 Perks and benefits "){
+      Get.offNamed(AppRoutes.companyBenefit,arguments: {screenName:companyDashboardScreen});
     }
     else{
       Get.offNamed(AppRoutes.profile);
@@ -238,7 +277,57 @@ class CompanyDashboardControllers extends GetxController{
   }
 
   openEmploymentRequestPage(context){
-    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyEmploymentRequest});
+    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
+  }
+  openAllApplicationPage(context){
+    Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyDashboardScreen,isAppApplication:true});
+  }
+  openRecommendedPage(context){
+    Get.offNamed(AppRoutes.companyRecommendedEmployee,arguments: {screenName:companyDashboardScreen});
+  }
+  openViewApplicationPage(context){
+    Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyDashboardScreen,isAppApplication:true});
+  }
+  openRecentlyJoinedPage(context){
+    Get.offNamed(AppRoutes.recentlyJoinedPeople,arguments: {screenName:companyDashboardScreen});
+  }
+  void getEmployeeApiCall() async{
+    try {
+      progressDialog.show();
+      DesignationListModel designationListModel = await ApiProvider.baseWithToken().designationList();
+      if(designationListModel.status==true){
+        employeeListData.value=designationListModel;
+
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  void getAllEmploymentApiCall()async {
+    try {
+      progressDialog.show();
+      CompanyAllEmploymentModel companyAllEmploymentModel = await ApiProvider.baseWithToken().companyAllEmployment();
+      if(companyAllEmploymentModel.status==true){
+        companyEmploymentData.value=companyAllEmploymentModel;
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
   }
 
 

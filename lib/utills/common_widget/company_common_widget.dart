@@ -31,8 +31,8 @@ commonCompanyWidget(context,{required String profileImage,required String initia
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(top: 2),
-                      child: SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,),
+                      padding: EdgeInsets.only(top: 2,left: 4),
+                      child: SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,color: appGreyBlackColor,),
                     ),
                     SizedBox(width: 2,),
                     SizedBox(
@@ -52,8 +52,8 @@ commonCompanyWidget(context,{required String profileImage,required String initia
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(top: 2),
-                    child: SvgPicture.asset(appLocationsSvgIcon,height: 15,width: 15,),
+                      padding: EdgeInsets.only(top: 2,left: 4),
+                    child: SvgPicture.asset(appLocationsSvgIcon,height: 15,width: 15,color: appGreyBlackColor,),
                   ),
                   SizedBox(width: 2,),
                   SizedBox(
@@ -68,8 +68,8 @@ commonCompanyWidget(context,{required String profileImage,required String initia
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 2),
-                child: SvgPicture.asset(appDataPostedIconSvg,height: 15,width: 15,),
+                padding: EdgeInsets.only(top: 2,left: 4),
+                child: SvgPicture.asset(appDataPostedIconSvg,height: 15,width: 15,color: appGreyBlackColor,),
               ),
 
               SizedBox(width: 2,),
@@ -197,7 +197,7 @@ String _getMonthName(int month) {
 }
 
 
-commonCompanyJobWidget(context,{required String profileImage,required String timeAgo,required String noOfVaccency,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required Function() markAsCompleted,required Function() isEdit}){
+commonCompanyJobWidget(context,{required String profileImage,required String timeAgo,required String noOfVaccency,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required Function() markAsCompleted,required Function() isEdit,required bool isProfileVerified,required double cardWidth}){
   return Card(
     child: Container(
       decoration: BoxDecoration(
@@ -207,13 +207,13 @@ commonCompanyJobWidget(context,{required String profileImage,required String tim
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          _companyJonProfileWidget(context,profileImage: profileImage,noOfVaccency:noOfVaccency, initialName: initialName, userName: userName, ccId: ccId, ratingStar: ratingStar, buttonName: buttonName,onClick: onClick, jobStatus: jobStatus, salary: salary,experienceYear: experienceYear,vaccancy: vaccancy,locations: locations, timeAgo: timeAgo, markAsCompleted: markAsCompleted, isEdit: isEdit),
+          _companyJonProfileWidget(context,profileImage: profileImage,noOfVaccency:noOfVaccency, initialName: initialName, userName: userName, ccId: ccId, ratingStar: ratingStar, buttonName: buttonName,onClick: onClick, jobStatus: jobStatus, salary: salary,experienceYear: experienceYear,vaccancy: vaccancy,locations: locations, timeAgo: timeAgo, markAsCompleted: markAsCompleted, isEdit: isEdit,isProfileVerified: isProfileVerified,cardWidth: cardWidth),
         ],
       ),
     ),
   );
 }
-_companyJonProfileWidget(context,{required String profileImage,required String noOfVaccency,required String timeAgo,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required Function() markAsCompleted,required Function() isEdit}) {
+_companyJonProfileWidget(context,{required String profileImage,required String noOfVaccency,required String timeAgo,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required Function() markAsCompleted,required Function() isEdit,required bool isProfileVerified,required double cardWidth }) {
   return Column(
     children: <Widget>[
       Row(
@@ -231,13 +231,14 @@ _companyJonProfileWidget(context,{required String profileImage,required String n
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.7,
+                    width: cardWidth*0.88,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                            flex: 2,
-                            child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,overflow:TextOverflow.fade,)),
+                        commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: cardWidth*0.74),
+                        // Expanded(
+                        //     flex: 2,
+                        //     child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,overflow:TextOverflow.fade,)),
                         noOfVaccency!="0"?GestureDetector(
                           onTap: (){
                             onClick();
@@ -320,7 +321,7 @@ _companyJonProfileWidget(context,{required String profileImage,required String n
                         ),
                       ),
                       SizedBox(width: 6,),
-                      GestureDetector(
+                      jobStatus==appCompleted?Container():GestureDetector(
                         onTap: (){
                           markAsCompleted();
                         },
@@ -376,7 +377,7 @@ _companyJonProfileWidget(context,{required String profileImage,required String n
 }
 
 
-commonCompanyApplicantWidget(context,{required String profileImage,required String timeAgo,required String noOfVaccency,required String profileDesignation,required String email,required String phone,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required bool isProfileVerified,required double width}){
+commonCompanyApplicantWidget(context,{required String profileImage,required String timeAgo,required String noOfVaccency,required String profileDesignation,required String email,required String phone,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required bool isProfileVerified,required double cardWidth}){
   return Card(
     elevation: 0,
     child: Container(
@@ -397,138 +398,123 @@ commonCompanyApplicantWidget(context,{required String profileImage,required Stri
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          _companyApplicantProfileWidget(context,profileImage: profileImage,noOfVaccency:noOfVaccency, initialName: initialName, userName: userName, ccId: ccId, ratingStar: ratingStar, buttonName: buttonName,onClick: onClick, jobStatus: jobStatus, salary: salary,experienceYear: experienceYear,vaccancy: vaccancy,locations: locations, timeAgo: timeAgo, email: email, phone: phone,profileDesignation:profileDesignation, isProfileVerified: isProfileVerified,width: width),
+          _companyApplicantProfileWidget(context,profileImage: profileImage,noOfVaccency:noOfVaccency, initialName: initialName, userName: userName, ccId: ccId, ratingStar: ratingStar, buttonName: buttonName,onClick: onClick, jobStatus: jobStatus, salary: salary,experienceYear: experienceYear,vaccancy: vaccancy,locations: locations, timeAgo: timeAgo, email: email, phone: phone,profileDesignation:profileDesignation, isProfileVerified: isProfileVerified,cardWidth: cardWidth),
         ],
       ),
     ),
   );
 }
 
-_companyApplicantProfileWidget(context,{required String profileImage,required String noOfVaccency,required String email,required String profileDesignation,required String phone,required String timeAgo,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required bool isProfileVerified,required double width}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              commonImageWidget(image: profileImage, initialName: initialName, height: 50.0, width: 50.0, borderRadius: 100),
-              SizedBox(width: 5,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width*0.7,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        SizedBox(
-                          child: commonUserNameWidget(context,userName: userName, isProfileVerified: isProfileVerified, width: MediaQuery.of(context).size.width*0.7),
-                           // child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,)
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text("$appId:$ccId",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
-                      SizedBox(width: 8,),
-                      ratingStar!="0"?Row(
-                        children: <Widget>[
-                          SvgPicture.asset(appRatingBarSvg,height: 15,width: 15,),
-                          Text("$ratingStar ${ratingStar=="1"?appStar:appStars}",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
-                        ],
-                      ):Container()
-                    ],
-                  ),
-                  locations.isNotEmpty?Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: SvgPicture.asset(appLocationsSvgIcon,height: 15,width: 15,),
-                      ),
-                      SizedBox(width: 2,),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width*0.66,
-                          child: Text(locations,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
-                    ],
-                  ):Container(),
-                  SizedBox(height: 2,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: SvgPicture.asset(appEmail,height: 15,width: 15,),
-                      ),
-                      SizedBox(width: 2,),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width*0.66,
-                          child: Text(email,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
-                    ],
-                  ),
-                  SizedBox(height: 2,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: SvgPicture.asset(appPhoneIcon,height: 15,width: 15,),
-                      ),
-
-                      SizedBox(width: 2,),
-                      Text(phone,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,),
-                    ],
-                  ),
-
-
-
-                ],
-              )
-            ],
-          ),
-
-        ],
-      ),
-      SizedBox(height: 10,),
-      Container(
-        width: MediaQuery.of(context).size.width*0.85,
-        height: 1,
-        color: appPrimaryBackgroundColor,
-      ),
-      SizedBox(height: 10,),
-      SizedBox(
-        width: width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+_companyApplicantProfileWidget(context,{required String profileImage,required String noOfVaccency,required String email,required String profileDesignation,required String phone,required String timeAgo,required String locations,required String salary,required String experienceYear,required String vaccancy,required String jobStatus,required String initialName,required String userName,required String ccId,required String ratingStar,required String buttonName,required Function() onClick,required bool isProfileVerified,required double cardWidth}) {
+  return SizedBox(
+    width: cardWidth,
+    child: Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
+            commonImageWidget(image: profileImage, initialName: initialName, height: 50.0, width: 50.0, borderRadius: 100),
+            SizedBox(width: 5,),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 2),
-                  child: SvgPicture.asset(appExperenceIconSvg,height: 15,width: 15,),
+                commonUserNameWidget(context,userName: userName, isProfileVerified: isProfileVerified, width:cardWidth*0.84),
+                Row(
+                  children: <Widget>[
+                    Text("$appId:$ccId",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
+                    SizedBox(width: 8,),
+                    ratingStar!="0"?Row(
+                      children: <Widget>[
+                        SvgPicture.asset(appRatingBarSvg,height: 15,width: 15,),
+                        Text("$ratingStar ${ratingStar=="1"?appStar:appStars}",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
+                      ],
+                    ):Container()
+                  ],
                 ),
-                SizedBox(width: 4,),
-                SizedBox(
-                    child: Text(profileDesignation,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),maxLines: 2,)),
+                locations.isNotEmpty?Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: SvgPicture.asset(appLocationsSvgIcon,height: 15,width: 15,),
+                    ),
+                    SizedBox(width: 2,),
+                    SizedBox(
+                        width: cardWidth*0.82,
+                        child: Text(locations,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
+                  ],
+                ):Container(),
+                SizedBox(height: 2,),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: SvgPicture.asset(appEmail,height: 15,width: 15,),
+                    ),
+                    SizedBox(width: 2,),
+                    SizedBox(
+                        width: cardWidth*0.82,
+                        child: Text(email,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,)),
+                  ],
+                ),
+                SizedBox(height: 2,),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: SvgPicture.asset(appPhoneIcon,height: 15,width: 15,),
+                    ),
+
+                    SizedBox(width: 2,),
+                    Text(phone,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,),
+                  ],
+                ),
+
+
+
               ],
-            ),
-            timeAgo.isNotEmpty?Text(timeAgo,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),):Container(),
+            )
           ],
         ),
-      )
-    ],
+        SizedBox(height: 10,),
+        Container(
+          width: MediaQuery.of(context).size.width*0.85,
+          height: 1,
+          color: appPrimaryBackgroundColor,
+        ),
+        SizedBox(height: 10,),
+        SizedBox(
+          width: cardWidth,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 2),
+                    child: SvgPicture.asset(appExperenceIconSvg,height: 15,width: 15,),
+                  ),
+                  SizedBox(width: 4,),
+                  SizedBox(
+                      child: Text(profileDesignation,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),maxLines: 2,)),
+                ],
+              ),
+              timeAgo.isNotEmpty?Text(timeAgo,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),):Container(),
+            ],
+          ),
+        )
+      ],
+    ),
   );
 }
 
 
-companyEmploymentRequestWidget(context,{required String profileImage,required String initialName,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String dataPosted,bool isApproved=false,bool isUpdates=false,bool isRejected=false,required String approved, required Function() isAcceptClick,required Function() isRejectClick}){
+companyEmploymentRequestWidget(context,{required String profileImage,required String initialName,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String dataPosted,bool isApproved=false,bool isUpdates=false,bool isRejected=false,required String approved, required Function() isAcceptClick,required Function() isRejectClick,required bool isProfileVerified,required double cardWidth}){
   var joiningDate=dataPosted.split("-")[0];
   var workedTillDate=dataPosted.split("-")[1];
   return Card(
@@ -553,9 +539,9 @@ companyEmploymentRequestWidget(context,{required String profileImage,required St
       child: Column(
         children: <Widget>[
           if(isRejected==false)
-            _companyEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,designation: designation,isApproved: isApproved,isUpdate: isUpdates,isRejected: isRejected, joiningDate: joiningDate,workedTillDate: workedTillDate,approved:approved, isAcceptClick: isAcceptClick, isRejectClick: isRejectClick),
+            _companyEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,designation: designation,isApproved: isApproved,isUpdate: isUpdates,isRejected: isRejected, joiningDate: joiningDate,workedTillDate: workedTillDate,approved:approved, isAcceptClick: isAcceptClick, isRejectClick: isRejectClick, isProfileVerified: isProfileVerified,cardWidth: cardWidth),
           if(isRejected)
-            _rejectedEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,dataPosted: dataPosted,designation: designation,)
+            _rejectedEmploymentWidget(context,profileImage: profileImage,initialName: initialName,userName: userName,onClick: onClick,jobStatus: jobStatus,ccId: ccId,dataPosted: dataPosted,designation: designation,cardWidth: cardWidth,isProfileVerified: isProfileVerified)
 
 
         ],
@@ -564,7 +550,7 @@ companyEmploymentRequestWidget(context,{required String profileImage,required St
   );
 }
 
-_rejectedEmploymentWidget(context, {required String profileImage, required String initialName, required String userName, required Function() onClick, required String jobStatus, required String ccId, required String dataPosted, required String designation}) {
+_rejectedEmploymentWidget(context, {required String profileImage, required String initialName, required String userName, required Function() onClick, required String jobStatus, required String ccId, required String dataPosted, required String designation,required double cardWidth,required bool isProfileVerified}) {
   return Column(
     children: <Widget>[
       Row(
@@ -582,14 +568,15 @@ _rejectedEmploymentWidget(context, {required String profileImage, required Strin
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.7,
+                    width: cardWidth,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                            flex: 2,
-                            child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,overflow:TextOverflow.fade,)),
+                        commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: cardWidth*0.8),
+                        // Expanded(
+                        //     flex: 2,
+                        //     child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,overflow:TextOverflow.fade,)),
                         GestureDetector(
                           onTap: (){
                             onClick();
@@ -608,7 +595,7 @@ _rejectedEmploymentWidget(context, {required String profileImage, required Strin
                           Text("$appId:$ccId",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
                           SizedBox(height: 2,),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width*0.51,
+                            width: cardWidth*0.86,//MediaQuery.of(context).size.width*0.51,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -664,7 +651,7 @@ _rejectedEmploymentWidget(context, {required String profileImage, required Strin
   );
 }
 
-_companyEmploymentWidget(context,{required String profileImage,required String initialName ,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String joiningDate,required String workedTillDate,required bool isApproved,required bool isUpdate,required bool isRejected, required String approved, required Function() isAcceptClick,required Function() isRejectClick}) {
+_companyEmploymentWidget(context,{required String profileImage,required String initialName ,required String userName,required String jobStatus,required Function() onClick,required String ccId,required String designation,required String joiningDate,required String workedTillDate,required bool isApproved,required bool isUpdate,required bool isRejected, required String approved, required Function() isAcceptClick,required Function() isRejectClick,required bool isProfileVerified,required double cardWidth}) {
   return Column(
     children: <Widget>[
       Row(
@@ -676,20 +663,21 @@ _companyEmploymentWidget(context,{required String profileImage,required String i
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               commonImageWidget(image: profileImage, initialName: initialName, height: 50.0, width: 50.0, borderRadius: 100),
-              SizedBox(width: 5,),
+              SizedBox(width: 8,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.7,
+                    width: cardWidth,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                            child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,overflow:TextOverflow.fade,)),
+                        commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: cardWidth*0.8),
+                        // Expanded(
+                        //   flex: 2,
+                        //     child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,overflow:TextOverflow.fade,)),
                         GestureDetector(
                           onTap: (){
                             onClick();
@@ -789,24 +777,34 @@ _companyEmploymentWidget(context,{required String profileImage,required String i
                       if(isApproved)
                         Row(
                           children: <Widget>[
-                            Container(
-                                padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: appPrimaryColor,
-                                    border: Border.all(color: appPrimaryColor,width: 1)
+                            GestureDetector(
+                              onTap: (){
+                                isAcceptClick();
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 3,horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: appPrimaryColor,
+                                      border: Border.all(color: appPrimaryColor,width: 1)
 
-                                ),
-                                child: Text(appAddReview,style: AppTextStyles.font12.copyWith(color: appWhiteColor),maxLines: 2,)
+                                  ),
+                                  child: Text(appAddReview,style: AppTextStyles.font12.copyWith(color: appWhiteColor),maxLines: 2,)
+                              ),
                             ),
                             SizedBox(width: 6,),
-                            Container(
-                                padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(color: appRedTwoColor,width: 1)
-                                ),
-                                child: Text(appLeftCompany,style: AppTextStyles.font12.copyWith(color: appRedTwoColor),maxLines: 2,)
+                            GestureDetector(
+                              onTap: (){
+                                isRejectClick();
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 3,horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: appRedTwoColor,width: 1)
+                                  ),
+                                  child: Text(appLeftCompany,style: AppTextStyles.font12.copyWith(color: appRedTwoColor),maxLines: 2,)
+                              ),
                             ),
                           ],
                         )
@@ -826,7 +824,7 @@ _companyEmploymentWidget(context,{required String profileImage,required String i
 }
 
 
-mostViewedJos(context,{required String designation,required String timeAgo,required String locations,required String noOfVaccency}){
+mostViewedJos(context,{required String designation,required String timeAgo,required String locations,required String noOfVaccency,required Function() viewApplicationClick}){
   return Container(
     padding: EdgeInsets.only(top: 5,bottom: 10),
     child: Column(
@@ -854,13 +852,18 @@ mostViewedJos(context,{required String designation,required String timeAgo,requi
                 Text("$noOfVaccency $appApplicants",style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
               ],
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 3,horizontal: 7),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: appPrimaryColor
+            GestureDetector(
+              onTap: (){
+                viewApplicationClick();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 3,horizontal: 7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: appPrimaryColor
+                ),
+                child: Text(appViewApplications,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
               ),
-              child: Text(appViewApplications,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
             )
           ],
         )
@@ -999,7 +1002,7 @@ _profileReciewWidget(context,{required String profileImage,required String initi
 }
 
 
-companyRecommendedWidget(context,{required String profileImage,required String initialName,required String userName,required String ratingBar,required String ccId,required String designation,required String location}){
+companyRecommendedWidget(context,{required String profileImage,required String initialName,required String userName,required String ratingBar,required String ccId,required String designation,required String location,required Function() viewProfileClick,required double cardWidth,required bool isProfileVerified}){
   return  Card(
     elevation: 0,
     child: Container(
@@ -1022,7 +1025,7 @@ companyRecommendedWidget(context,{required String profileImage,required String i
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(
-            width: MediaQuery.of(context).size.width*0.6,
+            width: cardWidth,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -1032,27 +1035,33 @@ companyRecommendedWidget(context,{required String profileImage,required String i
                     height: 50,
                     width: 50,
                     borderRadius: 100),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: appPrimaryColor
+                GestureDetector(
+                  onTap: (){
+                    viewProfileClick();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: appPrimaryColor
+                    ),
+                    child: Text(appViewProfile,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
                   ),
-                  child: Text(appViewProfile,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
                 )
               ],
             ),
           ),
           SizedBox(height: 5,),
           SizedBox(
-            width: MediaQuery.of(context).size.width*0.6,
+            width: cardWidth,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                //commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: width)
-                SizedBox(
-                    width: ratingBar=="0.0"?MediaQuery.of(context).size.width*0.6:MediaQuery.of(context).size.width*0.41,
-                    child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),)),
+                commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: ratingBar=="0.0"?cardWidth:cardWidth*0.8,),
+                // SizedBox(
+                //     width:
+                //     child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),)
+                // ),
                 ratingBar=="0.0"?Container():Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -1074,7 +1083,7 @@ companyRecommendedWidget(context,{required String profileImage,required String i
               Text(designation,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
             ],
           ):Container(),
-          location.isNotEmpty?SizedBox(height: 5,):Container(),
+          location.isNotEmpty?SizedBox(height: 10,):SizedBox(height: 0,),
           location.isNotEmpty? Row(
             children: <Widget>[
               SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,),
@@ -1090,7 +1099,7 @@ companyRecommendedWidget(context,{required String profileImage,required String i
   );
 }
 
-recentlyJoinedWidget(context,{required String profileImage,required String initialName,required String userName,required String ratingBar,required String ccId,required String designation,required String location}){
+recentlyJoinedWidget(context,{required String profileImage,required String initialName,required String userName,required String ratingBar,required String ccId,required String designation,required String location,required Function() addReview}){
   return  Card(
     elevation: 0,
     child: Container(
@@ -1122,6 +1131,7 @@ recentlyJoinedWidget(context,{required String profileImage,required String initi
           Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
           SizedBox(height: 3,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SvgPicture.asset(appDesignationSvgIcon,height: 16,width: 16,),
               SizedBox(width: 5,),
@@ -1129,13 +1139,18 @@ recentlyJoinedWidget(context,{required String profileImage,required String initi
             ],
           ),
           SizedBox(height: 8,),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: appPrimaryColor
+          GestureDetector(
+            onTap: (){
+              addReview();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 5,horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: appPrimaryColor
+              ),
+              child: Text(appAddReviewText,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
             ),
-            child: Text(appAddReviewText,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
           )
         ],
       ),
@@ -1235,18 +1250,7 @@ commonCompanyReviewWidget(context,{required String profileImage,required String 
       child: Column(
         children: <Widget>[
           _ratingProfileWidget(context,profileImage: profileImage, initialName: username, userName: username, ratingStar: ratingsStar, buttonName: buttonName,onClick: onClick, isProfileVerified: isProfileVerified, designation: designation, noOfReview: noOfReview,pendingReview: pendingReview),
-          Container(
-            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.16),
-            child: Row(
-              children: <Widget>[
-                Text('$appNoOfReview$noOfReview',style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-                SizedBox(width: 5,),
-                Container(height: 20,width: 1,color: appGreyBlackColor,),
-                SizedBox(width: 5,),
-                Text('$appPendingReview$pendingReview',style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-              ],
-            ),
-          )
+
         ],
       ),
     ),
@@ -1319,6 +1323,19 @@ _ratingProfileWidget(context,{required String designation,required String profil
                   )
                 ],
               ),
+              Container(
+                padding: EdgeInsets.only(left: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text('$appNoOfReview$noOfReview',style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                    SizedBox(width: 5,),
+                    Container(height: 20,width: 1,color: appGreyBlackColor,),
+                    SizedBox(width: 5,),
+                    Text('$appPendingReview$pendingReview',style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                  ],
+                ),
+              )
 
 
             ],
@@ -1345,7 +1362,7 @@ _ratingProfileWidget(context,{required String designation,required String profil
 
 
 ///For Specifi user rating widget
-commonCompanyUserReviewWidget(context,{required String profileImage,required String username,required String designation,required String ratingsStar,required bool isProfileVerified,required String date,required Function() onClick,required String noOfReview,required String pendingReview,required String description,required String buttonName,required bool isEditReview,required Function() onAcceptOrEditReview,required Function() onReject}){
+commonCompanyUserReviewWidget(context,{required String profileImage,required String username,required String designation,required String ratingsStar,required bool isProfileVerified,required String date,required Function() onClick,required String noOfReview,required String pendingReview,required String description,required String buttonName,required bool isEditReview,required Function() onAcceptOrEditReview,required Function() onReject,required bool isApprovedReview,required bool isShowViewMore,required bool isShowViewHistory,required Function() onClickViewHistory}){
   return Card(
     child: Container(
       decoration: BoxDecoration(
@@ -1374,8 +1391,12 @@ commonCompanyUserReviewWidget(context,{required String profileImage,required Str
                       size: 16,
                       padding: 1
                   ),
-                  SizedBox(width: 5,),
-                  Text(appViewHistory,style: AppTextStyles.font12W500Underline.copyWith(color: appGreyBlackColor,),),
+                  isShowViewHistory?SizedBox(width: 5,):SizedBox(width: 0,),
+                  isShowViewHistory?GestureDetector(
+                    onTap: (){
+                      onClickViewHistory();
+                    },
+                      child: Text(appViewHistory,style: AppTextStyles.font12W500Underline.copyWith(color: appGreyBlackColor,),)):Container(),
                 ],
               ),
               SizedBox(height: 4,),
@@ -1384,8 +1405,8 @@ commonCompanyUserReviewWidget(context,{required String profileImage,required Str
                   message: description,
                   textStyle: AppTextStyles.font12.copyWith(color: appGreyBlackColor)
               ),
-              SizedBox(height: 8,),
-              GestureDetector(
+              isShowViewMore?SizedBox(height: 8,):SizedBox(height: 0,),
+              isShowViewMore?GestureDetector(
                 onTap: (){
                   onClick();
                 },
@@ -1397,24 +1418,37 @@ commonCompanyUserReviewWidget(context,{required String profileImage,required Str
                   ),
                   child:  Text(appViewMore,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
                 ),
-              ),
+              ):Container(),
               SizedBox(height: 12,),
               Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: (){
-                      onAcceptOrEditReview();
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: isEditReview?MediaQuery.of(context).size.width*0.25:MediaQuery.of(context).size.width*0.2,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: appPrimaryColor,width: 1.0)
+                  Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: (){
+                          onAcceptOrEditReview();
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: isEditReview?MediaQuery.of(context).size.width*0.25:MediaQuery.of(context).size.width*0.2,
+                          height: 25,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: appPrimaryColor,width: 1.0)
+                          ),
+                          child: Text(buttonName,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
+                        ),
                       ),
-                      child: Text(buttonName,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
-                    ),
+                      isApprovedReview?SizedBox(width: 10,):SizedBox(width: 0,),
+                      isApprovedReview?Row(
+                        children: <Widget>[
+                          SvgPicture.asset(appVerifiedIcon,height: 20,width: 20,),
+                          SizedBox(width: 4,),
+                          Text(appApprovedReviews,style: AppTextStyles.font12.copyWith(color: appGreenColor),),
+                        ],
+                      ):Container()
+                      
+                    ],
                   ),
                   SizedBox(width: 10,),
                   isEditReview?Container():GestureDetector(

@@ -39,6 +39,7 @@ class Datum {
   String? slug;
   String? companyName;
   String? designationName;
+  bool? isVerified;
   dynamic presentAddress;
   String? profileDescription;
   String? date;
@@ -49,6 +50,7 @@ class Datum {
   String? onNotice;
   String? onImmediate;
   dynamic noticeDate;
+  Rating? rating;
 
   Datum({
     this.id,
@@ -75,6 +77,8 @@ class Datum {
     this.onNotice,
     this.onImmediate,
     this.noticeDate,
+    this.isVerified,
+    this.rating
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -90,6 +94,7 @@ class Datum {
     countryName: json["country_name"],
     profile: json["profile"],
     slug: json["slug"],
+    isVerified: json["isVerified"],
     companyName: json["company_name"],
     designationName: json["designation_name"],
     presentAddress: json["present_address"],
@@ -102,6 +107,7 @@ class Datum {
     onNotice: json["on_notice"],
     onImmediate: json["on_immediate"],
     noticeDate: json["notice_date"],
+    rating: json["rating"] == null ? null : Rating.fromJson(json["rating"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -112,6 +118,7 @@ class Datum {
     "fname": fname,
     "email": email,
     "phone": phone,
+    "isVerified":isVerified,
     "city_name": cityName,
     "state_name": stateName,
     "country_name": countryName,
@@ -129,5 +136,26 @@ class Datum {
     "on_notice": onNotice,
     "on_immediate": onImmediate,
     "notice_date": noticeDate,
+    "rating": rating?.toJson(),
+  };
+}
+
+class Rating {
+  int? rating;
+  int? noofrecord;
+
+  Rating({
+    this.rating,
+    this.noofrecord,
+  });
+
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+    rating: json["rating"],
+    noofrecord: json["noofrecord"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "rating": rating,
+    "noofrecord": noofrecord,
   };
 }

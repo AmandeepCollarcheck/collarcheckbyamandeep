@@ -44,6 +44,10 @@ class ReviewControllers extends GetxController{
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
     }else if(screenNameData.value==companyEmployeesScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+    }else if(screenNameData.value==companyDashboardScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar);
     }
 
   }

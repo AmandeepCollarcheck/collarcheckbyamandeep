@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class CommonScrollControllers extends GetxController with GetTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
@@ -15,6 +16,8 @@ class CommonScrollControllers extends GetxController with GetTickerProviderState
 
   double lastOffset = 0.0;
   Timer? debounceTimer;
+
+
 
   @override
   void onInit() {
@@ -69,6 +72,8 @@ class CommonScrollControllers extends GetxController with GetTickerProviderState
   void scrollToSection(int index) {
     isTabClicked = true;
     final ctx = sectionKeys[index].currentContext;
+    print("asshdjfshdfhsdfsdfhf");
+    print(ctx);
     if (ctx != null) {
       Scrollable.ensureVisible(
         ctx,

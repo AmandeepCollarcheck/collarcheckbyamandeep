@@ -56,6 +56,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
   return showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: appWhiteColor,
+      isDismissible: false,
       enableDrag: true,
       context: context,
       builder: (BuildContext context){
@@ -71,7 +72,23 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                     children: <Widget>[
                       GestureDetector(
                         onTap:(){
-                          Navigator.pop(context);
+                          Navigator.pop(context,{'result':false});
+                          selectedDesignationDropDown.clear();
+                          selectedCompanyDropDown.clear();
+                           selectedDepartmentDropDown.clear();
+                           selectedSkillsDropDown.clear();
+                           selectedCTCDropDown.clear();
+                           selectedEmployeeDropDown.clear();
+                           selectedCTCTypeDropDown.clear();
+                           joiningDateControllers.text="";
+                           employedTillControllers.text="";
+                           isStillWorkingHere.value=false;
+                           selectedEmployeeType.value = 0;
+                           selectedSkillsData.clear();
+                           rolesAndResponsibilityControllers.text="";
+                          ctcAmount.text="";
+                          selectedResumeName.value="";
+
                           //Get.back();
                         },
                         child: SvgPicture.asset(appBackIconSvg,height: 12,width: 12,color: appBlackColor,),
@@ -393,7 +410,7 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                       SizedBox(height: 10,),
                       commonTextFieldTitle(headerName: appSalaryAmount,isMendatory: true),
                       SizedBox(height: 5,),
-                      commonTextField(controller: ctcAmount, hintText: appSalaryAmount,onTap: (){}),
+                      commonTextField(controller: ctcAmount, hintText: appSalaryAmount,onTap: (){},keyboardType: TextInputType.phone),
                       ///Ctc type
                       SizedBox(height: 10,),
                       commonTextFieldTitle(headerName: appCtcTpe,isMendatory: true),
@@ -577,8 +594,7 @@ addEmploymentApiCall(context,{required String screenNameData})async{
         Get.back();
       }
       if(screenNameData==companyEmployeesScreen){
-        Navigator.pop(context);
-        Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+        Navigator.pop(context,{'result':true});
       }
       // if(screenNameData.value==dashboard){
       //   Get.offNamed(AppRoutes.bottomNavBar);

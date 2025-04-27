@@ -87,12 +87,18 @@ class MostAppliedJob {
   String? jobTitle;
   String? id;
   String? modifyDate;
+  String? cityName;
+  String? stateName;
+  String? countryName;
 
   MostAppliedJob({
     this.applicants,
     this.jobTitle,
     this.id,
     this.modifyDate,
+    this.countryName,
+    this.stateName,
+    this.cityName
   });
 
   factory MostAppliedJob.fromJson(Map<String, dynamic> json) => MostAppliedJob(
@@ -100,6 +106,9 @@ class MostAppliedJob {
     jobTitle: json["job_title"],
     id: json["id"],
     modifyDate: json["modify_date"],
+    countryName: json["country_name"],
+    stateName: json["state_name"],
+    cityName: json["city_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -107,6 +116,9 @@ class MostAppliedJob {
     "job_title": jobTitle,
     "id": id,
     "modify_date": modifyDate,
+    "city_name":cityName,
+    "state_name":stateName,
+    "country_name":countryName
   };
 }
 
@@ -128,6 +140,7 @@ class AllApplicationList {
   dynamic presentAddress;
   String? profileDescription;
   String? date;
+  bool? isVerified;
   String? resume;
   dynamic resumeName;
   dynamic expectedSalary;
@@ -163,6 +176,7 @@ class AllApplicationList {
     this.onImmediate,
     this.noticeDate,
     this.rating,
+    this.isVerified
   });
 
   factory AllApplicationList.fromJson(Map<String, dynamic> json) => AllApplicationList(
@@ -174,6 +188,7 @@ class AllApplicationList {
     email: json["email"],
     phone: json["phone"],
     cityName: json["city_name"],
+    isVerified: json["isVerified"],
     stateName: json["state_name"],
     countryName: json["country_name"],
     profile: json["profile"],
@@ -206,6 +221,7 @@ class AllApplicationList {
     "country_name": countryName,
     "profile": profile,
     "slug": slug,
+    "isVerified":isVerified,
     "company_name": companyName,
     "designation_name": designationName,
     "present_address": presentAddress,
@@ -496,6 +512,7 @@ class RecommendedEmployee {
   String? name;
   String? slug;
   String? cityName;
+  bool? isVerified;
   String? stateName;
   String? countryName;
   String? workStatus;
@@ -514,6 +531,7 @@ class RecommendedEmployee {
     this.stateName,
     this.countryName,
     this.workStatus,
+    this.isVerified,
     this.designationName,
     this.companyName,
     this.followData,
@@ -526,6 +544,7 @@ class RecommendedEmployee {
     profile: json["profile"],
     name: json["name"],
     slug: json["slug"],
+    isVerified: json['isVerified'],
     cityName: json["city_name"],
     stateName: json["state_name"],
     countryName: json["country_name"],
@@ -546,6 +565,7 @@ class RecommendedEmployee {
     "state_name": stateName,
     "country_name": countryName,
     "work_status": workStatus,
+    "isVerified":isVerified,
     "designation_name": designationName,
     "company_name": companyName,
     "followData": followData?.toJson(),

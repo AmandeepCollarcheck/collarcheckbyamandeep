@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/image_multipart.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
@@ -29,7 +30,15 @@ class AddGalleryControllers extends GetxController{
 
     super.onInit();
   }
-
+  backButtonClick(context){
+    if(screenNameData.value==companyDashboardScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
+    }else if(screenNameData.value==companyProfileScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar);
+    }
+  }
 
   captureImageFromCameraOrGallery(context){
     openCameraOrGallery(context, onCameraCapturedData: (File cameraCapturedImage ) {

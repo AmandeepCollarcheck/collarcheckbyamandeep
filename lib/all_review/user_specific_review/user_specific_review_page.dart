@@ -3,6 +3,7 @@ import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utills/app_colors.dart';
 import '../../utills/app_strings.dart';
@@ -112,14 +113,30 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
                       ratingsStar:allReviewsData[index].rating.toString()??"",
                       isProfileVerified:allReviewsData[index].isVerified??false,
                       date:formatDate(date: allReviewsData[index].lastEdit.toString()??""),
-                      onClick:(){},
+                      onClick:() async {
+                        String link = allReviewsData[index].link.toString()??"";
+                        if(allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty){
+                          final Uri _url = Uri.parse(link.startsWith('http') ? link : 'https://$link');
+                          if (!await launchUrl(_url)) {
+                        throw Exception('Could not launch $_url');
+                        }
+                        }else{
+                          showToast(appNoAnyLinkAvailable);
+                        }
+                      },
                       noOfReview:"",
                       pendingReview:"",
-                      description: 's sjffd gd f g g f d f g f f  f g sdgsdf hsfj jhsfbn hjasn js bas aj hjf af ahhfsd sdd sd dg gsd dg gg gf f gf f gf g g g f f ',
+                      description: allReviewsData[index].review.toString()??"",
                       buttonName: allReviewsData[index].edits==1?appEditReview:appAccept,
                       isEditReview: allReviewsData[index].edits==1?true:false,
                       onAcceptOrEditReview: () {  },
                       onReject: () {  },
+                      isApprovedReview: allReviewsData[index].approved=="1"?true:false,
+                      isShowViewMore: allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty?true:false,
+                      isShowViewHistory: allReviewsData[index].history!.isNotEmpty?true:false,
+                      onClickViewHistory: (){
+                        
+                      }
                     );
                   }),
                 )
@@ -161,12 +178,16 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
                       onClick:(){},
                       noOfReview:"",
                       pendingReview:"",
-                      description: 's sjffd gd f g g f d f g f f  f g sdgsdf hsfj jhsfbn hjasn js bas aj hjf af ahhfsd sdd sd dg gsd dg gg gf f gf f gf g g g f f ',
+                      description: allReviewsData[index].review.toString()??"",
                       buttonName: appAccept
                       ,
                       isEditReview: allReviewsData[index].edits==1?true:false,
                       onAcceptOrEditReview: () {  },
                       onReject: () {  },
+                      isApprovedReview: allReviewsData[index].approved=="1"?true:false,
+                      isShowViewMore: allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty?true:false,
+                        isShowViewHistory: allReviewsData[index].history!.isNotEmpty?true:false,
+                        onClickViewHistory: (){}
                     );
                   }),
                 )
@@ -208,12 +229,16 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
                       onClick:(){},
                       noOfReview:"",
                       pendingReview:"",
-                      description: 's sjffd gd f g g f d f g f f f g sdgsdf hsfj jhsfbn hjasn js bas aj hjf af ahhfsd sdd sd dg gsd dg gg gf f gf f gf g g g f f ',
-                      buttonName: appAccept
+                      description: allReviewsData[index].review.toString()??"",
+                      buttonName: appEditReview
                       ,
                       isEditReview: allReviewsData[index].edits==1?true:false,
                       onAcceptOrEditReview: () {  },
                       onReject: () {  },
+                      isApprovedReview: allReviewsData[index].approved=="1"?true:false,
+                      isShowViewMore: allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty?true:false,
+                        isShowViewHistory: allReviewsData[index].history!.isNotEmpty?true:false,
+                        onClickViewHistory: (){}
                     );
                   }),
                 )

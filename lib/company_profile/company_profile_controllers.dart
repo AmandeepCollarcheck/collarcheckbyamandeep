@@ -92,8 +92,6 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
     try {
       progressDialog.show();
       String slugData =await GetStorage().read(slug);
-
-
       CompanyProfileDetailsModel companyProfileDetailsModel = await ApiProvider.baseWithToken().companyProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
       if(companyProfileDetailsModel.status==true){
         companyProfileData.value=companyProfileDetailsModel;

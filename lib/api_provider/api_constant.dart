@@ -92,6 +92,10 @@ final String strCompanyAllEmployment = '/company/all-employement';
 final String strCompanyAcceptEmployment = '/company/update-employement';
 final String strCompanyRejectEmployment = '/company/rejectEmployement';
 final String strCompanyAllApplications = '/company/allapplication';
+final String strCompanyJobStatus = '/company/cancel-job';
+final String strCompanyEmploymentRequest = '/company/employement-request';
+final String strCompanyEmployee = '/recommend-employee';
+final String strCompanyRecentlyJoinedPeople = '/recent-joined-employee';
 
 
 

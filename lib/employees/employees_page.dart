@@ -39,8 +39,16 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                     // controller.openSearchScreen(context);
 
                   },
-                  onAddEmployment: (){
-                    openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData: companyEmployeesScreen, companyAllEmployment: controller.companyEmploymentData.value);
+                  onEmploymentRequestClick: (){
+                    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyEmployeesScreen});
+                  },
+                  onAddEmployment: ()async{
+                    final result=await openAddEmploymentForm(context, designationListData: controller.designationListData.value, screenNameData: companyEmployeesScreen, companyAllEmployment: controller.companyEmploymentData.value);
+                    if(result['result']==true){
+                      Future.delayed(Duration(milliseconds: 500), ()async {
+                        controller.getEmployeeDataListApiCall();
+                      });
+                    }
                   },
                   onTap: (){
                     controller.openSearchScreen(context);
@@ -137,8 +145,8 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                       location: generateLocation(cityName: currentData[index].presentAddress??'', stateName: "", countryName: ""),
                       dataPosted: dateCombination(joiningDate: currentData[index].connectiondate??'', endDate: '',isPresent: true),
                       onClick: () {
-                        Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyEmployeesScreen});
-                        // Get.offNamed(AppRoutes.review,arguments: {experienceId:currentData[index].experienceId??'',screenName:companyEmployeesScreen});
+                        //Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyEmployeesScreen});
+                         Get.offNamed(AppRoutes.review,arguments: {experienceId:currentData[index].experienceId??'',screenName:companyEmployeesScreen});
                       },
                         isProfileVerified: currentData[index].isVerified??false,
                     );
@@ -183,7 +191,8 @@ class EmployeesPage extends GetView<EmployeeControllers>{
                       dataPosted:  '$appLastWorkingDate${formatDate(date: pastData[index].connectiondate??"")}',
                       isPastData: true,
                       onClick: () {
-                        Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyEmployeesScreen});
+                        Get.offNamed(AppRoutes.review,arguments: {experienceId:pastData[index].experienceId??'',screenName:companyEmployeesScreen});
+                        //Get.offNamed(AppRoutes.companyAllReview,arguments: {screenName:companyEmployeesScreen});
                       }, isProfileVerified: pastData[index].isVerified??false,
                     );
                   }),

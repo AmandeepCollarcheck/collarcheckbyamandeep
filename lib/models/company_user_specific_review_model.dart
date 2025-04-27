@@ -28,7 +28,7 @@ class Data {
   int? activeCount;
   int? employementCount;
   int? allcount;
-  List<dynamic>? pendingData;
+  List<AllEmployee>? pendingData;
   List<AllEmployee>? completeData;
   List<AllEmployee>? allEmployee;
 
@@ -47,7 +47,7 @@ class Data {
     activeCount: json["active_count"],
     employementCount: json["employement_count"],
     allcount: json["allcount"],
-    pendingData: json["pendingData"] == null ? [] : List<dynamic>.from(json["pendingData"]!.map((x) => x)),
+    pendingData: json["pendingData"] == null ? [] : List<AllEmployee>.from(json["pendingData"]!.map((x) => AllEmployee.fromJson(x))),
     completeData: json["completeData"] == null ? [] : List<AllEmployee>.from(json["completeData"]!.map((x) => AllEmployee.fromJson(x))),
     allEmployee: json["allEmployee"] == null ? [] : List<AllEmployee>.from(json["allEmployee"]!.map((x) => AllEmployee.fromJson(x))),
   );
@@ -57,7 +57,7 @@ class Data {
     "active_count": activeCount,
     "employement_count": employementCount,
     "allcount": allcount,
-    "pendingData": pendingData == null ? [] : List<dynamic>.from(pendingData!.map((x) => x)),
+    "pendingData": pendingData == null ? [] : List<dynamic>.from(pendingData!.map((x) => x.toJson())),
     "completeData": completeData == null ? [] : List<dynamic>.from(completeData!.map((x) => x.toJson())),
     "allEmployee": allEmployee == null ? [] : List<dynamic>.from(allEmployee!.map((x) => x.toJson())),
   };

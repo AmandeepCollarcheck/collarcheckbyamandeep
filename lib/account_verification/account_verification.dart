@@ -21,8 +21,8 @@ class AccountVerificationPage extends GetView<AccountVerificationControllers>{
       body: SafeArea(
         child: SingleChildScrollView(
           child: Obx((){
-            var isPhoneVerified=controller.userProfileData.value.data?.phoneVerified??"";
-            var isEmailVerified=controller.userProfileData.value.data?.emailVerified??"";
+            var isPhoneVerified=controller.isPhoneVerified??"";
+            var isEmailVerified=controller.isEmailVerified??"";
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -73,7 +73,7 @@ class AccountVerificationPage extends GetView<AccountVerificationControllers>{
                     ],
                   ),
                 ),
-                isEmailVerified=="0"||isEmailVerified.isEmpty?SizedBox(
+                isEmailVerified=="1"?Container():SizedBox(
                   width: MediaQuery.of(context).size.width*0.6,
                   child: commonButton(
                       context,
@@ -86,7 +86,7 @@ class AccountVerificationPage extends GetView<AccountVerificationControllers>{
 
                       }
                   ),
-                ):Container()
+                )
               ],
             );
           }),

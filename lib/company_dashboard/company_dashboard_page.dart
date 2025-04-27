@@ -39,9 +39,15 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                       actionButtonOne: appNotificationSVGIcon,
                       actionButtonTwo: appSearchIcon,
                       isSearchActive: controller.isSearchActive.value,
+                      isAddEmploymentShow: false,
+                      isEmployeeRequestShow: false,
+                      isNotification: true,
                       onChanged: (value){
                         // controller.openSearchScreen(context);
             
+                      },
+                      onEmploymentRequestClick: (){
+                        Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
                       },
                       onAddEmployment: (){
                         //addNewJobForm(context, companyAllDetails: controller.designationListData.value);
@@ -108,7 +114,12 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                                 ],
                                               ),
                                             ),
-                                            commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
+                                            GestureDetector(
+                                              onTap:(){
+                                                controller.bottomController.bottomNavCurrentIndex.value=4;
+                                              },
+                                              child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
+                                            )
                                           ],
                                         );
                                       }),
@@ -155,7 +166,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                                     itemNumberColor: appBlueColor,
                                                     cardIcon: appCurrentEmploueeIcon,
                                                   onClick: (){
-                                                      Get.offNamed(AppRoutes.applicants,arguments: {screenName:allApplications,isAppApplication:true});
+                                                      Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyDashboardScreen,isAppApplication:true});
                                                   }
                                                 ),
                                                 SizedBox(width: 12,),
@@ -208,7 +219,18 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                           )
                                         ],
                                       ),
-                                      commonImageWidget(image: "", initialName: "initialName", height: 60, width: 60, borderRadius: 14)
+                                      Obx((){
+                                        var profileData=controller.companyUserDetails.value.data;
+                                        var companyName=profileData?.companyName??"";
+                                        var initialName=profileData?.companyName??"";
+                                        var profile=profileData?.profile??"";
+                                        return GestureDetector(
+                                          onTap:(){
+                                            controller.bottomController.bottomNavCurrentIndex.value=4;
+                                          },
+                                          child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
+                                        );
+                                      })
                                     ],
                                   ),
                                 ),
@@ -230,7 +252,18 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      commonImageWidget(image: "", initialName: "initialName", height: 66, width: 66, borderRadius: 14),
+                                      Obx((){
+                                        var profileData=controller.companyUserDetails.value.data;
+                                        var companyName=profileData?.companyName??"";
+                                        var initialName=profileData?.companyName??"";
+                                        var profile=profileData?.profile??"";
+                                        return GestureDetector(
+                                          onTap:(){
+                                            controller.bottomController.bottomNavCurrentIndex.value=4;
+                                          },
+                                          child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 66, width: 66, borderRadius: 14),
+                                        );
+                                      }),
                                       SizedBox(width: 10,),
                                       SizedBox(
                                         width: MediaQuery.of(context).size.width*0.66,
@@ -238,7 +271,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(appSpotlightYourWorkCulture,style: AppTextStyles.font18w700.copyWith(color: appWhiteColor),),
-                                            Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry.",style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),),
+                                            Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry.",style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),),
                                             SizedBox(height: 10,),
                                             Container(
                                               padding: EdgeInsets.all(5),
@@ -393,13 +426,13 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
               padding: EdgeInsets.only(left: 10),
               child: commonHeaderAndSeeAll(headerName: appEmployeeRequests, seeAllClick: (){
                 controller.openEmploymentRequestPage(context);
-              }),
+              },isShowViewAll: employmentListData.length>4?true:false),
             ),
             SizedBox(height: 10,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child:  Row(
-                children: List.generate(employmentListData.length/*jobList.length>4?4:jobList.length*/, (index){
+                children: List.generate(employmentListData.length>4?4:employmentListData.length, (index){
                   //controller.location.value="${jobList[index].cityName??""}, ${jobList[index].stateName??""}, ${jobList[index].companyName??""}";
                   return Padding(
                     padding: EdgeInsets.only(
@@ -416,7 +449,6 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                         print("On click wor,");
                       },
                       jobStatus: appEmployment,
-
                       approved: employmentListData[index].approved??"0",
                       isAcceptClick: () {
                       controller.acceptEmploymentApiCall(context, id:  employmentListData[index].id??"",);
@@ -424,6 +456,8 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                       isRejectClick: () {
                         controller.rejectEmploymentApiCall(context, id:  employmentListData[index].id??"",);
                       },
+                      isProfileVerified: employmentListData[index].isVerified??false,
+                      cardWidth: MediaQuery.of(context).size.width*0.7
                     ),
                   );
                 }),
@@ -450,14 +484,14 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
             Padding(
               padding: EdgeInsets.only(left: 10),
               child: commonHeaderAndSeeAll(headerName: appAllApplications, seeAllClick: (){
-                //controller.openRecommendJobPage(isJobForYou: true,);
-              }),
+                controller.openAllApplicationPage(context);
+              },isShowViewAll: allApplicationData.length>4?true:true),
             ),
-            SizedBox(height: 15,),
+            SizedBox(height: 10,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child:  Wrap(
-                children: List.generate(allApplicationData.length??0, (index){
+                children: List.generate(allApplicationData.length>4?4:allApplicationData.length, (index){
                   var location=generateLocation(cityName: allApplicationData[index].cityName??"", stateName: allApplicationData[index].stateName??"", countryName: allApplicationData[index].countryName??"");
                   return commonCompanyApplicantWidget(context,
                     profileImage: allApplicationData[index].profile??"",
@@ -479,8 +513,8 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                     email: allApplicationData[index].email??"",
                     phone: allApplicationData[index].phone??"",
                     profileDesignation: allApplicationData[index].designationName??"",
-                      isProfileVerified: true,
-                      width: MediaQuery.of(context).size.width*0.86
+                      isProfileVerified: allApplicationData[index].isVerified??false,
+                      cardWidth: MediaQuery.of(context).size.width*0.7
                   );
                 }),
               ),
@@ -506,7 +540,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
               padding: EdgeInsets.only(left: 20,top: 15),
               child: commonHeaderAndSeeAll(headerName: appMostViewedJobs, seeAllClick: (){
                 //controller.openRecommendJobPage(isJobForYou: true,);
-              }),
+              },isShowViewAll: mostViewedData.length>4?true:false,),
             ),
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
@@ -518,8 +552,11 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                           context,
                           designation: mostViewedData[index].jobTitle??"",
                           timeAgo: calculateTimeDifference(createDate:  mostViewedData[index].modifyDate??"",),
-                          locations: 'Delhi, Noida',
+                          locations: generateLocation(cityName: mostViewedData[index].cityName??"", stateName: mostViewedData[index].stateName??"", countryName: mostViewedData[index].countryName??""),
                           noOfVaccency: mostViewedData[index].applicants??"",
+                        viewApplicationClick: () {
+                            controller.openViewApplicationPage(context);
+                        },
                       );
                     },
                     separatorBuilder:(BuildContext context,int index){
@@ -527,7 +564,7 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                         height: 1,color: appPrimaryBackgroundColor,
                       );
                     },
-                    itemCount: mostViewedData.length??0
+                    itemCount: mostViewedData.length>4?4:mostViewedData.length,
                 )
             )
           ],
@@ -608,15 +645,15 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
             Padding(
               padding: EdgeInsets.only(left: 10),
               child: commonHeaderAndSeeAll(headerName: appRecommendedEmployees, seeAllClick: (){
-                //controller.openRecommendJobPage(isJobForYou: true,);
-              }),
+                controller.openRecommendedPage(context);
+              },isShowViewAll: recommendedEmployee.length>4?true:false),
             ),
-            SizedBox(height: 15,),
+            SizedBox(height: 10,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child:  Wrap(
                 spacing: 10,
-                children: List.generate(recommendedEmployee.length??0, (index){
+                children: List.generate(recommendedEmployee.length>4?4:recommendedEmployee.length, (index){
                   return companyRecommendedWidget(context,
                     profileImage: recommendedEmployee[index].profile??"",
                     initialName:recommendedEmployee[index].name??"",
@@ -625,6 +662,10 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                     location: generateLocation(cityName: recommendedEmployee[index].cityName??"", stateName: recommendedEmployee[index].stateName??"", countryName: recommendedEmployee[index].countryName??"",),
                     designation: recommendedEmployee[index].designationName??"",
                     ratingBar: formatRating(recommendedEmployee[index].totalRating.toString()??"0"),
+                    viewProfileClick: () {
+                      Get.offNamed(AppRoutes.profileDetails,arguments: {screenName:companyDashboardScreen,slugId:recommendedEmployee[index].slug??"",});
+                    }, cardWidth: MediaQuery.of(context).size.width*0.7,
+                    isProfileVerified: recommendedEmployee[index].isVerified??false,
                   );
                 }),
               ),
@@ -650,15 +691,15 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
             Padding(
               padding: EdgeInsets.only(left: 10),
               child: commonHeaderAndSeeAll(headerName: appPeopleWhoRecentlyJoined, seeAllClick: (){
-                //controller.openRecommendJobPage(isJobForYou: true,);
-              }),
+                controller.openRecentlyJoinedPage(context);
+              },isShowViewAll: recentlyJoinedData.length>4?true:false),
             ),
             SizedBox(height: 15,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child:  Wrap(
                 spacing: 10,
-                children: List.generate(recentlyJoinedData.length??0, (index){
+                children: List.generate(recentlyJoinedData.length>4?4:recentlyJoinedData.length, (index){
                   return recentlyJoinedWidget(context,
                     profileImage: recentlyJoinedData[index].profile??"",
                     initialName:recentlyJoinedData[index].name??"",
@@ -667,6 +708,9 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
                     location: 'Delhi, noida, lucknow',
                     designation: recentlyJoinedData[index].designationName??"",
                     ratingBar: '10',
+                    addReview: () {
+                      Get.offNamed(AppRoutes.review,arguments: {experienceId:recentlyJoinedData[index].experienceId??'',screenName:companyDashboardScreen});
+                    },
                   );
                 }),
               ),

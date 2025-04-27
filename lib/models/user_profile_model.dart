@@ -26,16 +26,15 @@ class UserProfileModel {
 
 class Data {
   String? id;
+  String? email;
+  String? phone;
   String? individualId;
   String? fname;
   String? lname;
-  String? email;
-  String? dob;
-  String? phone;
-  String? presentAddress;
-  String? permanentAddress;
   String? profile;
-  String? stateName;
+  dynamic stateName;
+  bool? showReview;
+  bool? showSalary;
   List<dynamic>? employementHistory;
   List<EmployementHistoryNew>? employementHistoryNew;
   List<dynamic>? allDocument;
@@ -43,17 +42,17 @@ class Data {
   List<AllPortfolio>? allPortfolio;
   List<AllEducation>? allEducation;
   String? socialImage;
-  String? profileType;
+  dynamic profileType;
   TotalRating? totalRating;
   dynamic secondPhoneVerify;
   dynamic emailAlternateVerify;
-  String? location;
+  dynamic location;
   String? workStatus;
   String? workStatusName;
   String? currentPosition;
   String? currentCompany;
   String? profileDescription;
-  String? linkdin;
+  dynamic linkdin;
   dynamic youtube;
   dynamic instagram;
   dynamic facebook;
@@ -62,6 +61,8 @@ class Data {
   dynamic twitter;
   dynamic zoom;
   dynamic snapchat;
+  dynamic genderName;
+  dynamic gender;
   bool? isVerified;
   String? userType;
   String? phoneVerified;
@@ -71,38 +72,48 @@ class Data {
   String? stillWorking;
   String? stillWorkingCompanyName;
   String? stillWorkingPositionName;
-  String? accomodation;
-  String? accomodationName;
+  dynamic accomodation;
+  dynamic accomodationName;
   bool? sameAddress;
-  String? country;
-  String? city;
-  String? state;
+  dynamic country;
+  dynamic city;
+  dynamic state;
   dynamic industry;
-  String? countryName;
+  dynamic countryName;
   String? resume;
   String? resumeName;
+  dynamic noticePeriod;
+  dynamic noticePeriodName;
+  dynamic noticeDate;
+  String? onImmediate;
+  String? onNotice;
+  dynamic expectedSalary;
+  dynamic expectedInhand;
+  dynamic expectedMode;
+  dynamic noticeType;
   dynamic industryName;
   String? slug;
   List<AllSkill>? allSkill;
   List<AllLanguage>? allLanguages;
   FollowData? followData;
-  List<Top>? topCompany;
-  List<Top>? topUser;
+  List<TopCompany>? topCompany;
+  List<TopUser>? topUser;
   Following? following;
-  List<dynamic>? allowReview;
+  AllowReview? allowReview;
+  bool? haveSalary;
+  bool? haveReview;
+  bool? haveDocument;
+
 
   Data({
     this.id,
     this.individualId,
     this.fname,
     this.lname,
-    this.email,
-    this.dob,
-    this.presentAddress,
-    this.phone,
     this.profile,
-    this.permanentAddress,
     this.stateName,
+    this.showReview,
+    this.showSalary,
     this.employementHistory,
     this.employementHistoryNew,
     this.allDocument,
@@ -129,6 +140,8 @@ class Data {
     this.twitter,
     this.zoom,
     this.snapchat,
+    this.genderName,
+    this.gender,
     this.isVerified,
     this.userType,
     this.phoneVerified,
@@ -148,6 +161,15 @@ class Data {
     this.countryName,
     this.resume,
     this.resumeName,
+    this.noticePeriod,
+    this.noticePeriodName,
+    this.noticeDate,
+    this.onImmediate,
+    this.onNotice,
+    this.expectedSalary,
+    this.expectedInhand,
+    this.expectedMode,
+    this.noticeType,
     this.industryName,
     this.slug,
     this.allSkill,
@@ -157,6 +179,11 @@ class Data {
     this.topUser,
     this.following,
     this.allowReview,
+    this.haveSalary,
+    this.haveReview,
+    this.haveDocument,
+    this.phone,
+    this.email
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -164,13 +191,12 @@ class Data {
     individualId: json["individual_id"],
     fname: json["fname"],
     lname: json["lname"],
-    email: json["email"],
-    phone: json["phone"],
-    presentAddress: json["present_address"],
-    permanentAddress: json["permanent_address"],
-    dob: json["dob"],
+    email: json['email'],
+    phone: json['phone'],
     profile: json["profile"],
     stateName: json["state_name"],
+    showReview: json["showReview"],
+    showSalary: json["showSalary"],
     employementHistory: json["employement_history"] == null ? [] : List<dynamic>.from(json["employement_history"]!.map((x) => x)),
     employementHistoryNew: json["employement_history_new"] == null ? [] : List<EmployementHistoryNew>.from(json["employement_history_new"]!.map((x) => EmployementHistoryNew.fromJson(x))),
     allDocument: json["all_document"] == null ? [] : List<dynamic>.from(json["all_document"]!.map((x) => x)),
@@ -197,6 +223,8 @@ class Data {
     twitter: json["twitter"],
     zoom: json["zoom"],
     snapchat: json["snapchat"],
+    genderName: json["gender_name"],
+    gender: json["gender"],
     isVerified: json["is_verified"],
     userType: json["user_type"],
     phoneVerified: json["phone_verified"],
@@ -216,15 +244,27 @@ class Data {
     countryName: json["country_name"],
     resume: json["resume"],
     resumeName: json["resumeName"],
+    noticePeriod: json["notice_period"],
+    noticePeriodName: json["notice_period_name"],
+    noticeDate: json["notice_date"],
+    onImmediate: json["on_immediate"],
+    onNotice: json["on_notice"],
+    expectedSalary: json["expected_salary"],
+    expectedInhand: json["expected_inhand"],
+    expectedMode: json["expected_mode"],
+    noticeType: json["notice_type"],
     industryName: json["industry_name"],
     slug: json["slug"],
     allSkill: json["all_Skill"] == null ? [] : List<AllSkill>.from(json["all_Skill"]!.map((x) => AllSkill.fromJson(x))),
     allLanguages: json["all_languages"] == null ? [] : List<AllLanguage>.from(json["all_languages"]!.map((x) => AllLanguage.fromJson(x))),
     followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
-    topCompany: json["topCompany"] == null ? [] : List<Top>.from(json["topCompany"]!.map((x) => Top.fromJson(x))),
-    topUser: json["topUser"] == null ? [] : List<Top>.from(json["topUser"]!.map((x) => Top.fromJson(x))),
+    topCompany: json["topCompany"] == null ? [] : List<TopCompany>.from(json["topCompany"]!.map((x) => TopCompany.fromJson(x))),
+    topUser: json["topUser"] == null ? [] : List<TopUser>.from(json["topUser"]!.map((x) => TopUser.fromJson(x))),
     following: json["following"] == null ? null : Following.fromJson(json["following"]),
-    allowReview: json["allowReview"] == null ? [] : List<dynamic>.from(json["allowReview"]!.map((x) => x)),
+    allowReview: json["allowReview"] == null ? null : AllowReview.fromJson(json["allowReview"]),
+    haveSalary: json["haveSalary"],
+    haveReview: json["haveReview"],
+    haveDocument: json["haveDocument"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -232,13 +272,12 @@ class Data {
     "individual_id": individualId,
     "fname": fname,
     "lname": lname,
-    "email": email,
-    "phone": phone,
-    "dob": dob,
+    "email":email,
+    "phone":phone,
     "profile": profile,
-    "present_address": presentAddress,
-    "permanent_address": permanentAddress,
     "state_name": stateName,
+    "showReview": showReview,
+    "showSalary": showSalary,
     "employement_history": employementHistory == null ? [] : List<dynamic>.from(employementHistory!.map((x) => x)),
     "employement_history_new": employementHistoryNew == null ? [] : List<dynamic>.from(employementHistoryNew!.map((x) => x.toJson())),
     "all_document": allDocument == null ? [] : List<dynamic>.from(allDocument!.map((x) => x)),
@@ -265,6 +304,8 @@ class Data {
     "twitter": twitter,
     "zoom": zoom,
     "snapchat": snapchat,
+    "gender_name": genderName,
+    "gender": gender,
     "is_verified": isVerified,
     "user_type": userType,
     "phone_verified": phoneVerified,
@@ -284,6 +325,15 @@ class Data {
     "country_name": countryName,
     "resume": resume,
     "resumeName": resumeName,
+    "notice_period": noticePeriod,
+    "notice_period_name": noticePeriodName,
+    "notice_date": noticeDate,
+    "on_immediate": onImmediate,
+    "on_notice": onNotice,
+    "expected_salary": expectedSalary,
+    "expected_inhand": expectedInhand,
+    "expected_mode": expectedMode,
+    "notice_type": noticeType,
     "industry_name": industryName,
     "slug": slug,
     "all_Skill": allSkill == null ? [] : List<dynamic>.from(allSkill!.map((x) => x.toJson())),
@@ -292,7 +342,10 @@ class Data {
     "topCompany": topCompany == null ? [] : List<dynamic>.from(topCompany!.map((x) => x.toJson())),
     "topUser": topUser == null ? [] : List<dynamic>.from(topUser!.map((x) => x.toJson())),
     "following": following?.toJson(),
-    "allowReview": allowReview == null ? [] : List<dynamic>.from(allowReview!.map((x) => x)),
+    "allowReview": allowReview?.toJson(),
+    "haveSalary": haveSalary,
+    "haveReview": haveReview,
+    "haveDocument": haveDocument,
   };
 }
 
@@ -300,8 +353,8 @@ class AllCertificate {
   String? id;
   String? university;
   String? course;
-  String? startDate;
-  String? endDate;
+  dynamic startDate;
+  dynamic endDate;
   bool? ongoing;
   List<String>? document;
 
@@ -387,8 +440,8 @@ class AllEducation {
     "course": course,
     "state": state,
     "city": city,
-    "starting_date": startingDate?.toIso8601String(),
-    "ending_date": endingDate?.toIso8601String(),
+    "starting_date": "${startingDate!.year.toString().padLeft(4, '0')}-${startingDate!.month.toString().padLeft(2, '0')}-${startingDate!.day.toString().padLeft(2, '0')}",
+    "ending_date": "${endingDate!.year.toString().padLeft(4, '0')}-${endingDate!.month.toString().padLeft(2, '0')}-${endingDate!.day.toString().padLeft(2, '0')}",
     "country": country,
     "ishighest": ishighest,
     "ongoing": ongoing,
@@ -480,20 +533,54 @@ class AllSkill {
   };
 }
 
+class AllowReview {
+  bool? requestSend;
+  bool? requestApproved;
+  bool? requestExpire;
+  bool? review;
+  String? experineceId;
+
+  AllowReview({
+    this.requestSend,
+    this.requestApproved,
+    this.requestExpire,
+    this.review,
+    this.experineceId,
+  });
+
+  factory AllowReview.fromJson(Map<String, dynamic> json) => AllowReview(
+    requestSend: json["requestSend"],
+    requestApproved: json["requestApproved"],
+    requestExpire: json["requestExpire"],
+    review: json["review"],
+    experineceId: json["experinece_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "requestSend": requestSend,
+    "requestApproved": requestApproved,
+    "requestExpire": requestExpire,
+    "review": review,
+    "experinece_id": experineceId,
+  };
+}
+
 class EmployementHistoryNew {
   String? id;
   dynamic companyLogo;
   String? company;
   String? companyId;
-  String? joiningDate;
+  DateTime? joiningDate;
   String? workedTillDate;
-  num? claimStatus;
+  int? claimStatus;
   bool? addedBy;
   String? approved;
   String? companySlug;
-  num? totalExperienceMonths;
+  String? userSlug;
+  int? showSalaryStatus;
+  int? totalExperienceMonths;
   List<ListElement>? lists;
-  num? stillWorking;
+  int? stillWorking;
 
   EmployementHistoryNew({
     this.id,
@@ -506,6 +593,8 @@ class EmployementHistoryNew {
     this.addedBy,
     this.approved,
     this.companySlug,
+    this.userSlug,
+    this.showSalaryStatus,
     this.totalExperienceMonths,
     this.lists,
     this.stillWorking,
@@ -516,12 +605,14 @@ class EmployementHistoryNew {
     companyLogo: json["company_logo"],
     company: json["company"],
     companyId: json["company_id"],
-    joiningDate: json["joining_date"] ,
+    joiningDate: json["joining_date"] == null ? null : DateTime.parse(json["joining_date"]),
     workedTillDate: json["worked_till_date"],
     claimStatus: json["claim_status"],
     addedBy: json["added_by"],
     approved: json["approved"],
     companySlug: json["company_slug"],
+    userSlug: json["user_slug"],
+    showSalaryStatus: json["showSalaryStatus"],
     totalExperienceMonths: json["totalExperienceMonths"],
     lists: json["lists"] == null ? [] : List<ListElement>.from(json["lists"]!.map((x) => ListElement.fromJson(x))),
     stillWorking: json["still_working"],
@@ -532,12 +623,14 @@ class EmployementHistoryNew {
     "company_logo": companyLogo,
     "company": company,
     "company_id": companyId,
-    "joining_date": joiningDate,
+    "joining_date": "${joiningDate!.year.toString().padLeft(4, '0')}-${joiningDate!.month.toString().padLeft(2, '0')}-${joiningDate!.day.toString().padLeft(2, '0')}",
     "worked_till_date": workedTillDate,
     "claim_status": claimStatus,
     "added_by": addedBy,
     "approved": approved,
     "company_slug": companySlug,
+    "user_slug": userSlug,
+    "showSalaryStatus": showSalaryStatus,
     "totalExperienceMonths": totalExperienceMonths,
     "lists": lists == null ? [] : List<dynamic>.from(lists!.map((x) => x.toJson())),
     "still_working": stillWorking,
@@ -546,31 +639,34 @@ class EmployementHistoryNew {
 
 class ListElement {
   String? id;
-  String? salary;
+  bool? haveSalary;
+  bool? haveDocument;
+  bool? haveReview;
   String? employmentType;
   String? designation;
-  String? joiningDate;
-  dynamic workedTillDate;
+  DateTime? joiningDate;
+  DateTime? workedTillDate;
   String? stillWorking;
   String? approved;
   String? description;
   String? salaryInhand;
   String? salaryMode;
   String? department;
-  num? claimStatus;
+  int? claimStatus;
   String? companySlug;
   List<Skill>? skill;
-  List<String>? document;
   bool? addedBy;
   String? employmentStatus;
-  List<BasicUpdateList>? basicUpdateList;
-  List<Rating>? rating;
+  List<dynamic>? basicUpdateList;
+  List<dynamic>? rating;
   TotalRating? totalRating;
   String? status;
 
   ListElement({
     this.id,
-    this.salary,
+    this.haveSalary,
+    this.haveDocument,
+    this.haveReview,
     this.employmentType,
     this.designation,
     this.joiningDate,
@@ -584,7 +680,6 @@ class ListElement {
     this.claimStatus,
     this.companySlug,
     this.skill,
-    this.document,
     this.addedBy,
     this.employmentStatus,
     this.basicUpdateList,
@@ -595,11 +690,13 @@ class ListElement {
 
   factory ListElement.fromJson(Map<String, dynamic> json) => ListElement(
     id: json["id"],
-    salary: json["salary"],
+    haveSalary: json["haveSalary"],
+    haveDocument: json["haveDocument"],
+    haveReview: json["haveReview"],
     employmentType: json["employment_type"],
     designation: json["designation"],
-    joiningDate: json["joining_date"],
-    workedTillDate: json["worked_till_date"] ,
+    joiningDate: json["joining_date"] == null ? null : DateTime.parse(json["joining_date"]),
+    workedTillDate: json["worked_till_date"] == null ? null : DateTime.parse(json["worked_till_date"]),
     stillWorking: json["still_working"],
     approved: json["approved"],
     description: json["description"],
@@ -609,22 +706,23 @@ class ListElement {
     claimStatus: json["claim_status"],
     companySlug: json["company_slug"],
     skill: json["skill"] == null ? [] : List<Skill>.from(json["skill"]!.map((x) => Skill.fromJson(x))),
-    document: json["document"] == null ? [] : List<String>.from(json["document"]!.map((x) => x)),
     addedBy: json["added_by"],
     employmentStatus: json["employment_status"],
-    basicUpdateList: json["basic_update_list"] == null ? [] : List<BasicUpdateList>.from(json["basic_update_list"]!.map((x) => BasicUpdateList.fromJson(x))),
-    rating: json["rating"] == null ? [] : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
+    basicUpdateList: json["basic_update_list"] == null ? [] : List<dynamic>.from(json["basic_update_list"]!.map((x) => x)),
+    rating: json["rating"] == null ? [] : List<dynamic>.from(json["rating"]!.map((x) => x)),
     totalRating: json["totalRating"] == null ? null : TotalRating.fromJson(json["totalRating"]),
     status: json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "salary": salary,
+    "haveSalary": haveSalary,
+    "haveDocument": haveDocument,
+    "haveReview": haveReview,
     "employment_type": employmentType,
     "designation": designation,
-    "joining_date": joiningDate,
-    "worked_till_date": workedTillDate,
+    "joining_date": "${joiningDate!.year.toString().padLeft(4, '0')}-${joiningDate!.month.toString().padLeft(2, '0')}-${joiningDate!.day.toString().padLeft(2, '0')}",
+    "worked_till_date": "${workedTillDate!.year.toString().padLeft(4, '0')}-${workedTillDate!.month.toString().padLeft(2, '0')}-${workedTillDate!.day.toString().padLeft(2, '0')}",
     "still_working": stillWorking,
     "approved": approved,
     "description": description,
@@ -634,173 +732,12 @@ class ListElement {
     "claim_status": claimStatus,
     "company_slug": companySlug,
     "skill": skill == null ? [] : List<dynamic>.from(skill!.map((x) => x.toJson())),
-    "document": document == null ? [] : List<dynamic>.from(document!.map((x) => x)),
     "added_by": addedBy,
     "employment_status": employmentStatus,
-    "basic_update_list": basicUpdateList == null ? [] : List<dynamic>.from(basicUpdateList!.map((x) => x.toJson())),
-    "rating": rating == null ? [] : List<dynamic>.from(rating!.map((x) => x.toJson())),
+    "basic_update_list": basicUpdateList == null ? [] : List<dynamic>.from(basicUpdateList!.map((x) => x)),
+    "rating": rating == null ? [] : List<dynamic>.from(rating!.map((x) => x)),
     "totalRating": totalRating?.toJson(),
     "status": status,
-  };
-}
-
-class BasicUpdateList {
-  String? id;
-  String? experienceId;
-  String? user;
-  String? salary;
-  String? salaryInhand;
-  String? salaryMode;
-  String? designation;
-  dynamic workedTillDate;
-  String? status;
-  String? type;
-  DateTime? createDate;
-  DateTime? modifyDate;
-
-  BasicUpdateList({
-    this.id,
-    this.experienceId,
-    this.user,
-    this.salary,
-    this.salaryInhand,
-    this.salaryMode,
-    this.designation,
-    this.workedTillDate,
-    this.status,
-    this.type,
-    this.createDate,
-    this.modifyDate,
-  });
-
-  factory BasicUpdateList.fromJson(Map<String, dynamic> json) => BasicUpdateList(
-    id: json["id"],
-    experienceId: json["experience_id"],
-    user: json["user"],
-    salary: json["salary"],
-    salaryInhand: json["salary_inhand"],
-    salaryMode: json["salary_mode"],
-    designation: json["designation"],
-    workedTillDate: json["worked_till_date"],
-    status: json["status"],
-    type: json["type"],
-    createDate: json["create_date"] == null ? null : DateTime.parse(json["create_date"]),
-    modifyDate: json["modify_date"] == null ? null : DateTime.parse(json["modify_date"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "experience_id": experienceId,
-    "user": user,
-    "salary": salary,
-    "salary_inhand": salaryInhand,
-    "salary_mode": salaryMode,
-    "designation": designation,
-    "worked_till_date": workedTillDate,
-    "status": status,
-    "type": type,
-    "create_date": createDate?.toIso8601String(),
-    "modify_date": modifyDate?.toIso8601String(),
-  };
-}
-
-class Rating {
-  String? id;
-  String? rating;
-  String? review;
-  String? approved;
-  String? status;
-  List<String>? doc;
-  DateTime? date;
-  String? link;
-  List<History>? history;
-
-  Rating({
-    this.id,
-    this.rating,
-    this.review,
-    this.approved,
-    this.status,
-    this.doc,
-    this.date,
-    this.link,
-    this.history,
-  });
-
-  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
-    id: json["id"],
-    rating: json["rating"],
-    review: json["review"],
-    approved: json["approved"],
-    status: json["status"],
-    doc: json["doc"] == null ? [] : List<String>.from(json["doc"]!.map((x) => x)),
-    date: json["date"] == null ? null : DateTime.parse(json["date"]),
-    link: json["link"],
-    history: json["history"] == null ? [] : List<History>.from(json["history"]!.map((x) => History.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "rating": rating,
-    "review": review,
-    "approved": approved,
-    "status": status,
-    "doc": doc == null ? [] : List<dynamic>.from(doc!.map((x) => x)),
-    "date": date?.toIso8601String(),
-    "link": link,
-    "history": history == null ? [] : List<dynamic>.from(history!.map((x) => x.toJson())),
-  };
-}
-
-class History {
-  String? id;
-  String? ratingId;
-  String? rating;
-  String? review;
-  String? doc;
-  String? link;
-  String? isDeleted;
-  String? status;
-  DateTime? createDate;
-  dynamic modifyDate;
-
-  History({
-    this.id,
-    this.ratingId,
-    this.rating,
-    this.review,
-    this.doc,
-    this.link,
-    this.isDeleted,
-    this.status,
-    this.createDate,
-    this.modifyDate,
-  });
-
-  factory History.fromJson(Map<String, dynamic> json) => History(
-    id: json["id"],
-    ratingId: json["rating_id"],
-    rating: json["rating"],
-    review: json["review"],
-    doc: json["doc"],
-    link: json["link"],
-    isDeleted: json["is_deleted"],
-    status: json["status"],
-    createDate: json["create_date"] == null ? null : DateTime.parse(json["create_date"]),
-    modifyDate: json["modify_date"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "rating_id": ratingId,
-    "rating": rating,
-    "review": review,
-    "doc": doc,
-    "link": link,
-    "is_deleted": isDeleted,
-    "status": status,
-    "create_date": createDate?.toIso8601String(),
-    "modify_date": modifyDate,
   };
 }
 
@@ -825,8 +762,8 @@ class Skill {
 }
 
 class TotalRating {
-  num? rating;
-  num? noofrecord;
+  int? rating;
+  int? noofrecord;
 
   TotalRating({
     this.rating,
@@ -845,8 +782,8 @@ class TotalRating {
 }
 
 class FollowData {
-  num? following;
-  num? follower;
+  int? following;
+  int? follower;
 
   FollowData({
     this.following,
@@ -884,74 +821,126 @@ class Following {
   };
 }
 
-class Top {
+class TopCompany {
   String? id;
   String? profile;
   String? name;
+  String? designationName;
+  String? individualId;
+  String? slug;
   String? cityName;
   String? stateName;
   String? countryName;
-  String? experienceCount;
-  String? city;
-  String? individualId;
-  String? slug;
   FollowData? followData;
-  Following? followingData;
-  String? workStatus;
-  String? designationName;
-  String? companyName;
+  Following? following;
 
-  Top({
+  TopCompany({
     this.id,
     this.profile,
     this.name,
+    this.individualId,
+    this.slug,
     this.cityName,
     this.stateName,
     this.countryName,
-    this.experienceCount,
-    this.city,
-    this.slug,
     this.followData,
-    this.individualId,
-    this.workStatus,
-    this.designationName,
-    this.companyName,
-    this.followingData
+    this.following,
+    this.designationName
   });
 
-  factory Top.fromJson(Map<String, dynamic> json) => Top(
+  factory TopCompany.fromJson(Map<String, dynamic> json) => TopCompany(
     id: json["id"],
     profile: json["profile"],
     name: json["name"],
+    individualId: json["individual_id"],
+    designationName: json["designationName"],
+    slug: json["slug"],
     cityName: json["city_name"],
     stateName: json["state_name"],
     countryName: json["country_name"],
-    experienceCount: json["experienceCount"],
-    city: json["city"],
-    slug: json["slug"],
     followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
-    followingData: json["following"] == null ? null : Following.fromJson(json["following"]),
-    individualId: json["individual_id"],
-    workStatus: json["work_status"],
-    designationName: json["designation_name"],
-    companyName: json["company_name"],
+    following: json["following"] == null ? null : Following.fromJson(json["following"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "profile": profile,
     "name": name,
+    "individual_id": individualId,
+    "slug": slug,
+    "designationName": designationName,
     "city_name": cityName,
     "state_name": stateName,
     "country_name": countryName,
-    "experienceCount": experienceCount,
-    "city": city,
-    "slug": slug,
-    "individual_id":individualId,
     "followData": followData?.toJson(),
-    "following": followingData?.toJson(),
+    "following": following?.toJson(),
+  };
+}
+
+class TopUser {
+  String? id;
+  String? individualId;
+  String? totalRating;
+  String? profile;
+  String? name;
+  String? slug;
+  String? cityName;
+  String? stateName;
+  String? countryName;
+  String? workStatus;
+  String? designationName;
+  String? companyName;
+  FollowData? followData;
+  Following? following;
+
+  TopUser({
+    this.id,
+    this.individualId,
+    this.totalRating,
+    this.profile,
+    this.name,
+    this.slug,
+    this.cityName,
+    this.stateName,
+    this.countryName,
+    this.workStatus,
+    this.designationName,
+    this.companyName,
+    this.followData,
+    this.following,
+  });
+
+  factory TopUser.fromJson(Map<String, dynamic> json) => TopUser(
+    id: json["id"],
+    individualId: json["individual_id"],
+    totalRating: json["totalRating"],
+    profile: json["profile"],
+    name: json["name"],
+    slug: json["slug"],
+    cityName: json["city_name"],
+    stateName: json["state_name"],
+    countryName: json["country_name"],
+    workStatus: json["work_status"],
+    designationName: json["designation_name"],
+    companyName: json["company_name"],
+    followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
+    following: json["following"] == null ? null : Following.fromJson(json["following"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "individual_id": individualId,
+    "totalRating": totalRating,
+    "profile": profile,
+    "name": name,
+    "slug": slug,
+    "city_name": cityName,
+    "state_name": stateName,
+    "country_name": countryName,
     "work_status": workStatus,
     "designation_name": designationName,
     "company_name": companyName,
+    "followData": followData?.toJson(),
+    "following": following?.toJson(),
   };
 }

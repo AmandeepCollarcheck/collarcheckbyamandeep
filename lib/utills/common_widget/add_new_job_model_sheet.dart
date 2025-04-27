@@ -49,6 +49,7 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
   return showModalBottomSheet(
     backgroundColor: appScreenBackgroundColor,
       isScrollControlled: true,
+      isDismissible: false,
       enableDrag: true,
       context: context,
       builder: (BuildContext context){
@@ -64,7 +65,7 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
                     children: <Widget>[
                       GestureDetector(
                         onTap:(){
-                          Navigator.pop(context);
+                          Navigator.pop(context,{'result':false});
                         },
                         child: SvgPicture.asset(appBackIconSvg,height: 12,width: 12,color: appBlackColor,),
                       ),
@@ -640,10 +641,7 @@ void _addNewJob(context,{required String screenNameData,required int isDraft})as
         Get.back();
       }
       if(screenNameData==companyJobsScreen){
-        final BottomNavBarController controller = Get.put(BottomNavBarController());
-        controller.bottomNavCurrentIndex.value=2;
-       // Navigator.pop(context);
-        //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+        Navigator.pop(context,{'result':true});
       }
 
     }else{

@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 
 import '../api_provider/api_provider.dart';
 import '../models/company_all_employment_model.dart';
+import '../models/company_employment_request_model.dart';
 import '../models/employee_list_model.dart';
 import '../models/employment_list_model.dart';
+import '../models/save_user_profile_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
 import '../utills/app_strings.dart';
@@ -18,14 +20,17 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
   var searchController = TextEditingController();
   var designationListData=DesignationListModel().obs;
   var companyEmploymentData=CompanyAllEmploymentModel().obs;
+  var companyEmploymentRequestData=CompanyEmploymentRequestModel().obs;
   var employeeData=EmployeeListModel().obs;
   Rx isSearchActive=false.obs;
   var isEditData=false.obs;
   var isEditIdData="".obs;
   Rx screenNameData="".obs;
   var selectedTabIndex=0.obs;
-  var currentCount="".obs;
-  var pastCount="".obs;
+  var pendingRequest="".obs;
+  var approvedRequest="".obs;
+  var updateRequest="".obs;
+  var rejectRequest="".obs;
   var listTabLabel = [
     appPending,appApproved,appUpdates,appRejected
   ].obs;
@@ -46,13 +51,7 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
     }
 
     if(isEditData.value){
-      Future.delayed(Duration(milliseconds: 500), ()async {
-        getDesignationApiCall();
-      });
 
-      // Future.delayed(Duration(milliseconds: 500), ()async {
-      //   _editEmploymentHistoryModel();
-      // });
 
     }else{
       Future.delayed(Duration(milliseconds: 500), ()async {
@@ -61,19 +60,25 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
       Future.delayed(Duration(milliseconds: 500), ()async {
         getAllEmploymentApiCall();
       });
+
       Future.delayed(Duration(milliseconds: 500), ()async {
-        getEmployeeDataListApiCall();
+        getEmploymentRequestApiCall();
       });
+
     }
 
-
-    // Future.delayed(Duration(milliseconds: 500), ()async {
-    //   getEmploymentHistoryApiCall();
-    // });
     super.onInit();
   }
 
-
+  backButtonClick(){
+    if(screenNameData.value==companyDashboardScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
+    }else if(screenNameData.value==companyEmployeesScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
+    }else if(screenNameData.value==companyJobsScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"2"});
+    }
+  }
   openSearchScreen(context){
     Get.offNamed(AppRoutes.search,arguments: {screenName:companyEmployeesScreen});
   }
@@ -105,13 +110,7 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
       EmployeeListModel connectionDataListModel = await ApiProvider.baseWithToken().employeeListData();
       if(connectionDataListModel.status==true){
         employeeData.value=connectionDataListModel;
-        currentCount.value=employeeData.value.data!.currentCount.toString();
-        pastCount.value=employeeData.value.data!.pastCount.toString();
-        listTabCounter.clear();
-        listTabCounter.add(currentCount.value);
-        listTabCounter.add(pastCount.value);
-        listTabCounter.add(pastCount.value);
-        listTabCounter.add(pastCount.value);
+
       }else{
         showToast(somethingWentWrong);
       }
@@ -143,4 +142,76 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
       showToast(exception.toString());
     }
   }
+
+  void getEmploymentRequestApiCall()async {
+    try {
+      progressDialog.show();
+      CompanyEmploymentRequestModel companyEmploymentRequestModel = await ApiProvider.baseWithToken().companyEmploymentRequest();
+      if(companyEmploymentRequestModel.status==true){
+        companyEmploymentRequestData.value=companyEmploymentRequestModel;
+        pendingRequest.value=companyEmploymentRequestData.value.data!.pendingCount.toString();
+        approvedRequest.value=companyEmploymentRequestData.value.data!.approvedCount.toString();
+        updateRequest.value=companyEmploymentRequestData.value.data!.updateList.toString();
+        rejectRequest.value=companyEmploymentRequestData.value.data!.rejectCount.toString();
+        listTabCounter.clear();
+        listTabCounter.add(pendingRequest.value);
+        listTabCounter.add(approvedRequest.value);
+        listTabCounter.add(updateRequest.value);
+        listTabCounter.add(rejectRequest.value);
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+  acceptEmploymentApiCall(context,{required String id})async{
+    try {
+      progressDialog.show();
+      SaveUserProfileModel acceptEmployment = await ApiProvider.baseWithToken().acceptCompanyEmployment(id: id);
+      if(acceptEmployment.status==true){
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          getEmploymentRequestApiCall();
+        });
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  rejectEmploymentApiCall(context,{required String id})async{
+    try {
+      progressDialog.show();
+      SaveUserProfileModel acceptEmployment = await ApiProvider.baseWithToken().rejectCompanyEmployment(id: id);
+      if(acceptEmployment.status==true){
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          getEmploymentRequestApiCall();
+        });
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+   leftCompanyApiCall(context,{required String id}){
+
+   }
 }
