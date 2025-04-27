@@ -177,14 +177,21 @@ class TopCompaniesPage extends GetView<TopCompaniesController>{
                                  runSpacing: 5,
                                  children: List.generate(allTopUsers.length??0, (index){
                                    return commonTopCompaniesWidget(context,
+                                       onProfileClick: (){
+                                         print("sdkjlfsfhshkdfhshfkshdf");
+                                         Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {slugId:allTopUsers[index]['slug']??"",screenName:topCompaniesScreen});
+                                       },
                                        image: allTopUsers[index]['profile']??"",
                                        location: generateLocation(cityName: allTopUsers[index]['city_name']??"", stateName: allTopUsers[index]['state_name']??"", countryName: allTopUsers[index]['country_name']??""),
                                        name: capitalizeFirstLetter(allTopUsers[index]['fname']??""),
                                        id: allTopUsers[index]['individual_id']??"",
                                        isProfileVerified: false,
-                                       cardWidth: MediaQuery.of(context).size.width*0.92,
+                                       isTopCompany: true,
+
+                                       cardWidth: MediaQuery.of(context).size.width,
                                        jobTitle: capitalizeFirstLetter(allTopUsers[index]['designation_name']??"",),
                                        onClick: ()async{
+                                         print("sdkjlfsfhshkdfhshfkshdf........");
                                          //String userIdData=await readStorageData(key: id) ??"";
                                          // controller.companyFollowApiCall(context, companyId: allTopUsers[index]['id']??"", userId: userIdData??"",);
                                        },

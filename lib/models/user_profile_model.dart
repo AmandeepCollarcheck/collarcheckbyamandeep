@@ -1,4 +1,12 @@
+// To parse this JSON data, do
+//
+//     final userProfileModel = userProfileModelFromJson(jsonString);
 
+import 'dart:convert';
+
+UserProfileModel userProfileModelFromJson(String str) => UserProfileModel.fromJson(json.decode(str));
+
+String userProfileModelToJson(UserProfileModel data) => json.encode(data.toJson());
 
 class UserProfileModel {
   bool? status;
@@ -26,8 +34,6 @@ class UserProfileModel {
 
 class Data {
   String? id;
-  String? email;
-  String? phone;
   String? individualId;
   String? fname;
   String? lname;
@@ -35,6 +41,15 @@ class Data {
   dynamic stateName;
   bool? showReview;
   bool? showSalary;
+  Setting? setting;
+  String? email;
+  dynamic emailAlternate;
+  String? phone;
+  dynamic secondPhone;
+  dynamic presentAddress;
+  dynamic permanentAddress;
+  dynamic cityName;
+  DateTime? dob;
   List<dynamic>? employementHistory;
   List<EmployementHistoryNew>? employementHistoryNew;
   List<dynamic>? allDocument;
@@ -69,7 +84,7 @@ class Data {
   String? emailVerified;
   String? stillWorkingPosition;
   String? stillWorkingCompany;
-  String? stillWorking;
+  int? stillWorking;
   String? stillWorkingCompanyName;
   String? stillWorkingPositionName;
   dynamic accomodation;
@@ -98,12 +113,9 @@ class Data {
   FollowData? followData;
   List<TopCompany>? topCompany;
   List<TopUser>? topUser;
-  Following? following;
-  AllowReview? allowReview;
   bool? haveSalary;
   bool? haveReview;
   bool? haveDocument;
-
 
   Data({
     this.id,
@@ -114,6 +126,15 @@ class Data {
     this.stateName,
     this.showReview,
     this.showSalary,
+    this.setting,
+    this.email,
+    this.emailAlternate,
+    this.phone,
+    this.secondPhone,
+    this.presentAddress,
+    this.permanentAddress,
+    this.cityName,
+    this.dob,
     this.employementHistory,
     this.employementHistoryNew,
     this.allDocument,
@@ -177,13 +198,9 @@ class Data {
     this.followData,
     this.topCompany,
     this.topUser,
-    this.following,
-    this.allowReview,
     this.haveSalary,
     this.haveReview,
     this.haveDocument,
-    this.phone,
-    this.email
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -191,12 +208,19 @@ class Data {
     individualId: json["individual_id"],
     fname: json["fname"],
     lname: json["lname"],
-    email: json['email'],
-    phone: json['phone'],
     profile: json["profile"],
     stateName: json["state_name"],
     showReview: json["showReview"],
     showSalary: json["showSalary"],
+    setting: json["setting"] == null ? null : Setting.fromJson(json["setting"]),
+    email: json["email"],
+    emailAlternate: json["email_alternate"],
+    phone: json["phone"],
+    secondPhone: json["second_phone"],
+    presentAddress: json["present_address"],
+    permanentAddress: json["permanent_address"],
+    cityName: json["city_name"],
+    dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
     employementHistory: json["employement_history"] == null ? [] : List<dynamic>.from(json["employement_history"]!.map((x) => x)),
     employementHistoryNew: json["employement_history_new"] == null ? [] : List<EmployementHistoryNew>.from(json["employement_history_new"]!.map((x) => EmployementHistoryNew.fromJson(x))),
     allDocument: json["all_document"] == null ? [] : List<dynamic>.from(json["all_document"]!.map((x) => x)),
@@ -260,8 +284,6 @@ class Data {
     followData: json["followData"] == null ? null : FollowData.fromJson(json["followData"]),
     topCompany: json["topCompany"] == null ? [] : List<TopCompany>.from(json["topCompany"]!.map((x) => TopCompany.fromJson(x))),
     topUser: json["topUser"] == null ? [] : List<TopUser>.from(json["topUser"]!.map((x) => TopUser.fromJson(x))),
-    following: json["following"] == null ? null : Following.fromJson(json["following"]),
-    allowReview: json["allowReview"] == null ? null : AllowReview.fromJson(json["allowReview"]),
     haveSalary: json["haveSalary"],
     haveReview: json["haveReview"],
     haveDocument: json["haveDocument"],
@@ -272,12 +294,19 @@ class Data {
     "individual_id": individualId,
     "fname": fname,
     "lname": lname,
-    "email":email,
-    "phone":phone,
     "profile": profile,
     "state_name": stateName,
     "showReview": showReview,
     "showSalary": showSalary,
+    "setting": setting?.toJson(),
+    "email": email,
+    "email_alternate": emailAlternate,
+    "phone": phone,
+    "second_phone": secondPhone,
+    "present_address": presentAddress,
+    "permanent_address": permanentAddress,
+    "city_name": cityName,
+    "dob": "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
     "employement_history": employementHistory == null ? [] : List<dynamic>.from(employementHistory!.map((x) => x)),
     "employement_history_new": employementHistoryNew == null ? [] : List<dynamic>.from(employementHistoryNew!.map((x) => x.toJson())),
     "all_document": allDocument == null ? [] : List<dynamic>.from(allDocument!.map((x) => x)),
@@ -341,8 +370,6 @@ class Data {
     "followData": followData?.toJson(),
     "topCompany": topCompany == null ? [] : List<dynamic>.from(topCompany!.map((x) => x.toJson())),
     "topUser": topUser == null ? [] : List<dynamic>.from(topUser!.map((x) => x.toJson())),
-    "following": following?.toJson(),
-    "allowReview": allowReview?.toJson(),
     "haveSalary": haveSalary,
     "haveReview": haveReview,
     "haveDocument": haveDocument,
@@ -533,38 +560,6 @@ class AllSkill {
   };
 }
 
-class AllowReview {
-  bool? requestSend;
-  bool? requestApproved;
-  bool? requestExpire;
-  bool? review;
-  String? experineceId;
-
-  AllowReview({
-    this.requestSend,
-    this.requestApproved,
-    this.requestExpire,
-    this.review,
-    this.experineceId,
-  });
-
-  factory AllowReview.fromJson(Map<String, dynamic> json) => AllowReview(
-    requestSend: json["requestSend"],
-    requestApproved: json["requestApproved"],
-    requestExpire: json["requestExpire"],
-    review: json["review"],
-    experineceId: json["experinece_id"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "requestSend": requestSend,
-    "requestApproved": requestApproved,
-    "requestExpire": requestExpire,
-    "review": review,
-    "experinece_id": experineceId,
-  };
-}
-
 class EmployementHistoryNew {
   String? id;
   dynamic companyLogo;
@@ -645,20 +640,22 @@ class ListElement {
   String? employmentType;
   String? designation;
   DateTime? joiningDate;
-  DateTime? workedTillDate;
+  dynamic workedTillDate;
   String? stillWorking;
   String? approved;
   String? description;
+  String? salary;
   String? salaryInhand;
   String? salaryMode;
   String? department;
   int? claimStatus;
   String? companySlug;
   List<Skill>? skill;
+  List<String>? document;
   bool? addedBy;
   String? employmentStatus;
   List<dynamic>? basicUpdateList;
-  List<dynamic>? rating;
+  List<Rating>? rating;
   TotalRating? totalRating;
   String? status;
 
@@ -674,12 +671,14 @@ class ListElement {
     this.stillWorking,
     this.approved,
     this.description,
+    this.salary,
     this.salaryInhand,
     this.salaryMode,
     this.department,
     this.claimStatus,
     this.companySlug,
     this.skill,
+    this.document,
     this.addedBy,
     this.employmentStatus,
     this.basicUpdateList,
@@ -696,20 +695,22 @@ class ListElement {
     employmentType: json["employment_type"],
     designation: json["designation"],
     joiningDate: json["joining_date"] == null ? null : DateTime.parse(json["joining_date"]),
-    workedTillDate: json["worked_till_date"] == null ? null : DateTime.parse(json["worked_till_date"]),
+    workedTillDate: json["worked_till_date"],
     stillWorking: json["still_working"],
     approved: json["approved"],
     description: json["description"],
+    salary: json["salary"],
     salaryInhand: json["salary_inhand"],
     salaryMode: json["salary_mode"],
     department: json["department"],
     claimStatus: json["claim_status"],
     companySlug: json["company_slug"],
     skill: json["skill"] == null ? [] : List<Skill>.from(json["skill"]!.map((x) => Skill.fromJson(x))),
+    document: json["document"] == null ? [] : List<String>.from(json["document"]!.map((x) => x)),
     addedBy: json["added_by"],
     employmentStatus: json["employment_status"],
     basicUpdateList: json["basic_update_list"] == null ? [] : List<dynamic>.from(json["basic_update_list"]!.map((x) => x)),
-    rating: json["rating"] == null ? [] : List<dynamic>.from(json["rating"]!.map((x) => x)),
+    rating: json["rating"] == null ? [] : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
     totalRating: json["totalRating"] == null ? null : TotalRating.fromJson(json["totalRating"]),
     status: json["status"],
   );
@@ -722,22 +723,127 @@ class ListElement {
     "employment_type": employmentType,
     "designation": designation,
     "joining_date": "${joiningDate!.year.toString().padLeft(4, '0')}-${joiningDate!.month.toString().padLeft(2, '0')}-${joiningDate!.day.toString().padLeft(2, '0')}",
-    "worked_till_date": "${workedTillDate!.year.toString().padLeft(4, '0')}-${workedTillDate!.month.toString().padLeft(2, '0')}-${workedTillDate!.day.toString().padLeft(2, '0')}",
+    "worked_till_date": workedTillDate,
     "still_working": stillWorking,
     "approved": approved,
     "description": description,
+    "salary": salary,
     "salary_inhand": salaryInhand,
     "salary_mode": salaryMode,
     "department": department,
     "claim_status": claimStatus,
     "company_slug": companySlug,
     "skill": skill == null ? [] : List<dynamic>.from(skill!.map((x) => x.toJson())),
+    "document": document == null ? [] : List<dynamic>.from(document!.map((x) => x)),
     "added_by": addedBy,
     "employment_status": employmentStatus,
     "basic_update_list": basicUpdateList == null ? [] : List<dynamic>.from(basicUpdateList!.map((x) => x)),
-    "rating": rating == null ? [] : List<dynamic>.from(rating!.map((x) => x)),
+    "rating": rating == null ? [] : List<dynamic>.from(rating!.map((x) => x.toJson())),
     "totalRating": totalRating?.toJson(),
     "status": status,
+  };
+}
+
+
+
+
+class Rating {
+  String? id;
+  String? rating;
+  String? review;
+  String? approved;
+  String? status;
+  List<dynamic>? doc;
+  DateTime? date;
+  String? link;
+  List<History>? history;
+
+  Rating({
+    this.id,
+    this.rating,
+    this.review,
+    this.approved,
+    this.status,
+    this.doc,
+    this.date,
+    this.link,
+    this.history,
+  });
+
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+    id: json["id"],
+    rating: json["rating"],
+    review: json["review"],
+    approved: json["approved"],
+    status: json["status"],
+    doc: json["doc"] == null ? [] : List<dynamic>.from(json["doc"]!.map((x) => x)),
+    date: json["date"] == null ? null : DateTime.parse(json["date"]),
+    link: json["link"],
+    history: json["history"] == null ? [] : List<History>.from(json["history"]!.map((x) => History.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "rating": rating,
+    "review": review,
+    "approved": approved,
+    "status": status,
+    "doc": doc == null ? [] : List<dynamic>.from(doc!.map((x) => x)),
+    "date": date?.toIso8601String(),
+    "link": link,
+    "history": history == null ? [] : List<dynamic>.from(history!.map((x) => x.toJson())),
+  };
+}
+
+class History {
+  String? id;
+  String? ratingId;
+  String? rating;
+  String? review;
+  String? doc;
+  String? link;
+  String? isDeleted;
+  String? status;
+  DateTime? createDate;
+  DateTime? modifyDate;
+
+  History({
+    this.id,
+    this.ratingId,
+    this.rating,
+    this.review,
+    this.doc,
+    this.link,
+    this.isDeleted,
+    this.status,
+    this.createDate,
+    this.modifyDate,
+  });
+
+  factory History.fromJson(Map<String, dynamic> json) => History(
+    id: json["id"],
+    ratingId: json["rating_id"],
+    rating: json["rating"],
+    review: json["review"],
+    doc: json["doc"],
+    link: json["link"],
+    isDeleted: json["is_deleted"],
+    status: json["status"],
+    createDate: json["create_date"] == null ? null : DateTime.parse(json["create_date"]),
+    modifyDate: json["modify_date"] == null ? null : DateTime.parse(json["modify_date"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "rating_id": ratingId,
+    "rating": rating,
+    "review": review,
+    "doc": doc,
+    "link": link,
+    "is_deleted": isDeleted,
+    "status": status,
+    "create_date": createDate?.toIso8601String(),
+    "modify_date": modifyDate?.toIso8601String(),
   };
 }
 
@@ -801,23 +907,35 @@ class FollowData {
   };
 }
 
-class Following {
-  bool? requestSend;
-  bool? requestApproved;
+class Setting {
+  String? mobile;
+  String? email;
+  String? address;
+  String? dob;
+  String? messages;
 
-  Following({
-    this.requestSend,
-    this.requestApproved,
+  Setting({
+    this.mobile,
+    this.email,
+    this.address,
+    this.dob,
+    this.messages,
   });
 
-  factory Following.fromJson(Map<String, dynamic> json) => Following(
-    requestSend: json["requestSend"],
-    requestApproved: json["requestApproved"],
+  factory Setting.fromJson(Map<String, dynamic> json) => Setting(
+    mobile: json["mobile"],
+    email: json["email"],
+    address: json["address"],
+    dob: json["dob"],
+    messages: json["messages"],
   );
 
   Map<String, dynamic> toJson() => {
-    "requestSend": requestSend,
-    "requestApproved": requestApproved,
+    "mobile": mobile,
+    "email": email,
+    "address": address,
+    "dob": dob,
+    "messages": messages,
   };
 }
 
@@ -853,8 +971,8 @@ class TopCompany {
     profile: json["profile"],
     name: json["name"],
     individualId: json["individual_id"],
-    designationName: json["designationName"],
     slug: json["slug"],
+    designationName:json["designationName"],
     cityName: json["city_name"],
     stateName: json["state_name"],
     countryName: json["country_name"],
@@ -868,12 +986,32 @@ class TopCompany {
     "name": name,
     "individual_id": individualId,
     "slug": slug,
-    "designationName": designationName,
     "city_name": cityName,
+    "designationName":designationName,
     "state_name": stateName,
     "country_name": countryName,
     "followData": followData?.toJson(),
     "following": following?.toJson(),
+  };
+}
+
+class Following {
+  bool? requestSend;
+  bool? requestApproved;
+
+  Following({
+    this.requestSend,
+    this.requestApproved,
+  });
+
+  factory Following.fromJson(Map<String, dynamic> json) => Following(
+    requestSend: json["requestSend"],
+    requestApproved: json["requestApproved"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "requestSend": requestSend,
+    "requestApproved": requestApproved,
   };
 }
 
@@ -944,3 +1082,5 @@ class TopUser {
     "following": following?.toJson(),
   };
 }
+
+

@@ -580,21 +580,24 @@ convertDateInMonthYear({required String date}){
 }
 
 
-checkEmploymentIsPresentOfNot({required String joiningDate ,required String tillEmploymentDate,required String isStillWorking}){
-
-  try{
-    String joiningDateData=formatDate(date: joiningDate??"");
-    String endDate=formatDate(date: tillEmploymentDate??"");
-    if(isStillWorking=="1"){
+checkEmploymentIsPresentOfNot({
+  required String joiningDate,
+  required String tillEmploymentDate,
+  required String isStillWorking,
+}) {
+  try {
+    String joiningDateData = formatDate(date: joiningDate);
+    if (isStillWorking == "1") {
       return "$joiningDateData $appTo $appPresent";
-    }else{
+    } else {
+      String endDate = formatDate(date: tillEmploymentDate);
       return "$joiningDateData $appTo $endDate";
     }
-
-  }catch(e){
+  } catch (e) {
     return "Invalid date";
   }
 }
+
 
 String getRatingText(int rating) {
   return rating <= 1 ? appStar : appStars;
@@ -710,7 +713,7 @@ String formatRating(dynamic rating) {
   return value.toStringAsFixed(1); // Always 1 digit after decimal
 }
 
-commonUserNameWidget(context,{required String userName,required bool isProfileVerified,required double width}){
+commonUserNameWidget(context,{required String userName,required bool isProfileVerified,required double width,Color textColor=appBlackColor}){
   return Container(
     width: width,
     //color: appRedColor,
@@ -721,7 +724,7 @@ commonUserNameWidget(context,{required String userName,required bool isProfileVe
         children: [
           TextSpan(
             text: userName,
-            style: AppTextStyles.font16W700.copyWith(color: appBlackColor),
+            style: AppTextStyles.font16W700.copyWith(color: textColor),
           ),
           if (isProfileVerified)
             WidgetSpan(
@@ -757,6 +760,10 @@ commonReadMoreWidget(context,{required  String message,required TextStyle textSt
 }
 
 String commonEmployementDataPosted({context, required String joiningData, required String employementTillDate, required String stillWorking,}) {
+  print("?????????????????????????????");
+  print(joiningData);
+  print(employementTillDate);
+  print(stillWorking);
   String getMonthName(int month) {
     const months = [
       "Jan", "Feb", "Mar", "Apr", "May", "Jun",

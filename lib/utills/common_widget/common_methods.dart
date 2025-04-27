@@ -101,7 +101,7 @@ commonCardWidget(context,{required String image,
                   children: <Widget>[
                     SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,),
                     SizedBox(
-                      width:cardWidth*0.65,
+                      width:cardWidth*0.62,
                       child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 1,),
                     )
                   ],
@@ -342,7 +342,7 @@ _companyDetails(context,{
       ),
       SizedBox(width: 12,),
       Container(
-        width:cardWidth*0.78,// MediaQuery.of(context).size.width*0.64,
+        width:cardWidth*0.7,// MediaQuery.of(context).size.width*0.64,
         alignment: Alignment.topLeft,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,39 +353,42 @@ _companyDetails(context,{
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width:cardWidth*0.6,
+                  width:cardWidth*0.52,
                   child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 2,),
                 ),
                 companyName!=null&&companyName.isNotEmpty?SizedBox(
-                    width:cardWidth*0.6,
+                    width:cardWidth*0.52,
                     child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
                 SizedBox(height: 1,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    salaryDetails!=null&&salaryDetails.isNotEmpty?Row(
-                      children: <Widget>[
-                        SvgPicture.asset(appSalarySvgIcon,height: 15,width: 15,),
-                        SizedBox(width: 2,),
-                        Text(salaryDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-                      ],
-                    ):Container(),
-                    salaryDetails!=null&&salaryDetails.isNotEmpty?SizedBox(width: 5,):SizedBox(width: 0,),
-                    (salaryDetails!=null&&salaryDetails.isNotEmpty)&&(appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty)? Container(
-                      height: 18,
-                      width: 1,
-                      color: appGreyBlackColor,
-                    ):Container(),
-                    SizedBox(width: 5,),
-                    appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty?Row(
-                      children: <Widget>[
-                        SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,),
-                        SizedBox(width: 2,),
-                        Text(expDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-                      ],
-                    ):Container(),
-                  ],
+                SizedBox(
+                  width:cardWidth*0.52,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      salaryDetails!=null&&salaryDetails.isNotEmpty?Row(
+                        children: <Widget>[
+                          SvgPicture.asset(appSalarySvgIcon,height: 15,width: 15,),
+                          SizedBox(width: 1,),
+                          Text(salaryDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                        ],
+                      ):Container(),
+                      salaryDetails!=null&&salaryDetails.isNotEmpty?SizedBox(width: 3,):SizedBox(width: 0,),
+                      (salaryDetails!=null&&salaryDetails.isNotEmpty)&&(appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty)? Container(
+                        height: 18,
+                        width: 1,
+                        color: appGreyBlackColor,
+                      ):Container(),
+                      SizedBox(width: 3,),
+                      appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty?Row(
+                        children: <Widget>[
+                          SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,),
+                          SizedBox(width: 1,),
+                          Text(expDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                        ],
+                      ):Container(),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -546,7 +549,8 @@ commonTopCompaniesWidget(context,{
   required Function onMessageClick,
   required bool isProfileVerified,
   Function()? onProfileClick,
-  required double cardWidth
+  required double cardWidth,
+  bool isTopCompany=false
 }){
   return Card(
     color: appWhiteColor,
@@ -614,8 +618,8 @@ commonTopCompaniesWidget(context,{
                   ),
                 ),
                 SizedBox(width: 10,),
-                SizedBox(
-                  width: isFollowData?cardWidth*0.5:cardWidth*0.45,
+                isTopCompany==false?SizedBox(
+                  width: isFollowData?cardWidth*0.54:cardWidth*0.45,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -661,7 +665,56 @@ commonTopCompaniesWidget(context,{
                       )
                     ],
                   ),
-                ),
+                ):Container(),
+                isTopCompany==true?SizedBox(
+                  width: isFollowData?cardWidth*0.76:cardWidth*0.45,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      commonUserNameWidget(context, userName: name, isProfileVerified: isProfileVerified, width: cardWidth*0.8),
+                      //Text(name,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
+                      id.isNotEmpty?Text("ID: $id",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),):Container(),
+                      Column(
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              jobTitle.isNotEmpty?Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(appExperenceIconSvg,height: 16,width: 16,color: appGreyBlackColor,),
+                                  SizedBox(width: 5,),
+                                  SizedBox(
+                                      width: isFollowData?cardWidth*0.44:cardWidth*0.38,
+                                      child: Text(jobTitle,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 2,)),
+                                ],
+                              ):Container(),
+                            ],
+                          ),
+                          jobTitle.isNotEmpty?SizedBox(height: 5,):SizedBox(height: 0,),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              location.isNotEmpty?Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,color: appGreyBlackColor,),
+                                  SizedBox(width: 5,),
+                                  SizedBox(
+                                      width: isFollowData?cardWidth*0.44:cardWidth*0.38,
+                                      child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 2,)),
+                                ],
+                              ):Container(),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ):Container(),
+
                 isFollowData?GestureDetector(
                   onTap: (){
                     if(isFollowing){

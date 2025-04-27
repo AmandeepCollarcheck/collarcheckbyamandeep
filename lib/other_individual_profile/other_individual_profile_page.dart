@@ -1259,7 +1259,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                     onExpendEnable: (){
                                       controller.isExpendedSkills.value=!controller.isExpendedSkills.value;
                                     },
-                                    employmentHistoryId: employmentHistory[index].id??"",
+                                    employmentHistoryId: employmentHistory[index].id??"", isProfileVerification: true,
                                   )
 
                                 ],

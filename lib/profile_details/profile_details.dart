@@ -33,171 +33,158 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
             /// **SliverAppBar inside NestedScrollView**
             Expanded(
               child: NestedScrollView(
+                controller: controller.scrollController,
                 headerSliverBuilder: (contextData, innerBoxIsScrolled) {
                   return [
-                    SliverAppBar(
-                      pinned: true,
-                      floating: false,
-                      backgroundColor: appScreenBackgroundColor,
-                      elevation: 0,
-                      automaticallyImplyLeading: false,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Container(
-                          color: appScreenBackgroundColor,
-                          padding: controller.isEmployeeProfileDate.value?EdgeInsets.only(top: 20):EdgeInsets.only(left: 20, right: 20),
-                          child: controller.isEmployeeProfileDate.value?commonActiveSearchBar(
-                              leadingIcon: appBackSvgIcon,
-                              screenName: appEmployeeProfiles,
-                              isFilterShow: false,
-                              actionButton: appFilterMore,
-                              onClick: (){
-                                controller.backButtonClick();
-                              },
-                              onShareClick: (){},
-                              onFilterClick:(){
-                               // controller.clickFilterButton();
-                              },
-                              isScreenNameShow: true,
-                              isShowShare: false
-                          ):commonAppBarWithSettingAndShareOption(context,
-                            leadingIcon: appBackSvgIcon,
-                            onClick: () {},
-                            onSettingsClick: () {},
-                          ),
-                        ),
-                      ),
-                    ),
+
                     SliverToBoxAdapter(
                       child: Container(
                         color: appScreenBackgroundColor,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            controller.isEmployeeProfileDate.value?SizedBox(height: 0): SizedBox(height: 20),
                             Container(
-                              padding: EdgeInsets.only(left: 20, right: 20),
-                              child: _profileWidget(context),
+                              padding: EdgeInsets.only(left: 20,right: 20),
+                              height:60,
+                              child: commonAppBarWithSettingAndShareOption(context,
+                                leadingIcon: appBackSvgIcon,
+                                onClick: () {},
+                                onSettingsClick: () {},
+                              ),
                             ),
-                            SizedBox(height: 10),
                             Container(
-                              height: 1,
-                              color: appPrimaryBackgroundColor,
-                            ),
-                            Obx(() {
-                              var stillWorkingCompany = controller.userProfileData.value.data?.stillWorkingCompanyName ?? "";
-                              var email = controller.userProfileData.value.data?.email ?? "";
-                              var phone = controller.userProfileData.value.data?.phone ?? "";
-                              var city = controller.userProfileData.value.data?.city ?? "";
-                              var state = controller.userProfileData.value.data?.stateName ?? "";
-                              var country = controller.userProfileData.value.data?.countryName ?? "";
+                              color: appScreenBackgroundColor,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  controller.isEmployeeProfileDate.value?SizedBox(height: 0): SizedBox(height: 20),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 20, right: 20),
+                                    child: _profileWidget(context),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    height: 1,
+                                    color: appPrimaryBackgroundColor,
+                                  ),
+                                  Obx(() {
+                                    var stillWorkingCompany = controller.userProfileData.value.data?.stillWorkingCompanyName ?? "";
+                                    var email = controller.userProfileData.value.data?.email ?? "";
+                                    var phone = controller.userProfileData.value.data?.phone ?? "";
+                                    var city = controller.userProfileData.value.data?.city ?? "";
+                                    var state = controller.userProfileData.value.data?.stateName ?? "";
+                                    var country = controller.userProfileData.value.data?.countryName ?? "";
 
-                              return Container(
-                                padding: EdgeInsets.only(left: 30, right: 20),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 10),
-                                    if (stillWorkingCompany.isNotEmpty)
-                                      _detailsCard(image: appCompanyIcon, title: stillWorkingCompany),
-                                    SizedBox(height: 5),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        if (email.isNotEmpty) _detailsCard(image: appEmail, title: email),
-                                        if (email.isNotEmpty) SizedBox(width: 10),
-                                        if (phone.isNotEmpty) _detailsCard(image: appPhoneIcon, title: phone),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5),
-                                    if (state.isNotEmpty)
-                                      _detailsCard(
-                                        image: appLocationsSvgIcon,
-                                        title: generateLocation(cityName: city, stateName: state, countryName: country),
-                                      ),
-                                  ],
-                                ),
-                              );
-                            }),
-                            SizedBox(height: 10),
-                            Obx(() {
-                              var isVerified = controller.userProfileData.value.data?.isVerified ?? false;
-                              return isVerified
-                                  ? Container()
-                                  : Container(
-                                decoration: BoxDecoration(
-                                  color: appGreyColor.withOpacity(0.4),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                margin: EdgeInsets.only(left: 20, right: 20),
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SvgPicture.asset(appVerifiedIcon, height: 26, width: 26),
-                                    SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(appVerifyYourProfile,
-                                            style: AppTextStyles.font16W600.copyWith(color: appBlackColor)),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width * 0.72,
-                                          child: Text(appOnAverage,
-                                              style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(14),
-                                            color: appPrimaryColor,
+                                    return Container(
+                                      padding: EdgeInsets.only(left: 30, right: 20),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(height: 10),
+                                          if (stillWorkingCompany.isNotEmpty)
+                                            _detailsCard(image: appCompanyIcon, title: stillWorkingCompany),
+                                          SizedBox(height: 5),
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              if (email.isNotEmpty) _detailsCard(image: appEmail, title: email),
+                                              if (email.isNotEmpty) SizedBox(width: 10),
+                                              if (phone.isNotEmpty) _detailsCard(image: appPhoneIcon, title: phone),
+                                            ],
                                           ),
-                                          child: Text(appVerifyNow,
-                                              style: AppTextStyles.font12.copyWith(color: appWhiteColor)),
+                                          SizedBox(height: 5),
+                                          if (state.isNotEmpty)
+                                            _detailsCard(
+                                              image: appLocationsSvgIcon,
+                                              title: generateLocation(cityName: city, stateName: state, countryName: country),
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                  SizedBox(height: 10),
+                                  Obx(() {
+                                    var isVerified = controller.userProfileData.value.data?.isVerified ?? false;
+                                    return isVerified
+                                        ? Container()
+                                        : Container(
+                                      decoration: BoxDecoration(
+                                        color: appGreyColor.withOpacity(0.4),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      margin: EdgeInsets.only(left: 20, right: 20),
+                                      padding: EdgeInsets.all(10),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SvgPicture.asset(appVerifiedIcon, height: 26, width: 26),
+                                          SizedBox(width: 10),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(appVerifyYourProfile,
+                                                  style: AppTextStyles.font16W600.copyWith(color: appBlackColor)),
+                                              SizedBox(
+                                                width: MediaQuery.of(context).size.width * 0.72,
+                                                child: Text(appOnAverage,
+                                                    style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)),
+                                              ),
+                                              SizedBox(height: 10),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(14),
+                                                  color: appPrimaryColor,
+                                                ),
+                                                child: Text(appVerifyNow,
+                                                    style: AppTextStyles.font12.copyWith(color: appWhiteColor)),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                  SizedBox(height: 10),
+                                  Obx((){
+                                    return controller.userProfileData.value.data?.id.toString()!=controller.userIdData.value?Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width*0.4,
+                                          child: commonButton(
+                                              isPaddingDisabled: true,
+                                              context,
+                                              buttonName: appFollowFound,
+                                              buttonBackgroundColor: appWhiteColor,
+                                              textColor: appPrimaryColor,
+                                              buttonBorderColor: appPrimaryColor,
+                                              onClick: (){
+
+                                              }
+                                          ),
+                                        ),
+                                        SizedBox(width: 10,),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width*0.4,
+                                          child: commonButton(
+                                              context,
+                                              isPaddingDisabled: true,
+                                              buttonName: appMessageFound,
+                                              buttonBackgroundColor: appPrimaryColor,
+                                              textColor: appWhiteColor,
+                                              buttonBorderColor: appPrimaryColor,
+                                              onClick: (){
+
+                                              }
+                                          ),
                                         ),
                                       ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                            SizedBox(height: 10),
-                            Obx((){
-                              return controller.userProfileData.value.data?.id.toString()!=controller.userIdData.value?Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width*0.4,
-                                    child: commonButton(
-                                        isPaddingDisabled: true,
-                                        context,
-                                        buttonName: appFollowFound,
-                                        buttonBackgroundColor: appWhiteColor,
-                                        textColor: appPrimaryColor,
-                                        buttonBorderColor: appPrimaryColor,
-                                        onClick: (){
+                                    ):Container();
 
-                                        }
-                                    ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width*0.4,
-                                    child: commonButton(
-                                        context,
-                                        isPaddingDisabled: true,
-                                        buttonName: appMessageFound,
-                                        buttonBackgroundColor: appPrimaryColor,
-                                        textColor: appWhiteColor,
-                                        buttonBorderColor: appPrimaryColor,
-                                        onClick: (){
-
-                                        }
-                                    ),
-                                  ),
+                                  })
                                 ],
-                              ):Container();
-
-                            })
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -205,44 +192,75 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                   ];
                 },
                 body: Container(
-                  margin: EdgeInsets.only(top: 40),
+                  //margin: EdgeInsets.only(top: 40),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
+                      SizedBox(height: 10,),
                       Container(height: 1, color: appPrimaryBackgroundColor),
-                      SizedBox(height: 16),
-                      Container(
-                        color: Colors.white,
-                        child: TabBar(
-                          isScrollable: true,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                          padding: EdgeInsets.zero,
-                          dividerColor: appWhiteColor,
-                          indicatorColor: appPrimaryColor,
-                          indicatorWeight: 2,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          controller: controller.tabController,
-                          tabs: List.generate(controller.listTabLabel.length, (index) {
-                            return Text(controller.listTabLabel[index],
-                                style: AppTextStyles.font14.copyWith(color: appBlackColor));
-                          }),
-                        ),
-                      ),
+                      ///Custom tab
+                      Obx((){
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(controller.listTabLabel.length, (index) {
+                              final isSelected = controller.selectedIndex.value == index;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  controller.selectedIndex.value = index;
+                                  controller.scrollToSection(index);
+
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: isSelected ? appPrimaryColor : appPrimaryBackgroundColor,
+                                        width:  isSelected ?2:1,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    controller.listTabLabel[index],
+                                    style: AppTextStyles.font14.copyWith(
+                                      color: isSelected ? appPrimaryColor : appBlackColor,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        );
+                      }),
                       SizedBox(height: 20),
 
                       /// **TabBarView below the TabBar**
                       Expanded(
-                        child: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                          controller: controller.tabController,
-                          children: <Widget>[
-                            _homeTabDetails(context),
-                            _employmentHistory(context),
-                            _portFolioTabDetails(context),
-                            _educationTabDetails(context),
-                          ],
-                        ),
+                        child: SingleChildScrollView(
+                          physics: BouncingScrollPhysics(),
+                          child: Obx((){
+                            var allData=controller.userProfileData.value.data;
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                _childWithKey(controller.homeKey, _homeTabDetails(context)),
+                                SizedBox(height: 20,),
+                                _childWithKey(controller.employmentHistory, _employmentHistory(context)),
+                                SizedBox(height: 20,),
+                                _childWithKey(controller.portfolio, _portFolioTabDetails(context)),
+                                SizedBox(height: 20,),
+                                _childWithKey(controller.education, _educationTabDetails(context)),
+                                _commonWidgetData(context)
+
+
+                              ],
+                            );
+                          }),),
                       ),
+
                     ],
                   ),
                 ),
@@ -736,6 +754,8 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
       var userLastName=profileData?.lname??'';
       var userIndividualId=profileData?.individualId??"";
       var isUserVerified=profileData?.isVerified??false;
+      var ratings=profileData.totalRating?.rating.toString()??"0";
+      var review=profileData.totalRating?.noofrecord.toString()??"0";
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -761,50 +781,53 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width*0.58,
-                      child: isUserVerified?RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "$userFirstName $userLastName",
-                              style: AppTextStyles.font20W700.copyWith(color: appBlackColor),
-                            ),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: SvgPicture.asset(
-                                appVerifiedIcon,
-                                height: 20,
-                                width: 20,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.78,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width*0.58,
+                        child: isUserVerified?RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "$userFirstName $userLastName",
+                                style: AppTextStyles.font20W700.copyWith(color: appBlackColor),
                               ),
-                            ),
-                          ],
-                        ),
-                        overflow: TextOverflow.clip,
-                        maxLines: 3,
-                      ):Text("$userFirstName $userLastName",style: AppTextStyles.font20W700.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,),
-                    ),
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: SvgPicture.asset(
+                                  appVerifiedIcon,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                          overflow: TextOverflow.clip,
+                          maxLines: 3,
+                        ):Text("$userFirstName $userLastName",style: AppTextStyles.font20W700.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,),
+                      ),
 
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   children: <Widget>[
-                    //     SizedBox(
-                    //       width:MediaQuery.of(context).size.width*0.48,
-                    //         child: Text("$userFirstName $userLastName sasdhf shdfhs shdfh",style: AppTextStyles.font20W700.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
-                    //     SvgPicture.asset(appVerifiedIcon,height: 20,width: 20,)
-                    //   ],
-                    // ),
-                    GestureDetector(
-                        onTap:(){
-                          Get.offNamed(AppRoutes.profile,arguments: {screenName:profileDetails});
-                        },
-                        child: SvgPicture.asset(appEditIcon,height: 20,width: 20,))
-                  ],
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: <Widget>[
+                      //     SizedBox(
+                      //       width:MediaQuery.of(context).size.width*0.48,
+                      //         child: Text("$userFirstName $userLastName sasdhf shdfhs shdfh",style: AppTextStyles.font20W700.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
+                      //     SvgPicture.asset(appVerifiedIcon,height: 20,width: 20,)
+                      //   ],
+                      // ),
+                      GestureDetector(
+                          onTap:(){
+                            Get.offNamed(AppRoutes.profile,arguments: {screenName:profileDetails});
+                          },
+                          child: SvgPicture.asset(appEditIcon,height: 20,width: 20,))
+                    ],
+                  ),
                 ),
                 Text("$appId: $userIndividualId",style: AppTextStyles.font14.copyWith(color: appPrimaryColor)),
                 Row(
@@ -812,7 +835,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                   children: <Widget>[
                     SvgPicture.asset(appStarIcon,height: 16,width: 16,),
                     SizedBox(width: 5,),
-                    Text("4.3 stars | 555 reviews",style: AppTextStyles.font12w500.copyWith(color: appBlackColor)),
+                    Text("${formatRating(ratings)} $appStar | $review ${review=="0"||review=="1"?appReview:appReviews}",style: AppTextStyles.font12w500.copyWith(color: appBlackColor)),
                   ],
                 ),
                ///Followers
@@ -955,7 +978,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                ],
              ),
            ),
-           _commonWidgetData(context)
+           //_commonWidgetData(context)
          ],
        ),
      );
@@ -1075,7 +1098,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                 ],
               ),
             ),
-            _commonWidgetData(context)
+            //_commonWidgetData(context)
           ],
         ),
       );
@@ -1165,7 +1188,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
               ],
             ),
           ),
-          _commonWidgetData(context)
+         // _commonWidgetData(context)
         ],
       ),
     );
@@ -1222,30 +1245,11 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Column(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(top: 25),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
-                                        border: Border.all(color: appPrimaryColor,width: 1)
-                                    ),
-                                    child:  Text(dateTimeYear(date: employmentHistory[index].joiningDate??""),style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
-                                  ),
-                                  Obx(() => DottedLine(
-                                    colors: [appPrimaryColor],
-                                    axis: Axis.vertical,
-                                    height: controller.experienceHeights.length > index
-                                        ? controller.experienceHeights[index]
-                                        : 0, // Set height dynamically
-                                  )),
-                                ],
-                              ),
-                              SizedBox(width: 5,),
-                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   buildExperienceCard(
                                       context,
+                                      isProfileVerification: true,//employmentHistory[index].v??false,
                                       companyName: employmentHistory[index].company??"",
                                       companyDetails: checkEmploymentIsPresentOfNot(joiningDate: employmentHistory[index].joiningDate??"", tillEmploymentDate: employmentHistory[index].workedTillDate
                                           ??"", isStillWorking: employmentHistory[index].stillWorking.toString()??"0"),
@@ -1269,7 +1273,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                 ],
               ),
             ),
-            _commonWidgetData(context)
+           // _commonWidgetData(context)
           ],
         ),
       );
@@ -1751,6 +1755,13 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
         allRightReservedWidget(),
         SizedBox(height: 20,),
       ],
+    );
+  }
+
+  _childWithKey(GlobalKey key, Widget child) {
+    return Container(
+      key: key,
+      child: child,
     );
   }
 

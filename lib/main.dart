@@ -1,6 +1,7 @@
 import 'package:collarchek/utills/app_colors.dart';
 import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/common_custom_scrool_tab_view.dart';
+import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:collarchek/utills/font_styles.dart';
 import 'package:collarchek/utills/internet_connection.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,6 +42,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      builder: (context, child) {
+        return PopScope(
+          canPop: false, // Prevents default back behavior
+          onPopInvoked: (didPop) {
+            if (!didPop) {
+              onWillPop();
+            }
+          },
+          child: child!,
+        );
+      },
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

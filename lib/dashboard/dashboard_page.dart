@@ -103,7 +103,7 @@ class DashboardPage extends GetView<DashboardController>{
                     //  right: index == recommendJob.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
                     ),
                     child: commonCardWidget(context,
-                        cardWidth: MediaQuery.of(context).size.width*0.7,
+                        cardWidth: MediaQuery.of(context).size.width*0.8,
                         onClick: (){
                           controller.openJobDetailsPage( jobTitle: recommendJob[index].slug ??"");
                         },
@@ -165,7 +165,7 @@ class DashboardPage extends GetView<DashboardController>{
                        // right: index == jobList.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
                       ),
                       child: commonCardWidget(context,
-                          cardWidth: MediaQuery.of(context).size.width*0.7,
+                          cardWidth: MediaQuery.of(context).size.width*0.8,
                           onClick: (){
                             controller.openJobDetailsPage( jobTitle: jobList[index].slug ??"");
                           },
