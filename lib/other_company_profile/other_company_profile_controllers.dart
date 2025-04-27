@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collarchek/utills/app_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ import '../utills/app_key_constent.dart';
 import '../utills/app_strings.dart';
 import '../utills/common_widget/progress.dart';
 
-class CompanyProfileControllers extends GetxController with GetTickerProviderStateMixin{
+class OtherCompanyProfileControllers extends GetxController with GetTickerProviderStateMixin{
   late ProgressDialog progressDialog=ProgressDialog() ;
   final scrollController = ScrollController();
   var companyProfileData=CompanyProfileDetailsModel().obs;
@@ -52,6 +53,16 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
     });
     super.onInit();
   }
+
+  backButton(context){
+    if(screenNameData.value==companyProfileScreen){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar,);
+    }
+  }
+
+
 
   void _onScroll() {
     final contextMap = {
@@ -104,19 +115,18 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
         // await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
         // await writeStorageData(key: profileImage, value: companyProfileData.value.data?.profile??"");
 
-    }else{
-    showToast(somethingWentWrong);
-    }
-    progressDialog.dismissLoader();
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
     } on HttpException catch (exception) {
-    progressDialog.dismissLoader();
-    showToast(exception.message);
+      progressDialog.dismissLoader();
+      showToast(exception.message);
     } catch (exception) {
-    progressDialog.dismissLoader();
-    showToast(exception.toString());
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
     }
   }
-
 
   ///Follow api
   companyFollowApiCall(context,{required String companyId,required String userId})async{
@@ -145,5 +155,6 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
       showToast(exception.toString());
     }
   }
+
 
 }

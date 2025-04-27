@@ -51,6 +51,7 @@ const progressBarMaxValue="5";
  const screenName="screen_name";
  const jobProfileName="jobProfileName";
  const isEdit="is_edit";
+ const reviewId="reviewId";
  const isEditItemId="is_edit_item_id";
  const mobileNumber="mobile_number";
  const isLoginScreen="isLoginScreen";
@@ -70,6 +71,7 @@ const progressBarMaxValue="5";
  const isAppApplication="isAppApplication";
  const isCompanyApp="isCompanyApp";
  const jobId="jobId";
+ const checkOtherProfile="checkOtherProfile";
 
 //value
 const profileDetails="profile_details";
@@ -85,6 +87,8 @@ const companyJobsScreen="companyJobs";
 const companyDashboardScreen="companyDashboard";
 const companyProfileScreen="companyProfile";
 const companyAllReviewScreen="companyAllReviewScreen";
+const companyUserSpecificReviewScreen="companyUserSpecificReviewScreen";
 const companyEmploymentRequest="companyEmploymentRequest";
 const allApplications="allApplications";
 const recommendedEmployeeScreen="recommendedEmployeeScreen";
+const otherCompanyProfileScreen="otherCompanyProfileScreen";

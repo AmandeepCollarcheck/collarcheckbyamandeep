@@ -326,6 +326,7 @@ class TopUser {
   String? individualId;
   String? profile;
   String? name;
+  bool? isVerified;
   String? slug;
   String? cityName;
   dynamic rating;
@@ -350,6 +351,7 @@ class TopUser {
     this.designationName,
     this.companyName,
     this.followData,
+    this.isVerified
   });
 
   factory TopUser.fromJson(Map<String, dynamic> json) => TopUser(
@@ -358,6 +360,7 @@ class TopUser {
     profile: json["profile"],
     name: json["name"],
     slug: json["slug"],
+    isVerified: json["isVerified"],
     cityName: json["city_name"],
     rating: json["rating"],
     stateName: json["state_name"],
@@ -374,6 +377,7 @@ class TopUser {
     "profile": profile,
     "name": name,
     "slug": slug,
+    "isVerified":isVerified,
     "city_name": cityName,
     "rating": rating,
     "state_name": stateName,
@@ -428,6 +432,7 @@ class TopCompany {
   String? id;
   String? profile;
   String? name;
+  bool? isVerified;
   String? individualId;
   String? slug;
   String? cityName;
@@ -445,6 +450,7 @@ class TopCompany {
     this.stateName,
     this.countryName,
     this.followData,
+    this.isVerified
   });
 
   factory TopCompany.fromJson(Map<String, dynamic> json) => TopCompany(
@@ -453,6 +459,7 @@ class TopCompany {
     name: json["name"],
     individualId: json["individual_id"],
     slug: json["slug"],
+    isVerified: json["isVerified"],
     cityName: json["city_name"],
     stateName: json["state_name"],
     countryName: json["country_name"],
@@ -465,6 +472,7 @@ class TopCompany {
     "name": name,
     "individual_id": individualId,
     "slug": slug,
+    "isVerified":isVerified,
     "city_name": cityName,
     "state_name": stateName,
     "country_name": countryName,

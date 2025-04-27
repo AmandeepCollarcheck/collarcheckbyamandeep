@@ -426,6 +426,48 @@ commonAppBarWithSettingAndShareOption(context,{required String leadingIcon,requi
     ),
   );
 }
+commonAppBarWithSettingAndShareOptionWithBackButton(context,{required Function() onBackClick,required String leadingIcon,required Function() onClick,required Function() onSettingsClick}){
+  return Container(
+    color: appWhiteColor,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                onBackClick();
+              },
+              child: SvgPicture.asset(appBackSvgIcon, height: 16, width: 16),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10,bottom: 10),
+              child: Image.asset(appLogoNewSvg, height: 32, width: 151),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              onTap: (){
+                onSettingsClick();
+              },
+              child: SvgPicture.asset(appSetting, height: 24, width: 24,),
+            ),
+            SizedBox(width: 10,),
+            GestureDetector(
+              onTap: (){
+                onSettingsClick();
+              },
+              child: SvgPicture.asset(Platform.isAndroid?appShareAndroid:appShareIos, height: 24, width: 24,),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
 
 Widget commonCompanySearchAppBar(

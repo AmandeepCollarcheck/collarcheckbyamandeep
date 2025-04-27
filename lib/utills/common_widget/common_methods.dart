@@ -79,6 +79,7 @@ commonCardWidget(context,{required String image,
               expDetails: expDetails,
             isApplied: isApplied,
             isApplyClick: isApplyClick,
+            cardWidth: cardWidth
           ),
           SizedBox(height: 10,),
           programmingKnowledge(context,programmingList: programmingList,isExpanded:isExpanded, itemCount: programmingList.length,onExpandChanged: onExpandChanged ),
@@ -91,7 +92,7 @@ commonCardWidget(context,{required String image,
           ),
           SizedBox(height: 10,),
           SizedBox(
-            width: MediaQuery.of(context).size.width*0.8,
+            width: cardWidth,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -99,8 +100,8 @@ commonCardWidget(context,{required String image,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.5,
+                    SizedBox(
+                      width:cardWidth*0.65,
                       child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 1,),
                     )
                   ],
@@ -163,6 +164,7 @@ appliedCommonCardWidget(context,{required String image,
             expDetails: expDetails,
             isApplied: true,
             isApplyClick: (){},
+            cardWidth: cardWidth
           ),
           SizedBox(height: 20,),
         //  _programmingKnowledge(context,programmingList: programmingList,isExpanded:isExpanded, itemCount: programmingList.length,onExpandChanged: onExpandChanged ),
@@ -307,6 +309,7 @@ _companyDetails(context,{
   required String companyName,
   required String salaryDetails,
   required String expDetails,
+  required double cardWidth,
   bool isCompanyProfile=false,
   bool isApplied=false,
   required Function() isApplyClick,
@@ -339,7 +342,7 @@ _companyDetails(context,{
       ),
       SizedBox(width: 12,),
       Container(
-        width: MediaQuery.of(context).size.width*0.64,
+        width:cardWidth*0.78,// MediaQuery.of(context).size.width*0.64,
         alignment: Alignment.topLeft,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,11 +353,11 @@ _companyDetails(context,{
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width:MediaQuery.of(context).size.width*0.5,
+                  width:cardWidth*0.6,
                   child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 2,),
                 ),
                 companyName!=null&&companyName.isNotEmpty?SizedBox(
-                    width:MediaQuery.of(context).size.width*0.45,
+                    width:cardWidth*0.6,
                     child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
                 SizedBox(height: 1,),
                 Row(
@@ -540,145 +543,160 @@ commonTopCompaniesWidget(context,{
   bool isFollowData=true,
   bool isFollowing=false,
   required Function onClick,
-  required Function onMessageClick
+  required Function onMessageClick,
+  required bool isProfileVerified,
+  Function()? onProfileClick,
+  required double cardWidth
 }){
   return Card(
     color: appWhiteColor,
-    child: Container(
-      decoration: BoxDecoration(
-        color: appWhiteColor,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: appBlackShadowColor,
-            offset: Offset(0, 5),
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                    borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
-                  border: Border.all(color: appGreyBlackColor,width: 0.5)
-                ),
-                child: image.isNotEmpty?Padding(
-                  padding: isSimilerProfile?EdgeInsets.all(0):EdgeInsets.all(0),
-                  child: ClipRRect(
-                    borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
-                    child: Image.network(image,height: 40,width: 40,fit: BoxFit.cover,errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
-                            gradient: LinearGradient(
-                                colors: [getRandomColor(),getRandomColor()]
-                            )
-                        ),
-                        child: Text(getInitialsWithSpace(input: name??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
-                      );
-                    },),
-                  ),
-                ):Container(
-                  alignment: Alignment.center,
+    child: GestureDetector(
+      onTap: (){
+        onProfileClick!();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: appWhiteColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: appBlackShadowColor,
+              offset: Offset(0, 5),
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
                       borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
-                      gradient: LinearGradient(
-                          colors: [getRandomColor(),getRandomColor()]
-                      )
+                    border: Border.all(color: appGreyBlackColor,width: 0.5)
                   ),
-                  child: Text(getInitialsWithSpace(input: name??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
-                ),
-              ),
-              SizedBox(width: 10,),
-              SizedBox(
-                width: isFollowData?MediaQuery.of(context).size.width*0.57:MediaQuery.of(context).size.width*0.57,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(name,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
-                    id.isNotEmpty?Text("ID: $id",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),):Container(),
-                  ],
-                ),
-              ),
-              isFollowData?GestureDetector(
-                onTap: (){
-                  if(isFollowing){
-
-                  }else{
-                    onClick();
-                  }
-
-                },
-                child: isFollowing?Text(appFollowing,style: AppTextStyles.font12.copyWith(color: appGreenColor),):SvgPicture.asset(appFollowCircular,height: 24,width: 24,),
-              ):Container(),
-             isSimilerProfile?GestureDetector(
-               onTap: (){
-                 onMessageClick();
-               },
-               child:  SvgPicture.asset(appMessageCircular,height: 24,width: 24,),
-             ):Container()
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
+                  child: image.isNotEmpty?Padding(
+                    padding: isSimilerProfile?EdgeInsets.all(0):EdgeInsets.all(0),
+                    child: ClipRRect(
+                      borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
+                      child: Image.network(image,height: 40,width: 40,fit: BoxFit.cover,errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          alignment: Alignment.center,
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
+                              gradient: LinearGradient(
+                                  colors: [getRandomColor(),getRandomColor()]
+                              )
+                          ),
+                          child: Text(getInitialsWithSpace(input: name??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
+                        );
+                      },),
+                    ),
+                  ):Container(
+                    alignment: Alignment.center,
+                    height: 50,
                     width: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: isFollowData?BorderRadius.circular(10):BorderRadius.circular(100),
+                        gradient: LinearGradient(
+                            colors: [getRandomColor(),getRandomColor()]
+                        )
+                    ),
+                    child: Text(getInitialsWithSpace(input: name??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
                   ),
-                  jobTitle.isNotEmpty?Row(
-                    children: <Widget>[
-                      SvgPicture.asset(appExperenceIconSvg,height: 16,width: 16,),
-                      SizedBox(width: 5,),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width*0.6,
-                          child: Text(jobTitle,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 2,)),
-                    ],
-                  ):Container(),
-                  Container(),
-                ],
-              ),
-              jobTitle.isNotEmpty?SizedBox(height: 5,):SizedBox(height: 0,),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: 50,
-                  ),
-                  location.isNotEmpty?Row(
+                ),
+                SizedBox(width: 10,),
+                SizedBox(
+                  width: isFollowData?cardWidth*0.5:cardWidth*0.45,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,),
-                      SizedBox(width: 5,),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width*0.6,
-                          child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 2,)),
+                      commonUserNameWidget(context, userName: name, isProfileVerified: isProfileVerified, width: cardWidth*0.8),
+                      //Text(name,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
+                      id.isNotEmpty?Text("ID: $id",style: AppTextStyles.font14.copyWith(color: appPrimaryColor),):Container(),
+                      Column(
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              jobTitle.isNotEmpty?Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(appExperenceIconSvg,height: 16,width: 16,color: appGreyBlackColor,),
+                                  SizedBox(width: 5,),
+                                  SizedBox(
+                                      width: isFollowData?cardWidth*0.44:cardWidth*0.38,
+                                      child: Text(jobTitle,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 2,)),
+                                ],
+                              ):Container(),
+                            ],
+                          ),
+                          jobTitle.isNotEmpty?SizedBox(height: 5,):SizedBox(height: 0,),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              location.isNotEmpty?Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,color: appGreyBlackColor,),
+                                  SizedBox(width: 5,),
+                                  SizedBox(
+                                      width: isFollowData?cardWidth*0.44:cardWidth*0.38,
+                                      child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 2,)),
+                                ],
+                              ):Container(),
+                            ],
+                          ),
+                        ],
+                      )
                     ],
-                  ):Container(),
-                  Container(),
-                ],
-              ),
-            ],
-          )
-        ],
+                  ),
+                ),
+                isFollowData?GestureDetector(
+                  onTap: (){
+                    if(isFollowing){
+
+                    }else{
+                      onClick();
+                    }
+
+                  },
+                  child: isFollowing?Text(appFollowing,style: AppTextStyles.font12.copyWith(color: appGreenColor),):Container(
+                    padding: EdgeInsets.symmetric(vertical: 4,horizontal: 5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(color: appPrimaryColor,width: 1)
+                    ),
+                    child: Text(appFollow,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
+                  ),
+                ):Container(),
+               isSimilerProfile?GestureDetector(
+                 onTap: (){
+                   onMessageClick();
+                 },
+                 child:  Container(
+                   padding: EdgeInsets.symmetric(vertical: 4,horizontal: 5),
+                   decoration: BoxDecoration(
+                     borderRadius: BorderRadius.circular(5.0),
+                     border: Border.all(color: appPrimaryColor,width: 1)
+                   ),
+                   child: Text(appMessages,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
+                 )//SvgPicture.asset(appMessageCircular,height: 24,width: 24,),
+               ):Container()
+              ],
+            ),
+          ],
+        ),
       ),
     ),
   );

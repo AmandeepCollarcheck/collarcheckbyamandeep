@@ -84,24 +84,26 @@ class DashboardPage extends GetView<DashboardController>{
       var recommendJob = controller.userHomeModel.value.data!.recommendJob??[];
       return recommendJob!=null&&recommendJob.isNotEmpty?Container(
         color: appPrimaryBackgroundColor,
+
         padding: EdgeInsets.only(left: 20,top: 20,bottom: 20),
         child: Column(
           children: <Widget>[
             commonHeaderAndSeeAll(headerName: appRecommendJobs, seeAllClick: (){
               controller.openRecommendJobPage();
-            }),
+            },isShowViewAll: recommendJob.length > 4 ? true : false),
             SizedBox(height: 15,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Obx(()=>Wrap(
                 spacing: 10,
-                children: List.generate(recommendJob.length??0, (index){
+                children: List.generate(recommendJob.length>4?4:recommendJob.length??0, (index){
                   return Padding(
                     padding: EdgeInsets.only(
-                      right: index == recommendJob.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
+                      right: index == (recommendJob.length > 4 ? 3 : recommendJob.length - 1) ? 20.0 : 0.0,
+                    //  right: index == recommendJob.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
                     ),
                     child: commonCardWidget(context,
-                        cardWidth: MediaQuery.of(context).size.width*0.9,
+                        cardWidth: MediaQuery.of(context).size.width*0.7,
                         onClick: (){
                           controller.openJobDetailsPage( jobTitle: recommendJob[index].slug ??"");
                         },
@@ -112,6 +114,7 @@ class DashboardPage extends GetView<DashboardController>{
                         expDetails: recommendJob[index].experienceName??"",
                         programmingList: recommendJob[index].skill??[],
                         isExpanded: controller.isExpanded.value,
+                        isApplied: recommendJob[index].apply??false,
                         onExpandChanged: () {
                           controller.isExpanded.value=!controller.isExpanded.value;
                         },
@@ -148,7 +151,7 @@ class DashboardPage extends GetView<DashboardController>{
             children: <Widget>[
               commonHeaderAndSeeAll(headerName: appJobsForYou, seeAllClick: (){
                 controller.openRecommendJobPage(isJobForYou: true,);
-              }),
+              },isShowViewAll: jobList.length>4?true:false),
               SizedBox(height: 15,),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -158,10 +161,11 @@ class DashboardPage extends GetView<DashboardController>{
                     //controller.location.value="${jobList[index].cityName??""}, ${jobList[index].stateName??""}, ${jobList[index].companyName??""}";
                     return Padding(
                       padding: EdgeInsets.only(
-                        right: index == jobList.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
+                          right: index == (jobList.length > 4 ? 3 : jobList.length - 1) ? 20.0 : 0.0
+                       // right: index == jobList.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
                       ),
                       child: commonCardWidget(context,
-                          cardWidth: MediaQuery.of(context).size.width*0.9,
+                          cardWidth: MediaQuery.of(context).size.width*0.7,
                           onClick: (){
                             controller.openJobDetailsPage( jobTitle: jobList[index].slug ??"");
                           },
@@ -172,6 +176,7 @@ class DashboardPage extends GetView<DashboardController>{
                           expDetails:  jobList[index].experienceName??"",
                           programmingList: jobList[index].skill??[],
                           isExpanded: controller.isExpanded.value,
+                          isApplied: jobList[index].apply??false,
                           onExpandChanged: () {
                             controller.isExpanded.value=!controller.isExpanded.value;
                           },
@@ -245,17 +250,18 @@ class DashboardPage extends GetView<DashboardController>{
           children: <Widget>[
             commonHeaderAndSeeAll(headerName: appTopCompanies, seeAllClick: (){
               controller.openTopCompaniesPage();
-            }),
+            },isShowViewAll: topCompanies.length > 4 ? true : false),
             SizedBox(height: 10,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Wrap(
                 spacing: 20,
-                children: List.generate(topCompanies.length??0, (index){
+                children: List.generate(topCompanies.length>4?4:topCompanies.length, (index){
                   var allTopCompanyList=topCompanies[index].images??[];
                   return  Padding(
                     padding: EdgeInsets.only(
-                      right: index == topCompanies.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
+                      right: index == (topCompanies.length > 4 ? 3 : topCompanies.length - 1) ? 20.0 : 0.0,
+                      //right: index == topCompanies.length - 1 ? 20.0 : 0.0, // ✅ Add padding to last index
                     ),
                     child: topCompaniesWidget(jobTypeName: topCompanies[index].name??'', numberOfCompany: topCompanies[index].industryCount??'', allCompanyIcon: allTopCompanyList??[]),
                   );

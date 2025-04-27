@@ -63,6 +63,10 @@ import 'package:collarchek/messages/message_bindings.dart';
 import 'package:collarchek/messages/message_page.dart';
 import 'package:collarchek/notifications/notification_binding.dart';
 import 'package:collarchek/notifications/notification_page.dart';
+import 'package:collarchek/other_company_profile/other_company_profile_bindings.dart';
+import 'package:collarchek/other_company_profile/other_company_profile_page.dart';
+import 'package:collarchek/other_individual_profile/other_individual_profile_bindings.dart';
+import 'package:collarchek/other_individual_profile/other_individual_profile_page.dart';
 import 'package:collarchek/portfolio/portfolio_bindings.dart';
 import 'package:collarchek/profile_details/profile_details.dart';
 import 'package:collarchek/profile_details/profile_details_bindings.dart';
@@ -132,6 +136,8 @@ class AppRoutes {
   static const String companyUpdateProfile = '/companyUpdateProfile';
   static const String companyRecommendedEmployee = '/companyRecommendedEmployee';
   static const String recentlyJoinedPeople = '/recentlyJoinedPeople';
+  static const String otherCompanyProfilePage = '/otherCompanyProfilePage';
+  static const String otherIndividualProfilePage = '/otherIndividualProfilePage';
   static final routes = [
     GetPage(
       name: splash,
@@ -347,6 +353,16 @@ class AppRoutes {
       name: recentlyJoinedPeople,
       page: () => CompanyRecentlyJoinedPeoplePage(),
       binding: CompanyRecentlyJoinedPeopleBindings(),
+    ),
+    GetPage(
+      name: otherCompanyProfilePage,
+      page: () => OtherCompanyProfilePage(),
+      binding: OtherCompanyProfileBindings(),
+    ),
+    GetPage(
+      name: otherIndividualProfilePage,
+      page: () => OtherIndividualProfilePage(),
+      binding: OtherIndividualProfileBindings(),
     ),
   ];
 }

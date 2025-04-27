@@ -37,18 +37,18 @@ class CompanyRecentlyJoinedPeoplePage extends GetView<CompanyRecentlyJoinedPeopl
             Container(
               margin: EdgeInsets.only(left: 20,right: 20),
               child: SizedBox(
-                height:MediaQuery.of(context).size.height*0.4,
+                height:MediaQuery.of(context).size.height*0.86,
                 child: Obx((){
                   var recentlyJoinedData=controller.recentlyJoinedData.value.data??[];
                   return GridView.builder(
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // 2 rows (you can adjust as needed)
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      childAspectRatio: 0.8, // Adjust width/height ratio
+                      childAspectRatio: 0.82, // Adjust width/height ratio
                     ),
-                    itemCount: recentlyJoinedData.length > 4 ? 4 : recentlyJoinedData.length,
+                    itemCount:  recentlyJoinedData.length,
                     itemBuilder: (context, index) {
                       return recentlyJoinedWidget(
                         context,

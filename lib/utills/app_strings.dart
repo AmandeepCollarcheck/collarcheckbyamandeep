@@ -428,6 +428,8 @@ const String appToPresent="to Present";
 const String appEmployment="Employment";
 const String appNoGalleryData="No data found in app gallery";
 const String appNoAnyLinkAvailable="No any link available";
+const String appReviewsHistory="Reviews history";
+const String appFollow="Follow";
 
 
 

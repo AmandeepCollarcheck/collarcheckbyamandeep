@@ -1,7 +1,9 @@
 import 'package:collarchek/company_profile/company_profile_controllers.dart';
+import 'package:collarchek/other_company_profile/other_company_profile_controllers.dart';
 import 'package:collarchek/utills/app_key_constent.dart';
 import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/app_strings.dart';
+import 'package:collarchek/utills/common_widget/common_button.dart';
 import 'package:collarchek/utills/common_widget/common_image_widget.dart';
 import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:collarchek/utills/font_styles.dart';
@@ -18,8 +20,8 @@ import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_methods.dart';
 import '../utills/image_path.dart';
 
-class CompanyProfilePage extends GetView<CompanyProfileControllers>{
-  const CompanyProfilePage({super.key});
+class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
+  const OtherCompanyProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
           backgroundColor: appScreenBackgroundColor,
           body: Column(
             children: <Widget>[
+              SizedBox(height: 30,),
               Expanded(
                   child: NestedScrollView(
                       controller: controller.scrollController,
@@ -40,13 +43,17 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+
                                   Container(
                                     padding: EdgeInsets.only(left: 20,right: 20),
                                     height:60,
-                                    child: commonAppBarWithSettingAndShareOption(context,
+                                    child: commonAppBarWithSettingAndShareOptionWithBackButton(context,
                                       leadingIcon: appBackSvgIcon,
                                       onClick: () {},
                                       onSettingsClick: () {},
+                                      onBackClick: () {
+                                        controller.backButton(context);
+                                      },
                                     ),
                                   ),
                                   Container(
@@ -58,58 +65,58 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                           ),
                         ];
                       },
-                    // body:ScrollToAnimateTab(
-                    //     activeTabDecoration: TabDecoration(
-                    //         textStyle: AppTextStyles.font14.copyWith(
-                    //           color:  appPrimaryColor,
-                    //           fontWeight:  FontWeight.bold,
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //             // border: Border.all(color: Colors.black),
-                    //             // borderRadius: const BorderRadius.all(Radius.circular(5))
-                    //         )
-                    //     ),
-                    //     inActiveTabDecoration: TabDecoration(
-                    //         textStyle: AppTextStyles.font14.copyWith(
-                    //           color:  appBlackColor,
-                    //           fontWeight:  FontWeight.normal,
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //             // border: Border.all(color: Colors.black12),
-                    //             // borderRadius: const BorderRadius.all(Radius.circular(5))
-                    //         )
-                    //     ),
-                    //     tabs: [
-                    //       ScrollableList(
-                    //           label: appAbout,
-                    //           body: _homeWidgetTabView(context)
-                    //       ),
-                    //       ScrollableList(
-                    //           label: appJobOpening,
-                    //           body: _jobOpeningTabView(context)
-                    //       ),
-                    //       ScrollableList(
-                    //           label: appGallery,
-                    //           body: _galleryWidget(context)
-                    //       ),
-                    //       ScrollableList(
-                    //           label: appPerksAndBenefits,
-                    //           body: Container(
-                    //             child: Text("asj"),
-                    //           )
-                    //       ),
-                    //       ScrollableList(
-                    //           label: appSimilarCompanies,
-                    //           body: _similarCompanyWidget(context)
-                    //       ),
-                    //       ScrollableList(
-                    //           label: appEmployeeProfiles,
-                    //           body:_simillerProfileWidget(context)
-                    //       ),
-                    //     ]
-                    // )
+                      // body:ScrollToAnimateTab(
+                      //     activeTabDecoration: TabDecoration(
+                      //         textStyle: AppTextStyles.font14.copyWith(
+                      //           color:  appPrimaryColor,
+                      //           fontWeight:  FontWeight.bold,
+                      //         ),
+                      //         decoration: BoxDecoration(
+                      //             // border: Border.all(color: Colors.black),
+                      //             // borderRadius: const BorderRadius.all(Radius.circular(5))
+                      //         )
+                      //     ),
+                      //     inActiveTabDecoration: TabDecoration(
+                      //         textStyle: AppTextStyles.font14.copyWith(
+                      //           color:  appBlackColor,
+                      //           fontWeight:  FontWeight.normal,
+                      //         ),
+                      //         decoration: BoxDecoration(
+                      //             // border: Border.all(color: Colors.black12),
+                      //             // borderRadius: const BorderRadius.all(Radius.circular(5))
+                      //         )
+                      //     ),
+                      //     tabs: [
+                      //       ScrollableList(
+                      //           label: appAbout,
+                      //           body: _homeWidgetTabView(context)
+                      //       ),
+                      //       ScrollableList(
+                      //           label: appJobOpening,
+                      //           body: _jobOpeningTabView(context)
+                      //       ),
+                      //       ScrollableList(
+                      //           label: appGallery,
+                      //           body: _galleryWidget(context)
+                      //       ),
+                      //       ScrollableList(
+                      //           label: appPerksAndBenefits,
+                      //           body: Container(
+                      //             child: Text("asj"),
+                      //           )
+                      //       ),
+                      //       ScrollableList(
+                      //           label: appSimilarCompanies,
+                      //           body: _similarCompanyWidget(context)
+                      //       ),
+                      //       ScrollableList(
+                      //           label: appEmployeeProfiles,
+                      //           body:_simillerProfileWidget(context)
+                      //       ),
+                      //     ]
+                      // )
 
-                    body:Column(
+                      body:Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: 10,),
@@ -151,26 +158,26 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                             );
                           }),
 
-                      Expanded(
-                        child: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          child: Obx((){
-                            var allData=controller.companyProfileData.value.data;
-                            var benefitsData=allData?.allBenefits??[];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _childWithKey(controller.homeKey, _homeWidgetTabView(context)),
-                                _childWithKey(controller.jobOpeningKey, _jobOpeningTabView(context)),
-                                _childWithKey(controller.galleryKey, _galleryWidget(context)),
-                                _childWithKey(controller.benifits, _perksAndBebefitsWidget(context, allBenefits: benefitsData??[])),
-                                _childWithKey(controller.companyKey, _similarCompanyWidget(context)),
-                                _childWithKey(controller.similerProfile, _simillerProfileWidget(context)),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              physics: BouncingScrollPhysics(),
+                              child: Obx((){
+                                var allData=controller.companyProfileData.value.data;
+                                var benefitsData=allData?.allBenefits??[];
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _childWithKey(controller.homeKey, _homeWidgetTabView(context)),
+                                    _childWithKey(controller.jobOpeningKey, _jobOpeningTabView(context)),
+                                    _childWithKey(controller.galleryKey, _galleryWidget(context)),
+                                    _childWithKey(controller.benifits, _perksAndBebefitsWidget(context, allBenefits: benefitsData??[])),
+                                    _childWithKey(controller.companyKey, _similarCompanyWidget(context)),
+                                    _childWithKey(controller.similerProfile, _simillerProfileWidget(context)),
 
-                              ],
-                            );
-                          }),),
-                      ),
+                                  ],
+                                );
+                              }),),
+                          ),
 
 
 
@@ -377,13 +384,63 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                   ],
                 ),
                 SizedBox(height: 4,),
-                 location.isNotEmpty?Row(
+                location.isNotEmpty?Row(
                   children: <Widget>[
                     SvgPicture.asset(appLocationsSvgIcon,height: 20,width: 20,),
                     SizedBox(width: 4,),
                     Text(location),
                   ],
                 ):Container(),
+                SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      width:MediaQuery.of(context).size.width*0.4,
+                      child: commonButton(
+                          context,
+                          isPaddingDisabled: true,
+                          isPrefixIcon: appFollowSvgIcon,
+                          buttonName: appFollow,
+                          isPrefixIconShow: true,
+                          buttonBackgroundColor: appWhiteColor,
+                          textColor: appPrimaryColor,
+                          buttonBorderColor: appPrimaryColor,
+                          onClick: (){
+                            var userId=controller.companyProfileData.value.data?.id??"";
+                            controller.companyFollowApiCall(context,companyId:userId??"" , userId:controller.companyProfileData.value.data?.id??"" );
+                          }
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    SizedBox(
+                      width:MediaQuery.of(context).size.width*0.4,
+                      child: commonButton(
+                          context,
+                          isPaddingDisabled: true,
+                          isPrefixIcon: appMessagesSvgIcon,
+                          buttonName: appMessages,
+                          isPrefixIconShow: true,
+                          buttonBackgroundColor: appPrimaryColor,
+                          textColor: appWhiteColor,
+                          buttonBorderColor: appWhiteColor,
+                          onClick: (){
+                            Get.offNamed(
+                                AppRoutes.chat,
+                                arguments: {
+                                  screenName:otherCompanyProfileScreen,
+                                  messageReceiverName:controller.companyProfileData.value.data?.companyName??"",
+                                  profileImageData:controller.companyProfileData.value.data?.profile??"",
+                                  receiverId:controller.companyProfileData.value.data?.id??"",
+                                  senderId:userId??"",
+                                  slugId:controller.slugDataId.value
+
+                                });
+                          }
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           )
@@ -740,33 +797,34 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
               runSpacing: 5,
               children: List.generate(companyProfile.length??0, (index){
                 return commonTopCompaniesWidget(context,
-                  image: companyProfile[index].profile??"",
-                  location: generateLocation(cityName: companyProfile[index].cityName??"", stateName: companyProfile[index].stateName??"", countryName: companyProfile[index].countryName??"",),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
-                  name: capitalizeFirstLetter(companyProfile[index].name??"",),
-                  id:companyProfile[index].individualId??"",// allTopCompanies[index]['individual_id']??"",
-                  jobTitle: "",
-                  onClick: (){
-                    var userId=controller.companyProfileData.value.data?.id??"";
-                    controller.companyFollowApiCall(context,companyId:userId??"" , userId:companyProfile[index].id??"" );
+                    image: companyProfile[index].profile??"",
+                    location: generateLocation(cityName: companyProfile[index].cityName??"", stateName: companyProfile[index].stateName??"", countryName: companyProfile[index].countryName??"",),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
+                    name: capitalizeFirstLetter(companyProfile[index].name??"",),
+                    id:companyProfile[index].individualId??"",// allTopCompanies[index]['individual_id']??"",
+                    jobTitle: "",
+                    onClick: (){
+                      var userId=controller.companyProfileData.value.data?.id??"";
+                      controller.companyFollowApiCall(context,companyId:userId??"" , userId:companyProfile[index].id??"" );
 
-                  },
-                  isFollowData: true, onMessageClick: (){
-                    // Get.offNamed(
-                    //     AppRoutes.chat,
-                    //     arguments: {
-                    //       screenName:profileDetails,
-                    //       messageReceiverName:companyProfile[index].name??"",
-                    //       profileImageData:companyProfile[index].profile??"",
-                    //       receiverId:companyProfile[index].id??"",
-                    //       senderId:userId??"",
-                    //
-                    //     });
-                  },
-                  isProfileVerified: companyProfile[index].isVerified??false,
-                  cardWidth: MediaQuery.of(context).size.width,
-                  onProfileClick: (){
-                    Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:companyProfile[index].slug??""});
-                  }
+                    },
+                    isFollowData: true, onMessageClick: (){
+                      Get.offNamed(
+                          AppRoutes.chat,
+                          arguments: {
+                            screenName:otherCompanyProfileScreen,
+                            messageReceiverName:companyProfile[index].name??"",
+                            profileImageData:companyProfile[index].profile??"",
+                            receiverId:companyProfile[index].id??"",
+                            senderId:userId??"",
+                            slugId:controller.slugDataId.value
+
+                          });
+                    },
+                    isProfileVerified: companyProfile[index].isVerified??false,
+                    cardWidth: MediaQuery.of(context).size.width,
+                    onProfileClick: (){
+                      Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:companyProfile[index].slug??""});
+                    }
                   // isFollowing:companyProfile[index].followingData?.requestSend??false,
 
 
@@ -816,11 +874,12 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                     Get.offNamed(
                         AppRoutes.chat,
                         arguments: {
-                          screenName:profileDetails,
+                          screenName:otherCompanyProfileScreen,
                           messageReceiverName:simillerUserData[index].name??"",
                           profileImageData:simillerUserData[index].profile??"",
                           receiverId:simillerUserData[index].id??"",
                           senderId:userId??"",
+                          slugId:controller.slugDataId.value
 
                         });
                   },

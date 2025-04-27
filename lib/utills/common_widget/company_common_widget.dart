@@ -1057,7 +1057,7 @@ companyRecommendedWidget(context,{required String profileImage,required String i
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: ratingBar=="0.0"?cardWidth:cardWidth*0.8,),
+                commonUserNameWidget(context, userName: userName, isProfileVerified: isProfileVerified, width: ratingBar=="0.0"?cardWidth:cardWidth*0.7,),
                 // SizedBox(
                 //     width:
                 //     child: Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),)
@@ -1128,7 +1128,7 @@ recentlyJoinedWidget(context,{required String profileImage,required String initi
               width: 50,
               borderRadius: 100),
           SizedBox(height: 5,),
-          Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),),
+          Text(userName,style: AppTextStyles.font16W700.copyWith(color: appBlackColor),maxLines: 2,),
           SizedBox(height: 3,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

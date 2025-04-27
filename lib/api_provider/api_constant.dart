@@ -96,6 +96,8 @@ final String strCompanyJobStatus = '/company/cancel-job';
 final String strCompanyEmploymentRequest = '/company/employement-request';
 final String strCompanyEmployee = '/recommend-employee';
 final String strCompanyRecentlyJoinedPeople = '/recent-joined-employee';
+final String strCompanyViewReview = '/company/view-review';
+final String strCompanyUpdateReview = '/company/add-review';
 
 
 

@@ -47,6 +47,7 @@ import '../models/employment_history_list_model.dart';
 import '../models/employment_list_model.dart';
 import '../models/filter_data_list_model.dart';
 import '../models/follow_request_data_model.dart';
+import '../models/get_specific_review_model.dart';
 import '../models/job_details_model.dart';
 import '../models/language_list_model.dart';
 import '../models/logout_model.dart';
@@ -1589,8 +1590,34 @@ class ApiProvider{
       handleException(error, stacktrace, _dioError!);
     }
   }
-
-
+  Future getReview({required String id}) async {
+    try {
+      Response response = await _dio.get("$strCompanyViewReview/$id" );
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return GetSpecificReviewModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future updateReview({required String id}) async {
+    try {
+      Response response = await _dio.put('$strCompanyUpdateReview/id');
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SaveUserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
 
 
 

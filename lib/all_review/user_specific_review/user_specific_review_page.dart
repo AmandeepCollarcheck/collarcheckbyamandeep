@@ -1,4 +1,6 @@
 import 'package:collarchek/all_review/user_specific_review/user_specfic_review_controllers.dart';
+import 'package:collarchek/utills/app_key_constent.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -129,13 +131,22 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
                       description: allReviewsData[index].review.toString()??"",
                       buttonName: allReviewsData[index].edits==1?appEditReview:appAccept,
                       isEditReview: allReviewsData[index].edits==1?true:false,
-                      onAcceptOrEditReview: () {  },
-                      onReject: () {  },
+                        onAcceptOrEditReview: () {
+                          if(allReviewsData[index].edits==1){
+                            Get.offNamed(AppRoutes.review,arguments: {isEdit:true,reviewId: allReviewsData[index].id??"",screenName:companyUserSpecificReviewScreen,jobProfileName:allReviewsData[index].user??"",});
+                          }else{
+                            controller.acceptRatingApiCall(context, id: allReviewsData[index].id??"",);
+                          }
+
+                        },
+                        onReject: () {
+                          controller.rejectRatingApiCall(context, id: allReviewsData[index].id??"",);
+                        },
                       isApprovedReview: allReviewsData[index].approved=="1"?true:false,
                       isShowViewMore: allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty?true:false,
                       isShowViewHistory: allReviewsData[index].history!.isNotEmpty?true:false,
                       onClickViewHistory: (){
-                        
+                        controller.openHistoryDialog(context, historyData: allReviewsData[index].history??[]);
                       }
                     );
                   }),
@@ -182,12 +193,23 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
                       buttonName: appAccept
                       ,
                       isEditReview: allReviewsData[index].edits==1?true:false,
-                      onAcceptOrEditReview: () {  },
-                      onReject: () {  },
+                        onAcceptOrEditReview: () {
+                          if(allReviewsData[index].edits==1){
+                            Get.offNamed(AppRoutes.review,arguments: {isEdit:true,reviewId: allReviewsData[index].id??"",screenName:companyUserSpecificReviewScreen,jobProfileName:allReviewsData[index].user??"",});
+                          }else{
+                            controller.acceptRatingApiCall(context, id: allReviewsData[index].id??"",);
+                          }
+
+                        },
+                        onReject: () {
+                          controller.rejectRatingApiCall(context, id: allReviewsData[index].id??"",);
+                        },
                       isApprovedReview: allReviewsData[index].approved=="1"?true:false,
                       isShowViewMore: allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty?true:false,
                         isShowViewHistory: allReviewsData[index].history!.isNotEmpty?true:false,
-                        onClickViewHistory: (){}
+                        onClickViewHistory: (){
+                          controller.openHistoryDialog(context, historyData: allReviewsData[index].history??[]);
+                        }
                     );
                   }),
                 )
@@ -233,12 +255,23 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
                       buttonName: appEditReview
                       ,
                       isEditReview: allReviewsData[index].edits==1?true:false,
-                      onAcceptOrEditReview: () {  },
-                      onReject: () {  },
+                      onAcceptOrEditReview: () {
+                        if(allReviewsData[index].edits==1){
+                          Get.offNamed(AppRoutes.review,arguments: {isEdit:true,reviewId: allReviewsData[index].id??"",screenName:companyUserSpecificReviewScreen,jobProfileName:allReviewsData[index].user??"",});
+                        }else{
+                          controller.acceptRatingApiCall(context, id: allReviewsData[index].id??"",);
+                        }
+
+                      },
+                      onReject: () {
+                        controller.rejectRatingApiCall(context, id: allReviewsData[index].id??"",);
+                      },
                       isApprovedReview: allReviewsData[index].approved=="1"?true:false,
                       isShowViewMore: allReviewsData[index].link!=null&&allReviewsData[index].link!.isNotEmpty?true:false,
                         isShowViewHistory: allReviewsData[index].history!.isNotEmpty?true:false,
-                        onClickViewHistory: (){}
+                        onClickViewHistory: (){
+                          controller.openHistoryDialog(context, historyData: allReviewsData[index].history??[]);
+                        }
                     );
                   }),
                 )

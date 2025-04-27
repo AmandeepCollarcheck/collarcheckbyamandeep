@@ -25,6 +25,7 @@ class ChatControllers extends GetxController{
 
   var argumentTypeDataDetails="".obs;
   var messagesData = <String>[].obs; // Observable list of messages
+  var slugDataId="".obs;
 
 
 
@@ -39,6 +40,7 @@ class ChatControllers extends GetxController{
      profileImage.value=data[profileImageData]??"";
      receiverIdData.value=data[receiverId]??"";
      senderIdData.value=data[senderId]??"";
+     slugDataId.value=data[slugId]??"";
      argumentTypeDataDetails.value=data[argumentTypeData]??"";
    }
    Future.delayed(Duration(milliseconds: 500), ()async {
@@ -58,6 +60,8 @@ class ChatControllers extends GetxController{
      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
    }else if(screenNameData.value==topCompaniesScreen){
      Get.offNamed(AppRoutes.topCompanies,arguments: {argumentTypeData:argumentTypeDataDetails.value});
+   }else if(screenNameData.value==otherCompanyProfileScreen){
+     Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:slugDataId.value});
    } else{
      Get.offNamed(AppRoutes.bottomNavBar,);
    }

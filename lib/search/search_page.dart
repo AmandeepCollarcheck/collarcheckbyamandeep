@@ -213,6 +213,8 @@ class SearchPage extends GetView<SearchControllers>{
                                                    name: capitalizeFirstLetter(companyList[index].fname??""),
                                                    id:companyList[index].individualId??"",
                                                    jobTitle:"",
+                                                   isProfileVerified: false,
+                                                   cardWidth: MediaQuery.of(context).size.width*0.92,
                                                    onClick: (){
 
                                                    },
@@ -291,6 +293,8 @@ class SearchPage extends GetView<SearchControllers>{
                                                },
                                                child: commonTopCompaniesWidget(context,
                                                    image: userList[index].profile??"",
+                                                   isProfileVerified: false,
+                                                   cardWidth: MediaQuery.of(context).size.width*0.92,
                                                    location: generateLocation(cityName: userList[index].cityName??"", stateName: userList[index].stateName??"", countryName: userList[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
                                                    name: capitalizeFirstLetter(userList[index].fname??""),
                                                    id:userList[index].individualId??"",

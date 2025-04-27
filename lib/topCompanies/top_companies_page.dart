@@ -105,6 +105,8 @@ class TopCompaniesPage extends GetView<TopCompaniesController>{
                                        location: generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
                                        name: capitalizeFirstLetter(allTopCompanies[index]['fname']??""),
                                        id: allTopCompanies[index]['individual_id']??"",
+                                       isProfileVerified: false,
+                                       cardWidth: MediaQuery.of(context).size.width*0.92,
                                        jobTitle: '',
                                        onClick: ()async{
                                          String userIdData=await readStorageData(key: id) ??"";
@@ -179,6 +181,8 @@ class TopCompaniesPage extends GetView<TopCompaniesController>{
                                        location: generateLocation(cityName: allTopUsers[index]['city_name']??"", stateName: allTopUsers[index]['state_name']??"", countryName: allTopUsers[index]['country_name']??""),
                                        name: capitalizeFirstLetter(allTopUsers[index]['fname']??""),
                                        id: allTopUsers[index]['individual_id']??"",
+                                       isProfileVerified: false,
+                                       cardWidth: MediaQuery.of(context).size.width*0.92,
                                        jobTitle: capitalizeFirstLetter(allTopUsers[index]['designation_name']??"",),
                                        onClick: ()async{
                                          //String userIdData=await readStorageData(key: id) ??"";
