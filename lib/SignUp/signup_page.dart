@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import '../utills/app_colors.dart';
 import '../utills/app_strings.dart';
 import '../utills/common_widget/common_text_field.dart';
+import '../utills/common_widget/progress.dart';
 import '../utills/font_styles.dart';
 import '../utills/image_path.dart';
 
@@ -20,136 +21,144 @@ class SignUpPage extends GetView<SignUpControllers>{
   const SignUpPage({super.key});
   @override
   Widget build(BuildContext context){
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: appScreenBackgroundColor,
-        appBar: commonAppBar(context,onClick: (){
-          controller.backButtonClick();
-        }),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top: 20),
-            alignment: Alignment.center,
-            child: Column(
-              children: <Widget>[
-                commonScreenHeader(headerName: appSignUpAsACompany),
+    return PopScope(
+      canPop: false, // Prevents default back behavior
+      onPopInvoked: (didPop) {
+        if (!didPop) {
+          onWillPop();
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: appScreenBackgroundColor,
+          appBar: commonAppBar(context,onClick: (){
+            controller.backButtonClick();
+          }),
+          body: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(top: 20),
+              alignment: Alignment.center,
+              child: Column(
+                children: <Widget>[
+                  commonScreenHeader(headerName: appSignUpAsACompany),
 
-                Form(
-                  key: controller.formKey,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 20,right: 20),
-                    child: Column(
-                      children: <Widget>[
-                        ///For Individual
-                        controller.isCompanyProfile.value==false?commonTextField(controller: controller.firstNameController, hintText: appFirstName, validator: (value) => value!.isEmpty ? appFirstName+appIsRequired : null,):Container(),
-                        controller.isCompanyProfile.value==false?SizedBox(height: 10,):SizedBox(height: 0,),
-                        controller.isCompanyProfile.value==false?commonTextField(controller: controller.lastNameController, hintText: appLastName, validator: (value) => value!.isEmpty ? appLastName+appIsRequired : null,):Container(),
-                       ///For Company
-                        controller.isCompanyProfile.value==true?commonTextField(controller: controller.companyController, hintText: appCompanyName, validator: (value) => value!.isEmpty ? appCompanyName+appIsRequired : null,):Container(),
-                        SizedBox(height: 10,),
-                        Obx(()=>commonTextFieldWithCountryCode(context,countryFlag: controller.selectedCountryFlag.value, controller: controller.phoneController, hintText:  appPhoneNumber, validator: (value) => value!.isEmpty ? appPhoneNumber+appIsRequired : null,
-                            selectedCountryFlag: (Map<String, String> newCountryData) {
-                              controller.selectedCountryFlag.value=newCountryData['countryFlag'];
-                              controller.countryCode.value="+${newCountryData['countryCode']}";
-                            }),),
-                       // commonTextField(controller: controller.phoneController, hintText: appPhoneNumber),
-                        SizedBox(height: 10,),
-                        ///For Company
-                        controller.isCompanyProfile.value==true?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress ,hintText: appCompanyEmail, validator: (value) => value!.isEmpty ? appCompanyEmail+appIsRequired : null,):Container(),
-                       ///For Individual
-                        controller.isCompanyProfile.value==false?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress , hintText: appEmailId, validator: (value) => value!.isEmpty ? appEmailId+appIsRequired : null,):Container(),
-                        SizedBox(height: 10,),
-                        commonTextField(controller: controller.referralCodeController, hintText: appReferralCode),
-                        SizedBox(height: 20,),
-                        _termConditionsWidget(context),
-                        SizedBox(height: 20,),
+                  Form(
+                    key: controller.formKey,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 20,right: 20),
+                      child: Column(
+                        children: <Widget>[
+                          ///For Individual
+                          controller.isCompanyProfile.value==false?commonTextField(controller: controller.firstNameController, hintText: appFirstName, validator: (value) => value!.isEmpty ? appFirstName+appIsRequired : null,):Container(),
+                          controller.isCompanyProfile.value==false?SizedBox(height: 10,):SizedBox(height: 0,),
+                          controller.isCompanyProfile.value==false?commonTextField(controller: controller.lastNameController, hintText: appLastName, validator: (value) => value!.isEmpty ? appLastName+appIsRequired : null,):Container(),
+                          ///For Company
+                          controller.isCompanyProfile.value==true?commonTextField(controller: controller.companyController, hintText: appCompanyName, validator: (value) => value!.isEmpty ? appCompanyName+appIsRequired : null,):Container(),
+                          SizedBox(height: 10,),
+                          Obx(()=>commonTextFieldWithCountryCode(context,countryFlag: controller.selectedCountryFlag.value, controller: controller.phoneController, hintText:  appPhoneNumber, validator: (value) => value!.isEmpty ? appPhoneNumber+appIsRequired : null,
+                              selectedCountryFlag: (Map<String, String> newCountryData) {
+                                controller.selectedCountryFlag.value=newCountryData['countryFlag'];
+                                controller.countryCode.value="+${newCountryData['countryCode']}";
+                              }),),
+                          // commonTextField(controller: controller.phoneController, hintText: appPhoneNumber),
+                          SizedBox(height: 10,),
+                          ///For Company
+                          controller.isCompanyProfile.value==true?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress ,hintText: appCompanyEmail, validator: (value) => value!.isEmpty ? appCompanyEmail+appIsRequired : null,):Container(),
+                          ///For Individual
+                          controller.isCompanyProfile.value==false?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress , hintText: appEmailId, validator: (value) => value!.isEmpty ? appEmailId+appIsRequired : null,):Container(),
+                          SizedBox(height: 10,),
+                          commonTextField(controller: controller.referralCodeController, hintText: appReferralCode),
+                          SizedBox(height: 20,),
+                          _termConditionsWidget(context),
+                          SizedBox(height: 20,),
 
+                        ],
+                      ),
+                    ),
+                  ),
+                  commonButton(context, buttonName: appSendOTP, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor, buttonBorderColor: appPrimaryColor, onClick: (){
+
+                    if(controller.isCompanyProfile.value==false){
+                      ///Individual SignUp
+                      controller.sendOtpButtonClick(context);
+                    }else{
+                      controller.companySignUpSendOtpButton(context);
+                    }
+
+                  }),
+                  Container(
+                    margin: EdgeInsets.only(left: 20,right: 20,top: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: appGreyBlackColor,
+                            thickness: 1, // Line thickness
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                              appContinue,
+                              style: AppTextStyles.font14.copyWith(color: appGreyBlackColor,)
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: appGreyBlackColor,
+                            thickness: 1, // Line thickness
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ),
-                commonButton(context, buttonName: appSendOTP, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor, buttonBorderColor: appPrimaryColor, onClick: (){
+                  SizedBox(height: 20,),
 
-                  if(controller.isCompanyProfile.value==false){
-                    ///Individual SignUp
-                    controller.sendOtpButtonClick(context);
-                  }else{
-                    controller.companySignUpSendOtpButton(context);
-                  }
-
-                }),
-                Container(
-                  margin: EdgeInsets.only(left: 20,right: 20,top: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: appGreyBlackColor,
-                          thickness: 1, // Line thickness
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                            appContinue,
-                            style: AppTextStyles.font14.copyWith(color: appGreyBlackColor,)
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: appGreyBlackColor,
-                          thickness: 1, // Line thickness
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20,),
-
-                ///For Company
-                controller.isCompanyProfile.value==true?_commonSocialSignIN(context,socialName: appSignUpWithGoogle,onClick: (){
-                  ///Gooogle click
-                },socialIcon: appGoogleIcon):Container(),
-                ///For Individual
-                controller.isCompanyProfile.value==false?_socialWidget():Container(),
+                  ///For Company
+                  controller.isCompanyProfile.value==true?_commonSocialSignIN(context,socialName: appSignUpWithGoogle,onClick: (){
+                    ///Gooogle click
+                  },socialIcon: appGoogleIcon):Container(),
+                  ///For Individual
+                  controller.isCompanyProfile.value==false?_socialWidget():Container(),
 
 
-                SizedBox(height: 30,),
-                Container(
-                  //margin: EdgeInsets.only(bottom: 30),
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
-                          children: [
-                            TextSpan(
-                              text:  appAlreadyHaveAnAccount,
-                              style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
-                            ),
-                            TextSpan(
-                              text: appLogin,
-                              style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  controller.loginButtonClick();
-                                  // Navigate to Terms of Use page or any action
-                                },
-                            ),
-                            TextSpan(
-                              text:  appHere,
-                              style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                  SizedBox(height: 30,),
+                  Container(
+                    //margin: EdgeInsets.only(bottom: 30),
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
+                            children: [
+                              TextSpan(
+                                text:  appAlreadyHaveAnAccount,
+                                style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
+                              ),
+                              TextSpan(
+                                text: appLogin,
+                                style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    controller.loginButtonClick();
+                                    // Navigate to Terms of Use page or any action
+                                  },
+                              ),
+                              TextSpan(
+                                text:  appHere,
+                                style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

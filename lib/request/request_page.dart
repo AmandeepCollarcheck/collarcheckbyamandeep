@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 import '../utills/common_widget/common_methods.dart';
+import '../utills/common_widget/progress.dart';
 import '../utills/font_styles.dart';
 import '../utills/image_path.dart';
 
@@ -17,47 +18,55 @@ class RequestPage extends GetView<RequestControllers>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appScreenBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            commonActiveSearchBar(
-                onClick: (){
-                  controller.backButtonClick(context);
-                }, onShareClick: (){}, onFilterClick: (){}, leadingIcon: appBackSvgIcon, screenName: appRequest, actionButton: ''),
-            SizedBox(height: 20,),
-            Container(
-              color: appWhiteColor,
-              padding:EdgeInsets.zero,
-              child: TabBar(
-                labelPadding: EdgeInsets.only(bottom: 10),
-                isScrollable: false,
-                dividerColor: appWhiteColor,
-                indicatorColor: appPrimaryColor,
-                indicatorWeight: 2,
-                // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
-                indicatorSize: TabBarIndicatorSize.tab,
-                controller: controller.tabController,
-                tabs: List.generate(controller.listTabLabel.length, (index){
-                  return Text(controller.listTabLabel[index],style: AppTextStyles.font14.copyWith(color: appBlackColor),);
-                }),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: appPrimaryBackgroundColor,
-                height: MediaQuery.of(context).size.height ,
-                child: TabBarView(
-                  // physics: NeverScrollableScrollPhysics(),
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              commonActiveSearchBar(
+                  onClick: (){
+                    controller.backButtonClick(context);
+                  }, onShareClick: (){}, onFilterClick: (){}, leadingIcon: appBackSvgIcon, screenName: appRequest, actionButton: ''),
+              SizedBox(height: 20,),
+              Container(
+                color: appWhiteColor,
+                padding:EdgeInsets.zero,
+                child: TabBar(
+                  labelPadding: EdgeInsets.only(bottom: 10),
+                  isScrollable: false,
+                  dividerColor: appWhiteColor,
+                  indicatorColor: appPrimaryColor,
+                  indicatorWeight: 2,
+                  // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
+                  indicatorSize: TabBarIndicatorSize.tab,
                   controller: controller.tabController,
-                  children: <Widget>[
-                    _followRequestWidget(context),
-                    _salaryRequestWidget(context),
-                  ],
+                  tabs: List.generate(controller.listTabLabel.length, (index){
+                    return Text(controller.listTabLabel[index],style: AppTextStyles.font14.copyWith(color: appBlackColor),);
+                  }),
                 ),
               ),
-            ),
+              Expanded(
+                child: Container(
+                  color: appPrimaryBackgroundColor,
+                  height: MediaQuery.of(context).size.height ,
+                  child: TabBarView(
+                    // physics: NeverScrollableScrollPhysics(),
+                    controller: controller.tabController,
+                    children: <Widget>[
+                      _followRequestWidget(context),
+                      _salaryRequestWidget(context),
+                    ],
+                  ),
+                ),
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

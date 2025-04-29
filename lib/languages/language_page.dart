@@ -26,86 +26,94 @@ class LanguagePage extends GetView<LanguageControllers>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appScreenBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              commonActiveSearchBar(
-                onClick: (){
-                   controller.backButtonClick(context);
-                },
-                leadingIcon: appBackSvgIcon,
-                screenName: appAddLanguage,  onShareClick: (){}, onFilterClick: (){}, actionButton: '',
-              ),
-              SizedBox(height: 20,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 20,right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        commonTextFieldTitle(headerName: appAddNewLanguage,isMendatory: true),
-                        SizedBox(height: 5,),
-                        Obx((){
-                          var languageData = List<LanguageDatum>.from(controller.allLanguageDataList.value.data ?? []);
-                          languageData.insert(0, LanguageDatum(id: "0", name: "Select"));
-                          return languageData!=null&&languageData.isNotEmpty?customDropDown(
-                              hintText: appSelectCompany,
-                              item: languageData.map((data)=>{'id':data.id,'name':data.name}).toList()??[],
-                              selectedValue: {'id':languageData[0].id,'name':languageData[0].name},
-                              onChanged: (Map<String,dynamic>? selectedData){
-                                if(selectedData!=null){
-                                  controller.languageId.value=selectedData['id'];
-                                }
-                              },
-                              icon: appDropDownIcon
-                          ):Container();
-                        }),
-                        SizedBox(height: 10,),
-                        commonTextFieldTitle(headerName: appRateFluency,isMendatory: true),
-                        SizedBox(height: 5,),
-                        commonRattingBar(context, initialRating: controller.ratingVerbalValue.value, updatedRating: (double data ) {
-                          controller.ratingVerbalValue.value=data;
-                        }),
-                        SizedBox(height: 10,),
-                        commonTextFieldTitle(headerName: appWrittenFluency,isMendatory: true),
-                        SizedBox(height: 5,),
-                        commonRattingBar(context, initialRating: controller.ratingWrittenValue.value, updatedRating: (double data ) {
-                          controller.ratingWrittenValue.value=data;
-                        }),
-                      ],
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                commonActiveSearchBar(
+                  onClick: (){
+                    controller.backButtonClick(context);
+                  },
+                  leadingIcon: appBackSvgIcon,
+                  screenName: appAddLanguage,  onShareClick: (){}, onFilterClick: (){}, actionButton: '',
+                ),
+                SizedBox(height: 20,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 20,right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          commonTextFieldTitle(headerName: appAddNewLanguage,isMendatory: true),
+                          SizedBox(height: 5,),
+                          Obx((){
+                            var languageData = List<LanguageDatum>.from(controller.allLanguageDataList.value.data ?? []);
+                            languageData.insert(0, LanguageDatum(id: "0", name: "Select"));
+                            return languageData!=null&&languageData.isNotEmpty?customDropDown(
+                                hintText: appSelectCompany,
+                                item: languageData.map((data)=>{'id':data.id,'name':data.name}).toList()??[],
+                                selectedValue: {'id':languageData[0].id,'name':languageData[0].name},
+                                onChanged: (Map<String,dynamic>? selectedData){
+                                  if(selectedData!=null){
+                                    controller.languageId.value=selectedData['id'];
+                                  }
+                                },
+                                icon: appDropDownIcon
+                            ):Container();
+                          }),
+                          SizedBox(height: 10,),
+                          commonTextFieldTitle(headerName: appRateFluency,isMendatory: true),
+                          SizedBox(height: 5,),
+                          commonRattingBar(context, initialRating: controller.ratingVerbalValue.value, updatedRating: (double data ) {
+                            controller.ratingVerbalValue.value=data;
+                          }),
+                          SizedBox(height: 10,),
+                          commonTextFieldTitle(headerName: appWrittenFluency,isMendatory: true),
+                          SizedBox(height: 5,),
+                          commonRattingBar(context, initialRating: controller.ratingWrittenValue.value, updatedRating: (double data ) {
+                            controller.ratingWrittenValue.value=data;
+                          }),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height:20,),
-                  commonButton(context,
-                      buttonName: appAddLanguage,
-                      buttonBackgroundColor: appPrimaryColor,
-                      textColor: appWhiteColor,
-                      buttonBorderColor: appPrimaryColor,
-                      onClick: (){
-                        if(controller.languageId.value!=null&&controller.languageId.value!="0"&&controller.languageId.value.isNotEmpty){
-                          if(controller.ratingVerbalValue.value==0.0){
-                            showToast(appPleaseVerbalFluency);
-                          }else if(controller.ratingWrittenValue.value==0.0){
-                            showToast(appPleaseWrittenFluency);
+                    SizedBox(height:20,),
+                    commonButton(context,
+                        buttonName: appAddLanguage,
+                        buttonBackgroundColor: appPrimaryColor,
+                        textColor: appWhiteColor,
+                        buttonBorderColor: appPrimaryColor,
+                        onClick: (){
+                          if(controller.languageId.value!=null&&controller.languageId.value!="0"&&controller.languageId.value.isNotEmpty){
+                            if(controller.ratingVerbalValue.value==0.0){
+                              showToast(appPleaseVerbalFluency);
+                            }else if(controller.ratingWrittenValue.value==0.0){
+                              showToast(appPleaseWrittenFluency);
+                            }else{
+                              controller.addLanguageApiCall(context);
+                            }
                           }else{
-                            controller.addLanguageApiCall(context);
+                            showToast(appPleaseSelecteValidLanguage);
                           }
-                        }else{
-                          showToast(appPleaseSelecteValidLanguage);
-                         }
-                      }
-                  ),
-                  SizedBox(height:30,),
-                  _getAllLanguageListData(context)
-                ],
-              )
-            ],
+                        }
+                    ),
+                    SizedBox(height:30,),
+                    _getAllLanguageListData(context)
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      ),
+      )
     );
   }
   _getAllLanguageListData( context) {

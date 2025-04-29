@@ -26,287 +26,295 @@ class CompanyDashboardPage extends GetView<CompanyDashboardControllers>{
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: appPrimaryBackgroundColor,
-      body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                ///Search Widget
-                Container(
-                  color: appWhiteColor,
-                  padding: EdgeInsets.only(left: 20,right: 20,top: 20),
-                  child: Obx(()=>commonCompanySearchAppBar(
-                      context,controller: controller.searchController,
-                      actionButtonOne: appNotificationSVGIcon,
-                      actionButtonTwo: appSearchIcon,
-                      isSearchActive: controller.isSearchActive.value,
-                      isAddEmploymentShow: false,
-                      isEmployeeRequestShow: false,
-                      isNotification: true,
-                      onChanged: (value){
-                        // controller.openSearchScreen(context);
-            
-                      },
-                      onEmploymentRequestClick: (){
-                        Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
-                      },
-                      onAddEmployment: (){
-                        //addNewJobForm(context, companyAllDetails: controller.designationListData.value);
-                      },
-                      onTap: (){
-                        controller.openSearchScreen(context);
-                      },
-                      onSearchIconClick: (bool isSearchClick) {
-                        controller.isSearchActive.value=isSearchClick;
-            
-                      })),
-                ),
-                Container(height: 10,color: appWhiteColor,),
-                Column(
-                  children: <Widget>[
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: <Widget>[
-                        Container(
-                          height: 150,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [appPrimaryColor,appBlueColor])
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(left: 20,right: 20,top: 20),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Obx((){
-                                        var profileData=controller.companyUserDetails.value.data;
-                                        var companyName=profileData?.companyName??"";
-                                        var initialName=profileData?.companyName??"";
-                                        var profile=profileData?.profile??"";
-                                        return Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  ///User name and profile image widget
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: "$appHi,",
-                                                          style: AppTextStyles.font20w500.copyWith(color: appWhiteColor),
-                                                        ),
-                                                        TextSpan(
-                                                          text: ' $companyName !',
-                                                          style: AppTextStyles.font20W700.copyWith(color: appWhiteColor),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    maxLines: 3,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  ///Search Widget
+                  Container(
+                    color: appWhiteColor,
+                    padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+                    child: Obx(()=>commonCompanySearchAppBar(
+                        context,controller: controller.searchController,
+                        actionButtonOne: appNotificationSVGIcon,
+                        actionButtonTwo: appSearchIcon,
+                        isSearchActive: controller.isSearchActive.value,
+                        isAddEmploymentShow: false,
+                        isEmployeeRequestShow: false,
+                        isNotification: true,
+                        onChanged: (value){
+                          // controller.openSearchScreen(context);
 
-                                                  Text(appReadyToJumpBack,style: AppTextStyles.font16.copyWith(color: appWhiteColor),maxLines: 3,),
+                        },
+                        onEmploymentRequestClick: (){
+                          Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
+                        },
+                        onAddEmployment: (){
+                          //addNewJobForm(context, companyAllDetails: controller.designationListData.value);
+                        },
+                        onTap: (){
+                          controller.openSearchScreen(context);
+                        },
+                        onSearchIconClick: (bool isSearchClick) {
+                          controller.isSearchActive.value=isSearchClick;
+
+                        })),
+                  ),
+                  Container(height: 10,color: appWhiteColor,),
+                  Column(
+                    children: <Widget>[
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [appPrimaryColor,appBlueColor])
+                            ),
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Obx((){
+                                          var profileData=controller.companyUserDetails.value.data;
+                                          var companyName=profileData?.companyName??"";
+                                          var initialName=profileData?.companyName??"";
+                                          var profile=profileData?.profile??"";
+                                          return Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    ///User name and profile image widget
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text: "$appHi,",
+                                                            style: AppTextStyles.font20w500.copyWith(color: appWhiteColor),
+                                                          ),
+                                                          TextSpan(
+                                                            text: ' $companyName !',
+                                                            style: AppTextStyles.font20W700.copyWith(color: appWhiteColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      maxLines: 3,
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+
+                                                    Text(appReadyToJumpBack,style: AppTextStyles.font16.copyWith(color: appWhiteColor),maxLines: 3,),
+                                                  ],
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap:(){
+                                                  controller.bottomController.bottomNavCurrentIndex.value=4;
+                                                },
+                                                child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
+                                              )
+                                            ],
+                                          );
+                                        }),
+                                        SizedBox(height: 30,),
+                                        ///Number of count widget
+                                        Obx((){
+                                          var staticsData=controller.companyStaticsDetails.value.data;
+                                          return Column(
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  _commonCardWidget(
+                                                      context,
+                                                      cardHeader: appPostedJobs,
+                                                      itemNumber: staticsData?.postedJobs.toString()??"0",
+                                                      itemNumberColor: appPrimaryColor,
+                                                      cardIcon: appCurrentEmploueeIcon,
+                                                      onClick: () {
+                                                        controller.bottomController.bottomNavCurrentIndex.value=2;
+                                                      }
+                                                  ),
+                                                  SizedBox(width: 12,),
+                                                  _commonCardWidget(
+                                                      context,
+                                                      cardHeader: appCurrentEmployees,
+                                                      itemNumber:  staticsData?.currentEmployies.toString()??"0",
+                                                      itemNumberColor: appSkyBlueColor,
+                                                      cardIcon: appCurrentEmploueeIcon,
+                                                      onClick: (){
+                                                        controller.bottomController.bottomNavCurrentIndex.value=1;
+                                                      }
+                                                  )
                                                 ],
                                               ),
-                                            ),
-                                            GestureDetector(
-                                              onTap:(){
-                                                controller.bottomController.bottomNavCurrentIndex.value=4;
-                                              },
-                                              child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
-                                            )
-                                          ],
-                                        );
-                                      }),
-                                      SizedBox(height: 30,),
-                                      ///Number of count widget
-                                      Obx((){
-                                        var staticsData=controller.companyStaticsDetails.value.data;
-                                        return Column(
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                _commonCardWidget(
-                                                    context,
-                                                    cardHeader: appPostedJobs,
-                                                    itemNumber: staticsData?.postedJobs.toString()??"0",
-                                                    itemNumberColor: appPrimaryColor,
-                                                    cardIcon: appCurrentEmploueeIcon,
-                                                    onClick: () {
-                                                      controller.bottomController.bottomNavCurrentIndex.value=2;
-                                                    }
-                                                ),
-                                                SizedBox(width: 12,),
-                                                _commonCardWidget(
-                                                    context,
-                                                    cardHeader: appCurrentEmployees,
-                                                    itemNumber:  staticsData?.currentEmployies.toString()??"0",
-                                                    itemNumberColor: appSkyBlueColor,
-                                                    cardIcon: appCurrentEmploueeIcon,
-                                                  onClick: (){
-                                                    controller.bottomController.bottomNavCurrentIndex.value=1;
-                                                  }
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(height: 12,),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                _commonCardWidget(
-                                                    context,
-                                                    cardHeader: appApplication,
-                                                    itemNumber:  staticsData?.applications.toString()??"0",
-                                                    itemNumberColor: appBlueColor,
-                                                    cardIcon: appCurrentEmploueeIcon,
-                                                  onClick: (){
-                                                      Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyDashboardScreen,isAppApplication:true});
-                                                  }
-                                                ),
-                                                SizedBox(width: 12,),
-                                                _commonCardWidget(
-                                                    context,
-                                                    cardHeader: appEmployeeRequests,
-                                                    itemNumber:  staticsData?.employementRequestList?.length.toString()??"0",
-                                                    itemNumberColor: appLightYellowColor,
-                                                    cardIcon: appCurrentEmploueeIcon,
-                                                  onClick: (){
-                                                    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
-                                                  }
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        );
-                                      })
-                                    ],
+                                              SizedBox(height: 12,),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  _commonCardWidget(
+                                                      context,
+                                                      cardHeader: appApplication,
+                                                      itemNumber:  staticsData?.applications.toString()??"0",
+                                                      itemNumberColor: appBlueColor,
+                                                      cardIcon: appCurrentEmploueeIcon,
+                                                      onClick: (){
+                                                        Get.offNamed(AppRoutes.applicants,arguments: {screenName:companyDashboardScreen,isAppApplication:true});
+                                                      }
+                                                  ),
+                                                  SizedBox(width: 12,),
+                                                  _commonCardWidget(
+                                                      context,
+                                                      cardHeader: appEmployeeRequests,
+                                                      itemNumber:  staticsData?.employementRequestList?.length.toString()??"0",
+                                                      itemNumberColor: appLightYellowColor,
+                                                      cardIcon: appCurrentEmploueeIcon,
+                                                      onClick: (){
+                                                        Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyDashboardScreen});
+                                                      }
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          );
+                                        })
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 20,),
+                                  SizedBox(height: 20,),
 
-                                ///Complete Your Profile Widget
-                                _completeProfileForBetterSearch(context),
-                                ///Employment Request
-                                _employmentRequest(context),
-                                Container(
-                                  
-                                  padding: EdgeInsets.all(20),
-                                 color: appPrimaryColor,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width*0.72,
-                                            child: Text(appAddYourPreference,style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),),
-                                          ),
-                                          SizedBox(height: 10,),
-                                          Container(
-                                            padding: EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5),
-                                              border: Border.all(color: appWhiteColor,width: 1)
-                                            ),
-                                            child: Text(appFindImmediateJoiners,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
-                                          )
-                                        ],
-                                      ),
-                                      Obx((){
-                                        var profileData=controller.companyUserDetails.value.data;
-                                        var companyName=profileData?.companyName??"";
-                                        var initialName=profileData?.companyName??"";
-                                        var profile=profileData?.profile??"";
-                                        return GestureDetector(
-                                          onTap:(){
-                                            controller.bottomController.bottomNavCurrentIndex.value=4;
-                                          },
-                                          child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
-                                        );
-                                      })
-                                    ],
-                                  ),
-                                ),
-                                ///All Application
-                                _allApplicationList(context),
-                                ///Most Viewed Jod
-                                _mostViewedJobs(context),
-                                /// Pending Employee Review
-                                _pendingEmployeeReview(context),
-                                ///recommended employees
-                                _recommendedEmployees(context),
-                                ///Spotlight your work culture
-                                Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(colors: [appPrimaryColor,appBlueColor])
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Obx((){
-                                        var profileData=controller.companyUserDetails.value.data;
-                                        var companyName=profileData?.companyName??"";
-                                        var initialName=profileData?.companyName??"";
-                                        var profile=profileData?.profile??"";
-                                        return GestureDetector(
-                                          onTap:(){
-                                            controller.bottomController.bottomNavCurrentIndex.value=4;
-                                          },
-                                          child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 66, width: 66, borderRadius: 14),
-                                        );
-                                      }),
-                                      SizedBox(width: 10,),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width*0.66,
-                                        child: Column(
+                                  ///Complete Your Profile Widget
+                                  _completeProfileForBetterSearch(context),
+                                  ///Employment Request
+                                  _employmentRequest(context),
+                                  Container(
+
+                                    padding: EdgeInsets.all(20),
+                                    color: appPrimaryColor,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            Text(appSpotlightYourWorkCulture,style: AppTextStyles.font18w700.copyWith(color: appWhiteColor),),
-                                            Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry.",style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),),
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width*0.72,
+                                              child: Text(appAddYourPreference,style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),),
+                                            ),
                                             SizedBox(height: 10,),
                                             Container(
                                               padding: EdgeInsets.all(5),
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5),
-                                                border: Border.all(color: appWhiteColor,width: 1)
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  border: Border.all(color: appWhiteColor,width: 1)
                                               ),
-                                              child: Text(appAddYourCulture,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
+                                              child: Text(appFindImmediateJoiners,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
                                             )
-
                                           ],
                                         ),
-                                      )
-                                    ],
+                                        Obx((){
+                                          var profileData=controller.companyUserDetails.value.data;
+                                          var companyName=profileData?.companyName??"";
+                                          var initialName=profileData?.companyName??"";
+                                          var profile=profileData?.profile??"";
+                                          return GestureDetector(
+                                            onTap:(){
+                                              controller.bottomController.bottomNavCurrentIndex.value=4;
+                                            },
+                                            child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 60, width: 60, borderRadius: 14),
+                                          );
+                                        })
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                ///People who reciently joined
-                                _peopleWhoRecentlyJoined(context),
-                                ///Save Condidate
-                                //_savedCandidate(context),
-                                ///_all Right resirved
-                                _allRightReserved(context)
+                                  ///All Application
+                                  _allApplicationList(context),
+                                  ///Most Viewed Jod
+                                  _mostViewedJobs(context),
+                                  /// Pending Employee Review
+                                  _pendingEmployeeReview(context),
+                                  ///recommended employees
+                                  _recommendedEmployees(context),
+                                  ///Spotlight your work culture
+                                  Container(
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [appPrimaryColor,appBlueColor])
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Obx((){
+                                          var profileData=controller.companyUserDetails.value.data;
+                                          var companyName=profileData?.companyName??"";
+                                          var initialName=profileData?.companyName??"";
+                                          var profile=profileData?.profile??"";
+                                          return GestureDetector(
+                                            onTap:(){
+                                              controller.bottomController.bottomNavCurrentIndex.value=4;
+                                            },
+                                            child: commonImageWidget(image: profile??"", initialName: initialName??"", height: 66, width: 66, borderRadius: 14),
+                                          );
+                                        }),
+                                        SizedBox(width: 10,),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width*0.66,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(appSpotlightYourWorkCulture,style: AppTextStyles.font18w700.copyWith(color: appWhiteColor),),
+                                              Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry.",style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),),
+                                              SizedBox(height: 10,),
+                                              Container(
+                                                padding: EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    border: Border.all(color: appWhiteColor,width: 1)
+                                                ),
+                                                child: Text(appAddYourCulture,style: AppTextStyles.font12.copyWith(color: appWhiteColor),),
+                                              )
+
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  ///People who reciently joined
+                                  _peopleWhoRecentlyJoined(context),
+                                  ///Save Condidate
+                                  //_savedCandidate(context),
+                                  ///_all Right resirved
+                                  _allRightReserved(context)
 
 
 
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
+                                ],
+                              )
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+        ),
       ),
     );
   }

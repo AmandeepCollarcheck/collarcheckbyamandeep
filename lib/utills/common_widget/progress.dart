@@ -232,53 +232,81 @@ String getInitialsWithSpace({required String? input}) {
 }
 
 
-jonInfoCard(context,{required String icon1,required String header1,required String description1,required String icon2,required String header2,required String description2}) {
-  return Container(
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width*0.45,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              icon1.isEmpty?Container():icon1.contains(".svg")?SvgPicture.asset(icon1,height: 16,width: 16,):Image.asset(icon1,height: 16,width: 16,),
-              SizedBox(width: 10,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(header1,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width*0.30,
-                      child: Text(description1,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)),
-                ],
-              )
-            ],
-          ),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            icon2.isEmpty?Container():icon2.contains(".svg")?SvgPicture.asset(icon2,height: 16,width: 16,):Image.asset(icon2,height: 16,width: 16,),
-            SizedBox(width: 10,),
-            Column(
+Widget jonInfoCard(
+    BuildContext context, {
+      required String icon1,
+      required String header1,
+      required String description1,
+      required String icon2,
+      required String header2,
+      required String description2,
+    }) {
+  List<Widget> infoItems = [];
+
+  Widget buildInfoBlock(String icon, String header, String description) {
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (icon.isNotEmpty)
+            icon.contains(".svg")
+                ? SvgPicture.asset(icon, height: 16, width: 16)
+                : Image.asset(icon, height: 16, width: 16),
+          if (icon.isNotEmpty) SizedBox(width: 8),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(header2,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width*0.30,
-                    child: Text(description2,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)),
+              children: [
+                Text(
+                  header,
+                  style: AppTextStyles.font14.copyWith(color: appBlackColor),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  description,
+                  style: AppTextStyles.font14.copyWith(color: appPrimaryColor),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ],
-            )
-          ],
-        )
-      ],
-    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Only add non-empty descriptions
+  if (description1.trim().isNotEmpty) {
+    infoItems.add(buildInfoBlock(icon1, header1, description1));
+  }
+  if (description2.trim().isNotEmpty) {
+    infoItems.add(buildInfoBlock(icon2, header2, description2));
+  }
+
+  if (infoItems.isEmpty) {
+    return SizedBox.shrink();
+  }
+
+  // Show 2 per row
+  return Column(
+    children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          infoItems[0],
+          if (infoItems.length > 1) SizedBox(width: 16),
+          if (infoItems.length > 1) infoItems[1],
+        ],
+      ),
+    ],
   );
 }
+
+
+
+
 
 openCameraOrGallery(context,{bool isCameraOptionEnable=false,bool isGalleryOptionEnable=false,required Function(File) onCameraCapturedData,required Function(File) onGalleryCapturedData}){
   showDialog(context: context, builder: (BuildContext context){

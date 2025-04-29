@@ -49,7 +49,7 @@ class Data {
   dynamic presentAddress;
   dynamic permanentAddress;
   dynamic cityName;
-  DateTime? dob;
+  String? dob;
   List<dynamic>? employementHistory;
   List<EmployementHistoryNew>? employementHistoryNew;
   List<dynamic>? allDocument;
@@ -220,7 +220,7 @@ class Data {
     presentAddress: json["present_address"],
     permanentAddress: json["permanent_address"],
     cityName: json["city_name"],
-    dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
+    dob: json["dob"],
     employementHistory: json["employement_history"] == null ? [] : List<dynamic>.from(json["employement_history"]!.map((x) => x)),
     employementHistoryNew: json["employement_history_new"] == null ? [] : List<EmployementHistoryNew>.from(json["employement_history_new"]!.map((x) => EmployementHistoryNew.fromJson(x))),
     allDocument: json["all_document"] == null ? [] : List<dynamic>.from(json["all_document"]!.map((x) => x)),
@@ -306,7 +306,7 @@ class Data {
     "present_address": presentAddress,
     "permanent_address": permanentAddress,
     "city_name": cityName,
-    "dob": "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
+    "dob": dob,
     "employement_history": employementHistory == null ? [] : List<dynamic>.from(employementHistory!.map((x) => x)),
     "employement_history_new": employementHistoryNew == null ? [] : List<dynamic>.from(employementHistoryNew!.map((x) => x.toJson())),
     "all_document": allDocument == null ? [] : List<dynamic>.from(allDocument!.map((x) => x)),

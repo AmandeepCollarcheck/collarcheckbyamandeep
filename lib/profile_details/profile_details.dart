@@ -26,248 +26,256 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.ltr,
-      child: Scaffold(
-        backgroundColor: appScreenBackgroundColor,
-        body: Column(
-          children: [
-            /// **SliverAppBar inside NestedScrollView**
-            Expanded(
-              child: NestedScrollView(
-                controller: controller.scrollController,
-                headerSliverBuilder: (contextData, innerBoxIsScrolled) {
-                  return [
+      child: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: appScreenBackgroundColor,
+          body: Column(
+            children: [
+              /// **SliverAppBar inside NestedScrollView**
+              Expanded(
+                child: NestedScrollView(
+                  controller: controller.scrollController,
+                  headerSliverBuilder: (contextData, innerBoxIsScrolled) {
+                    return [
 
-                    SliverToBoxAdapter(
-                      child: Container(
-                        color: appScreenBackgroundColor,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 20,right: 20),
-                              height:60,
-                              child: commonAppBarWithSettingAndShareOption(context,
-                                leadingIcon: appBackSvgIcon,
-                                onClick: () {},
-                                onSettingsClick: () {},
+                      SliverToBoxAdapter(
+                        child: Container(
+                          color: appScreenBackgroundColor,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 20,right: 20),
+                                height:60,
+                                child: commonAppBarWithSettingAndShareOption(context,
+                                  leadingIcon: appBackSvgIcon,
+                                  onClick: () {},
+                                  onSettingsClick: () {},
+                                ),
                               ),
-                            ),
-                            Container(
-                              color: appScreenBackgroundColor,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  controller.isEmployeeProfileDate.value?SizedBox(height: 0): SizedBox(height: 20),
-                                  Container(
-                                    padding: EdgeInsets.only(left: 20, right: 20),
-                                    child: _profileWidget(context),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Container(
-                                    height: 1,
-                                    color: appPrimaryBackgroundColor,
-                                  ),
-                                  Obx(() {
-                                    var stillWorkingCompany = controller.userProfileData.value.data?.stillWorkingCompanyName ?? "";
-                                    var email = controller.userProfileData.value.data?.email ?? "";
-                                    var phone = controller.userProfileData.value.data?.phone ?? "";
-                                    var city = controller.userProfileData.value.data?.city ?? "";
-                                    var state = controller.userProfileData.value.data?.stateName ?? "";
-                                    var country = controller.userProfileData.value.data?.countryName ?? "";
+                              Container(
+                                color: appScreenBackgroundColor,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    controller.isEmployeeProfileDate.value?SizedBox(height: 0): SizedBox(height: 20),
+                                    Container(
+                                      padding: EdgeInsets.only(left: 20, right: 20),
+                                      child: _profileWidget(context),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      height: 1,
+                                      color: appPrimaryBackgroundColor,
+                                    ),
+                                    Obx(() {
+                                      var stillWorkingCompany = controller.userProfileData.value.data?.stillWorkingCompanyName ?? "";
+                                      var email = controller.userProfileData.value.data?.email ?? "";
+                                      var phone = controller.userProfileData.value.data?.phone ?? "";
+                                      var city = controller.userProfileData.value.data?.city ?? "";
+                                      var state = controller.userProfileData.value.data?.stateName ?? "";
+                                      var country = controller.userProfileData.value.data?.countryName ?? "";
 
-                                    return Container(
-                                      padding: EdgeInsets.only(left: 30, right: 20),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 10),
-                                          if (stillWorkingCompany.isNotEmpty)
-                                            _detailsCard(image: appCompanyIcon, title: stillWorkingCompany),
-                                          SizedBox(height: 5),
-                                          Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              if (email.isNotEmpty) _detailsCard(image: appEmail, title: email),
-                                              if (email.isNotEmpty) SizedBox(width: 10),
-                                              if (phone.isNotEmpty) _detailsCard(image: appPhoneIcon, title: phone),
-                                            ],
-                                          ),
-                                          SizedBox(height: 5),
-                                          if (state.isNotEmpty)
-                                            _detailsCard(
-                                              image: appLocationsSvgIcon,
-                                              title: generateLocation(cityName: city, stateName: state, countryName: country),
+                                      return Container(
+                                        padding: EdgeInsets.only(left: 30, right: 20),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 10),
+                                            if (stillWorkingCompany.isNotEmpty)
+                                              _detailsCard(image: appCompanyIcon, title: stillWorkingCompany),
+                                            SizedBox(height: 5),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                if (email.isNotEmpty) _detailsCard(image: appEmail, title: email),
+                                                if (email.isNotEmpty) SizedBox(width: 10),
+                                                if (phone.isNotEmpty) _detailsCard(image: appPhoneIcon, title: phone),
+                                              ],
                                             ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                                  SizedBox(height: 10),
-                                  Obx(() {
-                                    var isVerified = controller.userProfileData.value.data?.isVerified ?? false;
-                                    return isVerified
-                                        ? Container()
-                                        : Container(
-                                      decoration: BoxDecoration(
-                                        color: appGreyColor.withOpacity(0.4),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      margin: EdgeInsets.only(left: 20, right: 20),
-                                      padding: EdgeInsets.all(10),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SvgPicture.asset(appVerifiedIcon, height: 26, width: 26),
-                                          SizedBox(width: 10),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(appVerifyYourProfile,
-                                                  style: AppTextStyles.font16W600.copyWith(color: appBlackColor)),
-                                              SizedBox(
-                                                width: MediaQuery.of(context).size.width * 0.72,
-                                                child: Text(appOnAverage,
-                                                    style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)),
+                                            SizedBox(height: 5),
+                                            if (state.isNotEmpty)
+                                              _detailsCard(
+                                                image: appLocationsSvgIcon,
+                                                title: generateLocation(cityName: city, stateName: state, countryName: country),
                                               ),
-                                              SizedBox(height: 10),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(14),
-                                                  color: appPrimaryColor,
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                    SizedBox(height: 10),
+                                    Obx(() {
+                                      var isVerified = controller.userProfileData.value.data?.isVerified ?? false;
+                                      return isVerified
+                                          ? Container()
+                                          : Container(
+                                        decoration: BoxDecoration(
+                                          color: appGreyColor.withOpacity(0.4),
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        margin: EdgeInsets.only(left: 20, right: 20),
+                                        padding: EdgeInsets.all(10),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SvgPicture.asset(appVerifiedIcon, height: 26, width: 26),
+                                            SizedBox(width: 10),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(appVerifyYourProfile,
+                                                    style: AppTextStyles.font16W600.copyWith(color: appBlackColor)),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context).size.width * 0.72,
+                                                  child: Text(appOnAverage,
+                                                      style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)),
                                                 ),
-                                                child: Text(appVerifyNow,
-                                                    style: AppTextStyles.font12.copyWith(color: appWhiteColor)),
-                                              ),
-                                            ],
+                                                SizedBox(height: 10),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(14),
+                                                    color: appPrimaryColor,
+                                                  ),
+                                                  child: Text(appVerifyNow,
+                                                      style: AppTextStyles.font12.copyWith(color: appWhiteColor)),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                    SizedBox(height: 10),
+                                    Obx((){
+                                      return controller.userProfileData.value.data?.id.toString()!=controller.userIdData.value?Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width*0.4,
+                                            child: commonButton(
+                                                isPaddingDisabled: true,
+                                                context,
+                                                buttonName: appFollowFound,
+                                                buttonBackgroundColor: appWhiteColor,
+                                                textColor: appPrimaryColor,
+                                                buttonBorderColor: appPrimaryColor,
+                                                onClick: (){
+
+                                                }
+                                            ),
+                                          ),
+                                          SizedBox(width: 10,),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width*0.4,
+                                            child: commonButton(
+                                                context,
+                                                isPaddingDisabled: true,
+                                                buttonName: appMessageFound,
+                                                buttonBackgroundColor: appPrimaryColor,
+                                                textColor: appWhiteColor,
+                                                buttonBorderColor: appPrimaryColor,
+                                                onClick: (){
+
+                                                }
+                                            ),
                                           ),
                                         ],
-                                      ),
-                                    );
-                                  }),
-                                  SizedBox(height: 10),
-                                  Obx((){
-                                    return controller.userProfileData.value.data?.id.toString()!=controller.userIdData.value?Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width*0.4,
-                                          child: commonButton(
-                                              isPaddingDisabled: true,
-                                              context,
-                                              buttonName: appFollowFound,
-                                              buttonBackgroundColor: appWhiteColor,
-                                              textColor: appPrimaryColor,
-                                              buttonBorderColor: appPrimaryColor,
-                                              onClick: (){
+                                      ):Container();
 
-                                              }
-                                          ),
-                                        ),
-                                        SizedBox(width: 10,),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width*0.4,
-                                          child: commonButton(
-                                              context,
-                                              isPaddingDisabled: true,
-                                              buttonName: appMessageFound,
-                                              buttonBackgroundColor: appPrimaryColor,
-                                              textColor: appWhiteColor,
-                                              buttonBorderColor: appPrimaryColor,
-                                              onClick: (){
-
-                                              }
-                                          ),
-                                        ),
-                                      ],
-                                    ):Container();
-
-                                  })
-                                ],
+                                    })
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ];
-                },
-                body: Container(
-                  //margin: EdgeInsets.only(top: 40),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10,),
-                      Container(height: 1, color: appPrimaryBackgroundColor),
-                      ///Custom tab
-                      Obx((){
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: List.generate(controller.listTabLabel.length, (index) {
-                              final isSelected = controller.selectedIndex.value == index;
+                    ];
+                  },
+                  body: Container(
+                    //margin: EdgeInsets.only(top: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10,),
+                        Container(height: 1, color: appPrimaryBackgroundColor),
+                        ///Custom tab
+                        Obx((){
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: List.generate(controller.listTabLabel.length, (index) {
+                                final isSelected = controller.selectedIndex.value == index;
 
-                              return GestureDetector(
-                                onTap: () {
-                                  controller.selectedIndex.value = index;
-                                  controller.scrollToSection(index);
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.selectedIndex.value = index;
+                                    controller.scrollToSection(index);
 
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: isSelected ? appPrimaryColor : appPrimaryBackgroundColor,
-                                        width:  isSelected ?2:1,
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: isSelected ? appPrimaryColor : appPrimaryBackgroundColor,
+                                          width:  isSelected ?2:1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      controller.listTabLabel[index],
+                                      style: AppTextStyles.font14.copyWith(
+                                        color: isSelected ? appPrimaryColor : appBlackColor,
                                       ),
                                     ),
                                   ),
-                                  child: Text(
-                                    controller.listTabLabel[index],
-                                    style: AppTextStyles.font14.copyWith(
-                                      color: isSelected ? appPrimaryColor : appBlackColor,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 20),
+                                );
+                              }),
+                            ),
+                          );
+                        }),
+                        SizedBox(height: 20),
 
-                      /// **TabBarView below the TabBar**
-                      Expanded(
-                        child: SingleChildScrollView(
-                          //controller: controller.scrollControllerForTabSelection,
-                          physics: BouncingScrollPhysics(),
-                          child: Obx((){
-                            var allData=controller.userProfileData.value.data;
+                        /// **TabBarView below the TabBar**
+                        Expanded(
+                            child: SingleChildScrollView(
+                              //controller: controller.scrollControllerForTabSelection,
+                              physics: BouncingScrollPhysics(),
+                              child: Obx((){
+                                var allData=controller.userProfileData.value.data;
 
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _childWithKey(controller.sectionKeys[0], _homeTabDetails(context)),
-                                SizedBox(height: 20,),
-                                _childWithKey(controller.sectionKeys[1], _employmentHistory(context)),
-                                SizedBox(height: 20,),
-                                _childWithKey(controller.sectionKeys[2], _portFolioTabDetails(context)),
-                                SizedBox(height: 20,),
-                                _childWithKey(controller.sectionKeys[3], _educationTabDetails(context)),
-                                _commonWidgetData(context)
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _childWithKey(controller.sectionKeys[0], _homeTabDetails(context)),
+                                    SizedBox(height: 20,),
+                                    _childWithKey(controller.sectionKeys[1], _employmentHistory(context)),
+                                    SizedBox(height: 20,),
+                                    _childWithKey(controller.sectionKeys[2], _portFolioTabDetails(context)),
+                                    SizedBox(height: 20,),
+                                    _childWithKey(controller.sectionKeys[3], _educationTabDetails(context)),
+                                    _commonWidgetData(context)
 
 
-                              ],
-                            );
-                          }),
-                      )),
+                                  ],
+                                );
+                              }),
+                            )),
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -946,11 +954,11 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                        SizedBox(height: 20,),
                        Column(
                          children: <Widget>[
-                           jonInfoCard(context,icon1: appEmail, header1: appEmailText, description1: 'satyam@gmail.com', icon2: appPhoneIcon, header2: appPhone, description2: '+917780987867'),
+                           jonInfoCard(context,icon1: appEmail, header1: appEmailText, description1: profileHomeTabData?.email??"", icon2: appPhoneIcon, header2: appPhone, description2: profileHomeTabData?.phone??""),
                            SizedBox(height: 10,),
-                           jonInfoCard(context,icon1: appDobIcon, header1: appDOBText, description1: '29 jan 1996', icon2: appLocationsSvgIcon, header2: appLocation, description2: 'Delhi,India'),
+                           jonInfoCard(context,icon1: appDobIcon, header1: appDOBText, description1: profileHomeTabData?.dob??"", icon2: appLocationsSvgIcon, header2: appLocation, description2: generateLocation(cityName: profileHomeTabData?.cityName??"", stateName: profileHomeTabData?.stateName??"", countryName: profileHomeTabData?.countryName??"")),
                            SizedBox(height: 10,),
-                           jonInfoCard(context,icon1: appCompanyIcon, header1: appCompany, description1: 'Quality', icon2: appDesignationSvgIcon, header2: appDesignation, description2: 'Project Manager'),
+                           jonInfoCard(context,icon1: appCompanyIcon, header1: appCompany, description1: profileHomeTabData?.stillWorkingCompanyName??"", icon2: appDesignationSvgIcon, header2: appDesignation, description2: profileHomeTabData?.stillWorkingPositionName??""),
                            SizedBox(height: 10,),
                          ],
                        ),

@@ -20,77 +20,85 @@ class ConnectionPage extends GetView<ConnectionControllers>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appScreenBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            // Container(
-            //   margin: EdgeInsets.only(left: 20,right: 20,top: 20),
-            //   child: commonSearchAppBar(
-            //       context,
-            //       controller: controller.searchController,
-            //       actionButtonOne: appNotificationSVGIcon,
-            //       actionButtonTwo: appSearchIcon,
-            //
-            //       onTap: (){
-            //         controller.openSearchScreen(context);
-            //       },
-            //       onSearchIconClick: (bool isSearchClick) {
-            //         controller.isSearchActive.value=isSearchClick;
-            //       })
-            // ),
-            Container(
-              margin: EdgeInsets.only(left: 20,right: 20,top: 20),
-              child: Obx(()=>commonSearchAppBar(
-                  context,controller: controller.searchController,
-                  actionButtonOne: appNotificationSVGIcon,
-                  actionButtonTwo: appSearchIcon,
-                  isSearchActive: controller.isSearchActive.value,
-                  onChanged: (value){
-                    // controller.openSearchScreen(context);
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              // Container(
+              //   margin: EdgeInsets.only(left: 20,right: 20,top: 20),
+              //   child: commonSearchAppBar(
+              //       context,
+              //       controller: controller.searchController,
+              //       actionButtonOne: appNotificationSVGIcon,
+              //       actionButtonTwo: appSearchIcon,
+              //
+              //       onTap: (){
+              //         controller.openSearchScreen(context);
+              //       },
+              //       onSearchIconClick: (bool isSearchClick) {
+              //         controller.isSearchActive.value=isSearchClick;
+              //       })
+              // ),
+              Container(
+                margin: EdgeInsets.only(left: 20,right: 20,top: 20),
+                child: Obx(()=>commonSearchAppBar(
+                    context,controller: controller.searchController,
+                    actionButtonOne: appNotificationSVGIcon,
+                    actionButtonTwo: appSearchIcon,
+                    isSearchActive: controller.isSearchActive.value,
+                    onChanged: (value){
+                      // controller.openSearchScreen(context);
 
-                  },
-                  onTap: (){
-                    controller.openSearchScreen(context);
-                  },
-                  onSearchIconClick: (bool isSearchClick) {
-                    controller.isSearchActive.value=isSearchClick;
+                    },
+                    onTap: (){
+                      controller.openSearchScreen(context);
+                    },
+                    onSearchIconClick: (bool isSearchClick) {
+                      controller.isSearchActive.value=isSearchClick;
 
-                  })),
-            ),
-            SizedBox(height: 20,),
-            Container(
-              color: appWhiteColor,
-              padding:EdgeInsets.zero,
-              child: TabBar(
-                labelPadding: EdgeInsets.only(bottom: 10),
-                isScrollable: false,
-                dividerColor: appWhiteColor,
-                indicatorColor: appPrimaryColor,
-                indicatorWeight: 2,
-                // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
-                indicatorSize: TabBarIndicatorSize.tab,
-                controller: controller.tabController,
-                tabs: List.generate(controller.listTabLabel.length, (index){
-                  return Text(controller.listTabLabel[index],style: AppTextStyles.font14.copyWith(color: appBlackColor),);
-                }),
+                    })),
               ),
-            ),
-            Expanded(
-              child: Container(
-                color: appPrimaryBackgroundColor,
-                height: MediaQuery.of(context).size.height ,
-                child: TabBarView(
-                 // physics: NeverScrollableScrollPhysics(),
+              SizedBox(height: 20,),
+              Container(
+                color: appWhiteColor,
+                padding:EdgeInsets.zero,
+                child: TabBar(
+                  labelPadding: EdgeInsets.only(bottom: 10),
+                  isScrollable: false,
+                  dividerColor: appWhiteColor,
+                  indicatorColor: appPrimaryColor,
+                  indicatorWeight: 2,
+                  // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
+                  indicatorSize: TabBarIndicatorSize.tab,
                   controller: controller.tabController,
-                  children: <Widget>[
-                    _followerWidget(context),
-                    _followingWidget(context),
-                  ],
+                  tabs: List.generate(controller.listTabLabel.length, (index){
+                    return Text(controller.listTabLabel[index],style: AppTextStyles.font14.copyWith(color: appBlackColor),);
+                  }),
                 ),
               ),
-            ),
+              Expanded(
+                child: Container(
+                  color: appPrimaryBackgroundColor,
+                  height: MediaQuery.of(context).size.height ,
+                  child: TabBarView(
+                    // physics: NeverScrollableScrollPhysics(),
+                    controller: controller.tabController,
+                    children: <Widget>[
+                      _followerWidget(context),
+                      _followingWidget(context),
+                    ],
+                  ),
+                ),
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -22,77 +22,85 @@ class UserSpecificReviewPage  extends GetView<UserSpecificReviewControllers>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appWhiteColor,
-      body:  SafeArea(
-          child: Column(
-            children: <Widget>[
-              commonActiveSearchBar(
-                  onClick: (){
-                    controller.backButtonClick(context);
-                  }, onShareClick: (){}, onFilterClick: (){}, leadingIcon: appBackSvgIcon, screenName: '$appReviewsFor${controller.userName}', actionButton: ''),
-              Container(
-                color: appWhiteColor,
-                padding:EdgeInsets.zero,
-                child: Obx(() {
-                  return TabBar(
-                    labelPadding: EdgeInsets.only(bottom: 10),
-                    isScrollable: false,
-                    dividerColor: appWhiteColor,
-                    indicatorColor: appPrimaryColor,
-                    indicatorWeight: 2,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    controller: controller.tabController,
-                    tabs: List.generate(controller.listTabLabel.length, (index) {
-                      return Obx(() {
-                        bool isSelected = controller.selectedTabIndex.value == index;
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child:  SafeArea(
+            child: Column(
+              children: <Widget>[
+                commonActiveSearchBar(
+                    onClick: (){
+                      controller.backButtonClick(context);
+                    }, onShareClick: (){}, onFilterClick: (){}, leadingIcon: appBackSvgIcon, screenName: '$appReviewsFor${controller.userName}', actionButton: ''),
+                Container(
+                  color: appWhiteColor,
+                  padding:EdgeInsets.zero,
+                  child: Obx(() {
+                    return TabBar(
+                      labelPadding: EdgeInsets.only(bottom: 10),
+                      isScrollable: false,
+                      dividerColor: appWhiteColor,
+                      indicatorColor: appPrimaryColor,
+                      indicatorWeight: 2,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      controller: controller.tabController,
+                      tabs: List.generate(controller.listTabLabel.length, (index) {
+                        return Obx(() {
+                          bool isSelected = controller.selectedTabIndex.value == index;
 
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              controller.listTabLabel[index],
-                              style: AppTextStyles.font12.copyWith(
-                                color: isSelected ? appPrimaryColor : appBlackColor,
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                controller.listTabLabel[index],
+                                style: AppTextStyles.font12.copyWith(
+                                  color: isSelected ? appPrimaryColor : appBlackColor,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 2),
-                            Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: isSelected ? appPrimaryColor : appGreyBlackColor,
+                              SizedBox(width: 2),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: isSelected ? appPrimaryColor : appGreyBlackColor,
+                                ),
+                                child: Text(
+                                  controller.listTabCounter[index].toString(),
+                                  style: AppTextStyles.font10.copyWith(color: appWhiteColor),
+                                ),
                               ),
-                              child: Text(
-                                controller.listTabCounter[index].toString(),
-                                style: AppTextStyles.font10.copyWith(color: appWhiteColor),
-                              ),
-                            ),
 
-                          ],
-                        );
-                      });
-                    }),
-                  );
-                }),
+                            ],
+                          );
+                        });
+                      }),
+                    );
+                  }),
 
-              ),
-              ///TabBarView
-              Expanded(
-                child: Container(
-                  color: appPrimaryBackgroundColor,
-                  height: MediaQuery.of(context).size.height ,
-                  child: TabBarView(
-                    // physics: NeverScrollableScrollPhysics(),
-                    controller: controller.tabController,
-                    children: <Widget>[
-                      _reviewsPage(context),
-                       _pendingReviewsPage(context),
-                       _appRovedReviewsPage(context)
-                    ],
+                ),
+                ///TabBarView
+                Expanded(
+                  child: Container(
+                    color: appPrimaryBackgroundColor,
+                    height: MediaQuery.of(context).size.height ,
+                    child: TabBarView(
+                      // physics: NeverScrollableScrollPhysics(),
+                      controller: controller.tabController,
+                      children: <Widget>[
+                        _reviewsPage(context),
+                        _pendingReviewsPage(context),
+                        _appRovedReviewsPage(context)
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )
+              ],
+            )
+        ),
       ),
     );
   }

@@ -18,65 +18,73 @@ class StartSignUpPage extends GetView<StartUpSignupController>{
   @override
   Widget build(BuildContext context){
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: appScreenBackgroundColor,
-        appBar: commonAppBar(context,onClick: (){
-          controller.backClick();
-        }),
+      child: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: appScreenBackgroundColor,
+          appBar: commonAppBar(context,onClick: (){
+            controller.backClick();
+          }),
 
-        body: Container(
-          alignment: Alignment.topLeft,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height*0.25),
-              commonScreenHeader(headerName: appContinueAsa),
-              commonButton(context, buttonName: appCompany, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor,buttonBorderColor: appPrimaryColor ,onClick: (){
-               controller.companySignUpClick();
-              }),
-              SizedBox(height: 10,),
-              commonButton(context, buttonName: appIndividual, buttonBackgroundColor: appWhiteColor, textColor: appPrimaryColor,buttonBorderColor: appPrimaryColor ,onClick: (){
-                controller.individualSignUpClick();
-              }),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 40),
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
-                          children: [
-                            TextSpan(
-                              text:  appAlreadyHaveAnAccount,
-                              style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
-                            ),
-                            TextSpan(
-                              text: appLogin,
-                              style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                 controller.loginButtonClick();
-                                  // Navigate to Terms of Use page or any action
-                                },
-                            ),
-                            TextSpan(
-                              text:  appHere,
-                              style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+          body: Container(
+            alignment: Alignment.topLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height*0.25),
+                commonScreenHeader(headerName: appContinueAsa),
+                commonButton(context, buttonName: appCompany, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor,buttonBorderColor: appPrimaryColor ,onClick: (){
+                  controller.companySignUpClick();
+                }),
+                SizedBox(height: 10,),
+                commonButton(context, buttonName: appIndividual, buttonBackgroundColor: appWhiteColor, textColor: appPrimaryColor,buttonBorderColor: appPrimaryColor ,onClick: (){
+                  controller.individualSignUpClick();
+                }),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
+                            children: [
+                              TextSpan(
+                                text:  appAlreadyHaveAnAccount,
+                                style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
+                              ),
+                              TextSpan(
+                                text: appLogin,
+                                style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    controller.loginButtonClick();
+                                    // Navigate to Terms of Use page or any action
+                                  },
+                              ),
+                              TextSpan(
+                                text:  appHere,
+                                style: AppTextStyles.font14.copyWith(color: appBlackColor), // Normal text style
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
+                )
 
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -22,71 +22,79 @@ class EditBenefitPage extends GetView<EditBeneFitControllers>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appScreenBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              commonActiveSearchBar(
-                onClick: (){
-                  controller.backButtonClick(context);
-                },
-                leadingIcon: appBackSvgIcon,
-                screenName: appEditBenefits,  onShareClick: (){}, onFilterClick: (){}, actionButton: '',
-              ),
-              SizedBox(height: 10,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 20,right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        commonTextFieldTitle(headerName: appAddNewBenefit,isMendatory: true),
-                        SizedBox(height: 5,),
-                        Obx((){
-                          var benefits = controller.benefitData.value.data ?? [];
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                commonActiveSearchBar(
+                  onClick: (){
+                    controller.backButtonClick(context);
+                  },
+                  leadingIcon: appBackSvgIcon,
+                  screenName: appEditBenefits,  onShareClick: (){}, onFilterClick: (){}, actionButton: '',
+                ),
+                SizedBox(height: 10,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 20,right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          commonTextFieldTitle(headerName: appAddNewBenefit,isMendatory: true),
+                          SizedBox(height: 5,),
+                          Obx((){
+                            var benefits = controller.benefitData.value.data ?? [];
 
-                          return benefits!=null&&benefits.isNotEmpty?customDropDown(
-                              hintText: appSelectCompany,
-                              item: [{"id":"0","name":appSelectBenefits},
-                              ...benefits.map((data)=>{'id':data.id,'name':data.name}).toList()??[]],
-                              selectedValue: benefits.any((datum)=>datum.id==controller.selectedBenefitsData["id"])?controller.selectedBenefitsData:{"id":"0","name":appSelectBenefits},
-                              onChanged: (Map<String,dynamic>? selectedData){
-                                if(selectedData!=null){
-                                  controller.benefitId.value=selectedData['id'];
-                                  controller.selectedBenefitsData.value={
-                                    "id":selectedData['id'],
-                                    "name":selectedData['name']
-                                  };
-                                }
-                              },
-                              icon: appDropDownIcon
-                          ):Container();
-                        }),
-                      ],
+                            return benefits!=null&&benefits.isNotEmpty?customDropDown(
+                                hintText: appSelectCompany,
+                                item: [{"id":"0","name":appSelectBenefits},
+                                  ...benefits.map((data)=>{'id':data.id,'name':data.name}).toList()??[]],
+                                selectedValue: benefits.any((datum)=>datum.id==controller.selectedBenefitsData["id"])?controller.selectedBenefitsData:{"id":"0","name":appSelectBenefits},
+                                onChanged: (Map<String,dynamic>? selectedData){
+                                  if(selectedData!=null){
+                                    controller.benefitId.value=selectedData['id'];
+                                    controller.selectedBenefitsData.value={
+                                      "id":selectedData['id'],
+                                      "name":selectedData['name']
+                                    };
+                                  }
+                                },
+                                icon: appDropDownIcon
+                            ):Container();
+                          }),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height:20,),
-                  commonButton(context,
-                      buttonName: appAddBenefits,
-                      buttonBackgroundColor: appPrimaryColor,
-                      textColor: appWhiteColor,
-                      buttonBorderColor: appPrimaryColor,
-                      onClick: (){
-                        if(controller.benefitId.value!=null&&controller.benefitId.value!="0"&&controller.benefitId.value.isNotEmpty){
-                          controller.addBenefitsApiCall(context);
-                        }else{
-                          showToast(appPleaseSelectBenefits);
-                        }
+                    SizedBox(height:20,),
+                    commonButton(context,
+                        buttonName: appAddBenefits,
+                        buttonBackgroundColor: appPrimaryColor,
+                        textColor: appWhiteColor,
+                        buttonBorderColor: appPrimaryColor,
+                        onClick: (){
+                          if(controller.benefitId.value!=null&&controller.benefitId.value!="0"&&controller.benefitId.value.isNotEmpty){
+                            controller.addBenefitsApiCall(context);
+                          }else{
+                            showToast(appPleaseSelectBenefits);
+                          }
 
-                      }
-                  ),
-                  SizedBox(height:30,),
-                  _getAllCompanyBenefitsListData(context)
-                ],
-              )
-            ],
+                        }
+                    ),
+                    SizedBox(height:30,),
+                    _getAllCompanyBenefitsListData(context)
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

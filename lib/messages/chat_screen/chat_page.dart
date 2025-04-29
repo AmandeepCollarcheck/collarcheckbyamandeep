@@ -18,121 +18,129 @@ class ChatPage extends GetView<ChatControllers>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appPrimaryBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            commonActiveSearchBar(
-              backGroundColor:appPrimaryBackgroundColor ,
-              onClick: (){
-                controller.backButtonClick(context);
-              },
-              leadingIcon: appBackSvgIcon,
-              screenName: controller.appBarName.value??"",
-              onShareClick: (){},
-              onFilterClick: (){},
-              actionButton: '',
-              isProfileImageShow: true,
-                profileImageData:controller.profileImage.value??"",
-              initialName: getInitialsWithSpace(input: controller.appBarName.value??"")
-            ),
-           // SizedBox(height: 20,),
-            Expanded(
-              child: Obx(() {
-                var messageData=controller.messageDatum.value.message??[];
-                messageData = List.from(messageData.reversed); // Reverse the list
-                return Container(
-                  padding: EdgeInsets.only(left: 20,right: 20),
-                  child: ListView.builder(
-                    reverse: true, // New messages appear at the bottom
-                    padding: EdgeInsets.all(10),
-                    itemCount: messageData.length??0,
-                    itemBuilder: (context, index) {
-                      final message = messageData[index];
-                      bool isMe = message.receiver == controller.receiverIdData.value;
-                      String? documentUrl = (message.document?.isNotEmpty ?? false) ? message.document!.first : null;
-                      return Align(
-                        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: isMe?CrossAxisAlignment.end:CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 5),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: isMe?appPrimaryColor:appWhiteColor,
-                                borderRadius: BorderRadius.circular(10),
+      body: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              commonActiveSearchBar(
+                  backGroundColor:appPrimaryBackgroundColor ,
+                  onClick: (){
+                    controller.backButtonClick(context);
+                  },
+                  leadingIcon: appBackSvgIcon,
+                  screenName: controller.appBarName.value??"",
+                  onShareClick: (){},
+                  onFilterClick: (){},
+                  actionButton: '',
+                  isProfileImageShow: true,
+                  profileImageData:controller.profileImage.value??"",
+                  initialName: getInitialsWithSpace(input: controller.appBarName.value??"")
+              ),
+              // SizedBox(height: 20,),
+              Expanded(
+                child: Obx(() {
+                  var messageData=controller.messageDatum.value.message??[];
+                  messageData = List.from(messageData.reversed); // Reverse the list
+                  return Container(
+                    padding: EdgeInsets.only(left: 20,right: 20),
+                    child: ListView.builder(
+                      reverse: true, // New messages appear at the bottom
+                      padding: EdgeInsets.all(10),
+                      itemCount: messageData.length??0,
+                      itemBuilder: (context, index) {
+                        final message = messageData[index];
+                        bool isMe = message.receiver == controller.receiverIdData.value;
+                        String? documentUrl = (message.document?.isNotEmpty ?? false) ? message.document!.first : null;
+                        return Align(
+                          alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: isMe?CrossAxisAlignment.end:CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: isMe?appPrimaryColor:appWhiteColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  messageData[index].message.toString(),
+                                  style: AppTextStyles.font14W500.copyWith(color: isMe?appWhiteColor:appBlackColor),
+                                ),
                               ),
-                              child: Text(
-                                messageData[index].message.toString(),
-                                style: AppTextStyles.font14W500.copyWith(color: isMe?appWhiteColor:appBlackColor),
+                              // Display Document (PDF, Image, or Video)
+                              if (documentUrl != null) displayDocument(documentUrl),
+                              SizedBox(height: 3,),
+                              Text(formatTimestampInAmPm(timestamp: messageData[index].datetime.toString()),style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)
+
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }),
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        child: TextField(
+                          controller: controller.messageController,
+                          decoration: InputDecoration(
+                            suffixIcon:GestureDetector(
+                              onTap: (){
+                                getFileFromGallery(context,onFilePickedData: (String data) {
+                                  controller.selectedDocumentData.value=data;
+                                });
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: SvgPicture.asset(appUploadDocument,height: 20,width: 20,),
                               ),
                             ),
-                            // Display Document (PDF, Image, or Video)
-                            if (documentUrl != null) displayDocument(documentUrl),
-                            SizedBox(height: 3,),
-                            Text(formatTimestampInAmPm(timestamp: messageData[index].datetime.toString()),style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)
 
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }),
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: TextField(
-                        controller: controller.messageController,
-                        decoration: InputDecoration(
-                          suffixIcon:GestureDetector(
-                            onTap: (){
-                              getFileFromGallery(context,onFilePickedData: (String data) {
-                                controller.selectedDocumentData.value=data;
-                              });
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: SvgPicture.asset(appUploadDocument,height: 20,width: 20,),
+                            hintText: appTypeAMessage,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20),
                           ),
-
-                          hintText: appTypeAMessage,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      controller.sendMessage(controller.messageController.text);
-                      controller.messageController.clear();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: appPrimaryColor
-                      ),
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: SvgPicture.asset(appChatSvg,height: 24,width: 24,)),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        controller.sendMessage(controller.messageController.text);
+                        controller.messageController.clear();
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: appPrimaryColor
                         ),
-                  ),
-                ],
+                        child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: SvgPicture.asset(appChatSvg,height: 24,width: 24,)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

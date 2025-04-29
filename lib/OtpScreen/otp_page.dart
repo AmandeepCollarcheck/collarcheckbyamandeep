@@ -12,6 +12,7 @@ import '../utills/app_strings.dart';
 import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_button.dart';
 import '../utills/common_widget/common_screen_header.dart';
+import '../utills/common_widget/progress.dart';
 
 class OtpPage extends GetView<OtpController>{
   const OtpPage({super.key});
@@ -19,154 +20,162 @@ class OtpPage extends GetView<OtpController>{
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: appScreenBackgroundColor,
-        appBar: commonAppBar(context,onClick: (){
-          controller.onBack(isLogin: controller.isLoginScreenData.value);
-        }),
-        body: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 30),
-            child: Column(
-              children: <Widget>[
-                commonScreenHeader(headerName:appEnterOtp),
-                Container(
-                  margin: EdgeInsets.only(left: 20,right: 20),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 10,),
-                      Obx((){
-                        return Column(
-                          children: <Widget>[
-                            controller.isEmailVerificationData.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,),
-                            SizedBox(height: 20,),
-                            Form(
-                              key: controller.formKey,
-                              child: PinCodeTextField(
+      child: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: appScreenBackgroundColor,
+          appBar: commonAppBar(context,onClick: (){
+            controller.onBack(isLogin: controller.isLoginScreenData.value);
+          }),
+          body: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 30),
+              child: Column(
+                children: <Widget>[
+                  commonScreenHeader(headerName:appEnterOtp),
+                  Container(
+                    margin: EdgeInsets.only(left: 20,right: 20),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 10,),
+                        Obx((){
+                          return Column(
+                            children: <Widget>[
+                              controller.isEmailVerificationData.value?Text("$appWeHaveSentOTPOnYourEmail${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,): Text("$appWeHaveSentOTP${controller.mobileNumberData.value}",style: AppTextStyles.font16W600.copyWith(color: appGreyBlackColor),textAlign: TextAlign.center,),
+                              SizedBox(height: 20,),
+                              Form(
+                                key: controller.formKey,
+                                child: PinCodeTextField(
 
-                                controller: controller.otpController,
-                                appContext: context,
-                                obscureText: false,
-                                length: 6,
-                                onChanged: (value) {
-                                  controller.otpController.text = value; // 🔥 Ensure controller updates
-                                },
-                                onCompleted: (String value){
-                                  controller.loginButtonClick(context);
-                                },
-                                validator: (value) => value!.isEmpty ? appOtp+appIsRequired : null,
-                                pinTheme: PinTheme(
-                                  fieldHeight: 40,
-                                  fieldWidth: 40,
-                                  errorBorderColor: appRedColor,
-                                  activeColor: appPrimaryColor,
-                                  activeFillColor: appPrimaryColor,
-                                  inactiveColor: appGreyBlackColor,
-                                  disabledColor: appGreyBlackColor,
-                                  selectedFillColor: appPrimaryColor,
-                                  inactiveBorderWidth: 1,
-                                  selectedBorderWidth: 1,
-                                  disabledBorderWidth: 1,
+                                  controller: controller.otpController,
+                                  appContext: context,
+                                  obscureText: false,
+                                  length: 6,
+                                  onChanged: (value) {
+                                    controller.otpController.text = value; // 🔥 Ensure controller updates
+                                  },
+                                  onCompleted: (String value){
+                                    controller.loginButtonClick(context);
+                                  },
+                                  validator: (value) => value!.isEmpty ? appOtp+appIsRequired : null,
+                                  pinTheme: PinTheme(
+                                    fieldHeight: 40,
+                                    fieldWidth: 40,
+                                    errorBorderColor: appRedColor,
+                                    activeColor: appPrimaryColor,
+                                    activeFillColor: appPrimaryColor,
+                                    inactiveColor: appGreyBlackColor,
+                                    disabledColor: appGreyBlackColor,
+                                    selectedFillColor: appPrimaryColor,
+                                    inactiveBorderWidth: 1,
+                                    selectedBorderWidth: 1,
+                                    disabledBorderWidth: 1,
+                                  ),
+                                  cursorColor: appPrimaryColor,
+                                  errorTextSpace: 30,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+
                                 ),
-                                cursorColor: appPrimaryColor,
-                                errorTextSpace: 30,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-
                               ),
-                            ),
-                          ],
-                        );
-                      }),
+                            ],
+                          );
+                        }),
 
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Obx((){
-                              print(">>>>>>");
-                              print(controller.isOtpWrong.value);
-                              return controller.isOtpWrong.value?Text(appWrongOtpEntered,style: AppTextStyles.font16W600.copyWith(color: appRedColor),):Container();
-                            }),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 20),
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Obx((){
+                                print(">>>>>>");
+                                print(controller.isOtpWrong.value);
+                                return controller.isOtpWrong.value?Text(appWrongOtpEntered,style: AppTextStyles.font16W600.copyWith(color: appRedColor),):Container();
+                              }),
 
-                            Obx(()=>RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
-                                children: [
-                                  TextSpan(
-                                    text:  appDidNotGetTheOTP,
-                                    style: AppTextStyles.font16W600.copyWith(color: appBlackColor), // Normal text style
-                                  ),
-                                  controller.otpCountDownTimer.value==0?
-                                  TextSpan(
-                                    text: appResend,
-                                    style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        controller.resendOtp(context);
-                                      },
-                                  ): TextSpan(
-                                    text: "0.${controller.otpCountDownTimer.value.toString()} $appSec",
-                                    style:  AppTextStyles.font14.copyWith(color: appPrimaryColor),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // controller.resendOtp(context);
-                                      },
-                                  ),
-                                ],
+                              Obx(()=>RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
+                                  children: [
+                                    TextSpan(
+                                      text:  appDidNotGetTheOTP,
+                                      style: AppTextStyles.font16W600.copyWith(color: appBlackColor), // Normal text style
+                                    ),
+                                    controller.otpCountDownTimer.value==0?
+                                    TextSpan(
+                                      text: appResend,
+                                      style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          controller.resendOtp(context);
+                                        },
+                                    ): TextSpan(
+                                      text: "0.${controller.otpCountDownTimer.value.toString()} $appSec",
+                                      style:  AppTextStyles.font14.copyWith(color: appPrimaryColor),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // controller.resendOtp(context);
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height*0.34,),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30),
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        commonButton(context, buttonName: controller.isEmailVerificationData.value?appVerifyEmail:appLogin, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor,buttonBorderColor: appPrimaryColor ,onClick: (){
+                          if(controller.isEmailVerificationData.value){
+                            controller.verifyEmailOtpAPiCall(context);
+                          }else{
+                            controller.loginButtonClick(context);
+                          }
+
+                        }),
+                        SizedBox(height: 20,),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
+                            children: [
+                              TextSpan(
+                                text: appDontHaveAnAccountt,
+                                style: AppTextStyles.font16W600.copyWith(color: appBlackColor), // Normal text style
                               ),
-                            )),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height*0.34,),
-                Container(
-                  margin: EdgeInsets.only(bottom: 30),
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      commonButton(context, buttonName: controller.isEmailVerificationData.value?appVerifyEmail:appLogin, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor,buttonBorderColor: appPrimaryColor ,onClick: (){
-                        if(controller.isEmailVerificationData.value){
-                          controller.verifyEmailOtpAPiCall(context);
-                        }else{
-                          controller.loginButtonClick(context);
-                        }
+                              TextSpan(
+                                text: appSignUp,
+                                style:  AppTextStyles.font16W600Underline.copyWith(color: appPrimaryColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    controller.signUpButtonClick(context);
+                                  },
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
 
-                      }),
-                      SizedBox(height: 20,),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(fontSize: 16, color: appBlackColor), // Default text style
-                          children: [
-                            TextSpan(
-                              text: appDontHaveAnAccountt,
-                              style: AppTextStyles.font16W600.copyWith(color: appBlackColor), // Normal text style
-                            ),
-                            TextSpan(
-                              text: appSignUp,
-                              style:  AppTextStyles.font16W600Underline.copyWith(color: appPrimaryColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  controller.signUpButtonClick(context);
-                                },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-
-              ],
+                ],
+              ),
             ),
           ),
         ),

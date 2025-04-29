@@ -27,168 +27,176 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.ltr,
-        child: Scaffold(
-          backgroundColor: appScreenBackgroundColor,
-          body: Column(
-            children: <Widget>[
-              SizedBox(height: 30,),
-              Expanded(
-                  child: NestedScrollView(
-                      controller: controller.scrollController,
-                      headerSliverBuilder: (contextData, innerBoxIsScrolled) {
-                        return [
-                          SliverToBoxAdapter(
-                            child: Container(
-                              color: appScreenBackgroundColor,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+        child: PopScope(
+          canPop: false, // Prevents default back behavior
+          onPopInvoked: (didPop) {
+            if (!didPop) {
+              onWillPop();
+            }
+          },
+          child: Scaffold(
+            backgroundColor: appScreenBackgroundColor,
+            body: Column(
+              children: <Widget>[
+                SizedBox(height: 30,),
+                Expanded(
+                    child: NestedScrollView(
+                        controller: controller.scrollController,
+                        headerSliverBuilder: (contextData, innerBoxIsScrolled) {
+                          return [
+                            SliverToBoxAdapter(
+                              child: Container(
+                                color: appScreenBackgroundColor,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
 
-                                  Container(
-                                    padding: EdgeInsets.only(left: 20,right: 20),
-                                    height:60,
-                                    child: commonAppBarWithSettingAndShareOptionWithBackButton(context,
-                                      leadingIcon: appBackSvgIcon,
-                                      onClick: () {},
-                                      onSettingsClick: () {},
-                                      onBackClick: () {
-                                        controller.backButton(context);
-                                      },
+                                    Container(
+                                      padding: EdgeInsets.only(left: 20,right: 20),
+                                      height:60,
+                                      child: commonAppBarWithSettingAndShareOptionWithBackButton(context,
+                                        leadingIcon: appBackSvgIcon,
+                                        onClick: () {},
+                                        onSettingsClick: () {},
+                                        onBackClick: () {
+                                          controller.backButton(context);
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    child: _profileWidget(context),
-                                  ),
-                                ],
+                                    Container(
+                                      child: _profileWidget(context),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ];
-                      },
-                      // body:ScrollToAnimateTab(
-                      //     activeTabDecoration: TabDecoration(
-                      //         textStyle: AppTextStyles.font14.copyWith(
-                      //           color:  appPrimaryColor,
-                      //           fontWeight:  FontWeight.bold,
-                      //         ),
-                      //         decoration: BoxDecoration(
-                      //             // border: Border.all(color: Colors.black),
-                      //             // borderRadius: const BorderRadius.all(Radius.circular(5))
-                      //         )
-                      //     ),
-                      //     inActiveTabDecoration: TabDecoration(
-                      //         textStyle: AppTextStyles.font14.copyWith(
-                      //           color:  appBlackColor,
-                      //           fontWeight:  FontWeight.normal,
-                      //         ),
-                      //         decoration: BoxDecoration(
-                      //             // border: Border.all(color: Colors.black12),
-                      //             // borderRadius: const BorderRadius.all(Radius.circular(5))
-                      //         )
-                      //     ),
-                      //     tabs: [
-                      //       ScrollableList(
-                      //           label: appAbout,
-                      //           body: _homeWidgetTabView(context)
-                      //       ),
-                      //       ScrollableList(
-                      //           label: appJobOpening,
-                      //           body: _jobOpeningTabView(context)
-                      //       ),
-                      //       ScrollableList(
-                      //           label: appGallery,
-                      //           body: _galleryWidget(context)
-                      //       ),
-                      //       ScrollableList(
-                      //           label: appPerksAndBenefits,
-                      //           body: Container(
-                      //             child: Text("asj"),
-                      //           )
-                      //       ),
-                      //       ScrollableList(
-                      //           label: appSimilarCompanies,
-                      //           body: _similarCompanyWidget(context)
-                      //       ),
-                      //       ScrollableList(
-                      //           label: appEmployeeProfiles,
-                      //           body:_simillerProfileWidget(context)
-                      //       ),
-                      //     ]
-                      // )
+                          ];
+                        },
+                        // body:ScrollToAnimateTab(
+                        //     activeTabDecoration: TabDecoration(
+                        //         textStyle: AppTextStyles.font14.copyWith(
+                        //           color:  appPrimaryColor,
+                        //           fontWeight:  FontWeight.bold,
+                        //         ),
+                        //         decoration: BoxDecoration(
+                        //             // border: Border.all(color: Colors.black),
+                        //             // borderRadius: const BorderRadius.all(Radius.circular(5))
+                        //         )
+                        //     ),
+                        //     inActiveTabDecoration: TabDecoration(
+                        //         textStyle: AppTextStyles.font14.copyWith(
+                        //           color:  appBlackColor,
+                        //           fontWeight:  FontWeight.normal,
+                        //         ),
+                        //         decoration: BoxDecoration(
+                        //             // border: Border.all(color: Colors.black12),
+                        //             // borderRadius: const BorderRadius.all(Radius.circular(5))
+                        //         )
+                        //     ),
+                        //     tabs: [
+                        //       ScrollableList(
+                        //           label: appAbout,
+                        //           body: _homeWidgetTabView(context)
+                        //       ),
+                        //       ScrollableList(
+                        //           label: appJobOpening,
+                        //           body: _jobOpeningTabView(context)
+                        //       ),
+                        //       ScrollableList(
+                        //           label: appGallery,
+                        //           body: _galleryWidget(context)
+                        //       ),
+                        //       ScrollableList(
+                        //           label: appPerksAndBenefits,
+                        //           body: Container(
+                        //             child: Text("asj"),
+                        //           )
+                        //       ),
+                        //       ScrollableList(
+                        //           label: appSimilarCompanies,
+                        //           body: _similarCompanyWidget(context)
+                        //       ),
+                        //       ScrollableList(
+                        //           label: appEmployeeProfiles,
+                        //           body:_simillerProfileWidget(context)
+                        //       ),
+                        //     ]
+                        // )
 
-                      body:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(height: 10,),
-                          Container(height: 1, color: appPrimaryBackgroundColor),
-                          ///Custom tab
-                          Obx((){
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: List.generate(controller.listTabLabel.length, (index) {
-                                  final isSelected = controller.selectedIndex.value == index;
+                        body:Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 10,),
+                            Container(height: 1, color: appPrimaryBackgroundColor),
+                            ///Custom tab
+                            Obx((){
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: List.generate(controller.listTabLabel.length, (index) {
+                                    final isSelected = controller.selectedIndex.value == index;
 
-                                  return GestureDetector(
-                                    onTap: () {
-                                      controller.selectedIndex.value = index;
-                                      controller.scrollToSection(index);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        controller.selectedIndex.value = index;
+                                        controller.scrollToSection(index);
 
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: isSelected ? appPrimaryColor : appPrimaryBackgroundColor,
-                                            width:  isSelected ?2:1,
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: isSelected ? appPrimaryColor : appPrimaryBackgroundColor,
+                                              width:  isSelected ?2:1,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          controller.listTabLabel[index],
+                                          style: AppTextStyles.font14.copyWith(
+                                            color: isSelected ? appPrimaryColor : appBlackColor,
                                           ),
                                         ),
                                       ),
-                                      child: Text(
-                                        controller.listTabLabel[index],
-                                        style: AppTextStyles.font14.copyWith(
-                                          color: isSelected ? appPrimaryColor : appBlackColor,
-                                        ),
-                                      ),
-                                    ),
+                                    );
+                                  }),
+                                ),
+                              );
+                            }),
+
+                            Expanded(
+                              child: SingleChildScrollView(
+                                physics: BouncingScrollPhysics(),
+                                child: Obx((){
+                                  var allData=controller.companyProfileData.value.data;
+                                  var benefitsData=allData?.allBenefits??[];
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      _childWithKey(controller.homeKey, _homeWidgetTabView(context)),
+                                      _childWithKey(controller.jobOpeningKey, _jobOpeningTabView(context)),
+                                      _childWithKey(controller.galleryKey, _galleryWidget(context)),
+                                      _childWithKey(controller.benifits, _perksAndBebefitsWidget(context, allBenefits: benefitsData??[])),
+                                      _childWithKey(controller.companyKey, _similarCompanyWidget(context)),
+                                      _childWithKey(controller.similerProfile, _simillerProfileWidget(context)),
+
+                                    ],
                                   );
-                                }),
-                              ),
-                            );
-                          }),
-
-                          Expanded(
-                            child: SingleChildScrollView(
-                              physics: BouncingScrollPhysics(),
-                              child: Obx((){
-                                var allData=controller.companyProfileData.value.data;
-                                var benefitsData=allData?.allBenefits??[];
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    _childWithKey(controller.homeKey, _homeWidgetTabView(context)),
-                                    _childWithKey(controller.jobOpeningKey, _jobOpeningTabView(context)),
-                                    _childWithKey(controller.galleryKey, _galleryWidget(context)),
-                                    _childWithKey(controller.benifits, _perksAndBebefitsWidget(context, allBenefits: benefitsData??[])),
-                                    _childWithKey(controller.companyKey, _similarCompanyWidget(context)),
-                                    _childWithKey(controller.similerProfile, _simillerProfileWidget(context)),
-
-                                  ],
-                                );
-                              }),),
-                          ),
+                                }),),
+                            ),
 
 
 
 
 
-                        ],
-                      )
+                          ],
+                        )
 
-                  )
-              )
-            ],
+                    )
+                )
+              ],
+            ),
           ),
         )
     );

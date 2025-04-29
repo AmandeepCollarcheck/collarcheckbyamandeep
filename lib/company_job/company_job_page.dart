@@ -24,102 +24,110 @@ class CompanyJobPage extends GetView<CompanyJobControllers>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: appScreenBackgroundColor,
-        body: Column(
-          children: <Widget>[
-            ///Search Widget
-            Container(
-              margin: EdgeInsets.only(left: 20,right: 20,top: 20),
-              child: Obx(()=>commonCompanySearchAppBar(
-                  context,controller: controller.searchController,
-                  actionButtonOne: appNotificationSVGIcon,
-                  actionButtonTwo: appSearchIcon,
-                  isSearchActive: controller.isSearchActive.value,
-                  onChanged: (value){
-                    // controller.openSearchScreen(context);
-                  },
-                  onEmploymentRequestClick: (){
-                    Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyJobsScreen});
-                  },
-                  onAddEmployment: ()async{
-                    final result=await addNewJobForm(context, companyAllDetails: controller.designationListData.value,screenNameData:companyJobsScreen);
-                    if(result['result']==true){
-                      Future.delayed(Duration(milliseconds: 500), ()async {
-                        controller.getJobListApiCall();
+      child: PopScope(
+        canPop: false, // Prevents default back behavior
+        onPopInvoked: (didPop) {
+          if (!didPop) {
+            onWillPop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: appScreenBackgroundColor,
+          body: Column(
+            children: <Widget>[
+              ///Search Widget
+              Container(
+                margin: EdgeInsets.only(left: 20,right: 20,top: 20),
+                child: Obx(()=>commonCompanySearchAppBar(
+                    context,controller: controller.searchController,
+                    actionButtonOne: appNotificationSVGIcon,
+                    actionButtonTwo: appSearchIcon,
+                    isSearchActive: controller.isSearchActive.value,
+                    onChanged: (value){
+                      // controller.openSearchScreen(context);
+                    },
+                    onEmploymentRequestClick: (){
+                      Get.offNamed(AppRoutes.companyEmploymentRequest,arguments: {screenName:companyJobsScreen});
+                    },
+                    onAddEmployment: ()async{
+                      final result=await addNewJobForm(context, companyAllDetails: controller.designationListData.value,screenNameData:companyJobsScreen);
+                      if(result['result']==true){
+                        Future.delayed(Duration(milliseconds: 500), ()async {
+                          controller.getJobListApiCall();
+                        });
+                      }
+                    },
+                    onTap: (){
+                      controller.openSearchScreen(context);
+                    },
+                    onSearchIconClick: (bool isSearchClick) {
+                      controller.isSearchActive.value=isSearchClick;
+
+                    })),
+              ),
+              SizedBox(height: 20,),
+              Container(
+                color: appWhiteColor,
+                padding:EdgeInsets.zero,
+                child: Obx(() {
+                  return TabBar(
+                    labelPadding: EdgeInsets.only(bottom: 10),
+                    isScrollable: false,
+                    dividerColor: appWhiteColor,
+                    indicatorColor: appPrimaryColor,
+                    indicatorWeight: 2,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    controller: controller.tabController,
+                    tabs: List.generate(controller.listTabLabel.length, (index) {
+                      return Obx(() {
+                        bool isSelected = controller.selectedTabIndex.value == index;
+
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              controller.listTabLabel[index],
+                              style: AppTextStyles.font14.copyWith(
+                                color: isSelected ? appPrimaryColor : appBlackColor,
+                              ),
+                            ),
+                            SizedBox(width: 2),
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isSelected ? appPrimaryColor : appGreyBlackColor,
+                              ),
+                              child: Text(
+                                controller.listTabCounter[index].toString(),
+                                style: AppTextStyles.font10.copyWith(color: appWhiteColor),
+                              ),
+                            ),
+                          ],
+                        );
                       });
-                    }
-                  },
-                  onTap: (){
-                    controller.openSearchScreen(context);
-                  },
-                  onSearchIconClick: (bool isSearchClick) {
-                    controller.isSearchActive.value=isSearchClick;
+                    }),
+                  );
+                }),
 
-                  })),
-            ),
-            SizedBox(height: 20,),
-            Container(
-              color: appWhiteColor,
-              padding:EdgeInsets.zero,
-              child: Obx(() {
-                return TabBar(
-                  labelPadding: EdgeInsets.only(bottom: 10),
-                  isScrollable: false,
-                  dividerColor: appWhiteColor,
-                  indicatorColor: appPrimaryColor,
-                  indicatorWeight: 2,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  controller: controller.tabController,
-                  tabs: List.generate(controller.listTabLabel.length, (index) {
-                    return Obx(() {
-                      bool isSelected = controller.selectedTabIndex.value == index;
-
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            controller.listTabLabel[index],
-                            style: AppTextStyles.font14.copyWith(
-                              color: isSelected ? appPrimaryColor : appBlackColor,
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isSelected ? appPrimaryColor : appGreyBlackColor,
-                            ),
-                            child: Text(
-                              controller.listTabCounter[index].toString(),
-                              style: AppTextStyles.font10.copyWith(color: appWhiteColor),
-                            ),
-                          ),
-                        ],
-                      );
-                    });
-                  }),
-                );
-              }),
-
-            ),
-            Expanded(
-              child: Container(
-                color: appPrimaryBackgroundColor,
-                height: MediaQuery.of(context).size.height ,
-                child: TabBarView(
-                  // physics: NeverScrollableScrollPhysics(),
-                  controller: controller.tabController,
-                  children: <Widget>[
-                    _openPage(context),
-                    _draftPage(context),
-                    _completedPage(context)
-                  ],
+              ),
+              Expanded(
+                child: Container(
+                  color: appPrimaryBackgroundColor,
+                  height: MediaQuery.of(context).size.height ,
+                  child: TabBarView(
+                    // physics: NeverScrollableScrollPhysics(),
+                    controller: controller.tabController,
+                    children: <Widget>[
+                      _openPage(context),
+                      _draftPage(context),
+                      _completedPage(context)
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
