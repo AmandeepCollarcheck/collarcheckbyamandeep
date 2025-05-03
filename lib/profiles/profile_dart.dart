@@ -604,71 +604,68 @@ class ProfilePage extends GetView<ProfileControllers>{
             commonTextField(controller: controller.permanentController, hintText: appPermanentAddress,maxLine: 5),
             SizedBox(height: 10,),
             ///Resume
-            Container(
-              padding: EdgeInsets.only(left: 20,right: 20),
-              child: Column(
-                children: <Widget>[
-                  commonTextFieldTitle(headerName: appResume,isMendatory: true),
-                  SizedBox(height: 5,),
-                  GestureDetector(
-                    onTap: (){
-                      getFileFromGallery(context,onFilePickedData: (String pickedData) {
-                        if(pickedData!=null){
-                          controller.selectedResumeName.value=pickedData;
-                        }
-                      });
-                    },
-                    child: DottedBorder(
-                        borderType: BorderType.RRect,
-                        color: appBlackColor,
-                        strokeWidth: 1,
-                        radius: Radius.circular(20),
-                        child:Container(
-                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SvgPicture.asset(appUploadResume,height: 24,width: 24,),
-                                SizedBox(width: 10,),
-                                Text(appUpdateResume,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
-                              ],
-                            )
-                        )
-                    ),
+            Column(
+              children: <Widget>[
+                commonTextFieldTitle(headerName: appResume,isMendatory: true),
+                SizedBox(height: 5,),
+                GestureDetector(
+                  onTap: (){
+                    getFileFromGallery(context,onFilePickedData: (String pickedData) {
+                      if(pickedData!=null){
+                        controller.selectedResumeName.value=pickedData;
+                      }
+                    });
+                  },
+                  child: DottedBorder(
+                      borderType: BorderType.RRect,
+                      color: appBlackColor,
+                      strokeWidth: 1,
+                      radius: Radius.circular(20),
+                      child:Container(
+                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          child:Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(appUploadResume,height: 24,width: 24,),
+                              SizedBox(width: 10,),
+                              Text(appUpdateResume,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
+                            ],
+                          )
+                      )
                   ),
-                  SizedBox(height: 5,),
-                  Text(appSupportedFormats,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-                  SizedBox(height: 10,),
-                  Obx((){
-                    return controller.selectedResumeName.value.isNotEmpty? Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: appPrimaryBackgroundColor
-                      ),
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Obx((){
-                            return SizedBox(
-                                width: MediaQuery.of(context).size.width*0.7,
-                                child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
-                          }),
-                          GestureDetector(
-                              onTap:(){
-                                controller.selectedResumeName.value="";
-                              },
-                              child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
-                        ],
-                      ),
-                    ):Container();
-                  })
-                ],
-              ),
+                ),
+                SizedBox(height: 5,),
+                Text(appSupportedFormats,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                SizedBox(height: 10,),
+                Obx((){
+                  return controller.selectedResumeName.value.isNotEmpty? Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: appPrimaryBackgroundColor
+                    ),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Obx((){
+                          return SizedBox(
+                              width: MediaQuery.of(context).size.width*0.7,
+                              child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                        }),
+                        GestureDetector(
+                            onTap:(){
+                              controller.selectedResumeName.value="";
+                            },
+                            child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
+                      ],
+                    ),
+                  ):Container();
+                })
+              ],
             ),
 
           ],
