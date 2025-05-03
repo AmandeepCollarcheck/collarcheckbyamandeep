@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
+
 class DioLogger{
   static Logger log = Logger('unique logger');
   static void initialize() {
@@ -28,3 +29,4 @@ class DioLogger{
     log.info('$tag - Error Message : ${error.message}');
   }
 }
+

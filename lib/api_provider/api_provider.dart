@@ -102,7 +102,7 @@ class ApiProvider{
     }, onResponse: (Response response, handler) {
       DioLogger.onSuccess(tag, response);
       return handler.next(response);
-    }, onError: (DioError error, handler) {
+    }, onError: (DioError error, handler) async {
       _dioError = error;
       DioLogger.onError(tag, error);
       return handler.next(error);

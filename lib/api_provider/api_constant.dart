@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
+import '../utills/common_widget/progress.dart';
+
 String tag = 'api_provider';
 //final baseUrlForLogin = 'https://api.collarcheck.com/wapi/';
 final baseUrlForLogin = 'https://admin.collarcheck.com/mapi/';
@@ -106,7 +108,13 @@ final String strCompanyUpdateReview = '/company/add-review';
 
 handleException(error,stacktrace,DioError dioError){
   if (dioError.response!.statusCode == 401) {
+    Future.delayed(Duration.zero, () {
+      openLoginPageWhenTokenUnauthorize();
+    });
     throwIfNoSuccess("unauthorized");
+
+
+
   } else if (dioError.response!.statusCode == 500) {
     if (dioError.response!.data == null) {
       throwIfNoSuccess("server_error");

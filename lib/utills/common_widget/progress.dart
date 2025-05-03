@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collarchek/utills/app_colors.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/common_button.dart';
 import 'package:collarchek/utills/common_widget/common_text_field.dart';
 import 'package:collarchek/utills/image_path.dart';
@@ -827,4 +828,11 @@ String commonEmployementDataPosted({context, required String joiningData, requir
   final till = stillWorking == "1" ? appToPresent : formatDate(employementTillDate);
 
   return "$joining-$till";
+}
+
+
+
+void openLoginPageWhenTokenUnauthorize() {
+  print("Navigating to login page...");
+  Future.microtask(() => Get.offAllNamed(AppRoutes.login));
 }

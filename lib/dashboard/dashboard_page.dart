@@ -3,9 +3,11 @@ import 'package:collarchek/utills/app_colors.dart';
 import 'package:collarchek/utills/app_key_constent.dart';
 import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/common_appbar.dart';
+import 'package:collarchek/utills/common_widget/common_image_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/rx_workers.dart' show debounce;
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -61,6 +63,7 @@ class DashboardPage extends GetView<DashboardController>{
                     SizedBox(height: 10,),
                     _profileWidget(context),
                     _recommendJobsWidget(context),
+                    _verifyProfileClamNow(context),
                     _completeProfileForBetterSearch(context),
                     _jobsForYouWidget(context),
                     _topCompanies(),
@@ -334,24 +337,26 @@ class DashboardPage extends GetView<DashboardController>{
   }
 
 // Circular Profile Image with Progress Indicator
-  Widget _buildProfileImage(String imageUrl, double percentage, String percentageText) {
+  Widget _buildProfileImage(String imageUrl, double percentage, String percentageText,{double height=56.0,double width=56,double radius=30.0}) {
     return Stack(
+      clipBehavior: Clip.none,
+      fit: StackFit.loose,
       alignment: Alignment.center,
       children: [
         CircularPercentIndicator(
-          radius: 30.0,
+          radius: radius,
           lineWidth: 2.0,
           percent: percentage,
           center: ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: imageUrl.isNotEmpty
-                ? Image.network(imageUrl, fit: BoxFit.cover, height: 56, width: 56)
-                : Image.asset(appDummyProfile, fit: BoxFit.cover, height: 56, width: 56),
+                ? Image.network(imageUrl, fit: BoxFit.cover, height: height, width: width)
+                : Image.asset(appDummyProfile, fit: BoxFit.cover, height: height, width: width),
           ),
           progressColor: Colors.green,
         ),
         Positioned(
-          bottom: 0,
+          bottom: -4,
           right: 8,
             child: Container(
               alignment: Alignment.center,
@@ -369,6 +374,160 @@ class DashboardPage extends GetView<DashboardController>{
         ),
       ],
     );
+  }
+
+  _verifyProfileClamNow( context) {
+    return Obx((){
+      final userDetail = controller.userHomeModel.value.data?.userDetail;
+
+      // Handle null user data gracefully
+      if (userDetail == null) {
+        return Container(); // Show a placeholder or shimmer effect
+      }
+
+      final profileFName = userDetail.fName ?? "";
+      final profileLName = userDetail.lName ?? "";
+      final profileLImage = userDetail.profile ?? "";
+      final profilePercentageText = userDetail.profilePercentage ?? "";
+      final profileLPercentage = (double.tryParse(profilePercentageText.toString()) ?? 0.0) / 100;
+
+      return profileLPercentage<75?Container(
+        margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+        padding: EdgeInsets.only(left: 10,top: 14,bottom: 14),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+                colors: [
+                  appPrimaryColor,
+                  appPrimaryColor
+                ]
+            )
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                    width: MediaQuery.of(context).size.width*0.65,
+                    child: Text(appVerifyYourProfileToClaim,style: AppTextStyles.font16W700.copyWith(color: appWhiteColor),)),
+                Padding(
+                  padding: EdgeInsets.only(top: 24),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    fit: StackFit.loose,
+                    children: <Widget>[
+                      commonImageWidget(
+                          image: profileLImage??"",
+                          initialName: profileFName??"",
+                          height: 66,
+                          width: 66,
+                          borderRadius: 100
+                      ),
+                      Positioned(
+                        right: -4,
+                        child: SvgPicture.asset(appVerifiedIcon,height: 30,width: 30,),
+                      )
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+            GestureDetector(
+              onTap: (){
+                final BottomNavBarController controller = Get.find<BottomNavBarController>();
+                controller.bottomNavCurrentIndex.value=4;
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: appWhiteColor
+                ),
+                child:  Text(appVerifyNow,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
+              ),
+            )
+          ],
+        ),
+      ):Container(
+        margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+        padding: EdgeInsets.only(left: 10,top: 14,bottom: 14),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+                colors: [
+                  appPrimaryColor,
+                  appPrimaryColor
+                ]
+            )
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+               Column(
+                 children: <Widget>[
+                   SizedBox(
+                       width: MediaQuery.of(context).size.width*0.65,
+                       child: Text(appYouAreATopCandidate,style: AppTextStyles.font16W700.copyWith(color: appWhiteColor),)),
+                   SizedBox(
+                       width: MediaQuery.of(context).size.width*0.62,
+                       child: Text(appOnAverageVerifiedMembers,style: AppTextStyles.font12w500.copyWith(color: appWhiteColor),)),
+
+                 ],
+               ),
+                Padding(
+                  padding: EdgeInsets.only(top: 24),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    fit: StackFit.loose,
+                    children: <Widget>[
+                      _buildProfileImage(
+                          profileLImage, profileLPercentage,
+                          profilePercentageText.toString(),
+                          height: 66,
+                          width: 66,
+                        radius: 32.0
+                      ),
+                      // commonImageWidget(
+                      //     image: profileLImage??"",
+                      //     initialName: profileFName??"",
+                      //     height: 66,
+                      //     width: 66,
+                      //     borderRadius: 100
+                      // ),
+                      Positioned(
+                        right: -10,
+                        child: SvgPicture.asset(appVerifiedIcon,height: 30,width: 30,),
+                      )
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+            GestureDetector(
+              onTap: (){
+                final BottomNavBarController controller = Get.find<BottomNavBarController>();
+                controller.bottomNavCurrentIndex.value=4;
+               },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: appWhiteColor
+                ),
+                child:  Text(appExploreNow,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 
 

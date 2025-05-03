@@ -17,6 +17,7 @@ import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_methods.dart';
 import '../utills/common_widget/common_progress_widget.dart';
 import '../utills/common_widget/progress.dart';
+import '../utills/common_widget/update_profile_individual_bottom_sheet.dart';
 import '../utills/font_styles.dart';
 
 class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
@@ -246,7 +247,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                         /// **TabBarView below the TabBar**
                         Expanded(
                             child: SingleChildScrollView(
-                              //controller: controller.scrollControllerForTabSelection,
+                              controller: controller.scrollControllerForTabSelection,
                               physics: BouncingScrollPhysics(),
                               child: Obx((){
                                 var allData=controller.userProfileData.value.data;
@@ -280,477 +281,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
       ),
     );
   }
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: appScreenBackgroundColor,
-  //     body: SafeArea(
-  //       child: SingleChildScrollView(
-  //         child: Column(
-  //           children: <Widget>[
-  //             SizedBox(height: 20,),
-  //             ///Certificates
-  //             Obx((){
-  //               var certificatesData=controller.allCertificatesData.value.data??[];
-  //               return Container(
-  //                 margin: EdgeInsets.only(left: 20,right: 20),
-  //                 padding: EdgeInsets.only(top: 10,bottom: 10,),
-  //                 decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                     border: Border.all(color: appPrimaryBackgroundColor,width: 1)
-  //                 ),
-  //                 child: Column(
-  //                   children: <Widget>[
-  //                     Container(
-  //                       padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                         children: <Widget>[
-  //                           Text(appCertifications,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-  //                           GestureDetector(
-  //                             onTap: (){
-  //                               Get.offNamed(AppRoutes.addCertificates,arguments: {screenName:profileDetails});
-  //                             },
-  //                             child: Row(
-  //                               children:<Widget> [
-  //                                 SvgPicture.asset(appExpendedIconIcon,height: 14,width: 14,),
-  //                                 SizedBox(width: 5,),
-  //                                 Text(appAddCertificates,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
-  //                               ],
-  //                             ),
-  //                           )
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       height: 1,
-  //                       color: appPrimaryBackgroundColor,
-  //                     ),
-  //                     certificatesData.isNotEmpty?SingleChildScrollView(
-  //                       child: Wrap(
-  //                         spacing: 15,
-  //                         runSpacing: 20,
-  //                         children: List.generate(certificatesData.length??0, (index){
-  //                           return Container(
-  //                             width: MediaQuery.of(context).size.width*0.4,
-  //                             margin: EdgeInsets.only(bottom: 10,top: 10),
-  //                             decoration: BoxDecoration(
-  //
-  //                               borderRadius: BorderRadius.circular(5.0),
-  //                               border: Border.all(color: appPrimaryBackgroundColor,width: 1),
-  //                             ),
-  //                             child: Column(
-  //                               crossAxisAlignment: CrossAxisAlignment.center,
-  //                               children: <Widget>[
-  //                                 Stack(
-  //                                   children: <Widget>[
-  //                                     certificatesData.isNotEmpty&&certificatesData[index].document!.isNotEmpty?Image.network(certificatesData[index].document?[0],height: MediaQuery.of(context).size.height*0.1,width:MediaQuery.of(context).size.width*0.4 ,fit: BoxFit.cover,):Image.asset(appCertificatesImageData,height: MediaQuery.of(context).size.height*0.1,width:MediaQuery.of(context).size.width*0.4 ,fit: BoxFit.cover,),
-  //                                     Positioned(
-  //                                       top: 5,
-  //                                       right: 5,
-  //                                       child: Row(
-  //                                         children: <Widget>[
-  //                                           GestureDetector(
-  //                                               onTap: (){
-  //                                                 controller.deleteCertificates(context, certificatesId: certificatesData[index].id??"",);
-  //
-  //                                               },
-  //                                               child: Container(
-  //                                                 padding: EdgeInsets.all(5
-  //                                                 ),
-  //                                                 decoration: BoxDecoration(
-  //                                                  // shape: BoxShape.circle,
-  //                                                   borderRadius: BorderRadius.circular(100.0),
-  //                                                   color: appPrimaryBackgroundColor,
-  //                                                   border: Border.all(color: appPrimaryBackgroundColor,width: 1),
-  //                                                 ),
-  //                                                 child: SvgPicture.asset(appDeleteSvgIcon,height: 15,width: 15,color: appPrimaryColor,),
-  //                                               )),
-  //                                           SizedBox(width: 5,),
-  //                                           GestureDetector(
-  //                                               onTap: (){
-  //                                                 Get.offNamed(AppRoutes.addCertificates,arguments: {screenName:profileDetails,isEdit:true,isEditItemId:certificatesData[index].id});
-  //                                               },
-  //                                               child: SvgPicture.asset(appEditIconWhiteBG,height: 25,width: 25,)),
-  //                                         ],
-  //                                       )
-  //                                     )
-  //
-  //                                   ],
-  //                                 ),
-  //                                 Container(
-  //                                     padding: EdgeInsets.only(left: 5,right: 5),
-  //                                     width: MediaQuery.of(context).size.width*0.4,
-  //                                     child: Text(certificatesData[index].course??"",style: AppTextStyles.font14.copyWith(color: appBlackColor),)),
-  //                                 Container(
-  //                                     padding: EdgeInsets.all(5),
-  //                                     width: MediaQuery.of(context).size.width*0.4,
-  //                                     child: Text(certificatesData[index].university??"",style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)),
-  //
-  //                                 Row(
-  //                                   children: <Widget>[
-  //                                     certificatesData[index].startDate!=null?Container(
-  //                                         padding: EdgeInsets.all(5),
-  //                                         width: MediaQuery.of(context).size.width*0.4,
-  //                                         child: Text("From : ${certificatesData[index].startDate??""}",style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)):Container(),
-  //                                     Text(" To ",style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),),
-  //                                     certificatesData[index].ongoing==true?Container(
-  //                                         padding: EdgeInsets.all(5),
-  //                                         width: MediaQuery.of(context).size.width*0.4,
-  //                                         child: Text(appOngoing,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),)):certificatesData[index].endDate!=null?Container(
-  //                                         padding: EdgeInsets.all(5),
-  //                                         width: MediaQuery.of(context).size.width*0.4,
-  //                                         child: Text("From : ${certificatesData[index].startDate??""}",style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)):Container(),
-  //                                   ],
-  //                                 )
-  //                               ],
-  //                             ),
-  //                           );
-  //                         }),
-  //                       ),
-  //                     ):Container(
-  //                       height: MediaQuery.of(context).size.height*0.1,
-  //                       width: MediaQuery.of(context).size.width,
-  //                       margin: EdgeInsets.all(10),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(20),
-  //                           border: Border.all(color: appPrimaryColor,width: 1)
-  //                       ),
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.center,
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: <Widget>[
-  //                           Text(appNoCertificateFound,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-  //                           Text(appAddCertificates,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),),
-  //
-  //                         ],
-  //                       ),
-  //                     )
-  //                   ],
-  //                 ),
-  //               );
-  //             }),
-  //             SizedBox(height: 20,),
-  //             ///Skills
-  //             Obx((){
-  //               var skillsData=controller.allSkillsData.value.data??[];
-  //               return Container(
-  //                 margin: EdgeInsets.only(left: 20,right: 20),
-  //                 padding: EdgeInsets.only(top: 10,bottom: 10,),
-  //                 decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                     border: Border.all(color: appPrimaryBackgroundColor,width: 1)
-  //                 ),
-  //                 child: Column(
-  //                   children: <Widget>[
-  //                     Container(
-  //                       padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                         children: <Widget>[
-  //                           Text(appSkills,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-  //                           GestureDetector(
-  //                             onTap: (){
-  //                               Get.offNamed(AppRoutes.skills,arguments: {screenName:profileDetails});
-  //                             },
-  //                             child: Row(
-  //                               children:<Widget> [
-  //                                 SvgPicture.asset(appEditIcon,height: 14,width: 14,),
-  //                               ],
-  //                             ),
-  //                           )
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       height: 1,
-  //                       color: appPrimaryBackgroundColor,
-  //                     ),
-  //                     SizedBox(height: 10,),
-  //                     skillsData.isNotEmpty?SingleChildScrollView(
-  //                       child: Wrap(
-  //                         runSpacing: 10,
-  //                         children: List.generate(skillsData.length??0, (index){
-  //                           return Container(
-  //                             padding: EdgeInsets.only(left: 10,right: 10),
-  //                             child: Row(
-  //                               crossAxisAlignment: CrossAxisAlignment.start,
-  //                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                               children: <Widget>[
-  //                                 SizedBox(
-  //                                     width:MediaQuery.of(context).size.width*0.2,
-  //                                     child: Text(skillsData[index].skill??"",style: AppTextStyles.font14.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
-  //                                 Row(
-  //                                   children: <Widget>[
-  //                                     LinearPercentIndicator(
-  //                                       width: MediaQuery.of(context).size.width*0.5,
-  //                                       lineHeight: 4.0,
-  //                                       percent: handleIndecaterPercentage(devident: skillsData[index].rating??"", devider: progressBarMaxValue),
-  //                                       barRadius: Radius.circular(10),
-  //                                       backgroundColor: appPrimaryBackgroundColor,
-  //                                       progressColor: appPrimaryColor,
-  //                                     ),
-  //                                     SizedBox(width: 3,),
-  //                                     Text("${skillsData[index].rating??""}/$progressBarMaxValue",style: AppTextStyles.font14.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 3,)
-  //                                   ],
-  //                                 )
-  //
-  //                               ],
-  //                             ),
-  //                           );
-  //                         }),
-  //                       ),
-  //                     ):Container(
-  //                       height: MediaQuery.of(context).size.height*0.1,
-  //                       width: MediaQuery.of(context).size.width,
-  //                       margin: EdgeInsets.all(10),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(20),
-  //                           border: Border.all(color: appPrimaryColor,width: 1)
-  //                       ),
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.center,
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: <Widget>[
-  //                           Text(appNoSkillsFound,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-  //                           Text(appAddSkills,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),),
-  //
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     SizedBox(height: 10,),
-  //                   ],
-  //                 ),
-  //               );
-  //             }),
-  //             SizedBox(height: 20,),
-  //             ///Languages
-  //             Obx((){
-  //               var languageData=controller.languageDate.value.data??[];
-  //               return Container(
-  //                 margin: EdgeInsets.only(left: 20,right: 20),
-  //                 padding: EdgeInsets.only(top: 10,bottom: 10,),
-  //                 decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                     border: Border.all(color: appPrimaryBackgroundColor,width: 1)
-  //                 ),
-  //                 child: Column(
-  //                   children: <Widget>[
-  //                     Container(
-  //                       padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                         children: <Widget>[
-  //                           Text(appLanguage,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-  //                           GestureDetector(
-  //                             onTap: (){
-  //                               Get.offNamed(AppRoutes.language,arguments: {screenName:profileDetails,});
-  //                             },
-  //                             child: Row(
-  //                               children:<Widget> [
-  //                                 SvgPicture.asset(appEditIcon,height: 14,width: 14,),
-  //                               ],
-  //                             ),
-  //                           )
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       height: 1,
-  //                       color: appPrimaryBackgroundColor,
-  //                     ),
-  //                     SizedBox(height: 10,),
-  //                     languageData.isNotEmpty?SingleChildScrollView(
-  //                       child: Wrap(
-  //                         runSpacing: 10,
-  //                         children: List.generate(languageData.length??0, (index){
-  //                           return Container(
-  //                             padding: EdgeInsets.only(left: 10,right: 10),
-  //                             child: Row(
-  //                               crossAxisAlignment: CrossAxisAlignment.center,
-  //                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                               children: <Widget>[
-  //                                 SizedBox(
-  //                                     width:MediaQuery.of(context).size.width*0.2,
-  //                                     child: Text(languageData[index].languageName??'',style: AppTextStyles.font14.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
-  //                                 Column(
-  //                                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                                   children: <Widget>[
-  //                                     Container(
-  //                                         padding: EdgeInsets.only(left: 10),
-  //                                         width:MediaQuery.of(context).size.width*0.3,
-  //                                         child: Text(appVerbal,style: AppTextStyles.font12.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
-  //                                     Row(
-  //                                       children: <Widget>[
-  //                                         LinearPercentIndicator(
-  //                                           width: MediaQuery.of(context).size.width*0.5,
-  //                                           lineHeight: 4.0,
-  //                                           percent: handleIndecaterPercentage(devident: languageData[index].verbal??'', devider: progressBarMaxValue??''),
-  //                                           barRadius: Radius.circular(10),
-  //                                           backgroundColor: appPrimaryBackgroundColor,
-  //                                           progressColor: appPrimaryColor,
-  //                                         ),
-  //                                         SizedBox(width: 3,),
-  //                                         Text("${languageData[index].verbal??''}/$progressBarMaxValue",style: AppTextStyles.font14.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 3,)
-  //                                       ],
-  //                                     ),
-  //                                     SizedBox(height: 10,),
-  //                                     Container(
-  //                                         padding: EdgeInsets.only(left: 10),
-  //                                         width:MediaQuery.of(context).size.width*0.3,
-  //                                         child: Text(appWritten,style: AppTextStyles.font12.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
-  //                                     Row(
-  //                                       children: <Widget>[
-  //                                         LinearPercentIndicator(
-  //                                           width: MediaQuery.of(context).size.width*0.5,
-  //                                           lineHeight: 4.0,
-  //                                           percent: handleIndecaterPercentage(devident: languageData[index].written??'', devider:progressBarMaxValue??''),
-  //                                           barRadius: Radius.circular(10),
-  //                                           backgroundColor: appPrimaryBackgroundColor,
-  //                                           progressColor: appPrimaryColor,
-  //                                         ),
-  //                                         SizedBox(width: 3,),
-  //                                         Text("${languageData[index].written??''}/$progressBarMaxValue",style: AppTextStyles.font14.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 3,)
-  //                                       ],
-  //                                     ),
-  //
-  //                                   ],
-  //                                 )
-  //
-  //                               ],
-  //                             ),
-  //                           );
-  //                         }),
-  //                       ),
-  //                     ):Container(
-  //                       height: MediaQuery.of(context).size.height*0.1,
-  //                       width: MediaQuery.of(context).size.width,
-  //                       margin: EdgeInsets.all(10),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(20),
-  //                           border: Border.all(color: appPrimaryColor,width: 1)
-  //                       ),
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.center,
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: <Widget>[
-  //                           Text(appNoLanguagesFound,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-  //                           Text(appAddLanguage,style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),),
-  //
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     SizedBox(height: 10,),
-  //                   ],
-  //                 ),
-  //               );
-  //             }),
-  //             ///CompanyProfile
-  //             SizedBox(height: 20,),
-  //            Obx((){
-  //              var companyProfile=controller.userProfileData.value.data?.topCompany??[];
-  //              var userId=controller.userProfileData.value.data?.id??"";
-  //              return  companyProfile.isNotEmpty?Container(
-  //                padding: EdgeInsets.only(top: 10,bottom: 10,left: 20,right: 20),
-  //                color: appPrimaryBackgroundColor,
-  //                child: Column(
-  //                  crossAxisAlignment: CrossAxisAlignment.start,
-  //                  children: <Widget>[
-  //                    Text(appCompanyProfiles,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,),
-  //                    SizedBox(height: 5,),
-  //                    Wrap(
-  //                      runSpacing: 5,
-  //                      children: List.generate(companyProfile.length??0, (index){
-  //                        return commonTopCompaniesWidget(context,
-  //                            image: companyProfile[index].profile??appCompanyImage,
-  //                            location: generateLocation(cityName: companyProfile[index].cityName??"", stateName: companyProfile[index].stateName??"", countryName: companyProfile[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
-  //                            name: capitalizeFirstLetter(companyProfile[index].name??""),
-  //                            id:companyProfile[index].individualId??"",// allTopCompanies[index]['individual_id']??"",
-  //                            jobTitle: capitalizeFirstLetter(companyProfile[index].designationName??""),
-  //                            onClick: (){
-  //                               var userId=controller.userProfileData.value.data?.id??"";
-  //                               controller.companyFollowApiCall(context,companyId:companyProfile[index].id??"", userId: userId??"" );
-  //
-  //                            },
-  //                            isFollowData: true, onMessageClick: (){
-  //                              Get.offNamed(
-  //                                  AppRoutes.chat,
-  //                                  arguments: {
-  //                                    screenName:profileDetails,
-  //                                    messageReceiverName:companyProfile[index].name??"",
-  //                                    profileImageData:companyProfile[index].profile??"",
-  //                                    receiverId:companyProfile[index].id??"",
-  //                                    senderId:userId??"",
-  //
-  //                                  });
-  //                            }
-  //
-  //
-  //                        );
-  //                      }),
-  //                    )
-  //                  ],
-  //                ),
-  //              ):Container();
-  //            }),
-  //             SizedBox(height: 10,),
-  //             ///Similer Profile
-  //             Obx((){
-  //               var similarProfile=controller.userProfileData.value.data?.topUser??[];
-  //               var userId=controller.userProfileData.value.data?.id??"";
-  //               return similarProfile.isNotEmpty?Container(
-  //                 padding: EdgeInsets.only(top: 10,bottom: 10,left: 20,right: 20),
-  //                 color: appWhiteColor,
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: <Widget>[
-  //                     Text(appSimilarProfiles,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,),
-  //                     SizedBox(height: 5,),
-  //                     Wrap(
-  //                       runSpacing: 5,
-  //                       children: List.generate(similarProfile.length??0, (index){
-  //                         return commonTopCompaniesWidget(context,
-  //                           image: similarProfile[index].profile??appCompanyImage,
-  //                           location: generateLocation(cityName: similarProfile[index].cityName??"", stateName: similarProfile[index].stateName??"", countryName: similarProfile[index].countryName??""),
-  //                           name: capitalizeFirstLetter(similarProfile[index].name??""),
-  //                           id:similarProfile[index].individualId??"",
-  //                           jobTitle: capitalizeFirstLetter(similarProfile[index].designationName??""),
-  //                           onClick: (){
-  //                             var userId=controller.userProfileData.value.data?.id??"";
-  //                             controller.companyFollowApiCall(context,companyId:userId??"" , userId:similarProfile[index].id??"" );
-  //
-  //                           },
-  //                           isSimilerProfile:true,
-  //                           isFollowData: false, onMessageClick: (){
-  //                             Get.offNamed(
-  //                                 AppRoutes.chat,
-  //                                 arguments: {
-  //                                   screenName:profileDetails,
-  //                                   messageReceiverName:similarProfile[index].name??"",
-  //                                   profileImageData:similarProfile[index].profile??"",
-  //                                   receiverId:similarProfile[index].id??"",
-  //                                   senderId:userId??"",
-  //
-  //                                 });
-  //                           },
-  //                         );
-  //                       }),
-  //                     )
-  //                   ],
-  //                 ),
-  //               ):Container();
-  //             }),
-  //             SizedBox(height: 20,),
-  //             allRightReservedWidget(),
-  //             SizedBox(height: 20,),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+
 
   _profileWidget(context) {
     return Obx((){
@@ -791,13 +322,13 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width: MediaQuery.of(context).size.width*0.78,
+                  width: MediaQuery.of(context).size.width*0.63,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       SizedBox(
-                        width: MediaQuery.of(context).size.width*0.58,
+                        width: MediaQuery.of(context).size.width*0.56,
                         child: isUserVerified?RichText(
                           text: TextSpan(
                             children: [
@@ -819,26 +350,17 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                           maxLines: 3,
                         ):Text("$userFirstName $userLastName",style: AppTextStyles.font20W700.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,),
                       ),
-
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: <Widget>[
-                      //     SizedBox(
-                      //       width:MediaQuery.of(context).size.width*0.48,
-                      //         child: Text("$userFirstName $userLastName sasdhf shdfhs shdfh",style: AppTextStyles.font20W700.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
-                      //     SvgPicture.asset(appVerifiedIcon,height: 20,width: 20,)
-                      //   ],
-                      // ),
                       GestureDetector(
                           onTap:(){
-                            Get.offNamed(AppRoutes.profile,arguments: {screenName:profileDetails});
+                           // Get.offNamed(AppRoutes.profile,arguments: {screenName:profileDetails});
+                            individualUpdateProfileBottomSheet(context);
                           },
                           child: SvgPicture.asset(appEditIcon,height: 20,width: 20,))
                     ],
                   ),
                 ),
                 Text("$appId: $userIndividualId",style: AppTextStyles.font14.copyWith(color: appPrimaryColor)),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -1244,41 +766,39 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                     height: 1,
                     color: appPrimaryBackgroundColor,
                   ),
-                  Obx((){
-                    return employmentHistory.isNotEmpty?Wrap(
-                      children: List.generate(employmentHistory.length??0, (index){
-                        return Container(
-                          padding: EdgeInsets.only(left: 10,right: 8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  buildExperienceCard(
-                                      context,
-                                      isProfileVerification: true,//employmentHistory[index].v??false,
-                                      companyName: employmentHistory[index].company??"",
-                                      companyDetails: checkEmploymentIsPresentOfNot(joiningDate: employmentHistory[index].joiningDate??"", tillEmploymentDate: employmentHistory[index].workedTillDate
-                                          ??"", isStillWorking: employmentHistory[index].stillWorking.toString()??"0"),
-                                      companyImage: employmentHistory[index].companyLogo??appCompanyImage,
-                                      experienceDetails: employmentHistory[index].lists??[],
-                                      isExpended: controller.isExpendedSkills.value??false,
-                                      onExpendEnable: (){
-                                        controller.isExpendedSkills.value=!controller.isExpendedSkills.value;
-                                      },
-                                      employmentHistoryId: employmentHistory[index].id??"",
-                                  )
+                  employmentHistory.isNotEmpty?Wrap(
+                    children: List.generate(employmentHistory.length??0, (index){
+                      return Container(
+                        padding: EdgeInsets.only(left: 10,right: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                buildExperienceCard(
+                                  context,
+                                  isProfileVerification: true,//employmentHistory[index].v??false,
+                                  companyName: employmentHistory[index].company??"",
+                                  companyDetails: checkEmploymentIsPresentOfNot(joiningDate: employmentHistory[index].joiningDate??"", tillEmploymentDate: employmentHistory[index].workedTillDate
+                                      ??"", isStillWorking: employmentHistory[index].stillWorking.toString()??"0"),
+                                  companyImage: employmentHistory[index].companyLogo??appCompanyImage,
+                                  experienceDetails: employmentHistory[index].lists??[],
+                                  isExpended: controller.isExpendedSkills.value??false,
+                                  onExpendEnable: (){
+                                    controller.isExpendedSkills.value=!controller.isExpendedSkills.value;
+                                  },
+                                  employmentHistoryId: employmentHistory[index].id??"",
+                                )
 
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                    ):noDataAvailableFoundWidget(context, header: appNoEmploymentHistory, details: appAddEmployement);
-                  }),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    }),
+                  ):noDataAvailableFoundWidget(context, header: appNoEmploymentHistory, details: appAddEmployement),
                 ],
               ),
             ),

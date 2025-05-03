@@ -1,12 +1,4 @@
-// To parse this JSON data, do
-//
-//     final userProfileModel = userProfileModelFromJson(jsonString);
 
-import 'dart:convert';
-
-UserProfileModel userProfileModelFromJson(String str) => UserProfileModel.fromJson(json.decode(str));
-
-String userProfileModelToJson(UserProfileModel data) => json.encode(data.toJson());
 
 class UserProfileModel {
   bool? status;
@@ -38,7 +30,7 @@ class Data {
   String? fname;
   String? lname;
   String? profile;
-  dynamic stateName;
+  String? stateName;
   bool? showReview;
   bool? showSalary;
   Setting? setting;
@@ -48,7 +40,7 @@ class Data {
   dynamic secondPhone;
   dynamic presentAddress;
   dynamic permanentAddress;
-  dynamic cityName;
+  String? cityName;
   String? dob;
   List<dynamic>? employementHistory;
   List<EmployementHistoryNew>? employementHistoryNew;
@@ -84,7 +76,7 @@ class Data {
   String? emailVerified;
   String? stillWorkingPosition;
   String? stillWorkingCompany;
-  int? stillWorking;
+  String? stillWorking;
   String? stillWorkingCompanyName;
   String? stillWorkingPositionName;
   dynamic accomodation;

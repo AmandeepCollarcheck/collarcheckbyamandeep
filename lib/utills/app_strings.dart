@@ -430,6 +430,10 @@ const String appNoGalleryData="No data found in app gallery";
 const String appNoAnyLinkAvailable="No any link available";
 const String appReviewsHistory="Reviews history";
 const String appFollow="Follow";
+const String appVerifyYourProfileToClaim="Verify your profile to claim your CC Verified Badge";
+const String appYouAreATopCandidate="You are a top candidate";
+const String appExploreNow ="Explore now";
+const String appOnAverageVerifiedMembers="On average, verified members get 60% more profile views.";
 
 
 

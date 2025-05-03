@@ -52,7 +52,7 @@ class RecommendJobPage extends GetView<RecommendJobController>{
                   var data=controller.userRecommendedJobForYou.value.data?.alljobList??[];
                   return data.isNotEmpty?Container(
                     // color: appPrimaryBackgroundColor,
-                      padding: EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 20),
+                      padding: EdgeInsets.only(left: 16,right: 16,top: 20,bottom: 20),
                       child: Column(
                         children: <Widget>[
                           Row(
@@ -97,7 +97,7 @@ class RecommendJobPage extends GetView<RecommendJobController>{
                               children: List.generate(jobList.length, (index) {
                                 return jobList.isNotEmpty?commonCardWidget(
                                   context,
-                                  cardWidth: MediaQuery.of(context).size.width,
+                                  cardWidth: MediaQuery.of(context).size.width*0.96,
                                   onClick: () {
                                     controller.openJobDetails(jobTitle: jobList[index].slug ??"");
                                   },

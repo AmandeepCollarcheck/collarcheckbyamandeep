@@ -15,6 +15,8 @@ import '../utills/common_widget/progress.dart';
 
 class CompanyProfileControllers extends GetxController with GetTickerProviderStateMixin{
   late ProgressDialog progressDialog=ProgressDialog() ;
+
+
   final scrollController = ScrollController();
   var companyProfileData=CompanyProfileDetailsModel().obs;
   var selectedIndex=0.obs;
@@ -29,6 +31,7 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
   var screenNameData="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
+
   var listTabLabel = [
     appAbout, appJobOpening, appGallery,appPerksAndBenefits
   ].obs;

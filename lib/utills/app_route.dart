@@ -91,6 +91,8 @@ import '../Splash/splash_binding.dart';
 import '../Splash/splash_page.dart';
 import '../company_update_profile/company_update_profile_page.dart';
 
+import '../dumy/dumy_bindings.dart';
+import '../dumy/dumy_page.dart';
 import '../filter/filter_bindings.dart';
 import '../portfolio/portfolio_page.dart';
 
@@ -140,6 +142,7 @@ class AppRoutes {
   static const String recentlyJoinedPeople = '/recentlyJoinedPeople';
   static const String otherCompanyProfilePage = '/otherCompanyProfilePage';
   static const String otherIndividualProfilePage = '/otherIndividualProfilePage';
+  static const String dumy = '/dumy';
   static final routes = [
     GetPage(
       name: splash,
@@ -365,6 +368,11 @@ class AppRoutes {
       name: otherIndividualProfilePage,
       page: () => OtherIndividualProfilePage(),
       binding: OtherIndividualProfileBindings(),
+    ),
+    GetPage(
+      name: dumy,
+      page: () => TabSyncNestedScrollPage(),
+      binding: DumyBindings(),
     ),
 
   ];

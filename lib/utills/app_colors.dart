@@ -21,3 +21,4 @@ const Color appRedTwoColor= Color(0xffE84040);
 const Color appBlueColor= Color(0xff6B6CB5);
 const Color appSkyBlueColor= Color(0xff79A8BC);
 const Color appLightYellowColor= Color(0xffE2C692);
+const Color appLightSkyBlueColor= Color(0xffD3DFF1);

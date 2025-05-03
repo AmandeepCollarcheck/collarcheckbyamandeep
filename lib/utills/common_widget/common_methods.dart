@@ -101,7 +101,8 @@ commonCardWidget(context,{required String image,
                   children: <Widget>[
                     SvgPicture.asset(appLocationsSvgIcon,height: 16,width: 16,),
                     SizedBox(
-                      width:cardWidth*0.62,
+
+                      width:cardWidth*0.56,
                       child: Text(location,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.clip,maxLines: 1,),
                     )
                   ],
@@ -353,17 +354,54 @@ _companyDetails(context,{
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width:cardWidth*0.52,
-                  child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 2,),
+                  width:cardWidth*0.7,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            width:cardWidth*0.52,
+                            child:  Text(jobProfileName,style: AppTextStyles.bold.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 2,),
+                          ),
+                          companyName!=null&&companyName.isNotEmpty?SizedBox(
+                              width:cardWidth*0.5,
+                              child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
+
+                        ],
+                      ),
+                      if(isCompanyProfile==false)
+                        isApplied?Text(appApplied,style: AppTextStyles.font14W500.copyWith(color: appGreenColor),):GestureDetector(
+                            onTap: (){
+                              isApplyClick();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: appPrimaryColor,width: 1),
+                                  color: appWhiteColor),
+                              child: Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
+                            )
+                          ///If need Icon enable cheild
+                          //child: SvgPicture.asset(appApplyIconNew,height: 24,width: 24,),
+                          // child: Row(
+                          //   children: <Widget>[
+                          //     SvgPicture.asset(appApplySvgIcon,height: 16,width: 16,),
+                          //     Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
+                          //   ],
+                          // ),
+                        )
+                    ],
+                  ),
                 ),
-                companyName!=null&&companyName.isNotEmpty?SizedBox(
-                    width:cardWidth*0.52,
-                    child: Text(companyName,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),overflow: TextOverflow.clip,maxLines: 3,)):Container(),
                 SizedBox(height: 1,),
                 SizedBox(
-                  width:cardWidth*0.52,
+                  width:cardWidth*0.7,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       salaryDetails!=null&&salaryDetails.isNotEmpty?Row(
@@ -373,18 +411,18 @@ _companyDetails(context,{
                           Text(salaryDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
                         ],
                       ):Container(),
-                      salaryDetails!=null&&salaryDetails.isNotEmpty?SizedBox(width: 3,):SizedBox(width: 0,),
+                      salaryDetails!=null&&salaryDetails.isNotEmpty?SizedBox(width: 6,):SizedBox(width: 0,),
                       (salaryDetails!=null&&salaryDetails.isNotEmpty)&&(appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty)? Container(
                         height: 18,
                         width: 1,
                         color: appGreyBlackColor,
                       ):Container(),
-                      SizedBox(width: 3,),
+                      SizedBox(width: 6,),
                       appExperenceIconSvg!=null&&appExperenceIconSvg.isNotEmpty?Row(
                         children: <Widget>[
                           SvgPicture.asset(appDesignationSvgIcon,height: 15,width: 15,),
                           SizedBox(width: 1,),
-                          Text(expDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+                          Text(expDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),overflow: TextOverflow.ellipsis,),
                         ],
                       ):Container(),
                     ],
@@ -392,28 +430,7 @@ _companyDetails(context,{
                 )
               ],
             ),
-            if(isCompanyProfile==false)
-              isApplied?Text(appApplied,style: AppTextStyles.font14W500.copyWith(color: appGreenColor),):GestureDetector(
-                onTap: (){
-                  isApplyClick();
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 1,horizontal: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: appPrimaryColor,width: 1),
-                    color: appWhiteColor),
-                  child: Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
-                )
-                ///If need Icon enable cheild
-                //child: SvgPicture.asset(appApplyIconNew,height: 24,width: 24,),
-                // child: Row(
-                //   children: <Widget>[
-                //     SvgPicture.asset(appApplySvgIcon,height: 16,width: 16,),
-                //     Text(appApply,style: AppTextStyles.font14W500.copyWith(color: appPrimaryColor),),
-                //   ],
-                // ),
-              )
+
           ],
         )
       ),

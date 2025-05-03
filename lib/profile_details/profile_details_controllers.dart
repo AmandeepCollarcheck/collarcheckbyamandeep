@@ -74,7 +74,9 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
     // TODO: implement onInit
     //IndividualUserProfileModel
     Future.delayed(Duration(milliseconds: 500), ()async {
+
       userIdData.value=await readStorageData(key: id);
+
       getProfileApiCall();
     });
     Future.delayed(Duration(milliseconds: 500), ()async {

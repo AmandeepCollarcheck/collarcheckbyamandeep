@@ -6,6 +6,7 @@ import 'package:collarchek/models/user_profile_model.dart';
 import 'package:collarchek/utills/app_route.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart' as dio;
 import 'package:get_storage/get_storage.dart';
@@ -25,7 +26,9 @@ import '../utills/common_widget/image_multipart.dart';
 import '../utills/common_widget/progress.dart';
 
 class ProfileControllers extends GetxController{
+  final List<GlobalKey> sectionKeys = List.generate(4, (_) => GlobalKey());
   late ProgressDialog progressDialog=ProgressDialog() ;
+  late ScrollController scrollController;
   Rx isAlternativeEmail=false.obs;
   Rx isAlternativePhone=false.obs;
   Rx isSameAsCheck =false.obs;
@@ -68,6 +71,10 @@ class ProfileControllers extends GetxController{
   Rx presentAddress=appSelect.obs;
   Rx paremanentAddress=appSelect.obs;
   Rx selectedResumeName="".obs;
+  var selectedIndex=0.obs;
+  var listTabLabel = [
+    appBasic, appAddress, appEmployment,appSocialAccounts
+  ].obs;
 
 
   ///Dropdown handled
@@ -84,10 +91,12 @@ class ProfileControllers extends GetxController{
 
   @override
   void onInit() {
+    scrollController = ScrollController();
     Map<String,dynamic> data=Get.arguments??{};
     if(data.isNotEmpty){
       screenNameData.value=data[screenName]??"";
     }
+    scrollController.addListener(_handleScroll);
 
 
     // TODO: implement onInit
@@ -116,7 +125,8 @@ class ProfileControllers extends GetxController{
     if(screenNameData.value==profileDetails){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
     }else{
-      Get.offNamed(AppRoutes.bottomNavBar);
+      //Get.offNamed(AppRoutes.bottomNavBar);
+      Get.back();
     }
 
   }
@@ -394,7 +404,39 @@ class ProfileControllers extends GetxController{
   }
 
 
+  void scrollToSection(int index)async {
+    final context = sectionKeys[index].currentContext;
+    if (context != null) {
+      await Scrollable.ensureVisible(
+        context,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
 
 
+  void _handleScroll() {
+    for (int i = 0; i < sectionKeys.length; i++) {
+      final context = sectionKeys[i].currentContext;
+      if (context != null) {
+        final box = context.findRenderObject() as RenderBox;
+        final pos = box.localToGlobal(Offset.zero).dy;
+
+        if (pos <= kToolbarHeight + 80 && pos + box.size.height > kToolbarHeight + 80) {
+          if (selectedIndex.value != i) {
+            selectedIndex.value = i;
+            // scrollController.animateTo(
+            //   i.toDouble(),
+            //   duration: Duration(seconds: 1), // Duration of the scroll animation
+            //   curve: Curves.easeInOut, // Animation curve (optional)
+            // );
+            // This will update TabController
+          }
+          break;
+        }
+      }
+    }
+  }
 }
