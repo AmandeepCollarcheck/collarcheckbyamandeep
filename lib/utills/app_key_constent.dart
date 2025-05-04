@@ -48,6 +48,7 @@ const progressBarMaxValue="5";
 //Key
  const searchJype="searchTypeData";
  const slugId="slugId";
+ const selfSlugId="selfSlugId";
  const screenName="screen_name";
  const jobProfileName="jobProfileName";
  const isEdit="is_edit";
@@ -93,3 +94,4 @@ const companyEmploymentRequest="companyEmploymentRequest";
 const allApplications="allApplications";
 const recommendedEmployeeScreen="recommendedEmployeeScreen";
 const otherCompanyProfileScreen="otherCompanyProfileScreen";
+const otherUserProfileScreen="otherUserProfileScreen";

@@ -27,6 +27,7 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
   final GlobalKey similerProfile = GlobalKey();
   final GlobalKey benifits = GlobalKey();
   var slugDataId="".obs;
+  var slugData="".obs;
   var screenNameData="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
@@ -35,6 +36,7 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
   ].obs;
 
   var isOtherUserProfileCheck=false;
+  var selfSlugIdData="".obs;
 
 
 
@@ -47,6 +49,7 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       screenNameData.value=data[screenName]??"";
       slugDataId.value=data[slugId]??"";
       isEmployeeProfileDate.value=data[isEmployeeProfile]??false;
+      selfSlugIdData.value=data[selfSlugId]??"";
     }
     scrollController.addListener(_onScroll);
     Future.delayed(Duration(milliseconds: 500), ()async {
@@ -56,6 +59,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
   }
 
   backButton(context){
+    print(">>>>>>>>>>>>>>");
+    print(screenNameData.value);
     if(screenNameData.value==companyProfileScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
     }else if(screenNameData.value==topCompaniesScreen){
@@ -64,6 +69,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
     }else if(screenNameData.value==profileDetails){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else if(screenNameData.value==otherUserProfileScreen){
+      Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {screenName:dashboard,slugId:selfSlugIdData.value,isEmployeeProfile:true});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar,);
     }
@@ -114,8 +121,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
   void getCompanyProfileApiCall() async{
     try {
       progressDialog.show();
-      String slugData =await GetStorage().read(slug);
-      CompanyProfileDetailsModel companyProfileDetailsModel = await ApiProvider.baseWithToken().companyProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
+       slugData.value =await GetStorage().read(slug);
+      CompanyProfileDetailsModel companyProfileDetailsModel = await ApiProvider.baseWithToken().companyProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData.value);
       if(companyProfileDetailsModel.status==true){
         companyProfileData.value=companyProfileDetailsModel;
 

@@ -674,6 +674,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context,int index){
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -799,10 +800,10 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              controller.isOtherUserProfileCheck==false?Stack(
+                              Stack(
                                 children: <Widget>[
                                   portfolioData[index].image!.isNotEmpty?Image.network(portfolioData[index].image!,height: MediaQuery.of(context).size.height*0.1,width:MediaQuery.of(context).size.width*0.4 ,fit: BoxFit.cover,):Image.asset(appDummyImageData,height: MediaQuery.of(context).size.height*0.1,width:MediaQuery.of(context).size.width*0.4 ,fit: BoxFit.cover,),
-                                  Positioned(
+                                  controller.isOtherUserProfileCheck==false?Positioned(
                                     top: 0,
                                     right: 0,
                                     child: GestureDetector(
@@ -810,10 +811,10 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                           Get.offNamed(AppRoutes.addPortfolio,arguments: {screenName:profileDetails,isEdit:true,isEditItemId:portfolioData[index].id??""});
                                         },
                                         child: SvgPicture.asset(appEditIconWhiteBG,height: 30,width: 30,)),
-                                  )
+                                  ):Container()
 
                                 ],
-                              ):Container(),
+                              ),
                               Text(portfolioData[index].title??"",style: AppTextStyles.font14.copyWith(color: appBlackColor),),
                               Text(portfolioData[index].description??"",style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),maxLines: 2,),
                             ],
@@ -1312,7 +1313,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                   id:companyProfile[index].individualId??"",// allTopCompanies[index]['individual_id']??"",
                   jobTitle: capitalizeFirstLetter(companyProfile[index].designationName??""),
                   onProfileClick: (){
-                    Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:profileDetails,slugId:companyProfile[index].slug??"",isEmployeeProfile:true});
+                    Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:otherUserProfileScreen,slugId:companyProfile[index].slug??"",isEmployeeProfile:true,selfSlugId: controller.slugDataId.value.isNotEmpty?controller.slugDataId.value:controller.slugData});
                   },
                   onClick: (){
                     var userId=controller.userProfileData.value.data?.id??"";
@@ -1367,7 +1368,11 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                   id:similarProfile[index].individualId??"",
                   jobTitle: capitalizeFirstLetter(similarProfile[index].designationName??""),
                   onProfileClick: (){
-                    Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {slugId:similarProfile[index].slug??"",screenName:profileDetails,isEmployeeProfile:true});
+                  controller.slugDataId.value=similarProfile[index].slug??"";
+                  Future.delayed(Duration(milliseconds: 500), ()async {
+                    controller.getProfileApiCall();
+                  });
+                   // Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {slugId:similarProfile[index].slug??"",screenName:otherUserProfileScreen,isEmployeeProfile:true});
                   },
                   onClick: (){
                     var userId=controller.userProfileData.value.data?.id??"";

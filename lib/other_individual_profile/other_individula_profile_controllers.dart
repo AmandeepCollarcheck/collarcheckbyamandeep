@@ -15,6 +15,7 @@ import '../models/education_details_model.dart';
 import '../models/education_list_model.dart';
 import '../models/employment_history_list_model.dart';
 import '../models/language_list_model.dart';
+import '../models/other_user_profile_model.dart';
 import '../models/portifolio_list_model.dart';
 import '../models/save_user_profile_model.dart';
 import '../models/user_profile_model.dart';
@@ -28,7 +29,7 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   final scrollController = ScrollController();
   final scrollControllerForTabSelection = ScrollController();
   late ProgressDialog progressDialog=ProgressDialog() ;
-  var userProfileData=UserProfileModel().obs;
+  var userProfileData=OtherUserProfileModel().obs;
   var searchController =TextEditingController();
   Rx isSearchActive=false.obs;
   var selectedIndex=0.obs;
@@ -43,6 +44,7 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   var isExpendedSkills=false.obs;
   var screenNameData="".obs;
   var slugDataId="".obs;
+  var slugData="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
   final GlobalKey headerKey = GlobalKey();
@@ -50,6 +52,7 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   final isScrollEnabled = false.obs;
   final List<GlobalKey> sectionKeys = List.generate(9, (_) => GlobalKey());
   var isOtherUserProfileCheck=false;
+  var selfSlugIdData="".obs;
 
 
 
@@ -64,6 +67,7 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
       screenNameData.value=data[screenName]??"";
       slugDataId.value=data[slugId]??"";
       isEmployeeProfileDate.value=data[isEmployeeProfile]??false;
+      selfSlugIdData.value=data[selfSlugId]??"";
     }
     tabController = TabController(length: 4, vsync: this);
     scrollControllerForTabSelection.addListener(_onScroll);
@@ -119,6 +123,8 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
       Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
     }else if(screenNameData.value==profileDetails){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else if(screenNameData.value==otherCompanyProfileScreen){
+      Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenNameData:profileDetails,isEmployeeProfile:true,slugId:selfSlugIdData.value});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar,);
     }
@@ -140,10 +146,10 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   void getProfileApiCall() async{
     try {
       progressDialog.show();
-      String slugData =await GetStorage().read(slug);
+      slugData.value=await GetStorage().read(slug);
 
 
-      UserProfileModel userProfileModel = await ApiProvider.baseWithToken().userProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
+      OtherUserProfileModel userProfileModel = await ApiProvider.baseWithToken().otherUserProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData.value);
       if(userProfileModel.status==true){
         userProfileData.value=userProfileModel;
         var profileData=userProfileData.value.data?.employementHistoryNew??[];

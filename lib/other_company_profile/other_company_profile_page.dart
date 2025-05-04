@@ -831,7 +831,11 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                     isProfileVerified: companyProfile[index].isVerified??false,
                     cardWidth: MediaQuery.of(context).size.width*0.92,
                     onProfileClick: (){
-                      Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:companyProfile[index].slug??""});
+                      controller.slugDataId.value=companyProfile[index].slug??"";
+                      Future.delayed(Duration(milliseconds: 500), ()async {
+                        controller.getCompanyProfileApiCall();
+                      });
+                      //Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:companyProfile[index].slug??""});
                     }
                   // isFollowing:companyProfile[index].followingData?.requestSend??false,
 
@@ -876,7 +880,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                   isProfileVerified: simillerUserData[index].isVerified??false,
                   cardWidth: MediaQuery.of(context).size.width*0.92,
                   onProfileClick: (){
-                    Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {screenName:companyProfileScreen,slugId:simillerUserData[index].slug??""});
+                    Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {screenName:otherCompanyProfileScreen,slugId:simillerUserData[index].slug??"",isEmployeeProfile:true,selfSlugId:controller.slugDataId.value.isNotEmpty?controller.slugDataId.value:controller.slugData.value});
                   },
                   isFollowData: false, onMessageClick: (){
                     Get.offNamed(

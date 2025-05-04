@@ -637,7 +637,7 @@ commonTopCompaniesWidget(context,{
                 ),
                 SizedBox(width: 10,),
                 isTopCompany==false?SizedBox(
-                  width: isFollowData?cardWidth*0.54:cardWidth*0.48,
+                  width: isFollowData?cardWidth*0.53:cardWidth*0.48,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

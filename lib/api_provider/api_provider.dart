@@ -52,6 +52,7 @@ import '../models/job_details_model.dart';
 import '../models/language_list_model.dart';
 import '../models/logout_model.dart';
 import '../models/notification_model.dart';
+import '../models/other_user_profile_model.dart';
 import '../models/portifolio_list_model.dart';
 import '../models/recommended_job_for_you_model.dart';
 import '../models/save_user_profile_model.dart';
@@ -284,6 +285,22 @@ class ApiProvider{
         jsonData = response.data;
       }
       return UserProfileModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+  Future otherUserProfile({required String userName}) async {
+    try {
+      print("slugData#${"$strUserProfile/$userName"}");
+      print("Slugdataaattta${"$strUserProfile/$userName"}");
+      Response response = await _dio.get("$strUserProfile/$userName");
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return OtherUserProfileModel.fromJson(jsonData);
     }catch (error, stacktrace) {
       handleException(error, stacktrace, _dioError!);
     }
