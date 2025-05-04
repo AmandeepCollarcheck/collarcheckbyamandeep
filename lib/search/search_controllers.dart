@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:get/get.dart';
-
+import 'package:dio/dio.dart' as dio;
 import '../api_provider/api_provider.dart';
+import '../models/save_user_profile_model.dart';
 import '../models/search_data_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_route.dart';
@@ -102,10 +103,37 @@ class SearchControllers extends GetxController{
   }
 
   openEmployeeProfileScreen(context,{required String employeeSlug}){
-    Get.offNamed(AppRoutes.profileDetails,arguments: {slugId:employeeSlug,screenName:searchScreen,isEmployeeProfile:true});
+    Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {slugId:employeeSlug,screenName:searchScreen,isEmployeeProfile:true});
   }
 
-  openCompanyProfileScreen(context,{required String employeeSlug}){
-    Get.offNamed(AppRoutes.companyProfile,arguments: {slugId:employeeSlug,screenName:searchScreen,isEmployeeProfile:true});
+  
+
+  ///Follow api
+  companyFollowApiCall(context,{required String userId,required String searchKeyWord})async{
+    try {
+      progressDialog.show();
+      var formData = dio.FormData.fromMap({
+        "follower_id":userId??"",
+        // "int-id":companyId??"0",
+      });
+      SaveUserProfileModel addSkillsData = await ApiProvider.baseWithToken().followCompany(formData);
+      if(addSkillsData.status==true){
+        //Get.offNamed(AppRoutes.bottomNavBar);s
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          globalSearchApiCall(context,searchKeyWord: searchKeyWord);
+        });
+
+      }else{
+        showToast(addSkillsData.messages??"");
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
   }
+
 }

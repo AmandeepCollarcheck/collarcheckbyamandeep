@@ -576,6 +576,7 @@ commonTopCompaniesWidget(context,{
         onProfileClick!();
       },
       child: Container(
+        width: cardWidth,
         decoration: BoxDecoration(
           color: appWhiteColor,
           borderRadius: BorderRadius.circular(10),
@@ -636,7 +637,7 @@ commonTopCompaniesWidget(context,{
                 ),
                 SizedBox(width: 10,),
                 isTopCompany==false?SizedBox(
-                  width: isFollowData?cardWidth*0.54:cardWidth*0.45,
+                  width: isFollowData?cardWidth*0.54:cardWidth*0.48,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -222,12 +222,12 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(appPerksAndBenefits,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                GestureDetector(
+                controller.isOtherUserProfileCheck==false?GestureDetector(
                   onTap: (){
                     Get.offNamed(AppRoutes.companyBenefit,arguments: {screenName:companyProfileScreen});
                   },
                   child: SvgPicture.asset(appEditIcon,height: 20,width: 20,),
-                )
+                ):Container()
               ],
             ),
           ),
@@ -496,7 +496,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(appAbout,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                          GestureDetector(
+                          controller.isOtherUserProfileCheck==false?GestureDetector(
                             onTap: (){
                               // if(profileDescription.isNotEmpty){
                               //   Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails,isEdit:true,filledProfileDescriptionData:profileDescription??""});
@@ -506,7 +506,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
 
                             },
                             child: SvgPicture.asset(appEditIcon,height: 22,width: 22,),
-                          )
+                          ):Container()
                         ],
                       ),
                     ),
@@ -656,7 +656,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(appJobOpening,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                  GestureDetector(
+                  controller.isOtherUserProfileCheck==false?GestureDetector(
                     onTap: (){
                       // if(profileDescription.isNotEmpty){
                       //   Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails,isEdit:true,filledProfileDescriptionData:profileDescription??""});
@@ -666,7 +666,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
 
                     },
                     child: SvgPicture.asset(appEditIcon,height: 22,width: 22,),
-                  )
+                  ):Container()
                 ],
               ),
             ),
@@ -740,13 +740,13 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(appGallery,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                  GestureDetector(
+                  controller.isOtherUserProfileCheck==false?GestureDetector(
                     onTap: (){
                       Get.offNamed(AppRoutes.addGallery,arguments: {screenName:companyProfileScreen});
 
                     },
                     child: SvgPicture.asset(appEditIcon,height: 22,width: 22,),
-                  )
+                  ):Container()
                 ],
               ),
             ),
@@ -829,7 +829,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                           });
                     },
                     isProfileVerified: companyProfile[index].isVerified??false,
-                    cardWidth: MediaQuery.of(context).size.width,
+                    cardWidth: MediaQuery.of(context).size.width*0.92,
                     onProfileClick: (){
                       Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:companyProfile[index].slug??""});
                     }
@@ -874,7 +874,7 @@ class OtherCompanyProfilePage extends GetView<OtherCompanyProfileControllers>{
                   },
                   isSimilerProfile:true,
                   isProfileVerified: simillerUserData[index].isVerified??false,
-                  cardWidth: MediaQuery.of(context).size.width,
+                  cardWidth: MediaQuery.of(context).size.width*0.92,
                   onProfileClick: (){
                     Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {screenName:companyProfileScreen,slugId:simillerUserData[index].slug??""});
                   },

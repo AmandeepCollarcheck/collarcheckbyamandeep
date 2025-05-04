@@ -62,6 +62,8 @@ class ChatControllers extends GetxController{
      Get.offNamed(AppRoutes.topCompanies,arguments: {argumentTypeData:argumentTypeDataDetails.value});
    }else if(screenNameData.value==otherCompanyProfileScreen){
      Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:companyProfileScreen,slugId:slugDataId.value});
+   }else if(screenNameData.value==searchScreen){
+     Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
    } else{
      Get.offNamed(AppRoutes.bottomNavBar,);
    }

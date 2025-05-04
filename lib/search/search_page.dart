@@ -1,5 +1,6 @@
 import 'package:collarchek/search/search_controllers.dart';
 import 'package:collarchek/utills/app_colors.dart';
+import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/common_text_field.dart';
 import 'package:collarchek/utills/font_styles.dart';
 import 'package:flutter/gestures.dart';
@@ -130,7 +131,7 @@ class SearchPage extends GetView<SearchControllers>{
                                               children: List.generate(jobList.length>4?4:jobList.length, (index) {
                                                 return commonCardWidget(
                                                   context,
-                                                  cardWidth: MediaQuery.of(context).size.width,
+                                                  cardWidth: MediaQuery.of(context).size.width*0.92,
                                                   onClick: () {
                                                     controller.openJobDetails(jobTitle: jobList[index].slug ??"",);
                                                   },
@@ -209,12 +210,7 @@ class SearchPage extends GetView<SearchControllers>{
                                             child: companyList.isNotEmpty?Wrap(
                                               runSpacing: 10,
                                               children: List.generate(companyListData.length>4?4:companyList.length, (index) {
-                                                return GestureDetector(
-                                                  onTap: (){
-                                                    controller.openCompanyProfileScreen(context,employeeSlug: companyList[index].slug??"");
-
-                                                  },
-                                                  child: commonTopCompaniesWidget(context,
+                                                return commonTopCompaniesWidget(context,
                                                       image: companyList[index].profile??"",
                                                       location: generateLocation(cityName: companyList[index].cityName??"", stateName: companyList[index].stateName??"", countryName: companyList[index].countryName??""),//generateLocation(cityName: allTopCompanies[index]['city_name']??"", stateName: allTopCompanies[index]['state_name']??"", countryName: allTopCompanies[index]['country_name']??""),
                                                       name: capitalizeFirstLetter(companyList[index].fname??""),
@@ -222,15 +218,17 @@ class SearchPage extends GetView<SearchControllers>{
                                                       jobTitle:"",
                                                       isProfileVerified: false,
                                                       cardWidth: MediaQuery.of(context).size.width*0.92,
+                                                      onProfileClick: (){
+                                                        Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:searchScreen,slugId:companyList[index].slug??"",isEmployeeProfile:true});
+
+                                                      },
                                                       onClick: (){
+                                                        controller.companyFollowApiCall(context , userId:companyList[index].id??"", searchKeyWord: controller.searchController.text );
 
                                                       },
                                                       isFollowData: true, onMessageClick: (){
 
                                                       }
-
-
-                                                  ),
                                                 );
                                               }),
                                             ):SizedBox(
@@ -294,11 +292,7 @@ class SearchPage extends GetView<SearchControllers>{
                                             child: userList.isNotEmpty?Wrap(
                                               runSpacing: 10,
                                               children: List.generate(userListData.length>4?4:userList.length, (index) {
-                                                return GestureDetector(
-                                                  onTap: (){
-                                                    controller.openEmployeeProfileScreen(context,employeeSlug: userList[index].slug??"");
-                                                  },
-                                                  child: commonTopCompaniesWidget(context,
+                                                return  commonTopCompaniesWidget(context,
                                                       image: userList[index].profile??"",
                                                       isProfileVerified: false,
                                                       cardWidth: MediaQuery.of(context).size.width*0.92,
@@ -306,6 +300,9 @@ class SearchPage extends GetView<SearchControllers>{
                                                       name: capitalizeFirstLetter(userList[index].fname??""),
                                                       id:userList[index].individualId??"",
                                                       jobTitle:capitalizeFirstLetter(userList[index].designationName??""),
+                                                      onProfileClick: (){
+                                                        controller.openEmployeeProfileScreen(context,employeeSlug: userList[index].slug??"");
+                                                      },
                                                       onClick: (){
                                                         // var userId=controller.userProfileData.value.data?.id??"";
                                                         // controller.companyFollowApiCall(context,companyId:companyProfile[index].id??"", userId: userId??"" );
@@ -313,11 +310,18 @@ class SearchPage extends GetView<SearchControllers>{
                                                       },
                                                       isSimilerProfile: true,
                                                       isFollowData: false, onMessageClick: (){
+                                                        Get.offNamed(
+                                                            AppRoutes.chat,
+                                                            arguments: {
+                                                              screenName:searchScreen,
+                                                              messageReceiverName:userList[index].fname??"",
+                                                              profileImageData:userList[index].profile??"",
+                                                              receiverId:userList[index].id??"",
+                                                              senderId:userId??"",
+
+                                                            });
 
                                                       }
-
-
-                                                  ),
                                                 );
                                               }),
                                             ):SizedBox(

@@ -6,7 +6,7 @@ class DumyBindings extends Bindings{
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(TabScrollController);
+    Get.put(TabControllerX());
   }
 
 }

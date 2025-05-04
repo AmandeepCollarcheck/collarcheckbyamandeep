@@ -902,7 +902,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(appAbout,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                        GestureDetector(
+                        controller.isOtherUserProfileCheck==false?GestureDetector(
                           onTap: (){
                             if(profileDescription.isNotEmpty){
                               Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails,isEdit:true,filledProfileDescriptionData:profileDescription??""});
@@ -912,7 +912,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
 
                           },
                           child: SvgPicture.asset(appEditIcon,height: 22,width: 22,),
-                        )
+                        ):Container()
                       ],
                     ),
                   ),
@@ -995,7 +995,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(appEducation,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                        GestureDetector(
+                        controller.isOtherUserProfileCheck==false?GestureDetector(
                           onTap: (){
                             Get.offNamed(AppRoutes.educations,arguments: {screenName:profileDetails});
                           },
@@ -1006,7 +1006,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                               Text(appAddEducation,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
                             ],
                           ),
-                        )
+                        ):Container()
                       ],
                     ),
                   ),
@@ -1113,7 +1113,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(appPortfolio,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                      GestureDetector(
+                      controller.isOtherUserProfileCheck==false?GestureDetector(
                         onTap: (){
                           Get.offNamed(AppRoutes.addPortfolio,arguments: {screenName:profileDetails});
                         },
@@ -1124,7 +1124,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                             Text(appAddPortfolio,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
                           ],
                         ),
-                      )
+                      ):Container()
                     ],
                   ),
                 ),
@@ -1205,7 +1205,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(appEmploymentHistory,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                        GestureDetector(
+                        controller.isOtherUserProfileCheck==false?GestureDetector(
                           onTap: (){
                             Get.offNamed(AppRoutes.employmentHistory,arguments: {screenName:profileDetails});
                           },
@@ -1216,7 +1216,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                               Text(appAddEmployement,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
                             ],
                           ),
-                        )
+                        ):Container()
                       ],
                     ),
                   ),
@@ -1314,7 +1314,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(appCertifications,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                            GestureDetector(
+                            controller.isOtherUserProfileCheck==false?GestureDetector(
                               onTap: (){
                                 Get.offNamed(AppRoutes.addCertificates,arguments: {screenName:profileDetails});
                               },
@@ -1325,7 +1325,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                   Text(appAddCertificates,style: AppTextStyles.font12.copyWith(color: appPrimaryColor),),
                                 ],
                               ),
-                            )
+                            ):Container()
                           ],
                         ),
                       ),
@@ -1457,7 +1457,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(appSkills,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                            GestureDetector(
+                            controller.isOtherUserProfileCheck==false?GestureDetector(
                               onTap: (){
                                 Get.offNamed(AppRoutes.skills,arguments: {screenName:profileDetails});
                               },
@@ -1466,7 +1466,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                   SvgPicture.asset(appEditIcon,height: 14,width: 14,),
                                 ],
                               ),
-                            )
+                            ):Container()
                           ],
                         ),
                       ),
@@ -1551,7 +1551,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(appLanguage,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                            GestureDetector(
+                            controller.isOtherUserProfileCheck==false?GestureDetector(
                               onTap: (){
                                 Get.offNamed(AppRoutes.language,arguments: {screenName:profileDetails,});
                               },
@@ -1560,7 +1560,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                   SvgPicture.asset(appEditIcon,height: 14,width: 14,),
                                 ],
                               ),
-                            )
+                            ):Container()
                           ],
                         ),
                       ),

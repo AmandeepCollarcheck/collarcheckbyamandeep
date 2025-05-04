@@ -42,7 +42,7 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   var slugDataId="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
-
+  var isOtherUserProfileCheck=false;
 
   var listTabLabel = [
     appHome, appEmploymentHistory, appPortfolio,appEducation
@@ -97,6 +97,8 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
       Get.offNamed(AppRoutes.search);
     } else if(screenNameData.value==companyProfileScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+    }else if(screenNameData.value==searchScreen){
+      Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar,);
     }
@@ -125,6 +127,16 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
         var profileData=userProfileData.value.data?.employementHistoryNew??[];
         await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
         await writeStorageData(key: profileImage, value: userProfileData.value.data?.profile??"");
+
+
+        ///Handle Other user check profile
+        String loginUserid=await readStorageData(key: 'userId');
+        String checkingProfileData=userProfileData.value.data?.individualId??"";
+        if(loginUserid.toString()==checkingProfileData.toString()){
+          isOtherUserProfileCheck=false;
+        }else{
+          isOtherUserProfileCheck=true;
+        }
 
       }else{
         showToast(somethingWentWrong);

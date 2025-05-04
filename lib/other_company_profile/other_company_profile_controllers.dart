@@ -34,6 +34,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
     appAbout, appJobOpening, appGallery,appPerksAndBenefits
   ].obs;
 
+  var isOtherUserProfileCheck=false;
+
 
 
 
@@ -45,7 +47,6 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       screenNameData.value=data[screenName]??"";
       slugDataId.value=data[slugId]??"";
       isEmployeeProfileDate.value=data[isEmployeeProfile]??false;
-
     }
     scrollController.addListener(_onScroll);
     Future.delayed(Duration(milliseconds: 500), ()async {
@@ -59,6 +60,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
     }else if(screenNameData.value==topCompaniesScreen){
       Get.offNamed(AppRoutes.topCompanies,arguments: {screenName:dashboard});
+    }else if(screenNameData.value==searchScreen){
+      Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar,);
     }
@@ -113,6 +116,15 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       CompanyProfileDetailsModel companyProfileDetailsModel = await ApiProvider.baseWithToken().companyProfile(userName: slugDataId.value.isNotEmpty?slugDataId.value:slugData);
       if(companyProfileDetailsModel.status==true){
         companyProfileData.value=companyProfileDetailsModel;
+
+        ///Handle Other user check profile
+        String loginUserid=await readStorageData(key: 'userId');
+        String checkingProfileData=companyProfileData.value.data?.individualId??"";
+        if(loginUserid.toString()==checkingProfileData.toString()){
+          isOtherUserProfileCheck=false;
+        }else{
+          isOtherUserProfileCheck=true;
+        }
         // var profileData=companyProfileData.value.data?.employementHistoryNew??[];
         // await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
         // await writeStorageData(key: profileImage, value: companyProfileData.value.data?.profile??"");
@@ -157,6 +169,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       showToast(exception.toString());
     }
   }
+
+
 
 
 }

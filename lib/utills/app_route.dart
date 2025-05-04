@@ -371,7 +371,7 @@ class AppRoutes {
     ),
     GetPage(
       name: dumy,
-      page: () => TabSyncNestedScrollPage(),
+      page: () => TabBarPage(),
       binding: DumyBindings(),
     ),
 
