@@ -27,221 +27,307 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
           onWillPop();
         }
       },
-      child: SafeArea(
-          child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: Scaffold(
-                  backgroundColor: appScreenBackgroundColor,
-                  bottomNavigationBar: _bottomButton(context),
-                  body: Column(
-                    children: [
-                      commonActiveSearchBar(
-                          backGroundColor: appWhiteColor,
-                          onClick: (){
-                            controller.backButtonClick(context);
-                          },
-                          onShareClick: (){},
-                          onFilterClick: (){},
-                          leadingIcon: appBackSvgIcon,
-                          isShowShare: true,
-                          screenName: "",
-                          actionButton: ""
-                      ),
-                      Expanded(
-                          child: NestedScrollView(
-                              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                                return[
-                                  SliverToBoxAdapter(
-                                    child: Container(
-                                      color: appScreenBackgroundColor,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          _jobProfileDetails(context),
-                                          SizedBox(height: 20,),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ];
+      child: Scaffold(
+          backgroundColor: appScreenBackgroundColor,
+          //bottomNavigationBar: _bottomButton(context),
+          body: SafeArea(
+            child: Column(
+              children: [
+                commonActiveSearchBar(
+                    backGroundColor: appWhiteColor,
+                    onClick: (){
+                      controller.backButtonClick(context);
+                    },
+                    onShareClick: (){},
+                    onFilterClick: (){},
+                    leadingIcon: appBackSvgIcon,
+                    isShowShare: true,
+                    screenName: "",
+                    actionButton: ""
+                ),
+                _jobProfileDetails(context),
+                SizedBox(height: 20,),
+                Column(
+                  children: <Widget>[
+                    Divider(color: appPrimaryBackgroundColor,thickness: 1,height: 1,),
+                    SizedBox(height: 10,),
+                    // Container(
+                    //   margin: EdgeInsets.only(left: 20,right: 20,),
+                    //   color: appWhiteColor,
+                    //   padding:EdgeInsets.zero,
+                    //   child: TabBar(
+                    //     indicatorPadding: EdgeInsets.zero,
+                    //     isScrollable: false,
+                    //     dividerColor: appWhiteColor,
+                    //     indicatorColor: appPrimaryColor,
+                    //     indicatorWeight: 2,
+                    //     labelPadding: EdgeInsets.only(bottom: 10),
+                    //     // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
+                    //     indicatorSize: TabBarIndicatorSize.tab,
+                    //     controller: controller.tabController,
+                    //     onTap: (index){
+                    //       controller.scrollToSection(index);
+                    //     },
+                    //
+                    //     tabs: List.generate(controller.listTabLabel.length, (index){
+                    //       return Text(controller.listTabLabel[index],style: AppTextStyles.font12.copyWith(color: appBlackColor),);
+                    //     }),
+                    //   ),
+                    // ),
+                    ///Custom Tab
+                    Obx((){
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(controller.listTabLabel.length, (index) {
+                            final isSelected = controller.selectedIndex.value == index;
+
+                            return GestureDetector(
+                              onTap: () async{
+                                // Immediately update the selected index to reflect the selected tab
+                                controller.selectedIndex.value = index;
+
+                                // Then, scroll to the section after the tab index is updated
+                                controller.scrollToSection(index);
+
                               },
-                              body: Column(
-                                children: <Widget>[
-                                  Divider(color: appPrimaryBackgroundColor,thickness: 1,height: 1,),
-                                  SizedBox(height: 10,),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 20,right: 20,),
-                                    color: appWhiteColor,
-                                    padding:EdgeInsets.zero,
-                                    child: TabBar(
-                                      indicatorPadding: EdgeInsets.zero,
-                                      isScrollable: false,
-                                      dividerColor: appWhiteColor,
-                                      indicatorColor: appPrimaryColor,
-                                      indicatorWeight: 2,
-                                      labelPadding: EdgeInsets.only(bottom: 10),
-                                      // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
-                                      indicatorSize: TabBarIndicatorSize.tab,
-                                      controller: controller.tabController,
-                                      onTap: (index){
-                                        controller.scrollToSection(index);
-                                      },
-
-                                      tabs: List.generate(controller.listTabLabel.length, (index){
-                                        return Text(controller.listTabLabel[index],style: AppTextStyles.font12.copyWith(color: appBlackColor),);
-                                      }),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: isSelected ? appPrimaryColor : appPrimaryBackgroundColor,
+                                      width:  isSelected ?2:1,
                                     ),
                                   ),
-                                  SizedBox(height: 10,),
-
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                        physics: BouncingScrollPhysics(),
-                                        //controller: controller.scrollController,
-                                        child: Container(
-
-                                          child: Column(
-                                            children: <Widget>[
-                                              Container(
-                                                margin: EdgeInsets.only(left: 20,right: 20),
-                                                child: Column(
-                                                  children: <Widget>[
-                                                    ///Job Description
-                                                    Obx((){
-                                                      var jobDescription=controller.jobDetailsData.value.data?.detail?.jobDescription??"";
-                                                      var roleResponsibility=controller.jobDetailsData.value.data?.detail?.rolesResponsibility??"";
-                                                      return jobDescription.isNotEmpty||roleResponsibility.isNotEmpty?Container(
-                                                        key: controller.keys[0],
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            SizedBox(height: 10,),
-                                                            Text(controller.jobDescriptionTitle[0],style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                                                            SizedBox(height: 5,),
-                                                            HtmlWidget(jobDescription??"",textStyle: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
-                                                            // Text(jobDescription??'',style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
-                                                            SizedBox(height: 10,),
-                                                            roleResponsibility!=null&&roleResponsibility.isNotEmpty?Text(controller.jobDescriptionTitle[1],style: AppTextStyles.font16W600.copyWith(color: appBlackColor),):Container(),
-                                                            SizedBox(height: 5,),
-                                                            HtmlWidget(roleResponsibility??"",textStyle: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
-                                                            //Text(roleResponsibility??'',style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
-
-                                                            // SizedBox(height: 10,),
-                                                            // _showSimilarJobs(context),
-                                                            SizedBox(height: 10,),
-
-                                                          ],
-                                                        ),
-                                                      ):Center(
-                                                        child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
-                                                      );
-                                                    }),
-
-
-
-                                                    ///Required Skills
-                                                    Obx((){
-                                                      var skills=controller.jobDetailsData.value.data?.detail?.skill??[];
-                                                      return skills.isNotEmpty?Container(
-                                                        key: controller.keys[1],
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            Text(appRequiredSkills,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                                                            SizedBox(height: 20,),
-                                                            GridView.builder(
-                                                              shrinkWrap: true,
-                                                              physics: NeverScrollableScrollPhysics(),
-                                                              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                                                maxCrossAxisExtent: 150, // Adjust this value based on max text size
-                                                                crossAxisSpacing: 8,
-                                                                mainAxisSpacing: 8,
-                                                                mainAxisExtent: 26, // Fixed height
-                                                              ),
-                                                              itemCount: skills.length ?? 0,
-                                                              itemBuilder: (context, index) {
-                                                                return Container(
-                                                                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                                                  alignment: Alignment.center,
-                                                                  decoration: BoxDecoration(
-                                                                    color: appWhiteColor,
-                                                                    borderRadius: BorderRadius.circular(5),
-                                                                    border: Border.all(color: appPrimaryColor, width: 1),
-                                                                  ),
-                                                                  child: Text(
-                                                                    skills[index].name ?? '',
-                                                                    style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
-                                                                  ),
-                                                                );
-                                                              },
-                                                            ),
-                                                            // SizedBox(height: 10,),
-                                                            // _showSimilarJobs(context),
-                                                            SizedBox(height: 10,),
-                                                          ],
-                                                        ),
-                                                      ):Center(
-                                                        child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
-                                                      );
-                                                    }),
-
-                                                    ///Job Info
-                                                    Container(
-                                                      key: controller.keys[2],
-                                                      child:  Obx((){
-                                                        var createdDate=controller.jobDetailsData.value.data?.detail?.createDate??"";
-                                                        var applicationCount=controller.jobDetailsData.value.data?.detail?.vacancy??"";
-                                                        var location =generateLocation(cityName: controller.jobDetailsData.value.data?.detail?.cityName??"", stateName: controller.jobDetailsData.value.data?.detail?.stateName??"", countryName: controller.jobDetailsData.value.data?.detail?.countryName??"");
-                                                        var industry =controller.jobDetailsData.value.data?.detail?.industryName??"";
-                                                        var department =controller.jobDetailsData.value.data?.detail?.departmentName??"";
-                                                        var designation =controller.jobDetailsData.value.data?.detail?.designationName??"";
-                                                        var salary =controller.jobDetailsData.value.data?.detail?.salaryName??"";
-                                                        var experience =controller.jobDetailsData.value.data?.detail?.experienceName??"";
-                                                        //var industry =controller.jobDetailsData.value.data?.detail?.w??"";
-                                                        return SingleChildScrollView(
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: <Widget>[
-                                                              Text(appJonInformation,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-                                                              SizedBox(height: 20,),
-                                                              Column(
-                                                                children: <Widget>[
-                                                                  jonInfoCard(context,icon1: appDataPostedIconSvg, header1: appDataPosted, description1: calculateTimeDifference(createDate: createdDate), icon2: appExperenceIconSvg, header2: appNoOfVacancies, description2: applicationCount??""),
-                                                                  SizedBox(height: 10,),
-                                                                  jonInfoCard(context,icon1: appLocationsSvgIcon, header1: appLocation, description1: location??'', icon2: appAppIndustoryIconSvg, header2: appIndustry, description2: industry??''),
-                                                                  SizedBox(height: 10,),
-                                                                  jonInfoCard(context,icon1: appExperenceIconSvg, header1: appDepartment, description1: department??'', icon2: appDesignationIconSvg, header2: appDesignation, description2: designation??''),
-                                                                  SizedBox(height: 10,),
-                                                                  jonInfoCard(context,icon1: appSalaryIconSvg, header1: appSalary, description1: salary??'', icon2: appExperenceIconSvg, header2: appExperience, description2: experience??''),
-                                                                  SizedBox(height: 10,),
-                                                                  jonInfoCard(context,icon1: appWebsiteIconSvg, header1: appWebsite, description1: 'www.google.com', icon2: "", header2: "", description2: ''),
-                                                                  SizedBox(height: 10,),
-                                                                ],
-                                                              ),
-                                                              SizedBox(height: 10,),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      }),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              _showSimilarJobs(context),
-                                              SizedBox(height: 10,),
-
-                                            ],
-                                          ),
-                                        )
-                                    ),
+                                ),
+                                child: Text(
+                                  controller.listTabLabel[index],
+                                  style: AppTextStyles.font14.copyWith(
+                                    color: isSelected ? appPrimaryColor : appBlackColor,
                                   ),
-                                ],
-                              )
-                          )
-                      )
-                    ],
-                  )
-              )
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      );
+                    }),
+                    SizedBox(height: 10,),
+                    ///Tab View Bar
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.58,
+                      child: SingleChildScrollView(
+                        controller: controller.scrollController,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                             _childWithKey(controller.sectionKeys[0], _jobDescription(context)),
+                            _childWithKey(controller.sectionKeys[1], _requiredSkills(context)),
+                            _childWithKey(controller.sectionKeys[2], _jobInformation(context)),
+                            _childWithKey(controller.sectionKeys[3],  _showSimilarJobs(context)),
+                            ///Submit button
+                            SizedBox(height: 10,),
+                            _bottomButton(context),
+                          ],
+                        ),),
+                    ),
+                  ],
+                )
+                // Expanded(
+                //     child: NestedScrollView(
+                //         headerSliverBuilder: (context, innerBoxIsScrolled) {
+                //           return[
+                //             SliverToBoxAdapter(
+                //               child: Container(
+                //                 color: appScreenBackgroundColor,
+                //                 child: Column(
+                //                   crossAxisAlignment: CrossAxisAlignment.start,
+                //                   children: [
+                //                     _jobProfileDetails(context),
+                //                     SizedBox(height: 20,),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //           ];
+                //         },
+                //         body: Column(
+                //           children: <Widget>[
+                //             Divider(color: appPrimaryBackgroundColor,thickness: 1,height: 1,),
+                //             SizedBox(height: 10,),
+                //             Container(
+                //               margin: EdgeInsets.only(left: 20,right: 20,),
+                //               color: appWhiteColor,
+                //               padding:EdgeInsets.zero,
+                //               child: TabBar(
+                //                 indicatorPadding: EdgeInsets.zero,
+                //                 isScrollable: false,
+                //                 dividerColor: appWhiteColor,
+                //                 indicatorColor: appPrimaryColor,
+                //                 indicatorWeight: 2,
+                //                 labelPadding: EdgeInsets.only(bottom: 10),
+                //                 // indicatorPadding: EdgeInsets.only(left: 20,right: 20),
+                //                 indicatorSize: TabBarIndicatorSize.tab,
+                //                 controller: controller.tabController,
+                //                 onTap: (index){
+                //                   controller.scrollToSection(index);
+                //                 },
+                //
+                //                 tabs: List.generate(controller.listTabLabel.length, (index){
+                //                   return Text(controller.listTabLabel[index],style: AppTextStyles.font12.copyWith(color: appBlackColor),);
+                //                 }),
+                //               ),
+                //             ),
+                //             SizedBox(height: 10,),
+                //
+                //             Expanded(
+                //               child: SingleChildScrollView(
+                //                   physics: BouncingScrollPhysics(),
+                //                   //controller: controller.scrollController,
+                //                   child: Container(
+                //
+                //                     child: Column(
+                //                       children: <Widget>[
+                //                         Container(
+                //                           margin: EdgeInsets.only(left: 20,right: 20),
+                //                           child: Column(
+                //                             children: <Widget>[
+                //                               ///Job Description
+                //                               Obx((){
+                //                                 var jobDescription=controller.jobDetailsData.value.data?.detail?.jobDescription??"";
+                //                                 var roleResponsibility=controller.jobDetailsData.value.data?.detail?.rolesResponsibility??"";
+                //                                 return jobDescription.isNotEmpty||roleResponsibility.isNotEmpty?Container(
+                //                                   key: controller.keys[0],
+                //                                   child: Column(
+                //                                     crossAxisAlignment: CrossAxisAlignment.start,
+                //                                     children: <Widget>[
+                //                                       SizedBox(height: 10,),
+                //                                       Text(controller.jobDescriptionTitle[0],style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+                //                                       SizedBox(height: 5,),
+                //                                       HtmlWidget(jobDescription??"",textStyle: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+                //                                       // Text(jobDescription??'',style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+                //                                       SizedBox(height: 10,),
+                //                                       roleResponsibility!=null&&roleResponsibility.isNotEmpty?Text(controller.jobDescriptionTitle[1],style: AppTextStyles.font16W600.copyWith(color: appBlackColor),):Container(),
+                //                                       SizedBox(height: 5,),
+                //                                       HtmlWidget(roleResponsibility??"",textStyle: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+                //                                       //Text(roleResponsibility??'',style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+                //
+                //                                       // SizedBox(height: 10,),
+                //                                       // _showSimilarJobs(context),
+                //                                       SizedBox(height: 10,),
+                //
+                //                                     ],
+                //                                   ),
+                //                                 ):Center(
+                //                                   child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
+                //                                 );
+                //                               }),
+                //
+                //
+                //
+                //                               ///Required Skills
+                //                               Obx((){
+                //                                 var skills=controller.jobDetailsData.value.data?.detail?.skill??[];
+                //                                 return skills.isNotEmpty?Container(
+                //                                   key: controller.keys[1],
+                //                                   child: Column(
+                //                                     crossAxisAlignment: CrossAxisAlignment.start,
+                //                                     children: <Widget>[
+                //                                       Text(appRequiredSkills,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+                //                                       SizedBox(height: 20,),
+                //                                       GridView.builder(
+                //                                         shrinkWrap: true,
+                //                                         physics: NeverScrollableScrollPhysics(),
+                //                                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                //                                           maxCrossAxisExtent: 150, // Adjust this value based on max text size
+                //                                           crossAxisSpacing: 8,
+                //                                           mainAxisSpacing: 8,
+                //                                           mainAxisExtent: 26, // Fixed height
+                //                                         ),
+                //                                         itemCount: skills.length ?? 0,
+                //                                         itemBuilder: (context, index) {
+                //                                           return Container(
+                //                                             padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                //                                             alignment: Alignment.center,
+                //                                             decoration: BoxDecoration(
+                //                                               color: appWhiteColor,
+                //                                               borderRadius: BorderRadius.circular(5),
+                //                                               border: Border.all(color: appPrimaryColor, width: 1),
+                //                                             ),
+                //                                             child: Text(
+                //                                               skills[index].name ?? '',
+                //                                               style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
+                //                                             ),
+                //                                           );
+                //                                         },
+                //                                       ),
+                //                                       // SizedBox(height: 10,),
+                //                                       // _showSimilarJobs(context),
+                //                                       SizedBox(height: 10,),
+                //                                     ],
+                //                                   ),
+                //                                 ):Center(
+                //                                   child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
+                //                                 );
+                //                               }),
+                //
+                //                               ///Job Info
+                //                               Container(
+                //                                 key: controller.keys[2],
+                //                                 child:  Obx((){
+                //                                   var createdDate=controller.jobDetailsData.value.data?.detail?.createDate??"";
+                //                                   var applicationCount=controller.jobDetailsData.value.data?.detail?.vacancy??"";
+                //                                   var location =generateLocation(cityName: controller.jobDetailsData.value.data?.detail?.cityName??"", stateName: controller.jobDetailsData.value.data?.detail?.stateName??"", countryName: controller.jobDetailsData.value.data?.detail?.countryName??"");
+                //                                   var industry =controller.jobDetailsData.value.data?.detail?.industryName??"";
+                //                                   var department =controller.jobDetailsData.value.data?.detail?.departmentName??"";
+                //                                   var designation =controller.jobDetailsData.value.data?.detail?.designationName??"";
+                //                                   var salary =controller.jobDetailsData.value.data?.detail?.salaryName??"";
+                //                                   var experience =controller.jobDetailsData.value.data?.detail?.experienceName??"";
+                //                                   //var industry =controller.jobDetailsData.value.data?.detail?.w??"";
+                //                                   return SingleChildScrollView(
+                //                                     child: Column(
+                //                                       crossAxisAlignment: CrossAxisAlignment.start,
+                //                                       children: <Widget>[
+                //                                         Text(appJonInformation,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+                //                                         SizedBox(height: 20,),
+                //                                         Column(
+                //                                           children: <Widget>[
+                //                                             jonInfoCard(context,icon1: appDataPostedIconSvg, header1: appDataPosted, description1: calculateTimeDifference(createDate: createdDate), icon2: appExperenceIconSvg, header2: appNoOfVacancies, description2: applicationCount??""),
+                //                                             SizedBox(height: 10,),
+                //                                             jonInfoCard(context,icon1: appLocationsSvgIcon, header1: appLocation, description1: location??'', icon2: appAppIndustoryIconSvg, header2: appIndustry, description2: industry??''),
+                //                                             SizedBox(height: 10,),
+                //                                             jonInfoCard(context,icon1: appExperenceIconSvg, header1: appDepartment, description1: department??'', icon2: appDesignationIconSvg, header2: appDesignation, description2: designation??''),
+                //                                             SizedBox(height: 10,),
+                //                                             jonInfoCard(context,icon1: appSalaryIconSvg, header1: appSalary, description1: salary??'', icon2: appExperenceIconSvg, header2: appExperience, description2: experience??''),
+                //                                             SizedBox(height: 10,),
+                //                                             jonInfoCard(context,icon1: appWebsiteIconSvg, header1: appWebsite, description1: 'www.google.com', icon2: "", header2: "", description2: ''),
+                //                                             SizedBox(height: 10,),
+                //                                           ],
+                //                                         ),
+                //                                         SizedBox(height: 10,),
+                //                                       ],
+                //                                     ),
+                //                                   );
+                //                                 }),
+                //                               ),
+                //                             ],
+                //                           ),
+                //                         ),
+                //                         _showSimilarJobs(context),
+                //                         SizedBox(height: 10,),
+                //
+                //                       ],
+                //                     ),
+                //                   )
+                //               ),
+                //             ),
+                //           ],
+                //         )
+                //     )
+                // )
+              ],
+            ),
           )
       ),
     );
@@ -610,7 +696,7 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
                       controller.getJobDetailsApiData(jobName: jobList[index].slug??'');
                       //controller.openJobDetails();sss
                     },
-                    cardWidth: MediaQuery.of(context).size.width,
+                    cardWidth: MediaQuery.of(context).size.width*0.92,
                     image: jobList[index].profile??"",
                     jobProfileName: capitalizeFirstLetter(jobList[index].jobTitle??""),
                     companyName: capitalizeFirstLetter(jobList[index].companyName??""),
@@ -705,6 +791,140 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
         ],
       )
     );
+  }
+
+  _childWithKey(GlobalKey key, Widget child) {
+    return Container(
+      key: key,
+      child: child,
+    );
+  }
+
+  Widget _jobDescription( context) {
+    return ///Job Description
+      Obx((){
+        var jobDescription=controller.jobDetailsData.value.data?.detail?.jobDescription??"";
+        var roleResponsibility=controller.jobDetailsData.value.data?.detail?.rolesResponsibility??"";
+        return jobDescription.isNotEmpty||roleResponsibility.isNotEmpty?Container(
+          margin: EdgeInsets.only(left: 16,right: 16),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 10,),
+              Text(controller.jobDescriptionTitle[0],style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+              SizedBox(height: 5,),
+              HtmlWidget(jobDescription??"",textStyle: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+              // Text(jobDescription??'',style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+              SizedBox(height: 10,),
+              roleResponsibility!=null&&roleResponsibility.isNotEmpty?Text(controller.jobDescriptionTitle[1],style: AppTextStyles.font16W600.copyWith(color: appBlackColor),):Container(),
+              SizedBox(height: 5,),
+              HtmlWidget(roleResponsibility??"",textStyle: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+              //Text(roleResponsibility??'',style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),),
+
+              // SizedBox(height: 10,),
+              // _showSimilarJobs(context),
+              SizedBox(height: 10,),
+
+            ],
+          ),
+        ):Center(
+          child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
+        );
+      });
+  }
+
+  Widget _requiredSkills( context) {
+    return ///Required Skills
+      Obx((){
+        var skills=controller.jobDetailsData.value.data?.detail?.skill??[];
+        return skills.isNotEmpty?Container(
+          margin: EdgeInsets.only(left: 16,right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(appRequiredSkills,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+              SizedBox(height: 20,),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 150, // Adjust this value based on max text size
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  mainAxisExtent: 26, // Fixed height
+                ),
+                itemCount: skills.length ?? 0,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: appWhiteColor,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: appPrimaryColor, width: 1),
+                    ),
+                    child: Text(
+                      skills[index].name ?? '',
+                      style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
+                    ),
+                  );
+                },
+              ),
+              // SizedBox(height: 10,),
+              // _showSimilarJobs(context),
+              SizedBox(height: 10,),
+            ],
+          ),
+        ):Center(
+          child: Text(appNoDataFound,style: AppTextStyles.font14.copyWith(color: appBlackColor),),
+        );
+      });
+  }
+
+  Widget _jobInformation( context) {
+    ///Job Info
+    return Obx((){
+      var jobDetails=controller.jobDetailsData.value.data?.detail;
+      if (jobDetails == null) {
+        return Container(); // or SizedBox()
+      }
+        var createdDate=jobDetails.createDate??"";
+        var applicationCount=jobDetails.vacancy??"";
+        var location =generateLocation(cityName: jobDetails.cityName??"", stateName: jobDetails.stateName??"", countryName: jobDetails.countryName??"");
+        var industry =jobDetails.industryName??"";
+        var department =jobDetails.departmentName??"";
+        var designation =jobDetails.designationName??"";
+        var salary =jobDetails.salaryName??"";
+        var experience =jobDetails.experienceName??"";
+        var website =jobDetails.website??"";
+        //var industry =controller.jobDetailsData.value.data?.detail?.w??"";
+        return Container(
+          margin: EdgeInsets.only(left: 16,right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(appJonInformation,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
+              SizedBox(height: 20,),
+              Column(
+                children: <Widget>[
+                  jonInfoCard(context,icon1: appDataPostedIconSvg, header1: appDataPosted, description1: calculateTimeDifference(createDate: createdDate), icon2: appExperenceIconSvg, header2: appNoOfVacancies, description2: applicationCount??""),
+                  SizedBox(height: 10,),
+                  jonInfoCard(context,icon1: appLocationsSvgIcon, header1: appLocation, description1: location??'', icon2: appAppIndustoryIconSvg, header2: appIndustry, description2: industry??''),
+                  SizedBox(height: 10,),
+                  jonInfoCard(context,icon1: appExperenceIconSvg, header1: appDepartment, description1: department??'', icon2: appDesignationIconSvg, header2: appDesignation, description2: designation??''),
+                  SizedBox(height: 10,),
+                  jonInfoCard(context,icon1: appSalaryIconSvg, header1: appSalary, description1: salary??'', icon2: appExperenceIconSvg, header2: appExperience, description2: experience??''),
+                  SizedBox(height: 10,),
+                  website.isNotEmpty? jonInfoCard(context,icon1: appWebsiteIconSvg, header1: appWebsite, description1: website??"", icon2: "", header2: "", description2: ''):Container(),
+                  SizedBox(height: 10,),
+                ],
+              ),
+              SizedBox(height: 10,),
+            ],
+          ),
+        );
+      });
   }
 
 }

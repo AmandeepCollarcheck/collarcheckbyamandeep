@@ -73,6 +73,7 @@ class Detail {
   String? cityName;
   String? salary;
   String? salaryName;
+  String? website;
   String? companyName;
   dynamic profile;
   String? createDate;
@@ -121,6 +122,7 @@ class Detail {
     this.gallery,
     this.companySlug,
     this.apply,
+    this.website
   });
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
@@ -138,6 +140,7 @@ class Detail {
     industryName: json["industry_name"],
     roleType: json["role_type"],
     industry: json["industry"],
+    website:json["website"],
     vacancy: json["vacancy"],
     urgent: json["urgent"],
     designationName: json["designation_name"],
@@ -184,6 +187,7 @@ class Detail {
     "country_name": countryName,
     "state_name": stateName,
     "designation": designation,
+    "website":website,
     "country": country,
     "state": state,
     "city": city,

@@ -45,20 +45,15 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
   var slugDataId="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
-
-
-  final sectionKeys = [
-    GlobalKey(),
-    GlobalKey(),
-    GlobalKey(),
-    GlobalKey(),
-
-  ];
+  final GlobalKey headerKey = GlobalKey();
+  final GlobalKey bodyKey = GlobalKey();
+  final isScrollEnabled = false.obs;
+  final List<GlobalKey> sectionKeys = List.generate(9, (_) => GlobalKey());
 
 
 
   var listTabLabel = [
-    appHome, appEmploymentHistory, appPortfolio,appEducation
+    appHome, appEmploymentHistory, appPortfolio,appEducation,appCertifications,appSkills, appLanguage,appCompany,appSimilarProfiles
   ].obs;
 
   @override
@@ -71,12 +66,18 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
      }
     tabController = TabController(length: 4, vsync: this);
     scrollControllerForTabSelection.addListener(_onScroll);
+    scrollController.addListener(() {
+      if (!isScrollEnabled.value) _handleNestedScroll();
+    });
+
+    scrollControllerForTabSelection.addListener(() {
+      if (isScrollEnabled.value) _handleNestedScroll();
+    });
+
+
     // TODO: implement onInit
     //IndividualUserProfileModel
     Future.delayed(Duration(milliseconds: 500), ()async {
-
-      userIdData.value=await readStorageData(key: id);
-
       getProfileApiCall();
     });
     Future.delayed(Duration(milliseconds: 500), ()async {
@@ -139,8 +140,12 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
       if(userProfileModel.status==true){
         userProfileData.value=userProfileModel;
         var profileData=userProfileData.value.data?.employementHistoryNew??[];
-        await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
-        await writeStorageData(key: profileImage, value: userProfileData.value.data?.profile??"");
+        if(profileData.isNotEmpty){
+          await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
+          await writeStorageData(key: profileImage, value: userProfileData.value.data?.profile??"");
+
+        }
+        userIdData.value=await readStorageData(key: id);
 
       }else{
         showToast(somethingWentWrong);
@@ -340,6 +345,7 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
 
 
   void _onScroll() {
+
     for (int i = 0; i < sectionKeys.length; i++) {
       final keyContext = sectionKeys[i].currentContext;
       if (keyContext != null) {
@@ -350,14 +356,12 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
           if (selectedIndex.value != i) {
             selectedIndex.value = i;
           }
-
-
-          print("shhjshdfhshkdf");
-          print(position);
           break;
         }
       }
+
     }
+
   }
 
 
@@ -380,4 +384,27 @@ class  ProfileDetailsControllers extends GetxController with GetTickerProviderSt
 
 
 
+
+   _handleNestedScroll() {
+    if(isScrollEnabled.value==false){
+      final offset = scrollController.offset;
+      final RenderBox? box = headerKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null) {
+        final headerHeight = box.size.height;
+
+        if (offset >= headerHeight && !isScrollEnabled.value) {
+          isScrollEnabled.value = true;
+        }
+      }
+    }else{
+      final offset = scrollControllerForTabSelection.offset;
+      final RenderBox? box = bodyKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null) {
+        if (offset <= 0.0 ) {
+          isScrollEnabled.value = false;
+        }
+      }
+    }
+
+  }
 }

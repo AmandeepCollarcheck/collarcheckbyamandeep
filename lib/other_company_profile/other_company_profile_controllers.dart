@@ -62,6 +62,8 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
       Get.offNamed(AppRoutes.topCompanies,arguments: {screenName:dashboard});
     }else if(screenNameData.value==searchScreen){
       Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
+    }else if(screenNameData.value==profileDetails){
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
     }else{
       Get.offNamed(AppRoutes.bottomNavBar,);
     }

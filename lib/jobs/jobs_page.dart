@@ -158,7 +158,7 @@ class JobsPage extends GetView<JobControllers>{
                         timeAgo: calculateTimeDifference(createDate: jobList[index].createDate ?? ""), isApplyClick: () {  },
                       ):Container(
                         child: Center(
-                            child: Text("jh")
+                            child: Text("")
                         ),
                       );
                     }),
@@ -229,7 +229,7 @@ class JobsPage extends GetView<JobControllers>{
                     children: List.generate(jobList.length, (index) {
                       return jobList.isNotEmpty?appliedCommonCardWidget(
                         context,
-                        cardWidth: MediaQuery.of(context).size.width,
+                        cardWidth: MediaQuery.of(context).size.width*0.92,
                         onClick: () {
                           controller.openJobDetails(jobTitle: jobList[index].slug ??"",);
                         },

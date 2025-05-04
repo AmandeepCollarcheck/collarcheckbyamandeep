@@ -12,25 +12,23 @@ import '../utills/app_strings.dart';
 import '../utills/common_widget/progress.dart';
 
 class JobDetailsControllers extends GetxController with GetTickerProviderStateMixin{
-  late final TabController tabController;
-  final ScrollController scrollController = ScrollController();
-  late ProgressDialog progressDialog=ProgressDialog() ;
+  final List<GlobalKey> sectionKeys = List.generate(4, (_) => GlobalKey());
+   late ScrollController scrollController;
+   ProgressDialog progressDialog=ProgressDialog() ;
   var jobDetailsData=JobDetailsModel().obs;
-  RxDouble tabViewHeight = RxDouble(350.0);
+  //RxDouble tabViewHeight = RxDouble(350.0);
   //var tabHeight=500.0.obs;
   Rx jobTitle="".obs;
   final RxBool isExpanded = false.obs;
   var isTabClicked = false.obs;
 
 
-  final List<GlobalKey> keys = List.generate(3, (index) => GlobalKey(debugLabel: 'section_$index'));
-
-  final List<double> sectionOffsets = [];
-  
 
 
+
+  var selectedIndex=0.obs;
   var listTabLabel = [
-    appJobDescription, appRequiredSkills, appJonInformation
+    appJobDescription, appRequiredSkills, appJonInformation, appSimilarJobs
   ].obs;
   var jobDescriptionTitle = [
     "Job Description", "Roles and Responsibilities"
@@ -42,13 +40,16 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
   var screenNameData="".obs;
   @override
   void onInit() {
+    scrollController = ScrollController();
     super.onInit();
-    final Map<String, dynamic> data = Get.arguments??{};
-    jobTitle.value=data['jobTitle']??"";
-    screenNameData.value=data[screenName]??"";
-    tabController = TabController(length: 3, vsync: this);
-    scrollController.addListener(_onScroll);
 
+    final Map<String, dynamic> data = Get.arguments??{};
+    if(data.isNotEmpty){
+      jobTitle.value=data['jobTitle']??"";
+      screenNameData.value=data[screenName]??"";
+    }
+
+    scrollController.addListener(_handleScroll);
     Future.delayed(Duration(milliseconds: 500), ()async {
       String jobName=jobTitle.value;
      await getJobDetailsApiData(jobName: jobName??"");
@@ -56,11 +57,7 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
   }
 
 
-  @override
-  void onClose() {
-    tabController.dispose();
-    super.onClose();
-  }
+
 
 
   backButtonClick(context){
@@ -128,63 +125,43 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
       showToast(exception.toString());
     }
   }
-  void updateHeight(double newHeight) {
-    if (newHeight > tabViewHeight.value) {
-      tabViewHeight.value = newHeight;
-    }
-  }
+  // void updateHeight(double newHeight) {
+  //   if (newHeight > tabViewHeight.value) {
+  //     tabViewHeight.value = newHeight;
+  //   }
+  // }
 
 
 
 
 
-  void _onScroll() {
-    double offset = scrollController.offset;
-    double screenHeight = Get.context!.size!.height;
-
-    for (int i = 0; i < keys.length; i++) {
-      final keyContext = keys[i].currentContext;
-      if (keyContext != null) {
-        final box = keyContext.findRenderObject() as RenderBox;
-        final position = box.localToGlobal(Offset.zero, ancestor: null).dy;
-
-        if (position <= screenHeight / 3) {
-          if (tabController.index != i) {
-
-            tabController.animateTo(i);
-          }
-        }
-      }
-    }
-  }
-
-  void _updateSectionOffsets() {
-    sectionOffsets.clear();
-    for (var key in keys) {
-      final ctx = key.currentContext;
-      if (ctx != null) {
-        final box = ctx.findRenderObject() as RenderBox;
-        final position = box.localToGlobal(Offset.zero, ancestor: Get.context!.findRenderObject());
-        sectionOffsets.add(position.dy + scrollController.offset);
-      }
-    }
-  }
-
-  void scrollToSection(int index) {
-    isTabClicked.value = true;
-    final ctx = keys[index].currentContext;
-    if (ctx != null) {
-      Scrollable.ensureVisible(
-        ctx,
+  void scrollToSection(int index)async {
+    final context = sectionKeys[index].currentContext;
+    if (context != null) {
+      await Scrollable.ensureVisible(
+        context,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-      ).then((_) {
-        Future.delayed(Duration(milliseconds: 200), () {
-          isTabClicked.value = false;
-        });
-      });
-    } else {
-      isTabClicked.value = false;
+      );
+    }
+  }
+
+
+
+  void _handleScroll() {
+    for (int i = 0; i < sectionKeys.length; i++) {
+      final context = sectionKeys[i].currentContext;
+      if (context != null) {
+        final box = context.findRenderObject() as RenderBox;
+        final pos = box.localToGlobal(Offset.zero).dy;
+
+        if (pos <= kToolbarHeight + 280 && pos + box.size.height > kToolbarHeight + 280) {
+          if (selectedIndex.value != i) {
+            selectedIndex.value = i;
+          }
+          break;
+        }
+      }
     }
   }
 
@@ -192,7 +169,7 @@ class JobDetailsControllers extends GetxController with GetTickerProviderStateMi
   @override
   void dispose() {
     scrollController.dispose();
-    tabController.dispose();
+
     super.dispose();
   }
 }
