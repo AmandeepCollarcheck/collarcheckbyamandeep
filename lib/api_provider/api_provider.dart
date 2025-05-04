@@ -376,6 +376,8 @@ class ApiProvider{
   }
   Future saveUserProfile(FormData params) async {
     try {
+      print("sjshkfhksdfshkdfhkdf");
+      print(params.fields);
       Response response = await _dio.post(strSaveProfile,data: params);
       Map<String, dynamic> jsonData;
       if (response.data is String) {

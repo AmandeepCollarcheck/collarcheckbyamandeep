@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collarchek/profiles/profile_controllers.dart';
 import 'package:collarchek/utills/app_colors.dart';
+import 'package:collarchek/utills/app_key_constent.dart';
 import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/common_widget/common_button.dart';
 import 'package:collarchek/utills/common_widget/common_methods.dart';
@@ -57,12 +58,7 @@ class ProfilePage extends GetView<ProfileControllers>{
 
                         return GestureDetector(
                           onTap: () async{
-                            // Immediately update the selected index to reflect the selected tab
                             controller.selectedIndex.value = index;
-
-                            // Then, scroll to the section after the tab index is updated
-                            controller.scrollToSection(index);
-
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -90,30 +86,32 @@ class ProfilePage extends GetView<ProfileControllers>{
                 ///Tab View Bar
                 SizedBox(
                   height: MediaQuery.of(context).size.height*0.7,
-                  child: SingleChildScrollView(
-                    controller: controller.scrollController,
-                   // physics: BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _childWithKey(controller.sectionKeys[0], _basicDetailsTabView(context)),
-                        _childWithKey(controller.sectionKeys[1], _addressTabView(context)),
-                        _childWithKey(controller.sectionKeys[2], _employmentTabView(context)),
-                        _childWithKey(controller.sectionKeys[3], _socialView(context)),
-                        ///Submit button
-                        SizedBox(height: 20,),
-                        commonButton(context,
-                            buttonName: appSave,
-                            buttonBackgroundColor: appPrimaryColor,
-                            textColor: appWhiteColor,
-                            buttonBorderColor: appPrimaryColor,
-                            onClick: (){
-                              controller.saveUserProfile(context);
-                            }
-                        ),
+                  child: Obx((){
+                    return SingleChildScrollView(
+                      controller: controller.scrollController,
+                      // physics: BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          controller.selectedIndex.value==0?_basicDetailsTabView(context):Container(),
+                          controller.selectedIndex.value==1?_addressTabView(context):Container(),
+                          controller.selectedIndex.value==2?_employmentTabView(context):Container(),
+                          controller.selectedIndex.value==3?_socialView(context):Container(),
+                          ///Submit button
+                          SizedBox(height: 20,),
+                          commonButton(context,
+                              buttonName: appSave,
+                              buttonBackgroundColor: appPrimaryColor,
+                              textColor: appWhiteColor,
+                              buttonBorderColor: appPrimaryColor,
+                              onClick: (){
+                                controller.saveUserProfile(context);
+                              }
+                          ),
 
-                      ],
-                    ),),
+                        ],
+                      ),);
+                  }),
                 ),
 
 
@@ -360,33 +358,95 @@ class ProfilePage extends GetView<ProfileControllers>{
                     ],
                   )
               ),
-              SizedBox(width: 10,),
-              ///Accomodation
-              Flexible(
-                  child: Column(
-                    children: <Widget>[
-                      commonTextFieldTitle(headerName: appAccomodationType,isMendatory: true),
-                      SizedBox(height: 5,),
-                      Obx((){
-                        var accomodationdata=controller.allDropDownData.value.data?.accomodationList??[];
-                        return accomodationdata!=null&&accomodationdata.isNotEmpty?customDropDown(
-                          hintText: appAccomodationType,
-                          item: [{'id':"0","name":appSelectAccomodation},
-                            ...accomodationdata.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
-                          ],
-                          selectedValue: accomodationdata.any((datum)=>datum.id==controller.selectedAccodationType["id"])?controller.selectedAccodationType:{'id':"0","name":appSelectAccomodation},
-                          onChanged: (Map<String,dynamic>? selectedData) {
-                            controller.selectedAccodationType.value = {
-                              "id": selectedData?['id'].toString() ?? "0",
-                              "name": selectedData?['name'].toString() ?? appSelectAccomodation
-                            };
-                            controller.accomodationType.value=selectedData?['name'];
-                          },
-                          icon: appDropDownIcon,):Container();
-                      }),
-                    ],
-                  )
+              controller.selectedIndex.value==0?SizedBox(width: 0,):SizedBox(width: 10,),
+            ],
+          ),
+        ),
+        SizedBox(height: 14,),
+        ///Profile Descriptuon
+        Container(
+          padding: EdgeInsets.only(left: 20,right: 20),
+          child: Column(
+            children: <Widget>[
+              commonTextFieldTitle(headerName: appProfileDescription,isMendatory: false),
+              SizedBox(height: 5,),
+              commonTextField(controller: controller.profileDescription, hintText: appProfileDescription,maxLine: 5),
+              SizedBox(height:4,),
+              Row(
+                children: <Widget>[
+                  SvgPicture.asset(appAISvg,height: 16,width: 16,),
+                  Text(appReWriteWithAi,style: AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),)
+                ],
               ),
+
+            ],
+          ),
+        ),
+        ///Resume
+        SizedBox(height: 10,),
+        Container(
+          padding: EdgeInsets.only(left: 20,right: 20),
+          child: Column(
+            children: <Widget>[
+              commonTextFieldTitle(headerName: appResume,isMendatory: true),
+              SizedBox(height: 5,),
+              GestureDetector(
+                onTap: (){
+                  getFileFromGallery(context,onFilePickedData: (String pickedData) {
+                    if(pickedData!=null){
+                      controller.selectedResumeName.value=pickedData;
+                    }
+                  });
+                },
+                child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    color: appBlackColor,
+                    strokeWidth: 1,
+                    radius: Radius.circular(20),
+                    child:Container(
+                        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SvgPicture.asset(appUploadResume,height: 24,width: 24,),
+                            SizedBox(width: 10,),
+                            Text(appUpdateResume,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
+                          ],
+                        )
+                    )
+                ),
+              ),
+              SizedBox(height: 5,),
+              Text(appSupportedFormats,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
+              SizedBox(height: 10,),
+              Obx((){
+                return controller.selectedResumeName.value.isNotEmpty? Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: appPrimaryBackgroundColor
+                  ),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Obx((){
+                        return SizedBox(
+                            width: MediaQuery.of(context).size.width*0.7,
+                            child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                      }),
+                      GestureDetector(
+                          onTap:(){
+                            controller.selectedResumeName.value="";
+                          },
+                          child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
+                    ],
+                  ),
+                ):Container();
+              })
             ],
           ),
         ),
@@ -400,58 +460,32 @@ class ProfilePage extends GetView<ProfileControllers>{
     return  Container(
       padding: EdgeInsets.only(left: 20,right: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          ///Current Company
-          commonTextFieldTitle(headerName: appMyCurrentCompany,isMendatory: false),
-          SizedBox(height: 5,),
-          Obx((){
-            var currentCompany=controller.allDropDownData.value.data?.companyList??[];
-            return currentCompany.isNotEmpty ? customDropDown(
-              hintText: appMyCurrentCompany,
-              item: [{"id": "0", "name": appSelectCompany},
-                ...currentCompany.map((datum) => {
-                  "id": datum.id,
-                  "name": datum.company,
-                })
-              ],
-              selectedValue: currentCompany.any((datum) => datum.id == controller.selectedCompany["id"]) ? controller.selectedCompany : {"id": "0", "name": appSelectCompany}, // Fallback if not found
-              onChanged: (Map<String, dynamic>? selectedData) {
-                if (selectedData != null) {
-                  controller.selectedCompany.value = {
-                    "id": selectedData?['id'].toString() ?? "0",
-                    "name": selectedData?['name'].toString() ?? appSelectCompany
-                  };
 
-                  controller.myCurrentCompany.value = selectedData['name'];
-                }
-              },
-              icon: appDropDownIcon,
-            )
-                : Container();
+          GestureDetector(
+            onTap: (){
+              Get.toNamed(AppRoutes.employmentHistory,arguments: {screenName:profileDetails, isProfileEdit:true});
+            },
+            child: Container(
+              alignment: Alignment.topLeft,
+              width: MediaQuery.of(context).size.width*0.5,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: appPrimaryColor,width: 1)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SvgPicture.asset(appAddIcon,height: 10,width: 10,),
+                  Text(appAddEmployement,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),)
+                ],
+              ),
+            ),
+          ),
 
-          }),
-          SizedBox(height: 10,),
-          ///Current Position
-          commonTextFieldTitle(headerName: appCurrentPosition,isMendatory: false),
-          SizedBox(height: 5,),
-          Obx((){
-            var currentPosition=controller.allDropDownData.value.data?.designationList??[];
-            return currentPosition.isNotEmpty?customDropDown(
-              hintText: appCurrentPosition,
-              item: [{"id": "0", "name": appSelectPosition},
-                ...currentPosition.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
-              ],
-              selectedValue: currentPosition.any((datum)=>datum.id==controller.selectedCurrentPosition["id"])?controller.selectedCurrentPosition: {"id": "0", "name": appSelectPosition},
-              onChanged: (Map<String,dynamic>? selectedData) {
-                controller.selectedCurrentPosition.value = {
-                  "id": selectedData?['id'].toString() ?? "0",
-                  "name": selectedData?['name'].toString() ?? appSelectPosition
-                };
-                controller.currentPosition.value=selectedData?['name'];
-              },
-              icon: appDropDownIcon,):Container();
-          }),
-          SizedBox(height: 10,),
+          SizedBox(height: 20,),
           ///Work Status
           commonTextFieldTitle(headerName: appWorkStatus,isMendatory: true),
           SizedBox(height: 5,),
@@ -483,64 +517,79 @@ class ProfilePage extends GetView<ProfileControllers>{
         padding: EdgeInsets.only(left: 20,right: 20),
         child: Column(
           children: <Widget>[
+            ///Accomodation
+            Column(
+              children: <Widget>[
+                commonTextFieldTitle(headerName: appAccomodationType,isMendatory: true),
+                SizedBox(height: 5,),
+                Obx((){
+                  var accomodationdata=controller.allDropDownData.value.data?.accomodationList??[];
+                  return accomodationdata!=null&&accomodationdata.isNotEmpty?customDropDown(
+                    hintText: appAccomodationType,
+                    item: [{'id':"0","name":appSelectAccomodation},
+                      ...accomodationdata.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                    ],
+                    selectedValue: accomodationdata.any((datum)=>datum.id==controller.selectedAccodationType["id"])?controller.selectedAccodationType:{'id':"0","name":appSelectAccomodation},
+                    onChanged: (Map<String,dynamic>? selectedData) {
+                      controller.selectedAccodationType.value = {
+                        "id": selectedData?['id'].toString() ?? "0",
+                        "name": selectedData?['name'].toString() ?? appSelectAccomodation
+                      };
+                      controller.accomodationType.value=selectedData?['name'];
+                    },
+                    icon: appDropDownIcon,):Container();
+                }),
+              ],
+            ),
             SizedBox(height: 10,),
             ///Work Country Stata
-            Row(
+            Column(
               children: <Widget>[
-                Flexible(
-                    child: Column(
-                      children: <Widget>[
-                        commonTextFieldTitle(headerName: appCountry,isMendatory: false),
-                        SizedBox(height: 5,),
-                        ///Country
-                        Obx((){
-                          var countryData=controller.countryListData.value.data??[];
-                          return countryData.isNotEmpty?customDropDown(
-                            hintText: appCountry,
-                            item: [{'id':"0","name":appSelectCountry},
-                              ...countryData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
-                            ],
-                            selectedValue: countryData.any((datum)=>datum.id==controller.selectedCountry["id"])?controller.selectedCountry:{'id':"0","name":appSelectCountry},
-                            onChanged: (Map<String,dynamic>? selectedData) {
-                              controller.selectedCountry.value = {
-                                "id": selectedData?['id'].toString() ?? "0",
-                                "name": selectedData?['name'].toString() ?? appSelectCountry
-                              };
-                              controller.getStateListApiCall(countryName: selectedData?['id']);
-                              controller.country.value=selectedData?['name'];
-                            }, icon: appDropDownIcon,):Container();
-                        })
-                      ],
-                    )
-                ),
-                SizedBox(width: 10,),
-                Flexible(
-                  ///State
-                    child: Column(
-                      children: <Widget>[
-                        commonTextFieldTitle(headerName: appState,isMendatory: false),
-                        SizedBox(height: 5,),
-                        Obx((){
-                          var StateData=controller.stateListData.value.data??[];
-                          return StateData!=null&&StateData.isNotEmpty?customDropDown(
-                            hintText: appAccomodationType,
-                            item:[{'id':"0","name":appSelectState},
-                              ...StateData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
-                            ],
-                            selectedValue:StateData.any((datum)=>datum.id==controller.selectedState["id"])?controller.selectedState:{'id':"0","name":appSelectState},
-                            onChanged: (Map<String,dynamic>? selectedData) {
-                              controller.selectedState.value = {
-                                "id": selectedData?['id'].toString() ?? "0",
-                                "name": selectedData?['name'].toString() ?? appSelectState
-                              };
-                              controller.getCityListApiCall(stateName:  selectedData?['id']);
-                              controller.state.value=selectedData?['name'];
-                            },
-                            icon: appDropDownIcon,):Container();
-                        })
-                      ],
-                    )
-                ),
+                commonTextFieldTitle(headerName: appCountry,isMendatory: false),
+                SizedBox(height: 5,),
+                ///Country
+                Obx((){
+                  var countryData=controller.countryListData.value.data??[];
+                  return countryData.isNotEmpty?customDropDown(
+                    hintText: appCountry,
+                    item: [{'id':"0","name":appSelectCountry},
+                      ...countryData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                    ],
+                    selectedValue: countryData.any((datum)=>datum.id==controller.selectedCountry["id"])?controller.selectedCountry:{'id':"0","name":appSelectCountry},
+                    onChanged: (Map<String,dynamic>? selectedData) {
+                      controller.selectedCountry.value = {
+                        "id": selectedData?['id'].toString() ?? "0",
+                        "name": selectedData?['name'].toString() ?? appSelectCountry
+                      };
+                      controller.getStateListApiCall(countryName: selectedData?['id']);
+                      controller.country.value=selectedData?['name'];
+                    }, icon: appDropDownIcon,):Container();
+                })
+              ],
+            ),
+            SizedBox(height: 10,),
+            Column(
+              children: <Widget>[
+                commonTextFieldTitle(headerName: appState,isMendatory: false),
+                SizedBox(height: 5,),
+                Obx((){
+                  var StateData=controller.stateListData.value.data??[];
+                  return StateData!=null&&StateData.isNotEmpty?customDropDown(
+                    hintText: appAccomodationType,
+                    item:[{'id':"0","name":appSelectState},
+                      ...StateData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                    ],
+                    selectedValue:StateData.any((datum)=>datum.id==controller.selectedState["id"])?controller.selectedState:{'id':"0","name":appSelectState},
+                    onChanged: (Map<String,dynamic>? selectedData) {
+                      controller.selectedState.value = {
+                        "id": selectedData?['id'].toString() ?? "0",
+                        "name": selectedData?['name'].toString() ?? appSelectState
+                      };
+                      controller.getCityListApiCall(stateName:  selectedData?['id']);
+                      controller.state.value=selectedData?['name'];
+                    },
+                    icon: appDropDownIcon,):Container();
+                })
               ],
             ),
             SizedBox(height: 10,),
@@ -603,70 +652,8 @@ class ProfilePage extends GetView<ProfileControllers>{
             SizedBox(height: 5,),
             commonTextField(controller: controller.permanentController, hintText: appPermanentAddress,maxLine: 5),
             SizedBox(height: 10,),
-            ///Resume
-            Column(
-              children: <Widget>[
-                commonTextFieldTitle(headerName: appResume,isMendatory: true),
-                SizedBox(height: 5,),
-                GestureDetector(
-                  onTap: (){
-                    getFileFromGallery(context,onFilePickedData: (String pickedData) {
-                      if(pickedData!=null){
-                        controller.selectedResumeName.value=pickedData;
-                      }
-                    });
-                  },
-                  child: DottedBorder(
-                      borderType: BorderType.RRect,
-                      color: appBlackColor,
-                      strokeWidth: 1,
-                      radius: Radius.circular(20),
-                      child:Container(
-                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 30),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          child:Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SvgPicture.asset(appUploadResume,height: 24,width: 24,),
-                              SizedBox(width: 10,),
-                              Text(appUpdateResume,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),),
-                            ],
-                          )
-                      )
-                  ),
-                ),
-                SizedBox(height: 5,),
-                Text(appSupportedFormats,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),),
-                SizedBox(height: 10,),
-                Obx((){
-                  return controller.selectedResumeName.value.isNotEmpty? Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: appPrimaryBackgroundColor
-                    ),
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Obx((){
-                          return SizedBox(
-                              width: MediaQuery.of(context).size.width*0.7,
-                              child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
-                        }),
-                        GestureDetector(
-                            onTap:(){
-                              controller.selectedResumeName.value="";
-                            },
-                            child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
-                      ],
-                    ),
-                  ):Container();
-                })
-              ],
-            ),
+
+
 
           ],
         ),

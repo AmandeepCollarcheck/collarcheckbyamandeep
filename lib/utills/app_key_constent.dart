@@ -72,6 +72,7 @@ const progressBarMaxValue="5";
  const isCompanyApp="isCompanyApp";
  const jobId="jobId";
  const checkOtherProfile="checkOtherProfile";
+ const isProfileEdit="isProfileEdit";
 
 //value
 const profileDetails="profile_details";

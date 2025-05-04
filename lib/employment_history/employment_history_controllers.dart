@@ -50,6 +50,7 @@ class EmploymentHistoryControllers extends GetxController{
   var salaryBracts=[{'id':"1","name":appAnnually},{'id':"2","name":appPerMonth},].obs;
 
  Rx screenNameData="".obs;
+ var isProfileEditData=false.obs;
 
 
  /// Dropdown
@@ -70,6 +71,7 @@ class EmploymentHistoryControllers extends GetxController{
       screenNameData.value=data[screenName]??"";
       isEditData.value=data[isEdit]??false;
       isEditIdData.value=data[isEditItemId]??"";
+      isProfileEditData.value=data[isProfileEdit]??false;
     }
 
     if(isEditData.value){
@@ -99,7 +101,12 @@ class EmploymentHistoryControllers extends GetxController{
     if(screenNameData.value==dashboard){
       Get.offNamed(AppRoutes.bottomNavBar);
     }else if(screenNameData.value==profileDetails){
-      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+      if(isProfileEditData.value){
+        Get.back();
+      }else{
+        Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+      }
+
     }else{
       Get.offNamed(AppRoutes.bottomNavBar);
     }
@@ -210,7 +217,11 @@ class EmploymentHistoryControllers extends GetxController{
         if(screenNameData.value==dashboard){
           Get.offNamed(AppRoutes.bottomNavBar);
         }else if(screenNameData.value==profileDetails){
-          Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+          if(isProfileEditData.value){
+            Get.back();
+          }else{
+            Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+          }
         }else{
           Get.offNamed(AppRoutes.bottomNavBar);
         }

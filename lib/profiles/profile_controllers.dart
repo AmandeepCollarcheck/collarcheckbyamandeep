@@ -12,6 +12,7 @@ import 'package:get/get_connect/http/src/utils/utils.dart' as dio;
 import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart' as dio;
 import '../api_provider/api_provider.dart';
+import '../bottom_nav_bar/bottom_nav_bar_controller.dart';
 import '../models/all_drop_down_list_model.dart';
 import '../models/city_list_model.dart';
 import '../models/country_list_model.dart';
@@ -34,7 +35,7 @@ class ProfileControllers extends GetxController{
   Rx isSameAsCheck =false.obs;
   Rx isEmailVerified =false.obs;
   Rx isPhoneVerified =false.obs;
-  var userProfileData=EmployeeUserDetails().obs;
+  var userProfileData=UserProfileModel().obs;
   var countryListData=CountryListModel().obs;
   var stateListData=StateListModel().obs;
   var cityListData=CityListModel().obs;
@@ -42,6 +43,7 @@ class ProfileControllers extends GetxController{
   var allDropDownData=AllDropDownListModel().obs;
   final formKey = GlobalKey<FormState>();
   var firstNameController = TextEditingController();
+  var profileDescription = TextEditingController();
   var lastNameController = TextEditingController();
   var emailController = TextEditingController();
   var phoneController = TextEditingController();
@@ -96,7 +98,7 @@ class ProfileControllers extends GetxController{
     if(data.isNotEmpty){
       screenNameData.value=data[screenName]??"";
     }
-    scrollController.addListener(_handleScroll);
+    //scrollController.addListener(_handleScroll);
 
 
     // TODO: implement onInit
@@ -149,7 +151,8 @@ class ProfileControllers extends GetxController{
       String firstname =await GetStorage().read(firstName);
       String lastname =await GetStorage().read(lastName);
       final userName=("$firstname-$lastname").replaceAll(" ", "");
-      EmployeeUserDetails userProfileModel = await ApiProvider.baseWithToken().employeeUserDetails();
+      String slugData =await GetStorage().read(slug);
+      UserProfileModel userProfileModel = await ApiProvider.baseWithToken().userProfile(userName: slugData);
       if(userProfileModel.status==true){
         userProfileData.value=userProfileModel;
         firstNameController.text=userProfileData.value.data?.fname??"";
@@ -177,6 +180,7 @@ class ProfileControllers extends GetxController{
         zoomController.text=userProfileData.value.data?.zoom??"";
         snapshotController.text=userProfileData.value.data?.snapchat??"";
         selectedResumeName.value=userProfileData.value.data?.resumeName??"";
+        profileDescription.text=userProfileData.value.data?.profileDescription??"";
         ///Set Data in DropDown
         selectedCompany.value={
           "id": userProfileData.value.data?.stillWorkingCompany.toString() ?? "0",
@@ -321,6 +325,7 @@ class ProfileControllers extends GetxController{
         "resume":resumeFile??"",
         "fname":firstNameController.text??'',
         "lname":lastNameController.text??'',
+        "type":(selectedIndex.value+1).toString(),
         "work_status":workStatus.value??"",
         "email":emailController.text??"",
         "alternative_email":alternativeEmailController.text??"",
@@ -328,6 +333,7 @@ class ProfileControllers extends GetxController{
         "alternative_phone":alternativePhoneController.text??"",
         "city":residingCity.value??'',
         "display_type":"",
+        'gender':"1",
         "current_position":currentPosition.value??'',
         "current_company":myCurrentCompany.value??'',
         "linkdin":linkedInController.text??'',
@@ -339,7 +345,7 @@ class ProfileControllers extends GetxController{
         "twitter":twitterController.text??'',
         "zoom":zoomController.text??'',
         "snapchat":snapshotController.text??'',
-        "profile_description":"",
+        "profile_description":profileDescription.text??"",
         "accomodation":accomodationType.value??'',
         "present_address":presentController.text??'',
         "same_address" : isSameAsCheck.value,
@@ -351,7 +357,20 @@ class ProfileControllers extends GetxController{
       SaveUserProfileModel saveUserProfileModel = await ApiProvider.baseWithToken().saveUserProfile(formData);
       if(saveUserProfileModel.status==true){
         progressDialog.dismissLoader();
-        Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+        if(selectedIndex.value==0){
+          selectedIndex.value=1;
+        }else if(selectedIndex.value==1){
+          selectedIndex.value=2;
+        }else if(selectedIndex.value==2){
+          selectedIndex.value=3;
+        }else if(selectedIndex.value==3){
+          Get.back();
+          final BottomNavBarController controller = Get.find<BottomNavBarController>();
+          controller.bottomNavCurrentIndex.value=4;
+        }
+
+
+
 
       }else{
         showToast(saveUserProfileModel.messages??"");
