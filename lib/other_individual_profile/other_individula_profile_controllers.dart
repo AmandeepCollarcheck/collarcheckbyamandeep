@@ -25,10 +25,13 @@ import '../utills/common_widget/progress.dart';
 
 class  OtherIndividualProfileControllers extends GetxController with GetTickerProviderStateMixin{
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final scrollController = ScrollController();
+  final scrollControllerForTabSelection = ScrollController();
   late ProgressDialog progressDialog=ProgressDialog() ;
   var userProfileData=UserProfileModel().obs;
   var searchController =TextEditingController();
   Rx isSearchActive=false.obs;
+  var selectedIndex=0.obs;
   late final TabController tabController;
   var employmentHistoryData=EmploymentHistoryListModel().obs;
   var educationListData=EducationListDataModel().obs;
@@ -42,10 +45,16 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   var slugDataId="".obs;
   var isEmployeeProfileDate=false.obs;
   var userIdData="".obs;
+  final GlobalKey headerKey = GlobalKey();
+  final GlobalKey bodyKey = GlobalKey();
+  final isScrollEnabled = false.obs;
+  final List<GlobalKey> sectionKeys = List.generate(9, (_) => GlobalKey());
   var isOtherUserProfileCheck=false;
 
+
+
   var listTabLabel = [
-    appHome, appEmploymentHistory, appPortfolio,appEducation
+    appHome, appEmploymentHistory, appPortfolio,appEducation,appCertifications,appSkills, appLanguage,appCompany,appSimilarProfiles
   ].obs;
 
   @override
@@ -57,9 +66,19 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
       isEmployeeProfileDate.value=data[isEmployeeProfile]??false;
     }
     tabController = TabController(length: 4, vsync: this);
+    scrollControllerForTabSelection.addListener(_onScroll);
+    scrollController.addListener(() {
+      if (!isScrollEnabled.value) _handleNestedScroll();
+    });
+
+    scrollControllerForTabSelection.addListener(() {
+      if (isScrollEnabled.value) _handleNestedScroll();
+    });
+
+
     // TODO: implement onInit
+    //IndividualUserProfileModel
     Future.delayed(Duration(milliseconds: 500), ()async {
-      userIdData.value=await readStorageData(key: id);
       getProfileApiCall();
     });
     Future.delayed(Duration(milliseconds: 500), ()async {
@@ -91,7 +110,6 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
 
 
 
-
   backButton(context){
     if(screenNameData.value==searchScreen){
       Get.offNamed(AppRoutes.search);
@@ -105,6 +123,8 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
       Get.offNamed(AppRoutes.bottomNavBar,);
     }
   }
+
+
 
 
   Color getRandomColor() {
@@ -127,9 +147,12 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
       if(userProfileModel.status==true){
         userProfileData.value=userProfileModel;
         var profileData=userProfileData.value.data?.employementHistoryNew??[];
-        await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
-        await writeStorageData(key: profileImage, value: userProfileData.value.data?.profile??"");
+        if(profileData.isNotEmpty){
+          await writeStorageData(key: profileDesignationData, value: profileData[0].lists?[0].designation.toString()??"");
+          await writeStorageData(key: profileImage, value: userProfileData.value.data?.profile??"");
 
+        }
+        userIdData.value=await readStorageData(key: id);
 
         ///Handle Other user check profile
         String loginUserid=await readStorageData(key: 'userId');
@@ -139,6 +162,8 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
         }else{
           isOtherUserProfileCheck=true;
         }
+
+
 
       }else{
         showToast(somethingWentWrong);
@@ -337,6 +362,67 @@ class  OtherIndividualProfileControllers extends GetxController with GetTickerPr
   }
 
 
+  void _onScroll() {
+
+    for (int i = 0; i < sectionKeys.length; i++) {
+      final keyContext = sectionKeys[i].currentContext;
+      if (keyContext != null) {
+        final box = keyContext.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero, ancestor: null).dy;
+
+        if (position > 0 && position < 200) { // 200 means "near top"
+          if (selectedIndex.value != i) {
+            selectedIndex.value = i;
+          }
+          break;
+        }
+      }
+
+    }
+
+  }
 
 
+  @override
+  void onClose() {
+    scrollController.dispose();
+    scrollControllerForTabSelection.dispose();
+    super.onClose();
+  }
+  void scrollToSection(int index) {
+    final context = sectionKeys[index].currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+
+
+
+  _handleNestedScroll() {
+    if(isScrollEnabled.value==false){
+      final offset = scrollController.offset;
+      final RenderBox? box = headerKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null) {
+        final headerHeight = box.size.height;
+
+        if (offset >= headerHeight && !isScrollEnabled.value) {
+          isScrollEnabled.value = true;
+        }
+      }
+    }else{
+      final offset = scrollControllerForTabSelection.offset;
+      final RenderBox? box = bodyKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null) {
+        if (offset <= 0.0 ) {
+          isScrollEnabled.value = false;
+        }
+      }
+    }
+
+  }
 }

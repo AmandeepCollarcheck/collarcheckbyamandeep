@@ -368,10 +368,6 @@ class ProfileControllers extends GetxController{
           final BottomNavBarController controller = Get.find<BottomNavBarController>();
           controller.bottomNavCurrentIndex.value=4;
         }
-
-
-
-
       }else{
         showToast(saveUserProfileModel.messages??"");
       }

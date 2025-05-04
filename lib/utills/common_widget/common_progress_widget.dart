@@ -103,7 +103,7 @@ import 'common_methods.dart';
                       ),
                       experienceDetails[index].description!=null?SizedBox(height: 3,):SizedBox(height: 0,),
                       experienceDetails[index].description!=null?SizedBox(
-                        width: MediaQuery.of(context).size.width*0.62,
+                        width: MediaQuery.of(context).size.width*0.82,
                           child: Text(experienceDetails[index].description??"",style: AppTextStyles.font14W500.copyWith(color: appGreyBlackColor),)):Container(),
                       ///Salary Package
                       experienceDetails[index].description!=null?SizedBox(height: 5,):SizedBox(height: 0,),

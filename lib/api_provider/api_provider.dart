@@ -274,6 +274,8 @@ class ApiProvider{
 
   Future userProfile({required String userName}) async {
     try {
+      print("slugData#${"$strUserProfile/$userName"}");
+      print("Slugdataaattta${"$strUserProfile/$userName"}");
       Response response = await _dio.get("$strUserProfile/$userName");
       Map<String, dynamic> jsonData;
       if (response.data is String) {
