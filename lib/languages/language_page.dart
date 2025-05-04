@@ -134,19 +134,19 @@ class LanguagePage extends GetView<LanguageControllers>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         SizedBox(
-                            width:MediaQuery.of(context).size.width*0.2,
+                            width:MediaQuery.of(context).size.width*0.38,
                             child: Text(languageList[index].languageName??"",style: AppTextStyles.font14.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                                padding: EdgeInsets.only(left: 10),
+                                padding: EdgeInsets.only(left: 8),
                                 width:MediaQuery.of(context).size.width*0.3,
                                 child: Text(appVerbal,style: AppTextStyles.font12.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
                             Row(
                               children: <Widget>[
                                 LinearPercentIndicator(
-                                  width: MediaQuery.of(context).size.width*0.45,
+                                  width:MediaQuery.of(context).size.width*0.3,
                                   lineHeight: 4.0,
                                   percent:  handleIndecaterPercentage(devident: languageList[index].verbal??'', devider: progressBarMaxValue??''),
                                   barRadius: Radius.circular(10),
@@ -159,13 +159,13 @@ class LanguagePage extends GetView<LanguageControllers>{
                             ),
                             SizedBox(height: 10,),
                             Container(
-                                padding: EdgeInsets.only(left: 10),
+                                padding: EdgeInsets.only(left: 8),
                                 width:MediaQuery.of(context).size.width*0.3,
                                 child: Text(appWritten,style: AppTextStyles.font12.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
                             Row(
                               children: <Widget>[
                                 LinearPercentIndicator(
-                                  width: MediaQuery.of(context).size.width*0.45,
+                                  width:MediaQuery.of(context).size.width*0.3,
                                   lineHeight: 4.0,
                                   percent:handleIndecaterPercentage(devident: languageList[index].written??'', devider: progressBarMaxValue??''),
                                   barRadius: Radius.circular(10),

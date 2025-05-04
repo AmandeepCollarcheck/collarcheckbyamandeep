@@ -844,33 +844,60 @@ class JobDetailesPage extends GetView<JobDetailsControllers>{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(appRequiredSkills,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
-              SizedBox(height: 20,),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 150, // Adjust this value based on max text size
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  mainAxisExtent: 26, // Fixed height
-                ),
-                itemCount: skills.length ?? 0,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: appWhiteColor,
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: appPrimaryColor, width: 1),
-                    ),
-                    child: Text(
-                      skills[index].name ?? '',
-                      style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
+              SizedBox(height: 10,),
+              Wrap(
+                spacing: 10, // Horizontal spacing between items
+                runSpacing: 10, // Vertical spacing between items
+                children: skills.map((skill) {
+                  return IntrinsicWidth( // Ensures the width adjusts based on content
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: appWhiteColor,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: appPrimaryColor, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // Ensures it wraps around content
+                        children: <Widget>[
+                          Text(
+                           skill.name??"",
+                            style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
+                          ),
+
+                        ],
+                      ),
                     ),
                   );
-                },
+                }).toList(),
               ),
+              // GridView.builder(k
+              //   shrinkWrap: true,
+              //   physics: NeverScrollableScrollPhysics(),
+              //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              //     maxCrossAxisExtent: 150, // Adjust this value based on max text size
+              //     crossAxisSpacing: 8,
+              //     mainAxisSpacing: 8,
+              //     mainAxisExtent: 26, // Fixed height
+              //   ),
+              //   itemCount: skills.length ?? 0,
+              //   itemBuilder: (context, index) {
+              //     return Container(
+              //       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+              //       alignment: Alignment.center,
+              //       decoration: BoxDecoration(
+              //         color: appWhiteColor,
+              //         borderRadius: BorderRadius.circular(5),
+              //         border: Border.all(color: appPrimaryColor, width: 1),
+              //       ),
+              //       child: Text("sjkfhdhfhskjjkfdsdhfsjfksfd--",
+              //         //skills[index].name ?? '',
+              //         style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
+              //       ),
+              //     );
+              //   },
+              // ),
               // SizedBox(height: 10,),
               // _showSimilarJobs(context),
               SizedBox(height: 10,),

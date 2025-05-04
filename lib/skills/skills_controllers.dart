@@ -85,6 +85,7 @@ class SkillControllers extends GetxController{
       if(addSkillsData.status==true){
         addSkillsModelData.value=addSkillsData;
         progressDialog.dismissLoader();
+
         getAllSkills();
 
       }else{

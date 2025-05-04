@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../utills/app_route.dart';
 import '../../utills/common_widget/common_appbar.dart';
 import '../../utills/common_widget/progress.dart';
 import '../../utills/image_path.dart';
@@ -33,10 +34,14 @@ class ChatPage extends GetView<ChatControllers>{
                   onClick: (){
                     controller.backButtonClick(context);
                   },
+                  isChatMessageProfileShow: true,
                   leadingIcon: appBackSvgIcon,
                   screenName: controller.appBarName.value??"",
                   onShareClick: (){},
                   onFilterClick: (){},
+                  chatScreenProfileOptionClick:(){
+                    _openPopupMenuButton(context);
+                  },
                   actionButton: '',
                   isProfileImageShow: true,
                   profileImageData:controller.profileImage.value??"",
@@ -197,6 +202,39 @@ class ChatPage extends GetView<ChatControllers>{
     if (url.endsWith('.mp4') || url.endsWith('.mov') || url.endsWith('.avi')) return 'video';
     return 'unknown';
   }
+
+  void _openPopupMenuButton(BuildContext context) {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final Size screenSize = overlay.size;
+    showMenu<String>(
+      context: context,
+        position: RelativeRect.fromLTRB(
+        screenSize.width - 10, // 10px from right
+        kToolbarHeight + 30,   // just below AppBar
+        0,
+        0,),
+      items: [
+        PopupMenuItem<String>(
+          value: 'option1',
+          child: Text(appViewProfile,style: AppTextStyles.font14W500.copyWith(color: appBlackColor),),
+        ),
+        PopupMenuItem<String>(
+          value: 'option2',
+          child: Text(appFollow,style: AppTextStyles.font14W500.copyWith(color: appBlackColor),),
+        ),
+      ],
+    ).then((value) {
+      if (value != null) {
+        if(value=="option1"){
+          //Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {slugId:similarProfile[index].slug??"",screenName:profileDetails,isEmployeeProfile:true});
+        }else{
+
+        }
+      }
+    });
+  }
+
+
 
 
 }

@@ -1,3 +1,4 @@
+import 'package:collarchek/utills/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
@@ -190,6 +191,7 @@ class AppTheme {
   static ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
     fontFamily: AppTextStyles.fontFamily,
+    popupMenuTheme:PopupMenuThemeData(color: appWhiteColor),
     textTheme: TextTheme(
       bodyLarge: AppTextStyles.regular,
       bodyMedium: AppTextStyles.medium,

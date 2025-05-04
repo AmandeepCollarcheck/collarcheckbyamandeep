@@ -135,7 +135,7 @@ Widget commonSearchAppBar(
   );
 }
 
-commonActiveSearchBar({required  Function onClick,required  Function onShareClick,required  Function onFilterClick,required String leadingIcon,required String screenName,bool isFilterShow=false,bool isScreenNameShow=true,bool isShowShare=false,required String actionButton,bool isProfileImageShow=false,String profileImageData="",String initialName="", Color backGroundColor=appWhiteColor}){
+commonActiveSearchBar({required  Function onClick,required  Function onShareClick,required  Function onFilterClick,required String leadingIcon,required String screenName,bool isFilterShow=false,bool isScreenNameShow=true,bool isShowShare=false,required String actionButton,bool isProfileImageShow=false,String profileImageData="",String initialName="", Color backGroundColor=appWhiteColor,isChatMessageProfileShow=false,Function()? chatScreenProfileOptionClick}){
   return Container(
     padding: EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 20),
     color: backGroundColor,
@@ -191,6 +191,7 @@ commonActiveSearchBar({required  Function onClick,required  Function onShareClic
           ],
         ),
 
+
         isFilterShow?GestureDetector(
           onTap: (){
             onFilterClick();
@@ -205,9 +206,12 @@ commonActiveSearchBar({required  Function onClick,required  Function onShareClic
             onShareClick();
           },
           child: SvgPicture.asset(appShareAndroid,height: 24,width: 24,),
-        ):Container(
-          width: 0,
-        )
+        ):isChatMessageProfileShow?GestureDetector(
+          onTap: (){
+            chatScreenProfileOptionClick!();
+          },
+          child: SvgPicture.asset(appMessageProfileSvgIcon,height: 24,width: 24,),
+        ):Container(),
 
       ],
     ),

@@ -377,11 +377,43 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    SvgPicture.asset(appStarIcon,height: 16,width: 16,),
-                    SizedBox(width: 5,),
-                    Text("${formatRating(ratings)} $appStar | $review ${review=="0"||review=="1"?appReview:appReviews}",style: AppTextStyles.font12w500.copyWith(color: appBlackColor)),
+                    // Star + rating
+                    ratings.isNotEmpty&&ratings!="0.0"&&ratings!="0"?Row(
+                      children: <Widget>[
+                        SvgPicture.asset(appStarIcon, height: 16, width: 16),
+                        SizedBox(width: 5),
+                        Text(
+                          formatRating(ratings),
+                          style: AppTextStyles.font12w500.copyWith(color: appBlackColor),
+                        ),
+                        SizedBox(width: 5),
+                      ],
+                    ):Container(),
+
+                    // Separator only when both available
+                    ( ratings.isNotEmpty&&ratings!="0.0"&&ratings!="0")&&(review.isNotEmpty&&review!="0.0"&&review!="0")?Text(
+                      "|",
+                      style: AppTextStyles.font12w500.copyWith(color: appBlackColor),
+                    ):Container(),
+                    SizedBox(width: 5),
+
+                    // Review count
+                    review.isNotEmpty&&review!="0.0"&&review!="0"?Text(
+                      "$review ${review == "1" ? appReview : appReviews}",
+                      style: AppTextStyles.font12w500.copyWith(color: appBlackColor),
+                    ):Container(),
                   ],
-                ),
+                ) ,
+
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   children: <Widget>[
+                //     SvgPicture.asset(appStarIcon,height: 16,width: 16,),
+                //     SizedBox(width: 5,),
+                //     Text("${formatRating(ratings)} $appStar | $review ${review=="0"||review=="1"?appReview:appReviews}",style: AppTextStyles.font12w500.copyWith(color: appBlackColor)),
+                //   ],
+                // ),
                ///Followers
                 controller.userProfileData.value.data?.followData?.follower!=0?SizedBox(height: 5,):SizedBox(height: 0,),
                 Obx((){
@@ -1067,12 +1099,12 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           SizedBox(
-                              width:MediaQuery.of(context).size.width*0.2,
+                              width:MediaQuery.of(context).size.width*0.45,
                               child: Text(skillsData[index].skill??"",style: AppTextStyles.font14.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
                           Row(
                             children: <Widget>[
                               LinearPercentIndicator(
-                                width: MediaQuery.of(context).size.width*0.5,
+                                width: MediaQuery.of(context).size.width*0.3,
                                 lineHeight: 4.0,
                                 percent: handleIndecaterPercentage(devident: skillsData[index].rating??"", devider: progressBarMaxValue),
                                 barRadius: Radius.circular(10),
@@ -1162,7 +1194,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           SizedBox(
-                              width:MediaQuery.of(context).size.width*0.2,
+                              width:MediaQuery.of(context).size.width*0.38,
                               child: Text(languageData[index].languageName??'',style: AppTextStyles.font14.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1174,7 +1206,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                               Row(
                                 children: <Widget>[
                                   LinearPercentIndicator(
-                                    width: MediaQuery.of(context).size.width*0.5,
+                                    width: MediaQuery.of(context).size.width*0.3,
                                     lineHeight: 4.0,
                                     percent: handleIndecaterPercentage(devident: languageData[index].verbal??'', devider: progressBarMaxValue??''),
                                     barRadius: Radius.circular(10),
@@ -1193,7 +1225,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                               Row(
                                 children: <Widget>[
                                   LinearPercentIndicator(
-                                    width: MediaQuery.of(context).size.width*0.5,
+                                    width: MediaQuery.of(context).size.width*0.3,
                                     lineHeight: 4.0,
                                     percent: handleIndecaterPercentage(devident: languageData[index].written??'', devider:progressBarMaxValue??''),
                                     barRadius: Radius.circular(10),

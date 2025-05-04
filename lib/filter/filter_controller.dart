@@ -74,7 +74,13 @@ class FilterController extends GetxController with GetTickerProviderStateMixin {
 
   void clickFilterClose() {
     if(screenNameData.value==recommendedScreen){
-      Get.offNamed(AppRoutes.recommendJob);
+      Get.offNamed(AppRoutes.recommendJob,arguments: {screenName:dashboard});
+    }else if(screenNameData.value==topCompanies){
+      Get.offNamed(AppRoutes.topCompanies,arguments: {screenName:dashboard});
+    }else if(screenNameData.value==searchScreen){
+      Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
     }
 
   }

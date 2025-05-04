@@ -95,11 +95,9 @@ class OtpPage extends GetView<OtpController>{
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               Obx((){
-                                print(">>>>>>");
-                                print(controller.isOtpWrong.value);
                                 return controller.isOtpWrong.value?Text(appWrongOtpEntered,style: AppTextStyles.font16W600.copyWith(color: appRedColor),):Container();
                               }),
-
+                              controller.isOtpWrong.value?SizedBox(height: 20,):SizedBox(height: 0,),
                               Obx(()=>RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(

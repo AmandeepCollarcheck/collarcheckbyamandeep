@@ -89,6 +89,7 @@ class OtpController extends GetxController{
             progressDialog.dismissLoader();
             final canVibrate = await Haptics.canVibrate();
             await Haptics.vibrate(HapticsType.error);
+            isOtpWrong.value=true;
             showToast(sendOtp.message??"");
           }
 

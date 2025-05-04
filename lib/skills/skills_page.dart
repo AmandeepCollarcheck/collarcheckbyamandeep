@@ -113,6 +113,7 @@ class SkilldPage extends GetView<SkillControllers>{
           runSpacing: 10,
           children: List.generate(skillsList.length??0, (index){
             return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Row(
@@ -120,12 +121,12 @@ class SkilldPage extends GetView<SkillControllers>{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     SizedBox(
-                        width:MediaQuery.of(context).size.width*0.2,
+                        width:MediaQuery.of(context).size.width*0.45,
                         child: Text(skillsList[index].skill??"",style: AppTextStyles.font14.copyWith(color: appBlackColor),overflow: TextOverflow.clip,maxLines: 3,)),
                     Row(
                       children: <Widget>[
                         LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width*0.5,
+                          width: MediaQuery.of(context).size.width*0.3,
                           lineHeight: 4.0,
                           percent: handleIndecaterPercentage(devident: skillsList[index].rating??"", devider: progressBarMaxValue),
                           barRadius: Radius.circular(10),

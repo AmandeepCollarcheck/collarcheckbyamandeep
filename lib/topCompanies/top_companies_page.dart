@@ -115,6 +115,10 @@ class TopCompaniesPage extends GetView<TopCompaniesController>{
                                           isProfileVerified: false,
                                           cardWidth: MediaQuery.of(context).size.width*0.92,
                                           jobTitle: '',
+                                          onProfileClick: (){
+                                            Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:topCompaniesScreen,slugId:allTopCompanies[index]['slug']??"",isEmployeeProfile:true});
+
+                                          },
                                           onClick: ()async{
                                             String userIdData=await readStorageData(key: id) ??"";
                                             controller.companyFollowApiCall(context, companyId: allTopCompanies[index]['id']??"", userId: userIdData??"",);

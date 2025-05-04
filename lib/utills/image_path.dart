@@ -155,3 +155,4 @@ const String appCameraIconSvg = "${svgIconBasePath}camera_icon.svg";
 const String appCCIDSvg = "${svgIconBasePath}ccid_icon.svg";
 const String appEmployeeRequestSvgIcon = "${svgIconBasePath}employeement_request_svg.svg";
 const String appCloseIconWithCircularBorderSvgIcon = "${svgIconBasePath}close_icon_with_circlur_border.svg";
+const String appMessageProfileSvgIcon = "${svgIconBasePath}message_profile.svg";

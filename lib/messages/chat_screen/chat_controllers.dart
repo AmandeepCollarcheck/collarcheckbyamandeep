@@ -26,11 +26,13 @@ class ChatControllers extends GetxController{
   var argumentTypeDataDetails="".obs;
   var messagesData = <String>[].obs; // Observable list of messages
   var slugDataId="".obs;
+  final GlobalKey menuKey = GlobalKey();
 
 
 
 
- @override
+
+  @override
   void onInit() {
     // TODO: implement onInit
    Map<String,dynamic> data=Get.arguments??{};

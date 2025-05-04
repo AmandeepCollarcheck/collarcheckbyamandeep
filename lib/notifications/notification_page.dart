@@ -49,10 +49,6 @@ class NotificationPage extends GetView<NotificationControllers>{
                   child: ListView.separated(
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context,int index){
-                        return Container(color: notificationData[index].isViewed=="0"?appWhiteColor:appPrimaryBackgroundColor,height: 1,);
-                      },
-                      itemCount: notificationData.length??0,
-                      separatorBuilder:  (BuildContext context,int index){
                         return Container(
                           color: notificationData[index].isViewed=="0"?appPrimaryBackgroundColor:appWhiteColor,
                           padding: EdgeInsets.only(left: 20,right: 10,top: 5,bottom: 5,),
@@ -78,6 +74,11 @@ class NotificationPage extends GetView<NotificationControllers>{
                             ],
                           ),
                         );
+
+                      },
+                      itemCount: notificationData.length??0,
+                      separatorBuilder:  (BuildContext context,int index){
+                        return Container(color: notificationData[index].isViewed=="0"?appWhiteColor:appPrimaryBackgroundColor,height: 1,);
                       }
 
                   ),
