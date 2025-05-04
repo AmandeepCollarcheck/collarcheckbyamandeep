@@ -171,6 +171,16 @@ class FilterController extends GetxController with GetTickerProviderStateMixin {
             argumentTypeData:isArgumentedData.value,
             topCompanyScreenType:screenTypeData.value
           });
+    }else if(screenNameData.value==searchScreen){
+      Get.offNamed(
+          AppRoutes.search,
+          arguments: {
+            selectedFilterTypeDataKey:filterType,
+            selectedFilterTypeId:filterTypeId,
+            isFilter:true,
+            argumentTypeData:isArgumentedData.value,
+            topCompanyScreenType:screenTypeData.value
+          });
     }
   }
 

@@ -140,7 +140,7 @@ class JobsPage extends GetView<JobControllers>{
                     children: List.generate(jobList.length, (index) {
                       return jobList.isNotEmpty?commonCardWidget(
                         context,
-                        cardWidth: MediaQuery.of(context).size.width,
+                        cardWidth: MediaQuery.of(context).size.width*0.92,
                         onClick: () {
                           controller.openJobDetails(jobTitle: jobList[index].slug ??"",);
                         },

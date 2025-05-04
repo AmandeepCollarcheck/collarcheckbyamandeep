@@ -1621,6 +1621,66 @@ class ApiProvider{
 
 
 
+  Future filteredSearchData({
+    String? jobType,
+    int limit = limit,
+    int offset = offset,
+    int? department,
+    int? city,
+    int? state,
+    int? country,
+    int? skill,
+    String? keyword,
+    int? company,
+    int? designation,
+    int? experience,
+    int? jobMode,
+    int? roleType,
+    int? industry,
+    int? salary,
+    int? urgent,
+    int? vacancy,
+    int? postedDate,
+  }) async {
+
+    try {
+      Map<String, dynamic> queryParams = {
+        'limit': limit.toString(),
+        'offset': offset.toString(),
+        'type': jobType.toString(),
+        if (department != null) 'department': department.toString(),
+        if (city != null) 'city': city.toString(),
+        if (state != null) 'state': state.toString(),
+        if (country != null) 'country': country.toString(),
+        if (skill != null) 'skill': skill.toString(),
+        if (keyword != null && keyword.isNotEmpty) 'keyword': keyword.toString(),
+        if (company != null) 'company': company.toString(),
+        if (designation != null) 'designation': designation.toString(),
+        if (experience != null) 'experience': experience.toString(),
+        if (jobMode != null) 'job_mode': jobMode.toString(),
+        if (roleType != null) 'role_type': roleType.toString(),
+        if (industry != null) 'industry': industry.toString(),
+        if (salary != null) 'salary': salary.toString(),
+        if (urgent != null) 'urgent': urgent.toString(),
+        if (vacancy != null) 'vacancy': vacancy.toString(),
+        if (postedDate != null) 'posted_date': postedDate.toString(),
+      };
+      queryParams.removeWhere((key, value) => value == null);
+      String queryString = Uri(queryParameters: queryParams).query;
+      Response response = await _dio.get("$strTopCompanies?$queryString");
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return SearchDataListModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
+
+
 
 
 
