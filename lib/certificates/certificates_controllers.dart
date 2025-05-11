@@ -38,6 +38,7 @@ class CertificatesControllers extends GetxController{
   Rx isHeigestQuilification =false.obs;
   var portfolioTitle="Select Portfolio".obs;
   var selectedImageFromTHeGallery="".obs;
+  var selectedFileName="".obs;
 
   var screenNameData="".obs;
   var isEditData=false.obs;
@@ -144,8 +145,8 @@ class CertificatesControllers extends GetxController{
         "course":selectedCourseIdName.value??'',
         "course_type":selectedCourseTypeData.value??"",
         "starting_date":convertStringDateTime(date: selectedJoiningDate.value??''),
-        "ending_date":convertStringDateTime(date:selectedEmployedTill.value??''),
-        "ongoing":isPurcuing.value??"",
+        "ending_date":isPurcuing.value?"":convertStringDateTime(date:selectedEmployedTill.value??''),
+        "ongoing":isPurcuing.value,
         "document[0]":documentFile??""//convertFileToMultipart(selectedImageFromTHeGallery.value??"")//convertFileToMultipart(selectedImageFromTHeGallery.value??""),
 
 

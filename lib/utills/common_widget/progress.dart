@@ -229,7 +229,7 @@ String getInitialsWithSpace({required String? input}) {
     return words[0][0].toUpperCase(); // Return single initial if only one word
   }
 
-  return '${words[0][0]} ${words[1][0]}'.toUpperCase();
+  return '${words[0][0]}${words[1][0]}'.toUpperCase();
 }
 
 
@@ -491,32 +491,40 @@ commonRattingBar(context,{int itemCount=5,required double initialRating,required
 
 
 
-Future<void> getPortfolioTypeFromGallery(context,{required Function(String) onFilePickedData,required String portfolioType})async{
-  int maxFileSize = 25 * 1024 * 1024;
+Future<void> getPortfolioTypeFromGallery(
+    context, {
+      required Function(String fileName, String filePath) onFilePickedData,
+      required String portfolioType,
+    }) async {
+  int maxFileSize = 5 * 1024 * 1024;
+
   try {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: portfolioType=="Upload Image"?FileType.image:portfolioType=="Upload Video"?FileType.video:FileType.custom,
+      type: portfolioType == "Upload Image"
+          ? FileType.custom
+          : portfolioType == "Upload Video"
+          ? FileType.video
+          : FileType.custom,
+      allowedExtensions: portfolioType == "Upload Image"
+          ? ['pdf', 'jpeg', 'jpg', 'png']
+          : null,
     );
 
     if (result != null) {
       PlatformFile file = result.files.first;
 
-      // Check file size limit
       if (file.size > maxFileSize) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("File size should be less than 25MB")),
+          SnackBar(content: Text(appFileSizeShouldBeLessThan),backgroundColor: appPrimaryColor,),
         );
         return;
       }
 
-      onFilePickedData(file.path.toString());
-    } else {
-      // User canceled file picker
+      onFilePickedData(file.name.toString(),file.path.toString());
     }
-  }catch (e){
-    print("Pdf not picked $e");
+  } catch (e) {
+    print("File not picked: $e");
   }
-
 }
 
 

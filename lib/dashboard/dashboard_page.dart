@@ -307,7 +307,7 @@ class DashboardPage extends GetView<DashboardController>{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildProfileText(profileFName, profileLName),
-              _buildProfileImage(profileLImage, profileLPercentage, profilePercentageText.toString()),
+              _buildProfileImage(profileLImage,"$profileFName $profileLName", profileLPercentage, profilePercentageText.toString()),
             ],
           ),
         ),
@@ -337,7 +337,7 @@ class DashboardPage extends GetView<DashboardController>{
   }
 
 // Circular Profile Image with Progress Indicator
-  Widget _buildProfileImage(String imageUrl, double percentage, String percentageText,{double height=56.0,double width=56,double radius=30.0}) {
+  Widget _buildProfileImage(String imageUrl,String initialName, double percentage, String percentageText,{double height=56.0,double width=56,double radius=30.0}) {
     return Stack(
       clipBehavior: Clip.none,
       fit: StackFit.loose,
@@ -349,9 +349,10 @@ class DashboardPage extends GetView<DashboardController>{
           percent: percentage,
           center: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: imageUrl.isNotEmpty
-                ? Image.network(imageUrl, fit: BoxFit.cover, height: height, width: width)
-                : Image.asset(appDummyProfile, fit: BoxFit.cover, height: height, width: width),
+            child: commonImageWidget(image: imageUrl, initialName: initialName, height: height, width: width, borderRadius: 100,isBorderDisable: true),
+            // child: imageUrl.isNotEmpty
+            //     ? Image.network(imageUrl, fit: BoxFit.cover, height: height, width: width)
+            //     : Image.asset(appDummyProfile, fit: BoxFit.cover, height: height, width: width),
           ),
           progressColor: Colors.green,
         ),
@@ -487,7 +488,7 @@ class DashboardPage extends GetView<DashboardController>{
                     fit: StackFit.loose,
                     children: <Widget>[
                       _buildProfileImage(
-                          profileLImage, profileLPercentage,
+                          profileLImage, "$profileFName $profileLName",profileLPercentage,
                           profilePercentageText.toString(),
                           height: 66,
                           width: 66,

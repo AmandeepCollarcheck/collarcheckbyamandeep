@@ -21,6 +21,7 @@ import 'package:collarchek/profiles/profile_bindings.dart';
 import 'package:collarchek/profiles/profile_dart.dart';
 import 'package:collarchek/recommendJobs/recommend_job.dart';
 import 'package:collarchek/utills/app_strings.dart';
+import 'package:collarchek/utills/common_widget/common_image_widget.dart';
 import 'package:collarchek/utills/image_path.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +176,8 @@ class BottomNavBarPage extends GetView<BottomNavBarController>{
                     center: SizedBox(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: controller.profileImageData.value.isNotEmpty?Image.network(controller.profileImageData.value??"",fit: BoxFit.cover,height: 25,width: 25,):Image.asset(appDummyProfile,fit: BoxFit.cover,height: 25,width: 25,),
+                       child: commonImageWidget(image: controller.profileImageData.value??"", initialName: controller.profileName.value??"", height: 25.0, width: 25.0, borderRadius: 100,isBorderDisable: true),
+                       // child: controller.profileImageData.value.isNotEmpty?Image.network(controller.profileImageData.value??"",fit: BoxFit.cover,height: 25,width: 25,):Image.asset(appDummyProfile,fit: BoxFit.cover,height: 25,width: 25,),
                       ),
                     ),
                     progressColor: Colors.green,

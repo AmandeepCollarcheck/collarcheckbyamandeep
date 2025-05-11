@@ -20,6 +20,7 @@ Widget commonTextField({
   VoidCallback? onTap,
   TextInputType keyboardType = TextInputType.text,
   FormFieldValidator<String>? validator,
+  List<TextInputFormatter>? inputFormatter,
   TextInputAction textInputAction = TextInputAction.done,
   Function()? onSearchClick,
   Function(String)? onChanged
@@ -35,7 +36,8 @@ Widget commonTextField({
     onTap: onTap,
     onChanged: onChanged,
     style: AppTextStyles.font16.copyWith(color: appBlackColor),
-    inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'^\s+')),],
+    inputFormatters: inputFormatter ?? [FilteringTextInputFormatter.deny(RegExp(r'^\s+'))],
+
     textCapitalization: keyboardType==TextInputType.emailAddress?TextCapitalization.none: TextCapitalization.sentences,
     decoration: InputDecoration(
       fillColor: appWhiteColor,

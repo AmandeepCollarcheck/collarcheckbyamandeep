@@ -146,15 +146,21 @@ class CertificatesPage extends GetView<CertificatesControllers>{
                                           controller: controller.employedTillControllers,
                                           hintText: appSelectDesignation,
                                           onTap: (){
-                                            selectDate(
-                                                context,
-                                                isEndDate: true,
-                                                firstDateData: convertStringDateTime(date: controller.joiningDateControllers.text??""),
-                                                onSelectedDate: (String employedTill) {
-                                                  controller.employedTillControllers.text=employedTill;
-                                                  controller.selectedEmployedTill.value=employedTill;
+                                            if(controller.isPurcuing.value){
+                                              showToast(appThisCertificateIsMarkedAsOngoing);
 
-                                                });
+                                            }else{
+                                              selectDate(
+                                                  context,
+                                                  isEndDate: true,
+                                                  firstDateData: convertStringDateTime(date: controller.joiningDateControllers.text??""),
+                                                  onSelectedDate: (String employedTill) {
+                                                    controller.employedTillControllers.text=employedTill;
+                                                    controller.selectedEmployedTill.value=employedTill;
+
+                                                  });
+                                            }
+
                                           }
                                       ),
                                     ],
@@ -206,9 +212,10 @@ class CertificatesPage extends GetView<CertificatesControllers>{
                             GestureDetector(
                               onTap: (){
 
-                                getPortfolioTypeFromGallery(context,onFilePickedData: (String pickedData) {
-                                  if(pickedData!=null){
-                                    controller.selectedImageFromTHeGallery.value=pickedData;
+                                getPortfolioTypeFromGallery(context,onFilePickedData: (String fileName,String filePath) {
+                                  if(filePath!=null){
+                                    controller.selectedImageFromTHeGallery.value=filePath;
+                                    controller.selectedFileName.value=fileName;
                                   }
                                 }, portfolioType: 'Upload Image', );
                               },
@@ -248,11 +255,12 @@ class CertificatesPage extends GetView<CertificatesControllers>{
                                     Obx((){
                                       return SizedBox(
                                           width: MediaQuery.of(context).size.width*0.7,
-                                          child: Text(controller.selectedImageFromTHeGallery.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                          child: Text(controller.selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                                     }),
                                     GestureDetector(
                                         onTap:(){
                                           controller.selectedImageFromTHeGallery.value="";
+                                          controller.selectedFileName.value="";
                                         },
                                         child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                                   ],

@@ -55,14 +55,18 @@ class SkilldPage extends GetView<SkillControllers>{
                           SizedBox(height: 5,),
                           Obx((){
                             var skills = List<DepartmentListElement>.from(controller.designationListData.value.data?.skillList ?? []);
-                            skills.insert(0, DepartmentListElement(id: "0", name: "Select"));
                             return skills!=null&&skills.isNotEmpty?customDropDown(
                                 hintText: appSelectCompany,
-                                item: skills.map((data)=>{'id':data.id,'name':data.name}).toList()??[],
-                                selectedValue: {'id':skills[0].id,'name':skills[0].name},
+                                item: [{"id":"0","name": appSelectSkill},
+                                ...skills.map((data)=>{'id':data.id,'name':data.name}).toList()??[]],
+                                selectedValue: skills.any((datum)=>datum.id==controller.selectedSkills["id"])?controller.selectedSkills:{"id":"0","name": appSelectSkill},
                                 onChanged: (Map<String,dynamic>? selectedData){
                                   if(selectedData!=null){
                                     controller.skillsId.value=selectedData['id'];
+                                    controller.selectedSkills.value={
+                                      "id": selectedData?['id'].toString() ?? "0",
+                                      "name": selectedData?['name'].toString() ?? appSelectSkill
+                                    };
                                   }
                                 },
                                 icon: appDropDownIcon
@@ -71,9 +75,12 @@ class SkilldPage extends GetView<SkillControllers>{
                           SizedBox(height: 10,),
                           commonTextFieldTitle(headerName: appRateYourSkills,isMendatory: true),
                           SizedBox(height: 5,),
-                          commonRattingBar(context, initialRating: controller.ratingValue.value, updatedRating: (double data ) {
-                            controller.ratingValue.value=data;
-                          }),
+                          Obx((){
+                            var initialRating=controller.ratingValue.value??0.0;
+                            return commonRattingBar(context, initialRating: initialRating??0.0, updatedRating: (double data ) {
+                              controller.ratingValue.value=data;
+                            });
+                          })
                         ],
                       ),
                     ),

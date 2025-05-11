@@ -22,7 +22,7 @@ const String appHere =" here";
 const String appAlreadyHaveAnAccount ="Already have an account ? ";
 const String appCompany ="Company";
 const String appIndividual ="Individual";
-const String appSignUpAsACompany ="Sign up as a Company";
+const String appSignUpAsACompany ="Sign up as a ";
 const String appCreateYourCollarCheckAccount ="Create your\nCollar Check account";
 const String appByContinuingYouAgreeToOur ="By continuing, you agree to our\n";
 const String appWeHaveSentOTP ="We have sent you an OTP on your Mobile Number ";
@@ -433,7 +433,9 @@ const String appFollow="Follow";
 const String appVerifyYourProfileToClaim="Verify your profile to claim your CC Verified Badge";
 const String appYouAreATopCandidate="You are a top candidate";
 const String appExploreNow ="Explore now";
+const String appFileSizeShouldBeLessThan ="File size should be less than 5MB";
 const String appOnAverageVerifiedMembers="On average, verified members get 60% more profile views.";
+const String appThisCertificateIsMarkedAsOngoing="This certificate is marked as ongoing. Please uncheck 'Ongoing' to set an end date.";
 
 
 

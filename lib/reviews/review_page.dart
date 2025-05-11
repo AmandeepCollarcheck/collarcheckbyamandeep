@@ -68,9 +68,10 @@ class ReviewPage extends GetView<ReviewControllers>{
                           GestureDetector(
                             onTap: (){
 
-                              getPortfolioTypeFromGallery(context,onFilePickedData: (String pickedData) {
+                              getPortfolioTypeFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
                                 if(pickedData!=null){
                                   controller.selectedImageFromTHeGallery.value=pickedData;
+                                  controller.selectedImageFileName.value=fileName;
                                 }
                               }, portfolioType: "Upload Image");
                             },
@@ -110,11 +111,12 @@ class ReviewPage extends GetView<ReviewControllers>{
                                   Obx((){
                                     return SizedBox(
                                         width: MediaQuery.of(context).size.width*0.7,
-                                        child: Text(controller.selectedImageFromTHeGallery.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                        child: Text(controller.selectedImageFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                                   }),
                                   GestureDetector(
                                       onTap:(){
                                         controller.selectedImageFromTHeGallery.value="";
+                                        controller.selectedImageFileName.value="";
                                       },
                                       child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                                 ],

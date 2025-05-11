@@ -23,6 +23,7 @@ class BottomNavBarController extends GetxController{
   var userTypeData="".obs;
   var selectedUserType=false.obs;
   var isProfileDataLoaded = false.obs;
+  var profileName="".obs;
   @override
   void onInit() {
 
@@ -86,6 +87,7 @@ class BottomNavBarController extends GetxController{
     profileImageData.value=await readStorageData(key: profileImage);
     var userFirstName=await readStorageData(key: firstName);
     var userLastName=await readStorageData(key: lastName);
+    profileName.value="$userFirstName";
 
     nameInitial.value= getInitialsWithSpace(input: "$userFirstName $userLastName");
     update();

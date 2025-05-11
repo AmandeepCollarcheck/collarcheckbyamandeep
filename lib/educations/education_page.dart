@@ -350,9 +350,10 @@ class EducationPage extends GetView<EducationControllers>{
                             GestureDetector(
                               onTap: (){
 
-                                getPortfolioTypeFromGallery(context,onFilePickedData: (String pickedData) {
+                                getPortfolioTypeFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
                                   if(pickedData!=null){
                                     controller.selectedImageFromTHeGallery.value=pickedData;
+                                    controller.selectedFileName.value=fileName;
                                   }
                                 }, portfolioType: "Upload Image");
                               },
@@ -392,11 +393,12 @@ class EducationPage extends GetView<EducationControllers>{
                                     Obx((){
                                       return SizedBox(
                                           width: MediaQuery.of(context).size.width*0.7,
-                                          child: Text(controller.selectedImageFromTHeGallery.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                          child: Text(controller.selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                                     }),
                                     GestureDetector(
                                         onTap:(){
                                           controller.selectedImageFromTHeGallery.value="";
+                                          controller.selectedFileName.value="";
                                         },
                                         child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                                   ],

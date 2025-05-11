@@ -22,6 +22,7 @@ class PortfolioControllers extends GetxController{
   var selectedPortfolioId="".obs;
   var portfolioTitle="Select Portfolio".obs;
   var selectedImageFromTHeGallery="".obs;
+  var selectedFileName="".obs;
   var portfolioType=[{'id':"1","name":"Image"},{'id':"2","name":"Video"},{'id':"3","name":"Youtube Link"},{'id':"4","name":"Pdf"},].obs;
 
   var screenNameData="".obs;
@@ -66,15 +67,17 @@ class PortfolioControllers extends GetxController{
     if(portfolioTitle.value=="Select Portfolio"){
       showToast(appPleaseSelectPortFolioType);
     }else if(portfolioTitle.value=="Upload Image"){
-      getPortfolioTypeFromGallery(context,onFilePickedData: (String pickedData) {
+      getPortfolioTypeFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
         if(pickedData!=null){
           selectedImageFromTHeGallery.value=pickedData;
+          selectedFileName.value=fileName;
         }
       }, portfolioType: portfolioTitle.value);
     }else if(portfolioTitle.value=="Upload Video"){
-      getPortfolioTypeFromGallery(context,onFilePickedData: (String pickedData) {
+      getPortfolioTypeFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
         if(pickedData!=null){
           selectedImageFromTHeGallery.value=pickedData;
+          selectedFileName.value=fileName;
         }
       }, portfolioType: portfolioTitle.value);
     }else{

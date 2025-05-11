@@ -24,6 +24,7 @@ class ReviewControllers extends GetxController{
   Rx skillsId="0".obs;
   var portfolioTitle="Select Portfolio".obs;
   var selectedImageFromTHeGallery="".obs;
+  var selectedImageFileName="".obs;
   Rx screenNameData="".obs;
   Rx experienceIdData="".obs;
   var isEditData=false.obs;

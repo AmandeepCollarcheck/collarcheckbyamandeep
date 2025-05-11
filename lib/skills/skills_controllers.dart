@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collarchek/utills/app_route.dart';
+import 'package:collarchek/utills/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:dio/dio.dart' as dio;
@@ -19,6 +20,9 @@ class SkillControllers extends GetxController{
   Rx ratingValue=0.0.obs;
   Rx skillsId="".obs;
   var screenNameData="".obs;
+
+  ///Skills
+  var selectedSkills={"id":"0","name": appSelectSkill}.obs;
 
 
   @override
@@ -39,6 +43,9 @@ class SkillControllers extends GetxController{
     // });
     super.onInit();
   }
+
+
+
 
 
   backButtonClick(context){
@@ -85,6 +92,11 @@ class SkillControllers extends GetxController{
       if(addSkillsData.status==true){
         addSkillsModelData.value=addSkillsData;
         progressDialog.dismissLoader();
+        selectedSkills.value={
+          "id":  "0",
+          "name":  appSelectSkill
+        };
+        ratingValue.value=0.0;
 
         getAllSkills();
 

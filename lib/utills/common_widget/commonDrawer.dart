@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collarchek/models/logout_model.dart';
 import 'package:collarchek/utills/app_colors.dart';
+import 'package:collarchek/utills/common_widget/common_image_widget.dart';
 import 'package:collarchek/utills/common_widget/progress.dart';
 import 'package:collarchek/utills/font_styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -216,7 +217,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
           backgroundColor: appGreyColor,
           center: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: controller.profileImageData.value.isNotEmpty?Image.network(controller.profileImageData.value,height: 64,width: 64,fit: BoxFit.cover,):Image.asset(appDummyProfile,height: 64,width: 64,fit: BoxFit.cover,),
+            child: commonImageWidget(image: controller.profileImageData.value??"", initialName: userNameData.value??"", height: 64, width: 64, borderRadius: 100,isBorderDisable: true),
+            //child: controller.profileImageData.value.isNotEmpty?Image.network(controller.profileImageData.value,height: 64,width: 64,fit: BoxFit.cover,):Image.asset(appDummyProfile,height: 64,width: 64,fit: BoxFit.cover,),
           ),
           progressColor: appPrimaryColor,
         ),

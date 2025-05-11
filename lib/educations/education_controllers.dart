@@ -42,6 +42,7 @@ class EducationControllers extends GetxController{
   Rx isHeigestQuilification =false.obs;
   var portfolioTitle="Select Portfolio".obs;
   var selectedImageFromTHeGallery="".obs;
+  var selectedFileName="".obs;
 
   var screenNameData="".obs;
   var isEditData=false.obs;
