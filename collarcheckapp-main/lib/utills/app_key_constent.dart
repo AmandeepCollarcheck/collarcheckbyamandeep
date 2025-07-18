@@ -12,6 +12,8 @@ const profession = 'profession';
 const id='id';
 const slug='slug';
 const userType='userType';
+const companyName='companyName';
+
 const notificationCount='notificationCount';
 const selectedFilterTypeDataKey='selectedFilterTypeDataKey';
 const selectedFilterTypeId='selectedFilterTypeId';

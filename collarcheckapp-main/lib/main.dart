@@ -14,6 +14,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 import 'bottom_nav_bar/bottom_nav_bar_controller.dart';
+import 'dashboard/dashboard_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await InternetChecker().onInit();
   Get.put(BottomNavBarController());
+  Get.put(DashboardController());
   Get.put(CommonScrollControllers(), permanent: true);
   await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

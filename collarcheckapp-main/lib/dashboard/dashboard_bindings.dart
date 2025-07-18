@@ -5,6 +5,6 @@ class DashboardBindings extends Bindings{
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(DashboardController());
+    Get.find<DashboardController>();
   }
 }

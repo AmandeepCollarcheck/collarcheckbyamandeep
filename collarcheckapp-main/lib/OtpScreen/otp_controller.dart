@@ -78,6 +78,7 @@ class OtpController extends GetxController{
             await writeStorageData(key: profileImage, value: sendOtp.data?.profile??"");
             await writeStorageData(key: firstName, value: sendOtp.data?.fName??"");
             await writeStorageData(key: lastName, value: sendOtp.data?.lName??"");
+            await writeStorageData(key: companyName, value: sendOtp.data?.companyName??"");
             await writeStorageData(key: userId, value: sendOtp.data?.individualId??"");
             await writeStorageData(key: profession, value: sendOtp.data?.profileDescription??"");
             await writeStorageData(key: id, value: sendOtp.data?.id??"");

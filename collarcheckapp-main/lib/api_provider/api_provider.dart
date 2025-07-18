@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_storage/get_storage.dart' show GetStorage;
 
+import '../models/aimodel/AI_model_Data.dart';
 import '../models/all_application_list_model.dart';
 import '../models/all_drop_down_list_model.dart';
 import '../models/all_language_list_data_model.dart';
@@ -230,6 +231,22 @@ class ApiProvider{
   }
 
 
+  Future aigenratedescription(FormData params) async {
+    try {
+      print(">>>>>>>>>>>>>>>>>>>>>>");
+      print(params.fields);
+      Response response = await _dio.post(aigenerate,data: params);
+      Map<String, dynamic> jsonData;
+      if (response.data is String) {
+        jsonData = jsonDecode(response.data);
+      } else {
+        jsonData = response.data;
+      }
+      return AIModel.fromJson(jsonData);
+    }catch (error, stacktrace) {
+      handleException(error, stacktrace, _dioError!);
+    }
+  }
   Future drawerCompanyconnectionListData() async {
     try {
       Response response = await _dio.get(strCompanyConnectionList);

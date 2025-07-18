@@ -114,7 +114,12 @@ class BottomNavBarPage extends GetView<BottomNavBarController>{
 
 
                       default:
-                        return GetPageRoute(page: () => DashboardPage());
+                        return GetPageRoute(
+                            page: () =>
+                            DashboardPage()
+                        ,binding: DashboardBindings()
+
+                        );
                     }
                   },
                 );

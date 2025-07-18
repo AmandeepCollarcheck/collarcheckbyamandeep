@@ -66,7 +66,7 @@ class DashboardPage extends GetView<DashboardController>{
                     _verifyProfileClamNow(context),
                     _completeProfileForBetterSearch(context),
                     _jobsForYouWidget(context),
-                    _topCompanies(),
+                    _topCompanies(controller),
                     allRightReservedWidget()
 
                   ],
@@ -239,20 +239,25 @@ class DashboardPage extends GetView<DashboardController>{
     );
   }
 
-  _topCompanies() {
+  _topCompanies(DashboardController controllerdata) {
     return Obx((){
-      if(controller.userHomeModel.value.data?.topIndustries==null){
+      var data=controllerdata.userHomeModel.value.data;
+      if(data==null|| data.topIndustries == null){
         ///For Simmer
         return Center();
       }
-      var topCompanies=controller.userHomeModel.value.data?.topIndustries??[];
-      return topCompanies!=null&&topCompanies.isNotEmpty?Container(
+      final topCompanies = data.topIndustries!;
+      if (topCompanies.isEmpty) {
+        return SizedBox.shrink(); // nothing to display
+      }
+      return
+      Container(
         color: appPrimaryBackgroundColor,
         padding: EdgeInsets.only(left: 20,top: 15,bottom: 20),
         child: Column(
           children: <Widget>[
             commonHeaderAndSeeAll(headerName: appTopCompanies, seeAllClick: (){
-              controller.openTopCompaniesPage();
+              controllerdata.openTopCompaniesPage();
             },isShowViewAll: topCompanies.length > 4 ? true : false),
             SizedBox(height: 10,),
             SingleChildScrollView(
@@ -273,7 +278,7 @@ class DashboardPage extends GetView<DashboardController>{
             )
           ],
         ),
-      ):Container();
+      );
     });
   }
 
