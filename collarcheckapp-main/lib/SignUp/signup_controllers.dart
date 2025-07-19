@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:collarchek/utills/common_widget/update_profile_bottom_sheet.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:collarchek/models/company_signUp_model.dart';
 import 'package:collarchek/models/individual_signup_model.dart';
@@ -9,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:linkedin_login/linkedin_login.dart';
 
 import '../api_provider/api_provider.dart';
+import '../models/country_list_model.dart';
+import '../models/send_otp_model.dart';
 import '../models/social_login_model.dart';
 import '../utills/app_key_constent.dart';
 import '../utills/app_strings.dart';
@@ -21,6 +24,8 @@ class SignUpControllers extends GetxController{
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   var phoneController = TextEditingController();
+  var countryListData=CountryListModel().obs;
+
   var companyEmailController = TextEditingController();
   var referralCodeController = TextEditingController();
   var socialLoginData=SocailLoginModel().obs;
@@ -29,7 +34,7 @@ class SignUpControllers extends GetxController{
   Rx isTermCheck =false.obs;
   Rx selectedCountryFlag ="https://cdn.kcak11.com/CountryFlags/countries/in.svg".obs;
   Rx countryCode="+91".obs;
-
+  Rx country=appSelect.obs;
 
   @override
   void dispose() {
@@ -46,53 +51,120 @@ class SignUpControllers extends GetxController{
   void onInit() {
     final Map<String, dynamic> data = Get.arguments??{};
     isCompanyProfile.value=data['isCompanyProfile']??false;
-    super.onInit();
-  }
 
-  sendOtpButtonClick(context) async {
-    if (formKey.currentState!.validate()) {
-      keyboardDismiss(context);
-      if (isTermCheck.value == false) {
-        showToast(appPleaseAcceptTermsConditions);
-      } else {
-        if (formKey.currentState!.validate()) {
-          if (phoneController.text.length < 4) {
-            showToast(appMobileNumberNotLessThanFourDigit);
-          } else {
-            try {
-              progressDialog.show();
-              var params = {
-                "fname": firstNameController.text ?? "",
-                "lname": lastNameController.text ?? "",
-                "email": companyEmailController.text ?? "",
-                "phone": "${countryCode.value}${phoneController.text}" ?? "",
-                "referral_code": referralCodeController.text ?? ""
-              };
-              IndividualSignupModel individualSignUpModel = await ApiProvider
-                  .base().individualSignUp(params);
-              progressDialog.dismissLoader();
-              if (individualSignUpModel.status == true) {
-                // Get.toNamed(AppRoutes.otp);
-                Get.offNamed(AppRoutes.otp, arguments: {
-                  "mobile_number": "${countryCode.value}${phoneController.text}",
-                  'isLoginScreen':false
-                });
-              } else {
-                showToast(individualSignUpModel.messages ?? "");
-              }
-            } on HttpException catch (exception) {
-              progressDialog.dismissLoader();
-              showToast(exception.message);
-            } catch (exception) {
-              progressDialog.dismissLoader();
-              showToast(exception.toString());
-            }
-          }
+    Future.delayed(Duration(milliseconds: 500), ()async {
+      getCountryListApiCall();
+
+    });
+
+    super.onInit();
+
+
+  }
+  var selectedCountry={'id':"0","name":appSelectCountry}.obs;
+
+
+  ///Country List
+  void getCountryListApiCall() async{
+    try {
+      progressDialog.show();
+      CountryListModel countryListModel = await ApiProvider.base().countryList();
+      if(countryListModel.status==true){
+        countryListData.value.data?.clear();
+        countryListData.value=countryListModel;
+        if(countryListData.value.data!=null&&countryListData.value.data!.isNotEmpty){
+          progressDialog.dismissLoader();
+          getStateListApiCall(countryName: countryListData.value.data?[0].id??"");
         }
       }
+      else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
     }
   }
-  companySignUpSendOtpButton(context)async{
+  sendOtpButtonSignup(context) async{
+    if (formKey.currentState!.validate()) {
+      if (phoneController.text.length < 4) {
+        showToast(appMobileNumberNotLessThanFourDigit);
+      } else {
+
+        try {
+          progressDialog.show();
+          var params = {
+
+            "email": companyEmailController.text ?? "",
+            "phone": "${countryCode.value}${phoneController.text}" ?? "",
+            "checkUnique": 1,
+          };
+          /*  IndividualSignupModel individualSignUpModel = await ApiProvider
+            .base().individualSignUp(params);*/
+
+          SendOtp sendOtp = await ApiProvider.base().sendOtp(params);
+          progressDialog.dismissLoader();
+          if (sendOtp.status == true) {
+            // Get.toNamed(AppRoutes.otp);
+            /* Get.offNamed(AppRoutes.otp, arguments: {
+            "mobile_number": "${countryCode.value}${phoneController.text}",
+            'isLoginScreen':false, 'isTermAccepted': isTermCheck.value, "email": companyEmailController.text, "firstName": firstNameController.text,
+          "lastName": lastNameController.text,
+            "companyName": companyController.text,
+           "isCompanyProfile": isCompanyProfile.value,"refralcode":referralCodeController.text
+          });*/
+
+            if(isCompanyProfile.value==false)
+            {
+              Get.offNamed(AppRoutes.otp, arguments: {
+                "mobile_number": "${countryCode.value}${phoneController.text}",
+                'isLoginScreen':false, 'isTermAccepted': isTermCheck.value, "email": companyEmailController.text, "firstName": firstNameController.text,
+                "lastName": lastNameController.text,'countryName':selectedCountry,
+
+
+                "isCompanyProfile": isCompanyProfile.value,"refralcode":referralCodeController.text
+              });
+
+            }
+            else{
+              Get.offNamed(AppRoutes.otp, arguments: {
+                "mobile_number": "${countryCode.value}${phoneController.text}",
+                'isLoginScreen':false, 'isTermAccepted': isTermCheck.value, "email": companyEmailController.text,
+                'companyName':companyController.text,
+
+                'countryName': selectedCountry['name'],
+                "isCompanyProfile": isCompanyProfile.value,"refralcode":referralCodeController.text
+              });
+
+
+            }
+
+
+
+            print("$isCompanyProfile what is");
+
+          } else {
+            showToast(sendOtp.message ?? "");
+          }
+        } on HttpException catch (exception) {
+          progressDialog.dismissLoader();
+          showToast(exception.message);
+        } catch (exception) {
+          progressDialog.dismissLoader();
+          showToast(exception.toString());
+        }
+
+      }
+    }
+
+
+  }
+
+  /* companySignUpSendOtpButton(context)async{
     if (formKey.currentState!.validate()) {
       keyboardDismiss(context);
       if (isTermCheck.value == false) {
@@ -132,7 +204,7 @@ class SignUpControllers extends GetxController{
         }
       }
     }
-  }
+  }*/
   loginButtonClick(){
     Get.offNamed(AppRoutes.login);
   }

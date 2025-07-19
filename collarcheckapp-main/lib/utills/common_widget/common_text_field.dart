@@ -8,13 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../app_colors.dart';
-
 Widget commonTextField({
   required TextEditingController controller,
   required String hintText,
   bool obscureText = false,
   IconData? icon,
   int maxLine=1,
+  int maxlength=128,
   String? suffixIcon,
   bool isRealOnly=false,
   VoidCallback? onTap,
@@ -33,6 +33,7 @@ Widget commonTextField({
     validator: validator,
     readOnly: isRealOnly,
     maxLines: maxLine,
+    maxLength:maxlength ,
     onTap: onTap,
     onChanged: onChanged,
     style: AppTextStyles.font16.copyWith(color: appBlackColor),
@@ -40,37 +41,42 @@ Widget commonTextField({
 
     textCapitalization: keyboardType==TextInputType.emailAddress?TextCapitalization.none: TextCapitalization.sentences,
     decoration: InputDecoration(
-      fillColor: appWhiteColor,
-      filled: true,
-      suffixIcon: suffixIcon!=null?GestureDetector(
-        onTap: (){
-          onSearchClick!();
-        },
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: SvgPicture.asset(suffixIcon,height: 20,width: 20,),
+        fillColor: appWhiteColor,
+        filled: true,
+        suffixIcon: suffixIcon!=null?GestureDetector(
+          onTap: (){
+            onSearchClick!();
+          },
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: SvgPicture.asset(suffixIcon,height: 20,width: 20,),
+          ),
+        ):null,
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        hintText: hintText,
+        hintStyle: AppTextStyles.font16.copyWith(color: appGreyBlackColor),
+        prefixIcon: icon != null ? Icon(icon) : null, // Optional: Add icon if provided
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(13),
+          borderSide: BorderSide(color: appGreyBlackColor),
         ),
-      ):null,
-      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      hintText: hintText,
-      hintStyle: AppTextStyles.font16.copyWith(color: appGreyBlackColor),
-      prefixIcon: icon != null ? Icon(icon) : null, // Optional: Add icon if provided
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(13),
-        borderSide: BorderSide(color: appGreyBlackColor),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(13),
-        borderSide: BorderSide(color: appGreyBlackColor), // Focused border color
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(13),
-        borderSide: BorderSide(color: appGreyBlackColor), // Enabled border color
-      ),
-      errorStyle:AppTextStyles.font14.copyWith(color: Colors.red,)
+
+        counterText: '',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(13),
+          borderSide: BorderSide(color: appGreyBlackColor), // Focused border color
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(13),
+          borderSide: BorderSide(color: appGreyBlackColor), // Enabled border color
+        ),
+        errorStyle:AppTextStyles.font14.copyWith(color: Colors.red,)
     ),
+
+
   );
 }
+
 
 
 
@@ -79,6 +85,7 @@ Widget commonTextFieldWithCountryCode(context,{
   required TextEditingController controller,
   required String hintText,
   FormFieldValidator<String>? validator,
+
   required final Function(Map<String, String>) selectedCountryFlag,
 }){
   return Row(

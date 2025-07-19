@@ -61,14 +61,40 @@ class SignUpPage extends GetView<SignUpControllers>{
                             FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
                             FilteringTextInputFormatter.deny(RegExp(r'[^\sa-zA-Z]')),
                           ]):Container(),
+
+
                           ///For Company
-                          controller.isCompanyProfile.value==true?commonTextField(controller: controller.companyController, hintText: appCompanyName, validator: (value) => value!.isEmpty ? appCompanyName+appIsRequired : null,inputFormatter: [
-                            FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
-                            FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
-                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z &-]')),
-                          ]):Container(),
+                          ///For Company
+                          controller.isCompanyProfile.value == true
+                              ? commonTextField(
+                              controller: controller.companyController,
+                              hintText: appCompanyName,
+                              validator: (value) => value!.isEmpty
+                                  ? appCompanyName + appIsRequired
+                                  : null,
+                              inputFormatter: [
+                                LengthLimitingTextInputFormatter(30),
+                                // Max 30 characters
+                                FilteringTextInputFormatter.deny(
+                                    RegExp(r'^\s+')),
+                                // No leading spaces
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[a-zA-Z0-9 &-]')),
+                                // Allowed characters
+                              ])
+                              : Container(),
+                          SizedBox(
+                            height: 10,
+                          ),
+
+
+
+
                           SizedBox(height: 10,),
-                          Obx(()=>commonTextFieldWithCountryCode(context,countryFlag: controller.selectedCountryFlag.value, controller: controller.phoneController, hintText:  appPhoneNumber, validator: (value) => value!.isEmpty ? appPhoneNumber+appIsRequired : null,
+                          Obx(()=>commonTextFieldWithCountryCode(context,countryFlag:
+                          controller.selectedCountryFlag.value, controller: controller.phoneController,
+                              hintText:  appPhoneNumber, validator: (value) =>
+                              value!.isEmpty ? appPhoneNumber+appIsRequired : null,
                               selectedCountryFlag: (Map<String, String> newCountryData) {
                                 controller.selectedCountryFlag.value=newCountryData['countryFlag'];
                                 controller.countryCode.value="+${newCountryData['countryCode']}";
@@ -76,18 +102,122 @@ class SignUpPage extends GetView<SignUpControllers>{
                           // commonTextField(controller: controller.phoneController, hintText: appPhoneNumber),
                           SizedBox(height: 10,),
                           ///For Company
-                          controller.isCompanyProfile.value==true?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress ,hintText: appCompanyEmail, validator: (value) => value!.isEmpty ? appCompanyEmail+appIsRequired : null,inputFormatter: [
-                            FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
-                            FilteringTextInputFormatter.deny(RegExp(r'[^\w\s]{2,}')),
-                          ]):Container(),
+                          ///company email
+                          controller.isCompanyProfile.value == true
+                              ? commonTextField(
+                            controller: controller.companyEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            hintText: appCompanyEmail,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return '$appCompanyEmail$appIsRequired';
+                              }
+
+                              // Trim input first
+                              final trimmed = value.trim();
+
+                              // ✅ Must start with a letter
+                              if (!RegExp(r'^[a-zA-Z]')
+                                  .hasMatch(trimmed)) {
+                                return 'Email must start with a letter';
+                              }
+
+                              // ✅ Must match full pattern: start with letter, valid email, ends with .com
+                              final emailRegex = RegExp(
+                                  r'^[a-zA-Z][\w.+-]*@[a-zA-Z0-9.-]+\.(com)$');
+                              if (!emailRegex.hasMatch(trimmed)) {
+                                return 'Enter a valid email with .com domain only';
+                              }
+
+                              return null;
+                            },
+                            inputFormatter: [
+                              FilteringTextInputFormatter.deny(
+                                  RegExp(r'^\s+')),
+                              // No leading space
+                              FilteringTextInputFormatter.allow(RegExp(
+                                  r'[a-zA-Z0-9@._+\-]') // Allow valid characters only
+                              ),
+                            ],
+                          )
+                              : Container(),
                           ///For Individual
-                          controller.isCompanyProfile.value==false?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress , hintText: appEmailId, validator: (value) => value!.isEmpty ? appEmailId+appIsRequired : null,inputFormatter: [
+                          ///company email
+                          controller.isCompanyProfile.value == true
+                              ? commonTextField(
+                            controller: controller.companyEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            hintText: appCompanyEmail,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return '$appCompanyEmail$appIsRequired';
+                              }
+
+                              // Trim input first
+                              final trimmed = value.trim();
+
+                              // ✅ Must start with a letter
+                              if (!RegExp(r'^[a-zA-Z]')
+                                  .hasMatch(trimmed)) {
+                                return 'Email must start with a letter';
+                              }
+
+                              // ✅ Must match full pattern: start with letter, valid email, ends with .com
+                              final emailRegex = RegExp(
+                                  r'^[a-zA-Z][\w.+-]*@[a-zA-Z0-9.-]+\.(com)$');
+                              if (!emailRegex.hasMatch(trimmed)) {
+                                return 'Enter a valid email with .com domain only';
+                              }
+
+                              return null;
+                            },
+                            inputFormatter: [
+                              FilteringTextInputFormatter.deny(
+                                  RegExp(r'^\s+')),
+                              // No leading space
+                              FilteringTextInputFormatter.allow(RegExp(
+                                  r'[a-zA-Z0-9@._+\-]') // Allow valid characters only
+                              ),
+                            ],
+                          )
+                              : Container(),
+                          SizedBox(height: 10,),
+                          ///For Company
+                          /*  controller.isCompanyProfile.value==true?commonTextField(controller: controller.countryController,keyboardType: TextInputType.text ,hintText: appCountryId, validator: (value) => value!.isEmpty ? appCountryId+appIsRequired : null,inputFormatter: [
                             FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
-                            FilteringTextInputFormatter.deny(RegExp(r'[^\w\s]{2,}')),
+                            FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
+                            FilteringTextInputFormatter.deny(RegExp(r'[^\sa-zA-Z]')),
                           ]):Container(),
+
+                          ///For Individual
+                          controller.isCompanyProfile.value==false?commonTextField(controller: controller.countryController,keyboardType: TextInputType.text , hintText: appCountryId, validator: (value) => value!.isEmpty ? appEmailId+appIsRequired : null,inputFormatter: [
+                            FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
+                            FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
+                            FilteringTextInputFormatter.deny(RegExp(r'[^\sa-zA-Z]')),
+                          ]):Container(),*/
+
+                          Obx((){
+                            var countryData=controller.countryListData.value.data??[];
+                            return countryData.isNotEmpty?customDropDown(
+                              hintText: appCountry,
+                              item: [{'id':"0","name":appSelectCountry},
+                                ...countryData.map((datum) => {"id": datum.id, "name": datum.name,}).toList() ?? []
+                              ],
+                              selectedValue: countryData.any((datum)=>datum.id==controller.selectedCountry["id"])?controller.selectedCountry:{'id':"0","name":appSelectCountry},
+                              onChanged: (Map<String,dynamic>? selectedData) {
+                                controller.selectedCountry.value = {
+                                  "id": selectedData?['id'].toString() ?? "0",
+                                  "name": selectedData?['name'].toString() ?? appSelectCountry
+                                };
+                                /* controller.getStateListApiCall(countryName: selectedData?['id']);
+                                controller.country.value=selectedData?['name'];*/
+                              }, icon: appDropDownIcon,):Container();
+                          }),
+
                           SizedBox(height: 10,),
                           commonTextField(controller: controller.referralCodeController, hintText: appReferralCode),
                           SizedBox(height: 20,),
+
                           _termConditionsWidget(context),
                           SizedBox(height: 20,),
 
@@ -96,12 +226,27 @@ class SignUpPage extends GetView<SignUpControllers>{
                     ),
                   ),
                   commonButton(context, buttonName: appSendOTP, buttonBackgroundColor: appPrimaryColor, textColor: appWhiteColor, buttonBorderColor: appPrimaryColor, onClick: (){
-
+                    if (!controller.isTermCheck.value) {
+                      // Show a warning: Terms not accepted
+                      Get.snackbar(
+                        'Terms Required',
+                        'Please accept the terms and conditions to continue.',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.redAccent,
+                        colorText: Colors.white,
+                        duration: Duration(seconds: 2),
+                      );
+                      return;
+                    }
                     if(controller.isCompanyProfile.value==false){
                       ///Individual SignUp
-                      controller.sendOtpButtonClick(context);
+                      //controller.sendOtpButtonClick(context);
+
+                      controller.sendOtpButtonSignup(context);
                     }else{
-                      controller.companySignUpSendOtpButton(context);
+
+                      controller.sendOtpButtonSignup(context);
+                      // controller.companySignUpSendOtpButton(context);
                     }
 
                   }),
@@ -134,7 +279,8 @@ class SignUpPage extends GetView<SignUpControllers>{
                   SizedBox(height: 20,),
 
                   ///For Company
-                  controller.isCompanyProfile.value==true?_commonSocialSignIN(context,socialName: appSignUpWithGoogle,onClick: (){
+                  controller.isCompanyProfile.value==true?_commonSocialSignIN(context,socialName:
+                  appSignUpWithGoogle,onClick: (){
                     controller.googleLogin();
                     ///Gooogle click
                   },socialIcon: appGoogleIcon):Container(),
@@ -163,7 +309,9 @@ class SignUpPage extends GetView<SignUpControllers>{
                                 style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    controller.loginButtonClick();
+                                    //  controller.loginButtonClick();
+
+                                    print("login page off");
                                     // Navigate to Terms of Use page or any action
                                   },
                               ),
@@ -205,6 +353,8 @@ class SignUpPage extends GetView<SignUpControllers>{
               value: controller.isTermCheck.value,
               onChanged: (value) {
                 controller.isTermCheck.value = !controller.isTermCheck.value;
+
+
               },
             ),
           )),
@@ -226,7 +376,7 @@ class SignUpPage extends GetView<SignUpControllers>{
                     style:  AppTextStyles.font14Underline.copyWith(color: appPrimaryColor),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                       // controller.signUpButtonClick();
+                        // controller.signUpButtonClick();
                         // Navigate to Terms of Use page or any action
                       },
                   ),
@@ -299,8 +449,8 @@ class SignUpPage extends GetView<SignUpControllers>{
         height: 50,
         width: 65,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: appGreyBlackColor,width: 1.0)
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: appGreyBlackColor,width: 1.0)
         ),
         child: SvgPicture.asset(socialIcon,height: 40,width: 40,),
       ),

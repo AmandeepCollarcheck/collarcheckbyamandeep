@@ -35,6 +35,7 @@ class EmployeesPage extends GetView<EmployeeControllers>{
           body: Column(
             children: <Widget>[
               ///Search Widget
+
               Container(
                 margin: EdgeInsets.only(left: 20,right: 20,top: 20),
                 child: Obx(()=>commonCompanySearchAppBar(

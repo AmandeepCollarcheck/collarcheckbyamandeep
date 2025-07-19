@@ -296,20 +296,40 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                           selectedEmployeeType.value = int.parse(employeeType[0].id??""); // Default selection at index 1
                         }
                         return Wrap(
-                          spacing: 10, // Add spacing between radio buttons
-                          children: List.generate(employeeType.length, (index) {
+                          spacing: 5, // Add spacing between radio buttons
+                          children: List.generate(
+
+                              employeeType.length, (index) {
+
+
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min, // Prevent unnecessary expansion
                               children: <Widget>[
-                                Radio<int>(
-                                  value: int.parse(employeeType[index].id??""), // Set correct value
-                                  groupValue: selectedEmployeeType.value, // Bind to selected value
-                                  onChanged: (value) {
-                                    selectedEmployeeType.value = value; // Update selected value
-                                    print("Selected Employee Type ID: $value");
-                                  },),
-                                Text(employeeType[index].name ?? "",style: AppTextStyles.font14W500.copyWith(color: appBlackColor),),
+
+                                Theme(
+                                  data: Theme.of(context).copyWith(
+                                    unselectedWidgetColor: appPrimaryColor,
+                                    colorScheme: ColorScheme.fromSeed(
+                                      seedColor: appPrimaryColor,
+                                    ),
+
+                                    // 🔘 change default (unselected) color
+                                  ),
+                                  child: Radio<int>(
+                                    value: int.parse(employeeType[index].id ?? ""),
+                                    groupValue: selectedEmployeeType.value,
+                                    activeColor: appPrimaryColor, // ✔️ color when selected
+                                    onChanged: (value) {
+                                      selectedEmployeeType.value = value!;
+                                      print("Selected Employee Type ID: $value");
+                                    },
+                                  ),
+                                ),
+                                Text(
+                                  employeeType[index].name ?? "",
+                                  style: AppTextStyles.font14W500.copyWith(color: appBlackColor),
+                                ),
                               ],
                             );
                           }),

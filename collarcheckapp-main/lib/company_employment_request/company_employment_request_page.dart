@@ -43,6 +43,7 @@ class CompanyEmploymentRequestPage extends GetView<CompanyEmploymentRequestContr
                     actionButton: appFilterMore,
                     onClick: (){
                       controller.backButtonClick();
+                      Get.back();
                     },
                     onShareClick: (){},
                     onAddEmployment:()async{
