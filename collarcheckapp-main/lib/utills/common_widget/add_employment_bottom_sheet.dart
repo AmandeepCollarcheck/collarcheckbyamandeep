@@ -348,7 +348,9 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                             selectedValue: skills.any((detum)=>detum.id==selectedSkillsDropDown["id"])?selectedSkillsDropDown:{"id":"0","name": appSelectSkill},
                             onChanged: (Map<String,dynamic>? selectedData){
                               if (selectedData != null) {
+
                                 selectedSkillsDropDown.value={
+
                                   "id": selectedData?['id'].toString() ?? "0",
                                   "name": selectedData?['name'].toString() ?? appSelectSkill
                                 };

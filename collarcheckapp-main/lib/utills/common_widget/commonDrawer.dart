@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:collarchek/dashboard/dashboard_controller.dart';
 import 'package:collarchek/models/logout_model.dart';
 import 'package:collarchek/utills/app_colors.dart';
 import 'package:collarchek/utills/common_widget/common_image_widget.dart';
@@ -15,7 +14,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../api_provider/api_provider.dart';
 import '../../bottom_nav_bar/bottom_nav_bar_controller.dart';
-import '../../models/user_home_model.dart';
 import '../app_key_constent.dart';
 import '../app_route.dart';
 import '../app_strings.dart';
@@ -34,11 +32,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
   Rx professionData="".obs;
   Rx profilePercentageData=0.0.obs;
   Rx userNameData="".obs;
-  Rx companyNameData="".obs;
-  Rx userTypeData="".obs;
   late ProgressDialog progressDialog ;
   final BottomNavBarController controller = Get.find<BottomNavBarController>();
-
 
   @override
   void initState() {
@@ -49,24 +44,18 @@ class _CommonDrawerState extends State<CommonDrawer> {
   }
 
   _getAllDataLocally() async {
-
     profileImageData.value=await readStorageData(key: profileImage) ??"";
     profileDesignation.value=await readStorageData(key: profileDesignationData) ??"";
     userIdData.value=await readStorageData(key: userId) ??"";
     professionData.value=await readStorageData(key: profession) ??"";
-
-    String firstNameData = await readStorageData(key: firstName) ?? "";
-    String lastNameData = await readStorageData(key: lastName) ?? "";
-    /// first name and last name combined
-    userNameData.value = "$firstNameData $lastNameData".trim();
-    companyNameData.value =  await readStorageData(key: companyName) ?? "";
-    userTypeData.value =  await readStorageData(key: userType) ?? "";
+    String firstName = await readStorageData(key: 'firstName') ?? "";
+    String lastName = await readStorageData(key: 'lastName') ?? "";
+    userNameData.value = "$firstName $lastName".trim();
 
     profilePercentageData.value=(double.tryParse(await readStorageData(key: progressPercentage)) ?? 0.0) / 100;
   }
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       backgroundColor: appWhiteColor,
       child: Obx(()=>Container(
@@ -86,10 +75,6 @@ class _CommonDrawerState extends State<CommonDrawer> {
               Get.back();
               Get.offNamed(AppRoutes.recommendJob);
             }),
-
-
-
-
             SizedBox(height: 10,),
             Container(
               height: 1,
@@ -109,11 +94,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
               controller.bottomNavCurrentIndex.value=2;
               controller.selectedTabIndexValue.value=1;
             }),
-
-
             SizedBox(height: 10,),
-
-            ///My employee
             _drawerOptionCard(icon: appMyConnectionIconSvg, title: controller.userTypeData.value==company?appMyEmployees:appMyConnections, onOptionClick: () {
               Get.back();
               controller.bottomNavCurrentIndex.value=1;
@@ -129,14 +110,10 @@ class _CommonDrawerState extends State<CommonDrawer> {
               }
 
             }),
-
-            ///my connections
             controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
             controller.userTypeData.value==company?_drawerOptionCard(icon: appMyConnectionIconSvg, title: appMyConnections, onOptionClick: () {
               Get.back();
-
-              Get.offNamed(AppRoutes.mycompanyconnection,arguments: {bottomNavCurrentIndexData:"1"});
-            //  controller.bottomNavCurrentIndex.value=1;
+              controller.bottomNavCurrentIndex.value=1;
               //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
             }):Container(),
             controller.userTypeData.value==company?SizedBox(height: 10,):SizedBox(height: 0,),
@@ -163,23 +140,18 @@ class _CommonDrawerState extends State<CommonDrawer> {
               Get.back();
               Get.offNamed(AppRoutes.request,arguments: {screenName:dashboard,tabSelectionIndexValue:1});
             }),
-
             SizedBox(height: 10,),
-
             Container(
               height: 1,
               color: appPrimaryBackgroundColor,
             ),
-
             SizedBox(height: 10,),
             Container(
               padding: EdgeInsets.only(left: 10),
               child: Text(appGeneral,style: AppTextStyles.font12.copyWith(color: appGreyBlackColor),),
             ),
-
             SizedBox(height: 10,),
             _drawerOptionCard(icon: appAboutUsIconSvg, title: appAboutUsText, onOptionClick: () {  }),
-
             SizedBox(height: 10,),
             _drawerOptionCard(icon: appBestPracticsIconSvg, title: appBestPractices, onOptionClick: () {  }),
             SizedBox(height: 10,),
@@ -188,12 +160,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
             SizedBox(height: 10,),
             _drawerOptionCard(icon: appNotificationSettingsIconSvg, title: appNotificationSettings, onOptionClick: () {  }),
             SizedBox(height: 10,),
-            _drawerOptionCard(icon: appSettingsIconIconSvg, title: appGeneralSettings, onOptionClick: () {
-
-
-              Get.offNamed(AppRoutes.accountsettings,arguments: {bottomNavCurrentIndexData:"1"});
-
-            }),
+            _drawerOptionCard(icon: appSettingsIconIconSvg, title: appGeneralSettings, onOptionClick: () {  }),
             SizedBox(height: 10,),
             // _drawerOptionCard(icon: appSettings, title: appSettingsText, onOptionClick: () {  }),
             // SizedBox(height: 10,),
@@ -250,8 +217,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
           backgroundColor: appGreyColor,
           center: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: commonImageWidget(image: controller.profileImageData.value??"",
-                initialName: userNameData.value??"", height: 64, width: 64, borderRadius: 100,isBorderDisable: true),
+            child: commonImageWidget(image: controller.profileImageData.value??"", initialName: userNameData.value??"", height: 64, width: 64, borderRadius: 100,isBorderDisable: true),
             //child: controller.profileImageData.value.isNotEmpty?Image.network(controller.profileImageData.value,height: 64,width: 64,fit: BoxFit.cover,):Image.asset(appDummyProfile,height: 64,width: 64,fit: BoxFit.cover,),
           ),
           progressColor: appPrimaryColor,
@@ -260,10 +226,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
-            userTypeData=="company"?Text("${companyNameData.value}"):
-            userNameData.value!=null&&userNameData.value.isNotEmpty?
-            Text(userNameData.value,style: AppTextStyles.font16W700.copyWith(color: appBlackColor)):Container(),
+            userNameData.value!=null&&userNameData.value.isNotEmpty?  Text(userNameData.value,style: AppTextStyles.font16W700.copyWith(color: appBlackColor)):Container(),
             userIdData.value!=null&&userIdData.value.isNotEmpty? Text("$appId: ${userIdData.value}",style: AppTextStyles.font12.copyWith(color: appPrimaryColor)):Container(),
             profileDesignation.value!=null&&profileDesignation.value.isNotEmpty? Text(profileDesignation.value,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor)):Container(),
             SizedBox(height: 5,),
@@ -280,23 +243,23 @@ class _CommonDrawerState extends State<CommonDrawer> {
     );
   }
 
-   _callingLogoutApi() async{
-     try {
-       progressDialog.show();
-       LogoutModel logoutModel = await ApiProvider.baseWithToken().logout();
-       progressDialog.dismissLoader();
-       if (logoutModel.status == true) {
-         await GetStorage().erase();
-         Get.offNamed(AppRoutes.startup,);
-       } else {
-         showToast(logoutModel.message);
-       }
-     } on HttpException catch (exception) {
-       progressDialog.dismissLoader();
-       showToast(exception.message);
-     } catch (exception) {
-       progressDialog.dismissLoader();
-       showToast(exception.toString());
-     }
-   }
+  _callingLogoutApi() async{
+    try {
+      progressDialog.show();
+      LogoutModel logoutModel = await ApiProvider.baseWithToken().logout();
+      progressDialog.dismissLoader();
+      if (logoutModel.status == true) {
+        await GetStorage().erase();
+        Get.offNamed(AppRoutes.startup,);
+      } else {
+        showToast(logoutModel.message);
+      }
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
 }

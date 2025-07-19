@@ -142,45 +142,10 @@ class SignUpPage extends GetView<SignUpControllers>{
                           )
                               : Container(),
                           ///For Individual
-                          ///company email
-                          controller.isCompanyProfile.value == true
-                              ? commonTextField(
-                            controller: controller.companyEmailController,
-                            keyboardType: TextInputType.emailAddress,
-                            hintText: appCompanyEmail,
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return '$appCompanyEmail$appIsRequired';
-                              }
-
-                              // Trim input first
-                              final trimmed = value.trim();
-
-                              // ✅ Must start with a letter
-                              if (!RegExp(r'^[a-zA-Z]')
-                                  .hasMatch(trimmed)) {
-                                return 'Email must start with a letter';
-                              }
-
-                              // ✅ Must match full pattern: start with letter, valid email, ends with .com
-                              final emailRegex = RegExp(
-                                  r'^[a-zA-Z][\w.+-]*@[a-zA-Z0-9.-]+\.(com)$');
-                              if (!emailRegex.hasMatch(trimmed)) {
-                                return 'Enter a valid email with .com domain only';
-                              }
-
-                              return null;
-                            },
-                            inputFormatter: [
-                              FilteringTextInputFormatter.deny(
-                                  RegExp(r'^\s+')),
-                              // No leading space
-                              FilteringTextInputFormatter.allow(RegExp(
-                                  r'[a-zA-Z0-9@._+\-]') // Allow valid characters only
-                              ),
-                            ],
-                          )
-                              : Container(),
+                          controller.isCompanyProfile.value==false?commonTextField(controller: controller.companyEmailController,keyboardType: TextInputType.emailAddress , hintText: appEmailId, validator: (value) => value!.isEmpty ? appEmailId+appIsRequired : null,inputFormatter: [
+                            FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
+                            FilteringTextInputFormatter.deny(RegExp(r'[^\w\s]{2,}')),
+                          ]):Container(),
                           SizedBox(height: 10,),
                           ///For Company
                           /*  controller.isCompanyProfile.value==true?commonTextField(controller: controller.countryController,keyboardType: TextInputType.text ,hintText: appCountryId, validator: (value) => value!.isEmpty ? appCountryId+appIsRequired : null,inputFormatter: [
