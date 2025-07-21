@@ -671,7 +671,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                                           borderRadius: BorderRadius.circular(5),
                                           border: Border.all(color: appPrimaryColor,width: 1)
                                       ),
-                                      child: educationDetails[index].endingDate!=null?Text(dateTimeYear(date: educationDetails[index].endingDate??""),style: AppTextStyles.font12.copyWith(color: appPrimaryColor)):Container(),
+                                      child: educationDetails[index].startingDate!=null?Text(dateTimeYear(date: educationDetails[index].startingDate??""),style: AppTextStyles.font12.copyWith(color: appPrimaryColor)):Container(),
                                     ),
                                     SizedBox(width: 10,),
                                     Column(
@@ -819,6 +819,7 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
   _employmentHistory(context) {
     return Obx((){
       var employmentHistory=controller.employmentHistoryData.value.data??[];
+      var userData=controller.userProfileData.value.data;
       return SingleChildScrollView(
         child:  Column(
           children: <Widget>[
@@ -879,6 +880,8 @@ class ProfileDetailsPage extends GetView<ProfileDetailsControllers>{
                                     controller.isExpendedSkills.value=!controller.isExpendedSkills.value;
                                   },
                                   employmentHistoryId: employmentHistory[index].id??"",
+                                  slugId: employmentHistory[index].companySlug??"",
+                                  selfSlugId:controller.slugDataId.value??"",
                                 )
 
                               ],

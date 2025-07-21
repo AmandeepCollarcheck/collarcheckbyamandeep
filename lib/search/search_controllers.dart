@@ -87,16 +87,17 @@ class SearchControllers extends GetxController{
 
   globalSearchApiCall(context,{required String searchKeyWord})async{
      searchTypeKey.value=await readStorageData(key: searchJype);
-    const duration = Duration(milliseconds: 500);
+    const duration = Duration(milliseconds: 50);
     debouncer.debounce(
       duration: duration,
       onDebounce: () async {
         try {
-          keyboardDismiss(context);
-          progressDialog.show();
+          //keyboardDismiss(context);
+          //progressDialog.show();
           SearchDataListModel searchDataListModel = await ApiProvider.baseWithToken().globalSearch(searchKeyword: searchKeyWord, searchType: searchTypeKey.value,);
           if(searchDataListModel.status==true){
             searchDataList.value=searchDataListModel;
+            keyboardDismiss(context);
             // if (searchController.text.isNotEmpty) {
             //   searchService.addSearchQuery(searchController.text.trim());
             //   searchController.clear();
@@ -133,7 +134,7 @@ class SearchControllers extends GetxController{
       SaveUserProfileModel addSkillsData = await ApiProvider.baseWithToken().followCompany(formData);
       if(addSkillsData.status==true){
         //Get.offNamed(AppRoutes.bottomNavBar);s
-        Future.delayed(Duration(milliseconds: 500), ()async {
+        Future.delayed(Duration(milliseconds: 50), ()async {
           globalSearchApiCall(context,searchKeyWord: searchKeyWord);
         });
 

@@ -148,13 +148,18 @@ class EducationPage extends GetView<EducationControllers>{
                                           controller: controller.employedTillControllers,
                                           hintText: appSelectDesignation,
                                           onTap: (){
-                                            selectDate(
-                                                context, isEndDate: true,
-                                                firstDateData: convertStringDateTime(date: controller.joiningDateControllers.text??""),
-                                                onSelectedDate: (String employedTill) {
-                                                  controller.employedTillControllers.text=employedTill;
-                                                  controller.selectedEmployedTill.value=employedTill;
-                                                });
+                                            if(controller.isPurcuing.value){
+                                              showToast(appThisCourseIsMarkedAsPursuing);
+                                            }else{
+                                              selectDate(
+                                                  context, isEndDate: true,
+                                                  firstDateData: convertStringDateTime(date: controller.joiningDateControllers.text??""),
+                                                  onSelectedDate: (String employedTill) {
+                                                    controller.employedTillControllers.text=employedTill;
+                                                    controller.selectedEmployedTill.value=employedTill;
+                                                  });
+                                            }
+
                                           }
                                       ),
                                     ],

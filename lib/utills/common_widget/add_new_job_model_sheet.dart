@@ -31,6 +31,7 @@ var noOfVaccencyController=TextEditingController();
 var jobDescriptionController=TextEditingController();
 var appIndustryControllers=TextEditingController();
 var selectedImageFromTHeGallery="".obs;
+var selectedFileName="".obs;
 var selectedSkillsData = [].obs;
 var selectedJobTitle={"id":"0","name": appSelectedJobTitles}.obs;
 var selectedSkills={"id":"0","name": appSelectSkill}.obs;
@@ -415,9 +416,10 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
                       GestureDetector(
                         onTap: (){
 
-                          getFileFromGallery(context,onFilePickedData: (String pickedData) {
+                          getFileFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
                             if(pickedData!=null){
                               selectedImageFromTHeGallery.value=pickedData;
+                              selectedFileName.value=fileName;
                             }
                           }, );
                         },
@@ -457,11 +459,12 @@ addNewJobForm(context,{required  CompanyAllDetailsData companyAllDetails,require
                               Obx((){
                                 return SizedBox(
                                     width: MediaQuery.of(context).size.width*0.7,
-                                    child: Text(selectedImageFromTHeGallery.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                    child: Text(selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                               }),
                               GestureDetector(
                                   onTap:(){
                                     selectedImageFromTHeGallery.value="";
+                                    selectedFileName.value="";
                                   },
                                   child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                             ],
@@ -637,9 +640,9 @@ void _addNewJob(context,{required String screenNameData,required int isDraft})as
 
     SaveUserProfileModel addEmployment = await ApiProvider.baseWithToken().addJob(data);
     if(addEmployment.status==true){
-      if (progressDialog.isShowing()) {
-        Get.back();
-      }
+      // if (progressDialog.isShowing()) {
+      //   Get.back();
+      // }
       if(screenNameData==companyJobsScreen){
         Navigator.pop(context,{'result':true});
       }

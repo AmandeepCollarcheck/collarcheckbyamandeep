@@ -158,7 +158,7 @@ Widget commonMobileNumberTextField({
       FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*$')),
       FilteringTextInputFormatter.deny(RegExp(r'^\s+')),
     ],
-    maxLength: 15,
+    maxLength: 10,
     validator: validator,
     style: AppTextStyles.font16.copyWith(color: appBlackColor),
     decoration: InputDecoration(

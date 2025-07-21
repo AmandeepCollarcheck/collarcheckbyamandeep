@@ -81,9 +81,10 @@ class PortfolioControllers extends GetxController{
         }
       }, portfolioType: portfolioTitle.value);
     }else{
-      getFileFromGallery(context,onFilePickedData: (String pickedData) {
+      getFileFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
         if(pickedData!=null){
           selectedImageFromTHeGallery.value=pickedData;
+          selectedFileName.value=fileName;
         }
       },);
     }

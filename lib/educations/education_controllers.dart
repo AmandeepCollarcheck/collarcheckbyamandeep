@@ -65,15 +65,16 @@ class EducationControllers extends GetxController{
     isEditData.value=data[isEdit]??false;
     isEditItemIdData.value=data[isEditItemId]??"";
   }
+  Future.delayed(Duration(milliseconds: 500), ()async {
+    await getDesignationApiCall();
+  });
   if(isEditData.value){
     Future.delayed(Duration(milliseconds: 500), ()async {
       getEducationDataListApiCall();
 
     });
   }
-  Future.delayed(Duration(milliseconds: 500), ()async {
-    getDesignationApiCall();
-  });
+
 
     super.onInit();
   }
@@ -87,7 +88,7 @@ class EducationControllers extends GetxController{
   }
 
 
-  void getDesignationApiCall() async{
+   getDesignationApiCall() async{
     try {
       progressDialog.show();
       EducationListModel designationListModel = await ApiProvider.baseWithToken().educationDetails();
@@ -196,7 +197,7 @@ class EducationControllers extends GetxController{
         "course":selectedCourseIdName.value??'',
         "course_type":selectedCourseTypeData.value??"",
         "starting_date":selectedJoiningDate.value??'',
-        "ending_date":selectedEmployedTill.value??'',
+        "ending_date":isPurcuing.value?"":selectedEmployedTill.value??'',
         "ishighest":isHeigestQuilification.value,
         "ongoing":isPurcuing.value??"",
         "country":selectedCountryIdData.value??"",
@@ -240,19 +241,30 @@ class EducationControllers extends GetxController{
         var itemData=educationData.value.data;
 
         if(isEditData.value){
-          ///For University
-          selectedUniverCityDropDown.value={
-            "id": itemData?.id ?? "0",
-            "name": itemData?.university ?? appSelectedUniversity
-          };
-          selectedInstitutationIdData.value=itemData?.id;
+          if(itemData?.university!=null){
+            var universityNameId=getDataBasedByIdName(model: educationDataDetails.value, name: itemData?.university.toString() ?? "0",);
+            await Future.delayed(Duration(microseconds: 50));
+            ///For University
+            selectedUniverCityDropDown.value={
+              "id": universityNameId.toString() ?? "0",
+              "name": itemData?.university ?? appSelectedUniversity
+            };
+            selectedInstitutationIdData.value=universityNameId.toString()??itemData?.id;
+          }
+
 
           ///Select Course
-          selectedCourseDropDown.value={
-            "id": itemData?.courseType ?? "0",
-            "name": itemData?.course ?? appSelectedCourse
-          };
-          selectedCourseIdName.value=itemData?.courseType;
+          if( itemData?.course!=null){
+            var courseNameId=getCourseDataBasedByIdName(model: educationDataDetails.value, name: itemData?.course.toString() ?? "0",);
+
+            await Future.delayed(Duration(microseconds: 50));
+            selectedCourseDropDown.value={
+              "id": courseNameId.toString() ?? "0",
+              "name": itemData?.course ?? appSelectedCourse
+            };
+            selectedCourseIdName.value=courseNameId.toString();
+          }
+
 
           ///Course type
           selectedCourseTypeData.value=int.tryParse(itemData!.courseType.toString())??1;
@@ -270,6 +282,7 @@ class EducationControllers extends GetxController{
             "id": itemData?.country ?? "0",
             "name": countryName ?? appSelectCountry
           };
+
           selectedCountryIdData.value=itemData?.country;
           await getStateListApiCall(countryName: itemData!.country.toString() );
           ///State
@@ -352,6 +365,34 @@ class EducationControllers extends GetxController{
         ?.firstWhere((country) => country.id == id, orElse: () => CountryList(name: "Not Found"))
         .name ??
         "Not Found";
+  }
+
+
+  String getDataBasedByIdName({
+    required EducationListModel model,
+    required String name,
+  }) {
+
+    final matchedItem = model.data?.institutionList?.firstWhere(
+          (element) => (element.name?.trim().toLowerCase() == name.trim().toLowerCase()),
+      orElse: () => CourseListElement(name: "Not Found", id: "Not Found"),
+    );
+
+    return matchedItem?.id ?? "Not Found";
+  }
+
+  String getCourseDataBasedByIdName({
+    required EducationListModel model,
+    required String name,
+  }) {
+
+
+    final matchedItem = model.data?.courseList?.firstWhere(
+          (element) => (element.name?.trim().toLowerCase() == name.trim().toLowerCase()),
+      orElse: () => CourseListElement(name: "Not Found", id: "Not Found"),
+    );
+
+    return matchedItem?.id ?? "Not Found";
   }
 
 

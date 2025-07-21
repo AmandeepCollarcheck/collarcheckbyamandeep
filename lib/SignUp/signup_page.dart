@@ -134,7 +134,8 @@ class SignUpPage extends GetView<SignUpControllers>{
                   SizedBox(height: 20,),
 
                   ///For Company
-                  controller.isCompanyProfile.value==true?_commonSocialSignIN(context,socialName: appSignUpWithGoogle,onClick: (){
+                  controller.isCompanyProfile.value==true?_commonSocialSignIN(context,socialName:
+                  appSignUpWithGoogle,onClick: (){
                     controller.googleLogin();
                     ///Gooogle click
                   },socialIcon: appGoogleIcon):Container(),

@@ -32,6 +32,7 @@ class EmploymentHistoryControllers extends GetxController{
   var selectedEmployeeType = Rxn<int>();
   var selectedSkillsData = [].obs;
   Rx selectedResumeName="".obs;
+  Rx selectedFileName="".obs;
   Rx selectedDesignation="".obs;
   Rx selectedCompany="".obs;
   Rx selectedDepartment="".obs;
@@ -40,6 +41,8 @@ class EmploymentHistoryControllers extends GetxController{
   Rx selectedSkills="".obs;
   Rx selectedCTC="".obs;
   Rx selectedType="".obs;
+  Rx selectedCTCID="".obs;
+  Rx selectedTypeId="".obs;
 
   Rx isStillWorkingHere =false.obs;
   var isEditData=false.obs;
@@ -201,9 +204,10 @@ class EmploymentHistoryControllers extends GetxController{
         "employment_type":selectedEmployeeType.value,
         "description":rolesAndResponsibilityControllers.text??"",
         "document[0]":documentFile??'',
-        "salary_mode":selectedCTC.value??"",
+        "salary_mode":selectedType.value??"",
         "salary_inhand":ctcAmount.value.text??"",
-        "still_working":isStillWorkingHere.value?1:0
+        "still_working":isStillWorkingHere.value?1:0,
+        "salary":selectedCTCID??"0"
       });
 
       for (int i = 0; i < selectedSkillsData.length; i++) {
@@ -315,6 +319,7 @@ class EmploymentHistoryControllers extends GetxController{
         rolesAndResponsibilityControllers.text=filledData?.description??"";
         ///Resume
         selectedResumeName.value=filledData?.document?[0]??"";
+        selectedFileName.value=filledData?.document?[0]??"";
         ///Ctc amount
         ctcAmount.text=filledData?.salaryInhand??"";
         ///Still working
@@ -340,6 +345,7 @@ class EmploymentHistoryControllers extends GetxController{
   }
 
   updateEmploymentApiCall(context)async{
+
     try {
       keyboardDismiss(context);
       progressDialog.show();

@@ -7,6 +7,7 @@ class SearchBindings extends Bindings{
   void dependencies() {
     // TODO: implement dependencies
     Get.put(SearchControllers());
+
   }
   
 }

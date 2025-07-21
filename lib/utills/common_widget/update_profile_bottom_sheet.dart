@@ -100,7 +100,7 @@ updateProfileBottomSheet(context,{required CompanyAllDetailsData companyAllDetai
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () => Navigator.pop(context,{'result':false}),
                             child: SvgPicture.asset(
                               appBackIconSvg,
                               height: 12,
@@ -589,7 +589,7 @@ void _updateProfileDetails(context) async{
     SaveUserProfileModel saveUserProfileModel = await ApiProvider.baseWithToken().companyUpdateProfile(formData);
     if(saveUserProfileModel.status==true){
       progressDialog.dismissLoader();
-      Navigator.pop(context);
+      Navigator.pop(context,{'result':true});
     }else{
       showToast(saveUserProfileModel.messages??"");
     }

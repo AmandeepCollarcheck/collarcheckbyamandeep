@@ -392,9 +392,10 @@ class ProfilePage extends GetView<ProfileControllers>{
               SizedBox(height: 5,),
               GestureDetector(
                 onTap: (){
-                  getFileFromGallery(context,onFilePickedData: (String pickedData) {
+                  getFileFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
                     if(pickedData!=null){
                       controller.selectedResumeName.value=pickedData;
+                      controller.selectedFileName.value=fileName;
                     }
                   });
                 },
@@ -436,11 +437,12 @@ class ProfilePage extends GetView<ProfileControllers>{
                       Obx((){
                         return SizedBox(
                             width: MediaQuery.of(context).size.width*0.7,
-                            child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                            child: Text(controller.selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                       }),
                       GestureDetector(
                           onTap:(){
                             controller.selectedResumeName.value="";
+                            controller.selectedFileName.value="";
                           },
                           child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                     ],

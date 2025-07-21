@@ -44,7 +44,7 @@ class LoginControllers extends GetxController{
   sendOtpLogin(context) async {
     keyboardDismiss(context);
     if(formKey.currentState!.validate()) {
-      if (phoneController.text.length < 4) {
+      if (phoneController.text.length < 10) {
         showToast(appMobileNumberNotLessThanFourDigit);
       } else {
         try {

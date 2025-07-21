@@ -12,7 +12,7 @@ import '../../utills/common_widget/image_multipart.dart';
 import '../../utills/common_widget/progress.dart';
 
 class ChatControllers extends GetxController{
-
+  late ProgressDialog progressDialog=ProgressDialog() ;
   var allMessageData=AllMessageDataListModel().obs;
   var messageDatum=MessageDatum().obs;
   var screenNameData="".obs;
@@ -22,6 +22,7 @@ class ChatControllers extends GetxController{
   var profileImage="".obs;
   var  messageController = TextEditingController();
   var selectedDocumentData="".obs;
+  var selectedFileName="".obs;
 
   var argumentTypeDataDetails="".obs;
   var messagesData = <String>[].obs; // Observable list of messages
@@ -123,5 +124,32 @@ class ChatControllers extends GetxController{
     }
   }
 
+  ///Follow api
+  companyFollowApiCall(context,{required String companyId,required String userId})async{
+    try {
+      progressDialog.show();
+      var formData = dio.FormData.fromMap({
+        "follower_id":userId??"",
+        // "int-id":companyId??"0",
+      });
+      SaveUserProfileModel addSkillsData = await ApiProvider.baseWithToken().followCompany(formData);
+      if(addSkillsData.status==true){
+        //Get.offNamed(AppRoutes.bottomNavBar);s
+        Future.delayed(Duration(milliseconds: 500), ()async {
+          getAllMessage();
+        });
+
+      }else{
+        showToast(addSkillsData.messages??"");
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
 
 }

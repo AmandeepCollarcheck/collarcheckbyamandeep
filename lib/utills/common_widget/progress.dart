@@ -391,7 +391,7 @@ Future<void> _openCamera({required Function(File) onCameraCapturedData}) async {
 
 }
 
-Future<void> getFileFromGallery(context,{required Function(String) onFilePickedData})async{
+Future<void> getFileFromGallery(context,{required Function(String fileName,String onFilePickedData) onFilePickedData})async{
   int maxFileSize = 2 * 1024 * 1024;
   try {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -410,7 +410,7 @@ Future<void> getFileFromGallery(context,{required Function(String) onFilePickedD
         return;
       }
 
-      onFilePickedData(file.path.toString());
+      onFilePickedData(file.name.toString(),file.path.toString());
     } else {
       // User canceled file picker
     }
@@ -642,7 +642,12 @@ String getRatingText(int rating) {
 
 
 completeSalaryPackage({required String salaryType,required String salaryAmount,required String salaryMode}){
-  return "$salaryType $salaryAmount $salaryMode";
+  if(salaryType=="1"){
+    return "$appCTC $salaryAmount $salaryMode";
+  }else{
+    return "$appInHand $salaryAmount $salaryMode";
+  }
+
 }
 
 openShortItemFilter(context,{required Function(int) onShort}){
@@ -749,6 +754,18 @@ String formatRating(dynamic rating) {
   final double value = double.tryParse(rating.toString()) ?? 0.0;
   return value.toStringAsFixed(1); // Always 1 digit after decimal
 }
+double parseToDoubleRating(dynamic value) {
+  if (value is int) {
+    return value.toDouble();
+  } else if (value is double) {
+    return value;
+  } else if (value is String) {
+    return double.tryParse(value) ?? 0.0;
+  } else {
+    return 0.0;
+  }
+}
+
 
 commonUserNameWidget(context,{required String userName,required bool isProfileVerified,required double width,Color textColor=appBlackColor}){
   return Container(

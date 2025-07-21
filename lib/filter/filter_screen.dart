@@ -115,7 +115,18 @@ class FilterPage extends GetView<FilterController>{
                     child: commonButton(
                         context,
                         isPaddingDisabled: true,
-                        buttonName: appReset, buttonBackgroundColor: appWhiteColor, textColor: appPrimaryColor, buttonBorderColor: appPrimaryColor, onClick: (){}),
+                        buttonName: appReset, buttonBackgroundColor: appWhiteColor, textColor: appPrimaryColor, buttonBorderColor: appPrimaryColor, onClick: (){
+                      // Reset selected filters
+                      controller.selectedFilterType.value = [];
+                      controller.selectedFilterTypeItemId.clear();
+
+                      // Optionally call apply again with cleared values
+                      // controller.getApplyFilterData(
+                      //   context,
+                      //   filterType: [],
+                      //   filterTypeId: {},
+                      // );
+                    }),
                   ),
                   SizedBox(width: 20,),
                   SizedBox(

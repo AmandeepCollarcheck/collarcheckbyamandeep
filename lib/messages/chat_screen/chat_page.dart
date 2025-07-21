@@ -104,8 +104,14 @@ class ChatPage extends GetView<ChatControllers>{
                           decoration: InputDecoration(
                             suffixIcon:GestureDetector(
                               onTap: (){
-                                getFileFromGallery(context,onFilePickedData: (String data) {
+                                getFileFromGallery(context,onFilePickedData: (String fileName,String data) {
                                   controller.selectedDocumentData.value=data;
+                                  controller.selectedFileName.value=fileName;
+                                  print("nkdfhsdhfhsfdskhdf");
+                                  print(controller.selectedFileName.value);
+                                  print(controller.selectedDocumentData.value);
+                                  controller.sendMessage(controller.selectedFileName.value);
+                                  controller.messageController.clear();
                                 });
                               },
                               child: Padding(
@@ -226,8 +232,47 @@ class ChatPage extends GetView<ChatControllers>{
     ).then((value) {
       if (value != null) {
         if(value=="option1"){
+          Get.dialog(
+            AlertDialog(
+              title: Text(controller.appBarName.value??"",),
+              content: ClipOval(
+
+                child: controller.profileImage.value.isNotEmpty?Image.network(
+                  controller.profileImage.value,height: MediaQuery.of(context).size.height*0.3,width: MediaQuery.of(context).size.height*0.3,fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                              colors: [getRandomColor(),getRandomColor()]
+                          )
+                      ),
+                      height: MediaQuery.of(context).size.height*0.3,width: MediaQuery.of(context).size.height*0.3,
+                      child: Text(getInitialsWithSpace(input: controller.appBarName.value??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor),),
+                    );
+                  },
+                ):Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                          colors: [getRandomColor(),getRandomColor()]
+                      )
+                  ),
+                  height: MediaQuery.of(context).size.height*0.3,width: MediaQuery.of(context).size.height*0.3,
+                  child: Text(getInitialsWithSpace(input: controller.appBarName.value??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor),),
+                ),
+              ),
+
+            ),
+          );
+
           //Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {slugId:similarProfile[index].slug??"",screenName:profileDetails,isEmployeeProfile:true});
         }else{
+          var userId=controller.allMessageData.value.data?[0].sender??"";
+          controller.companyFollowApiCall(context,companyId:userId??"" , userId:controller.allMessageData.value.data?[0].sender??"" );
+
 
         }
       }

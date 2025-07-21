@@ -69,6 +69,7 @@ class JobList {
   String? individualId;
   String? profile;
   String? slug;
+  bool? isApply;
   String? cityName;
   String? stateName;
   String? countryName;
@@ -92,6 +93,7 @@ class JobList {
     this.individualId,
     this.profile,
     this.slug,
+    this.isApply,
     this.cityName,
     this.stateName,
     this.countryName,
@@ -114,6 +116,7 @@ class JobList {
     individualId: json["individual_id"],
     profile: json["profile"],
     slug: json["slug"],
+    isApply: json["apply"],
     cityName: json["city_name"],
     stateName: json["state_name"],
     salaryName: json.containsKey("salary_name") && json["salary_name"] != null
@@ -138,6 +141,7 @@ class JobList {
     "individual_id": individualId,
     "profile": profile,
     "slug": slug,
+    "apply":isApply,
     "city_name": cityName,
     "state_name": stateName,
     "country_name": countryName,

@@ -62,13 +62,13 @@ class OtherCompanyProfileControllers extends GetxController with GetTickerProvid
     print(">>>>>>>>>>>>>>");
     print(screenNameData.value);
     if(screenNameData.value==companyProfileScreen){
-      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4",slugId:selfSlugIdData.value});
     }else if(screenNameData.value==topCompaniesScreen){
       Get.offNamed(AppRoutes.topCompanies,arguments: {screenName:dashboard});
     }else if(screenNameData.value==searchScreen){
       Get.offNamed(AppRoutes.search,arguments: {screenName:dashboard});
     }else if(screenNameData.value==profileDetails){
-      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4"});
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"4",slugId:selfSlugIdData.value});
     }else if(screenNameData.value==otherUserProfileScreen){
       Get.offNamed(AppRoutes.otherIndividualProfilePage,arguments: {screenName:dashboard,slugId:selfSlugIdData.value,isEmployeeProfile:true});
     }else{

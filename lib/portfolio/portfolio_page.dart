@@ -145,11 +145,12 @@ class PortfolioPage extends GetView<PortfolioControllers>{
                                   Obx((){
                                     return SizedBox(
                                         width: MediaQuery.of(context).size.width*0.7,
-                                        child: Text(controller.selectedImageFromTHeGallery.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                        child: Text(controller.selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                                   }),
                                   GestureDetector(
                                       onTap:(){
                                         controller.selectedImageFromTHeGallery.value="";
+                                        controller.selectedFileName.value="";
                                       },
                                       child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                                 ],

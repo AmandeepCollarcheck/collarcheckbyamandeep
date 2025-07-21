@@ -73,6 +73,7 @@ class ProfileControllers extends GetxController{
   Rx presentAddress=appSelect.obs;
   Rx paremanentAddress=appSelect.obs;
   Rx selectedResumeName="".obs;
+  Rx selectedFileName="".obs;
   var selectedIndex=0.obs;
   var listTabLabel = [
     appBasic, appAddress, appEmployment,appSocialAccounts

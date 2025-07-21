@@ -1,12 +1,16 @@
 import 'dart:io';
 
+import 'package:collarchek/utills/app_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart' as dio;
 import '../api_provider/api_provider.dart';
+import '../bottom_nav_bar/bottom_nav_bar_controller.dart';
+import '../models/company_all_details_data.dart';
 import '../models/company_profile_details_model.dart';
+import '../models/company_user_details_model.dart';
 import '../models/save_user_profile_model.dart';
 import '../models/user_profile_model.dart';
 import '../utills/app_key_constent.dart';
@@ -19,6 +23,8 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
 
   final scrollController = ScrollController();
   var companyProfileData=CompanyProfileDetailsModel().obs;
+  var designationListData=CompanyAllDetailsData().obs;
+  var companyUserDetails=CompanyUserDetailsModel().obs;
   var selectedIndex=0.obs;
   var isExpanded=false.obs;
   final GlobalKey homeKey = GlobalKey();
@@ -52,6 +58,12 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
     scrollController.addListener(_onScroll);
     Future.delayed(Duration(milliseconds: 500), ()async {
       getCompanyProfileApiCall();
+    });
+    Future.delayed(Duration(milliseconds: 500), ()async {
+      getDesignationApiCall();
+    });
+    Future.delayed(Duration(milliseconds: 500), ()async {
+      getDashboardApiData();
     });
     super.onInit();
   }
@@ -138,6 +150,56 @@ class CompanyProfileControllers extends GetxController with GetTickerProviderSta
 
       }else{
         showToast(addSkillsData.messages??"");
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  openJobsList(context){
+    final BottomNavBarController controller = Get.find<BottomNavBarController>();
+    controller.bottomNavCurrentIndex.value=2;
+    //Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"2",screenName:companyProfileScreen});
+  }
+
+  void getDesignationApiCall() async{
+    try {
+      progressDialog.show();
+      CompanyAllDetailsData designationListModel = await ApiProvider.baseWithToken().companyAllData();
+      if(designationListModel.status==true){
+        designationListData.value=designationListModel;
+
+      }else{
+        showToast(somethingWentWrong);
+      }
+      progressDialog.dismissLoader();
+    } on HttpException catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.message);
+    } catch (exception) {
+      progressDialog.dismissLoader();
+      showToast(exception.toString());
+    }
+  }
+
+  getDashboardApiData() async {
+    try {
+      progressDialog.show();
+      CompanyUserDetailsModel companyUserDetailsModel = await ApiProvider.baseWithToken().companyUserDetails();
+      if(companyUserDetailsModel.status==true){
+        companyUserDetails.value=companyUserDetailsModel;
+        await writeStorageData(key: profileImage, value: companyUserDetails.value.data?.profile.toString()??"");
+        await writeStorageData(key: progressPercentage, value: companyUserDetails.value.data?.profilePercentage.toString()??"0");
+        await writeStorageData(key: searchJype, value: "jobs");
+
+
+      }else{
+        showToast(somethingWentWrong);
       }
       progressDialog.dismissLoader();
     } on HttpException catch (exception) {

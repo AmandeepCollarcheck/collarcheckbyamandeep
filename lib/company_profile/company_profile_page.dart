@@ -4,6 +4,7 @@ import 'package:collarchek/utills/app_route.dart';
 import 'package:collarchek/utills/app_strings.dart';
 import 'package:collarchek/utills/common_widget/common_image_widget.dart';
 import 'package:collarchek/utills/common_widget/progress.dart';
+
 import 'package:collarchek/utills/font_styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,10 @@ import 'package:get/get.dart';
 import 'package:scroll_to_animate_tab/scroll_to_animate_tab.dart';
 import '../models/company_profile_details_model.dart';
 import '../utills/app_colors.dart';
+import '../utills/common_widget/add_new_job_model_sheet.dart';
 import '../utills/common_widget/common_appbar.dart';
 import '../utills/common_widget/common_methods.dart';
+import '../utills/common_widget/update_profile_bottom_sheet.dart' show updateProfileBottomSheet;
 import '../utills/image_path.dart';
 
 class CompanyProfilePage extends GetView<CompanyProfileControllers>{
@@ -440,7 +443,14 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                         children: <Widget>[
                           Text(appAbout,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
                           GestureDetector(
-                            onTap: (){
+                            onTap: ()async{
+                              //Get.bottomSheet(updateProfileBottomSheet())
+                              final result=await updateProfileBottomSheet(context, companyAllDetails: controller.designationListData.value, screenName: companyProfileScreen, companyUserDetails: controller.companyUserDetails.value,);
+                              if(result['result']==true){
+                                Future.delayed(Duration(milliseconds: 500), ()async {
+                                  controller.getCompanyProfileApiCall();
+                                });
+                              }
                               // if(profileDescription.isNotEmpty){
                               //   Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails,isEdit:true,filledProfileDescriptionData:profileDescription??""});
                               // }else{
@@ -600,7 +610,13 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                 children: <Widget>[
                   Text(appJobOpening,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),),
                   GestureDetector(
-                    onTap: (){
+                    onTap: ()async{
+                      // final result=await addNewJobForm(context, companyAllDetails: controller.designationListData.value,screenNameData:companyJobsScreen);
+                      // if(result['result']==true){
+                      //   Future.delayed(Duration(milliseconds: 500), ()async {
+                      //     controller.getJobListApiCall();
+                      //   });
+                      // }
                       // if(profileDescription.isNotEmpty){
                       //   Get.offNamed(AppRoutes.about,arguments: {screenName:profileDetails,isEdit:true,filledProfileDescriptionData:profileDescription??""});
                       // }else{
@@ -632,7 +648,8 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                       child: commonCardWidget(context,
                           cardWidth: MediaQuery.of(context).size.width*0.9,
                           onClick: (){
-                            //controller.openJobDetailsPage( jobTitle: recommendJob[index].slug ??"");
+
+                            controller.openJobsList(context);
                           },
                           image:  jobOpeningData[index].profile??"",
                           isCompanyProfile:true,
@@ -657,7 +674,7 @@ class CompanyProfilePage extends GetView<CompanyProfileControllers>{
                 ),
               ),
             ):Container(
-              child: noDataAvailableFoundWidget(context, header: appGallery, details: appNoGalleryData),
+              child: noDataAvailableFoundWidget(context, header: appJobOpening, details: appNoJobOpeneingData),
             )
           ],
         ),

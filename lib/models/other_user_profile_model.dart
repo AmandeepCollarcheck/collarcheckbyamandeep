@@ -30,7 +30,7 @@ class Data {
   String? fname;
   String? lname;
   String? profile;
-  String? stateName;
+  dynamic? stateName;
   String? cityName;
   bool? showReview;
   bool? showSalary;
@@ -73,7 +73,7 @@ class Data {
   String? emailVerified;
   String? stillWorkingPosition;
   String? stillWorkingCompany;
-  int? stillWorking;
+  String? stillWorking;
   String? stillWorkingCompanyName;
   String? stillWorkingPositionName;
   String? accomodation;
@@ -520,6 +520,7 @@ class EmployementHistoryNew {
   String? approved;
   String? companySlug;
   String? userSlug;
+  int? showSalaryStatus;
   int? totalExperienceMonths;
   List<ListElement>? lists;
   int? stillWorking;
@@ -538,6 +539,7 @@ class EmployementHistoryNew {
     this.userSlug,
     this.totalExperienceMonths,
     this.lists,
+    this.showSalaryStatus,
     this.stillWorking,
   });
 
@@ -548,6 +550,7 @@ class EmployementHistoryNew {
     companyId: json["company_id"],
     joiningDate: json["joining_date"],
     workedTillDate: json["worked_till_date"],
+    showSalaryStatus:json["showSalaryStatus"],
     claimStatus: json["claim_status"],
     addedBy: json["added_by"],
     approved: json["approved"],
@@ -564,6 +567,7 @@ class EmployementHistoryNew {
     "company": company,
     "company_id": companyId,
     "joining_date": joiningDate,
+    "showSalaryStatus":showSalaryStatus,
     "worked_till_date": workedTillDate,
     "claim_status": claimStatus,
     "added_by": addedBy,

@@ -23,6 +23,8 @@ import 'common_methods.dart';
     required String companyName,
     required String companyDetails,
     required String companyImage,
+     required String slugId,
+     required String selfSlugId,
      required List experienceDetails,
      required bool isProfileVerification,
      bool isExpended=false,
@@ -33,7 +35,7 @@ import 'common_methods.dart';
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _profileWidget(context,companyImage: companyImage, companyName: companyName, companyDetails: companyDetails),
+          _profileWidget(context,companyImage: companyImage, companyName: companyName, companyDetails: companyDetails, slugIdData: slugId, selfSlugIdData: selfSlugId),
           SizedBox(height: 8,),
           Wrap(
             direction: Axis.vertical,
@@ -63,9 +65,9 @@ import 'common_methods.dart';
 
                                   Row(
                                     children: <Widget>[
-                                      commonRattingBar(context, size: 14,padding: 0,initialRating: 2.0, updatedRating: (double data){
+                                      parseToDoubleRating(experienceDetails[index].totalRating.rating)!=0.0?commonRattingBar(context, size: 14,padding: 0,initialRating: parseToDoubleRating(experienceDetails[index].totalRating.rating), updatedRating: (double data){
                                         print(data);
-                                      },ignoreGesture: true),
+                                      },ignoreGesture: true):Container(),
                                       SizedBox(width: 5,),
                                      GestureDetector(
                                        onTap:(){
@@ -148,63 +150,72 @@ import 'common_methods.dart';
                             ),
                           )
                         ],
-                      ):Column()
+                      ):Column(),
+                      //SizedBox(height: 10,)
 
                     ],
                   ),
                 ],
               );
             }),
-          )
+          ),
 
         ],
       ),
     );
 }
 
-_profileWidget(context,{required String companyImage,required String companyName,required String companyDetails}) {
-     return Row(
-       children: <Widget>[
-         companyImage.isNotEmpty?ClipRRect(
-           borderRadius: BorderRadius.circular(10),
-           child: Image.network(appCompanyImage,height: 50,width: 50,errorBuilder: (context, error, stackTrace) {
-             return Container(
-               alignment: Alignment.center,
-               height: 50,
-               width: 50,
-               decoration: BoxDecoration(
-                   borderRadius: BorderRadius.circular(10),
-                   gradient: LinearGradient(
-                       colors: [getRandomColor(),getRandomColor()]
-                   )
-               ),
-               child: companyName.isNotEmpty?Text(getInitialsWithSpace(input: companyName??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)):Container(),
-             );
-           },),
-         ):Container(
-           alignment: Alignment.center,
-           height: 50,
-           width: 50,
-           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-               gradient: LinearGradient(
-                   colors: [getRandomColor(),getRandomColor()]
-               )
+_profileWidget(context,{required String companyImage,required String companyName,required String companyDetails,required String slugIdData,required String selfSlugIdData}) {
+     return GestureDetector(
+       onTap: (){
+         print("askjldsfjsjdfsjdfjsjdfksdf");
+         print(slugId);
+         print(selfSlugId);
+         Get.offNamed(AppRoutes.otherCompanyProfilePage,arguments: {screenName:profileDetails,slugId:slugIdData,selfSlugId:selfSlugIdData});
+       },
+       child: Row(
+         children: <Widget>[
+           companyImage.isNotEmpty?ClipRRect(
+             borderRadius: BorderRadius.circular(10),
+             child: Image.network(appCompanyImage,height: 50,width: 50,errorBuilder: (context, error, stackTrace) {
+               return Container(
+                 alignment: Alignment.center,
+                 height: 50,
+                 width: 50,
+                 decoration: BoxDecoration(
+                     borderRadius: BorderRadius.circular(10),
+                     gradient: LinearGradient(
+                         colors: [getRandomColor(),getRandomColor()]
+                     )
+                 ),
+                 child: companyName.isNotEmpty?Text(getInitialsWithSpace(input: companyName??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)):Container(),
+               );
+             },),
+           ):Container(
+             alignment: Alignment.center,
+             height: 50,
+             width: 50,
+             decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(10),
+                 gradient: LinearGradient(
+                     colors: [getRandomColor(),getRandomColor()]
+                 )
+             ),
+             child: Text(getInitialsWithSpace(input: companyName??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
            ),
-           child: Text(getInitialsWithSpace(input: companyName??""),style: AppTextStyles.font20W700.copyWith(color: appBlackColor)),
-         ),
-         SizedBox(width: 10,),
-         Column(
-           crossAxisAlignment: CrossAxisAlignment.start,
-           children: <Widget>[
-             SizedBox(
-               width: MediaQuery.of(context).size.width*0.56,
-                 child: Text(companyName,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),)),
-             SizedBox(
-                 width: MediaQuery.of(context).size.width*0.56,
-                 child: Text(companyDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)),
-           ],
-         )
-       ],
+           SizedBox(width: 10,),
+           Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: <Widget>[
+               SizedBox(
+                   width: MediaQuery.of(context).size.width*0.56,
+                   child: Text(companyName,style: AppTextStyles.font16W600.copyWith(color: appBlackColor),)),
+               SizedBox(
+                   width: MediaQuery.of(context).size.width*0.56,
+                   child: Text(companyDetails,style: AppTextStyles.font12w500.copyWith(color: appGreyBlackColor),)),
+             ],
+           )
+         ],
+       ),
      );
 }

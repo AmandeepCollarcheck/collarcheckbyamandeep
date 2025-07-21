@@ -135,6 +135,10 @@ class SearchPage extends GetView<SearchControllers>{
                                                   onClick: () {
                                                     controller.openJobDetails(jobTitle: jobList[index].slug ??"",);
                                                   },
+                                                  isApplyClick:(){
+                                                    controller.openJobDetails(jobTitle: jobList[index].slug ??"",);
+                                                  },
+                                                  isApplied: jobList[index].isApply ??false,
                                                   image: jobList[index].profile ??"",
                                                   jobProfileName: jobList[index].jobTitle ?? "",
                                                   companyName: jobList[index].companyName ?? "",
@@ -146,7 +150,8 @@ class SearchPage extends GetView<SearchControllers>{
                                                     controller.isExpanded.value = !controller.isExpanded.value;
                                                   },
                                                   location: generateLocation(cityName: jobList[index].cityName??"", stateName: jobList[index].stateName??"", countryName: jobList[index].countryName??""),
-                                                  timeAgo: calculateTimeDifference(createDate: jobList[index].createDate??""), isApplyClick: () {  },
+                                                  timeAgo: calculateTimeDifference(createDate: jobList[index].createDate??""),
+
                                                 );
                                               }),
                                             ):SizedBox(

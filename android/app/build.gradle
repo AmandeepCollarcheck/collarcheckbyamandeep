@@ -47,10 +47,10 @@ android {
             keyPassword 'CollarCheck'
         }
         debug {
-//            storeFile file('my-release-key.jks')  // Use the same keystore
-//            storePassword 'CollarCheck'
-//            keyAlias 'release'
-//            keyPassword 'CollarCheck'
+            storeFile file('my-release-key.jks')  // Use the same keystore
+            storePassword 'CollarCheck'
+            keyAlias 'release'
+            keyPassword 'CollarCheck'
         }
     }
 

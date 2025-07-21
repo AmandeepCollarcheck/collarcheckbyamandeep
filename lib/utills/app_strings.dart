@@ -48,7 +48,7 @@ const String appConnectionsRequest ="Connections Request";
 const String appJobs ="Jobs";
 const String appMessages ="Messages";
 const String appSearchForJobsCompanies ="Search for Jobs, Companies & Employees";
-const String appMobileNumberNotLessThanFourDigit ="Mobile number must be at least 4 digits";
+const String appMobileNumberNotLessThanFourDigit ="Mobile number must be at least 10 digits";
 const String appOtpMustBeSixDigit ="Otp must be at least 6 digits";
 const String appPleaseAcceptTermsConditions ="Please accept the Terms and Conditions to proceed.";
 const String appSeeAll ="See All";
@@ -427,6 +427,7 @@ const String appPleaseEnterContactPersonName="Please enter contact person name";
 const String appToPresent="to Present";
 const String appEmployment="Employment";
 const String appNoGalleryData="No data found in app gallery";
+const String appNoJobOpeneingData="No data found in job opening";
 const String appNoAnyLinkAvailable="No any link available";
 const String appReviewsHistory="Reviews history";
 const String appFollow="Follow";
@@ -436,6 +437,8 @@ const String appExploreNow ="Explore now";
 const String appFileSizeShouldBeLessThan ="File size should be less than 5MB";
 const String appOnAverageVerifiedMembers="On average, verified members get 60% more profile views.";
 const String appThisCertificateIsMarkedAsOngoing="This certificate is marked as ongoing. Please uncheck 'Ongoing' to set an end date.";
+const String appThisCourseIsMarkedAsPursuing="This course is marked as pursuing. Please uncheck 'pursuing' to set an end date.";
+const String appThisEmploymentIsMarkedAsStillWorking="This Employment is marked as still working. Please uncheck 'still working' to set an end date.";
 
 
 

@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /search_history/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Allow queries that use orderBy and limit
+    match /search_history/{docId=**} {
+      allow read: if request.auth != null;
+    }
+  }
+}

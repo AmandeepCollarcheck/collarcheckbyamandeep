@@ -477,6 +477,7 @@ class ApiProvider{
   Future addEmployment(FormData params) async {
     try {
 
+
       Response response = await _dio.post(strAddEmployment,data: params);
       Map<String, dynamic> jsonData;
       if (response.data is String) {
@@ -644,6 +645,9 @@ class ApiProvider{
 
   Future addCertificates(FormData params) async {
     try {
+      print("smndnfsndfn,sd,fnn,dfn,s");
+      print(params.fields);
+
       Response response = await _dio.post(strEmployeeAddCertificates,data: params);
       Map<String, dynamic> jsonData;
       if (response.data is String) {

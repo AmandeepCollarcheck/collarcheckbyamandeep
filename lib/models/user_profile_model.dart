@@ -76,7 +76,7 @@ class Data {
   String? emailVerified;
   String? stillWorkingPosition;
   String? stillWorkingCompany;
-  int? stillWorking;
+  String? stillWorking;
   String? stillWorkingCompanyName;
   String? stillWorkingPositionName;
   String? accomodation;

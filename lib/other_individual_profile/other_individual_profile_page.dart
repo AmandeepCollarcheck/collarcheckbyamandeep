@@ -55,7 +55,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                             children: [
                               Container(
 
-                                 margin: EdgeInsets.only(top: 20),
+                                 margin: EdgeInsets.only(top: 20,left: 20,right: 20),
                                 height:60,
                                 child: controller.isEmployeeProfileDate.value?commonActiveSearchBar(
                                     leadingIcon: appBackSvgIcon,
@@ -186,7 +186,8 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                                 textColor: appPrimaryColor,
                                                 buttonBorderColor: appPrimaryColor,
                                                 onClick: (){
-
+                                                  var userId=controller.userProfileData.value.data?.id??"";
+                                                  controller.companyFollowApiCall(context,companyId:userId??"" , userId:controller.userProfileData.value.data?.id??"" );
                                                 }
                                             ),
                                           ),
@@ -201,7 +202,17 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                                 textColor: appWhiteColor,
                                                 buttonBorderColor: appPrimaryColor,
                                                 onClick: (){
+                                                  Get.offNamed(
+                                                      AppRoutes.chat,
+                                                      arguments: {
+                                                        screenName:otherCompanyProfileScreen,
+                                                        messageReceiverName:controller.userProfileData.value.data?.fname??"",
+                                                        profileImageData:controller.userProfileData.value.data?.profile??"",
+                                                        receiverId:controller.userProfileData.value.data?.id??"",
+                                                        senderId:userId??"",
+                                                        slugId:controller.slugDataId.value
 
+                                                      });
                                                 }
                                             ),
                                           ),
@@ -838,6 +849,7 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
   _employmentHistory(context) {
     return Obx((){
       var employmentHistory=controller.employmentHistoryData.value.data??[];
+      var userData=controller.userProfileData.value.data;
       return SingleChildScrollView(
         child:  Column(
           children: <Widget>[
@@ -898,6 +910,8 @@ class OtherIndividualProfilePage extends GetView<OtherIndividualProfileControlle
                                     controller.isExpendedSkills.value=!controller.isExpendedSkills.value;
                                   },
                                   employmentHistoryId: employmentHistory[index].id??"",
+                                  slugId: employmentHistory[index].companySlug??"",
+                                  selfSlugId: controller.slugDataId.value??"",
                                 )
 
                               ],

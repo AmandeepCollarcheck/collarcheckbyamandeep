@@ -77,6 +77,8 @@ class CompanyEmploymentRequestControllers extends GetxController with GetTickerP
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"1"});
     }else if(screenNameData.value==companyJobsScreen){
       Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"2"});
+    }else{
+      Get.offNamed(AppRoutes.bottomNavBar,arguments: {bottomNavCurrentIndexData:"0"});
     }
   }
   openSearchScreen(context){

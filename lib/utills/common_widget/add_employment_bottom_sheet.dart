@@ -37,6 +37,7 @@ Rx selectedEmployedTill="".obs;
 Rx selectedCTC="".obs;
 Rx selectedType="".obs;
 Rx selectedResumeName="".obs;
+Rx selectedFileName="".obs;
 Rx isStillWorkingHere =false.obs;
 var selectedEmployeeType = Rxn<int>();
 var selectedSkillsData = [].obs;
@@ -450,9 +451,10 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                       SizedBox(height: 5,),
                       GestureDetector(
                         onTap: (){
-                          getFileFromGallery(context,onFilePickedData: (String pickedData) {
+                          getFileFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
                             if(pickedData!=null){
                               selectedResumeName.value=pickedData;
+                              selectedFileName.value=fileName;
                             }
                           });
                         },
@@ -495,11 +497,12 @@ openAddEmploymentForm(context,{required DesignationListModel designationListData
                               Obx((){
                                 return SizedBox(
                                     width: MediaQuery.of(context).size.width*0.7,
-                                    child: Text(selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                    child: Text(selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                               }),
                               GestureDetector(
                                   onTap:(){
                                     selectedResumeName.value="";
+                                    selectedFileName.value="";
                                   },
                                   child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                             ],

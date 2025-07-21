@@ -107,7 +107,8 @@ class ConnectionPage extends GetView<ConnectionControllers>{
   _followerWidget(context)  {
 
     return SingleChildScrollView(
-      child: Obx(()  {
+      child: Obx(
+              ()  {
         var followersData=controller.connectionData.value.data?.followerList??[];
         return followersData.isNotEmpty?Container(
             padding: EdgeInsets.all(15),
@@ -119,7 +120,8 @@ class ConnectionPage extends GetView<ConnectionControllers>{
                     name: followersData[index].name??'',
                     id: followersData[index].individualId??"",
                     jobTitle: followersData[index].designationName??"",
-                    location: generateLocation(cityName: "", stateName: followersData[index].stateName??"", countryName: followersData[index].countryName??""),
+                    location: generateLocation(cityName: "", stateName: followersData[index].stateName??"",
+                        countryName: followersData[index].countryName??""),
                     isFollowBack:followersData[index].followBack??false,
                     onClick: (){
                       Get.offNamed(

@@ -183,15 +183,20 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                                           controller: controller.employedTillControllers,
                                           hintText: appChooseEmployedTillDate,
                                           onTap: (){
-                                            selectDate(
-                                                context,
-                                                isEndDate: true,
-                                                firstDateData: convertStringDateTime(date: controller.joiningDateControllers.text??""),
-                                                onSelectedDate: (String employedTill) {
-                                                  controller.employedTillControllers.text=employedTill;
-                                                  controller.selectedEmployedTill.value=employedTill;
+                                            if(controller.isStillWorkingHere.value){
+                                              showToast(appThisEmploymentIsMarkedAsStillWorking);
+                                            }else{
+                                              selectDate(
+                                                  context,
+                                                  isEndDate: true,
+                                                  firstDateData: convertStringDateTime(date: controller.joiningDateControllers.text??""),
+                                                  onSelectedDate: (String employedTill) {
+                                                    controller.employedTillControllers.text=employedTill;
+                                                    controller.selectedEmployedTill.value=employedTill;
 
-                                                });
+                                                  });
+                                            }
+
                                           }
                                       ),
                                     ],
@@ -309,13 +314,15 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                               ):Container();
                             }),
                             SizedBox(height: 5,),
-                            Obx((){
-                              var skills=controller.selectedSkillsData.value??[];
+                            Obx(() {
+                              var skills = controller.selectedSkillsData.value ?? [];
                               return Wrap(
-                                spacing: 10, // Horizontal spacing between items
-                                runSpacing: 10, // Vertical spacing between items
-                                children: skills.map((skill) {
-                                  return IntrinsicWidth( // Ensures the width adjusts based on content
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: skills.asMap().entries.map((entry) {
+                                  int index = entry.key;
+                                  var skill = entry.value;
+                                  return IntrinsicWidth(
                                     child: Container(
                                       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                                       alignment: Alignment.center,
@@ -325,24 +332,30 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                                         border: Border.all(color: appPrimaryColor, width: 1),
                                       ),
                                       child: Row(
-                                        mainAxisSize: MainAxisSize.min, // Ensures it wraps around content
+                                        mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           Text(
-                                            ((skill is Map ? skill['name'] : skill.name) ?? '').isNotEmpty
-                                                ? (skill is Map ? skill['name'] : skill.name)
-                                                : '',
+                                            ((skill is Map ? skill['name'] : skill.name) ?? '').toString(),
                                             style: AppTextStyles.font12w500.copyWith(color: appPrimaryColor),
                                           ),
-                                          SizedBox(width: 5), // Spacing between text and icon
-                                          SvgPicture.asset(appCloseIcon, height: 12, width: 12),
+                                          SizedBox(width: 5),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (skills.isNotEmpty && index < skills.length) {
+                                                skills.removeAt(index);
+                                                controller.selectedSkillsData.value = List.from(skills); // trigger update
+                                              }
+                                            },
+                                            child: SvgPicture.asset(appCloseIcon, height: 12, width: 12),
+                                          )
                                         ],
                                       ),
                                     ),
                                   );
                                 }).toList(),
                               );
-
                             }),
+
 
                             ///Salary CtC
                             SizedBox(height: 10,),
@@ -362,7 +375,8 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                                         "id": selectedData?['id'].toString() ?? "0",
                                         "name": selectedData?['name'].toString() ?? appSelectCTC
                                       };
-                                      controller.selectedType.value=selectedData['name'];// Add new selected skill
+                                      controller.selectedCTC.value=selectedData['name'];// Add new selected skill
+                                      controller.selectedCTCID.value=selectedData['id'];// Add new selected skill
                                     }
                                   },
                                   icon: appDropDownIcon
@@ -392,6 +406,7 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                                         "name": selectedData?['name'].toString() ?? appSelectCTCType
                                       };
                                       controller.selectedType.value=selectedData['name'];// Add new selected skill
+                                      controller.selectedTypeId.value=selectedData['id'];// Add new selected skill
                                     }
                                   },
                                   icon: appDropDownIcon
@@ -420,9 +435,10 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                             SizedBox(height: 5,),
                             GestureDetector(
                               onTap: (){
-                                getFileFromGallery(context,onFilePickedData: (String pickedData) {
+                                getFileFromGallery(context,onFilePickedData: (String fileName,String pickedData) {
                                   if(pickedData!=null){
                                     controller.selectedResumeName.value=pickedData;
+                                    controller.selectedFileName.value=fileName;
                                   }
                                 });
                               },
@@ -465,11 +481,12 @@ class EmploymentHistoryPage extends GetView<EmploymentHistoryControllers>{
                                     Obx((){
                                       return SizedBox(
                                           width: MediaQuery.of(context).size.width*0.7,
-                                          child: Text(controller.selectedResumeName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
+                                          child: Text(controller.selectedFileName.value,style: AppTextStyles.font14.copyWith(color: appPrimaryColor),));
                                     }),
                                     GestureDetector(
                                         onTap:(){
                                           controller.selectedResumeName.value="";
+                                          controller.selectedFileName.value="";
                                         },
                                         child: SvgPicture.asset(appCloseIcon,height: 24,width: 24,))
                                   ],

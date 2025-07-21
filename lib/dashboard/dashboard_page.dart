@@ -25,6 +25,8 @@ class DashboardPage extends GetView<DashboardController>{
 
   @override
   Widget build(BuildContext context) {
+
+
     return SafeArea(
       child: PopScope(
           canPop: false, // Prevents default back behavior
@@ -246,7 +248,9 @@ class DashboardPage extends GetView<DashboardController>{
         return Center();
       }
       var topCompanies=controller.userHomeModel.value.data?.topIndustries??[];
-      return topCompanies!=null&&topCompanies.isNotEmpty?Container(
+      return
+
+        topCompanies!=null&&topCompanies.isNotEmpty?Container(
         color: appPrimaryBackgroundColor,
         padding: EdgeInsets.only(left: 20,top: 15,bottom: 20),
         child: Column(

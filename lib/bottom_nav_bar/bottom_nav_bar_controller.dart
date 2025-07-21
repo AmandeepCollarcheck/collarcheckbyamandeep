@@ -20,7 +20,7 @@ class BottomNavBarController extends GetxController{
   var profileImageData="".obs;
   var nameInitial="".obs;
   var selectedTabIndexValue=0.obs;
-  var userTypeData="".obs;
+  var userTypeData=company.obs;
   var selectedUserType=false.obs;
   var isProfileDataLoaded = false.obs;
   var profileName="".obs;
