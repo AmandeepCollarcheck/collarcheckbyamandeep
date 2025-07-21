@@ -1,0 +1,2 @@
+D:/client_project/flutter_psnl/collarchek/android/app/.cxx/RelWithDebInfo/5x1c1n3n/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/client_project/flutter_psnl/collarchek/android/app/.cxx/RelWithDebInfo/5x1c1n3n/armeabi-v7a/CMakeFiles/rebuild_cache.dir
